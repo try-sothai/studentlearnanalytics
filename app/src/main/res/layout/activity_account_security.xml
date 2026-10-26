@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/admin_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/btnBackAccountSecurity"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Back"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/admin_text_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Account Security"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Section A: Change Password Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_lock_purple"
+                            app:tint="@color/admin_primary_blue" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Change Password"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Update your password regularly to keep your account secure."
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="@color/admin_border" />
+
+                    <!-- Current Password -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Password *"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCurrentPassword"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:passwordToggleEnabled="true"
+                        app:startIconDrawable="@drawable/ic_lock_purple"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCurrentPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:hint="Enter current password"
+                            android:inputType="textPassword"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- New Password -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="New Password *"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNewPassword"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:passwordToggleEnabled="true"
+                        app:startIconDrawable="@drawable/ic_lock_purple"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNewPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:hint="Enter new password"
+                            android:inputType="textPassword"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Confirm New Password -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Confirm New Password *"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilConfirmNewPassword"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:passwordToggleEnabled="true"
+                        app:startIconDrawable="@drawable/ic_lock_purple"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etConfirmNewPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:hint="Confirm new password"
+                            android:inputType="textPassword"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Password Requirements Panel -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="#F4F7FF"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/admin_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Password Requirements"
+                                android:textColor="@color/admin_primary_blue"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/req1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="✓ At least 8 characters"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/req2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="✓ Include uppercase and lowercase letters"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/req3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="✓ Include at least one number"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/req4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="✓ Include at least one special character"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Update Password Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUpdatePassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:text="Update Password"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section B: Two-Factor Authentication (2FA) Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_lock_purple"
+                            app:tint="@color/admin_primary_blue" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Two-Factor Authentication (2FA)"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Add an extra layer of security to your account."
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvBadge2FAStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_credit"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="Disabled"
+                            android:textColor="@color/admin_inactive_red"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="You will receive a verification code via email or an authenticator app upon logging in."
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEnable2FA"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Enable 2FA"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/admin_primary_blue"
+                        app:strokeWidth="1dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

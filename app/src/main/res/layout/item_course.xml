@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/teacher_card_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/teacher_border"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <!-- Top Section: Course Identity & Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Left: Course Icon Container -->
+            <FrameLayout
+                android:id="@+id/iconContainer"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_course_icon_blue"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/imgCourseIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_book"
+                    app:tint="@color/white"
+                    android:contentDescription="Course Icon" />
+            </FrameLayout>
+
+            <!-- Middle: Code, Name, Instructor, Department & Metadata -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCourseCodeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CS101 - Data Structures"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTeacherName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Teacher: Mr. Chan"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvDepartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="Computer Science Department"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvCourseMetadata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="35 students • Mon, Wed 08:00–09:30 • Room A101"
+                    android:textColor="@color/teacher_primary_blue"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Right: Status Badge & Chevron -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tvStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:text="Active"
+                    android:textColor="@color/status_good_text"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_status_good" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/teacher_secondary_text"
+                    android:contentDescription="Details" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@color/teacher_border" />
+
+        <!-- Bottom Section: Quick Action Controls Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Quick Action 1: Students -->
+            <LinearLayout
+                android:id="@+id/btnQuickStudents"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_teacher_dropdown"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_group"
+                    app:tint="@color/teacher_primary_blue"
+                    android:contentDescription="Students" />
+
+                <TextView
+                    android:id="@+id/tvQuickStudentsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Students (35)"
+                    android:textColor="@color/teacher_primary_blue"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Quick Action 2: Schedule -->
+            <LinearLayout
+                android:id="@+id/btnQuickSchedule"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:background="@drawable/bg_teacher_dropdown"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/teacher_primary_blue"
+                    android:contentDescription="Schedule" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Schedule"
+                    android:textColor="@color/teacher_primary_blue"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Quick Action 3: Analytics -->
+            <LinearLayout
+                android:id="@+id/btnQuickAnalytics"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="2dp"
+                android:background="@drawable/bg_teacher_dropdown"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_chart_bar"
+                    app:tint="@color/teacher_primary_blue"
+                    android:contentDescription="Analytics" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Analytics"
+                    android:textColor="@color/teacher_primary_blue"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Quick Action 4: More -->
+            <LinearLayout
+                android:id="@+id/btnQuickMore"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="0.8"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_teacher_dropdown"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="More"
+                    android:textColor="@color/teacher_primary_blue"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="@color/teacher_primary_blue"
+                    android:contentDescription="More" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,28 @@
+# Android Studio
+*.iml
+.idea/
+
+# Gradle
+.gradle/
+**/build/
+
+# Local SDK configuration
+local.properties
+
+# Android build artifacts
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Node.js dependencies (if present)
+node_modules/
+
+# Logs
+*.log
+build_assemble_clean_log.txt
+build_assemble_log.txt
+build_lint_log.txt
+
+# Operating system
+.DS_Store
+Thumbs.db

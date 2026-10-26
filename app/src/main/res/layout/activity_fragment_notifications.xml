@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/notif_background"
+    android:fitsSystemWindows="true"
+    tools:ignore="all">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        app:elevation="0dp"
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="12dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_social_button"
+                android:src="@drawable/ic_back"
+                app:tint="@color/notif_navy_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notifications"
+                android:textColor="@color/notif_navy_text"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/btnBack"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Filter Tabs -->
+            <LinearLayout
+                android:id="@+id/filterTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_notif_tab_active"
+                    android:gravity="center"
+                    android:text="All"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1.2"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_notif_tab_inactive"
+                    android:gravity="center"
+                    android:text="Unread (3)"
+                    android:textColor="@color/notif_navy_text"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1.1"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_notif_tab_inactive"
+                    android:gravity="center"
+                    android:text="Important"
+                    android:textColor="@color/notif_navy_text"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Card 1: Academic Risk Alert -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#F0F0FF"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/icon1"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardBackgroundColor="#FFF0F2"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_prediction"
+                            app:tint="@color/notif_red_alert" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/title1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="Academic Risk Alert"
+                        android:textColor="@color/notif_navy_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/unreadDot1"
+                        app:layout_constraintStart_toEndOf="@id/icon1"
+                        app:layout_constraintTop_toTopOf="@id/icon1" />
+
+                    <TextView
+                        android:id="@+id/desc1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="You are at medium risk. Please keep improving your attendance and quiz scores."
+                        android:textColor="#5A6482"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/title1"
+                        app:layout_constraintTop_toBottomOf="@id/title1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="2 hours ago"
+                        android:textColor="#A5ABB9"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/title1"
+                        app:layout_constraintTop_toBottomOf="@id/desc1" />
+
+                    <View
+                        android:id="@+id/unreadDot1"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/bg_notif_unread_dot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/title1"
+                        app:layout_constraintBottom_toBottomOf="@id/title1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 2: New Recommendation -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#F0F0FF"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/icon2"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardBackgroundColor="#F0F6FF"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_assignment"
+                            app:tint="@color/notif_blue" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/title2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="New Recommendation"
+                        android:textColor="@color/notif_navy_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/unreadDot2"
+                        app:layout_constraintStart_toEndOf="@id/icon2"
+                        app:layout_constraintTop_toTopOf="@id/icon2" />
+
+                    <TextView
+                        android:id="@+id/desc2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Check your latest personalized recommendations."
+                        android:textColor="#5A6482"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/title2"
+                        app:layout_constraintTop_toBottomOf="@id/title2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="5 hours ago"
+                        android:textColor="#A5ABB9"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/title2"
+                        app:layout_constraintTop_toBottomOf="@id/desc2" />
+
+                    <View
+                        android:id="@+id/unreadDot2"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/bg_notif_unread_dot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/title2"
+                        app:layout_constraintBottom_toBottomOf="@id/title2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 3: Grade Updated -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#F0F0FF"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/icon3"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardBackgroundColor="#EEFFF9"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/bg_circle_soft_blue"
+                            app:tint="@color/notif_green" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/title3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="Grade Updated"
+                        android:textColor="@color/notif_navy_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/unreadDot3"
+                        app:layout_constraintStart_toEndOf="@id/icon3"
+                        app:layout_constraintTop_toTopOf="@id/icon3" />
+
+                    <TextView
+                        android:id="@+id/desc3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Your quiz score has been updated."
+                        android:textColor="#5A6482"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/title3"
+                        app:layout_constraintTop_toBottomOf="@id/title3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="1 day ago"
+                        android:textColor="#A5ABB9"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/title3"
+                        app:layout_constraintTop_toBottomOf="@id/desc3" />
+
+                    <View
+                        android:id="@+id/unreadDot3"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/bg_notif_unread_dot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/title3"
+                        app:layout_constraintBottom_toBottomOf="@id/title3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 4: Upcoming Exam -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#F0F0FF"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/icon4"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardBackgroundColor="#F5F3FF"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_notifications"
+                            app:tint="@color/notif_secondary_purple" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/title4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="12dp"
+                        android:text="Upcoming Exam"
+                        android:textColor="@color/notif_navy_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/unreadDot4"
+                        app:layout_constraintStart_toEndOf="@id/icon4"
+                        app:layout_constraintTop_toTopOf="@id/icon4" />
+
+                    <TextView
+                        android:id="@+id/desc4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Final exam will be on May 25, 2024."
+                        android:textColor="#5A6482"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/title4"
+                        app:layout_constraintTop_toBottomOf="@id/title4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="2 days ago"
+                        android:textColor="#A5ABB9"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/title4"
+                        app:layout_constraintTop_toBottomOf="@id/desc4" />
+
+                    <View
+                        android:id="@+id/unreadDot4"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/bg_notif_unread_dot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/title4"
+                        app:layout_constraintBottom_toBottomOf="@id/title4" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 5: General Announcement -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#F0F0FF"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/icon5"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardBackgroundColor="#FFF8F0"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_notifications"
+                            app:tint="@color/notif_orange" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/title5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:text="General Announcement"
+                        android:textColor="@color/notif_navy_text"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/icon5"
+                        app:layout_constraintTop_toTopOf="@id/icon5" />
+
+                    <TextView
+                        android:id="@+id/desc5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Semester break schedule has been released."
+                        android:textColor="#5A6482"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/title5"
+                        app:layout_constraintTop_toBottomOf="@id/title5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="3 days ago"
+                        android:textColor="#A5ABB9"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/title5"
+                        app:layout_constraintTop_toBottomOf="@id/desc5" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

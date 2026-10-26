@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/slas_background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".student.attendance.AttendanceDetailActivity">
+
+    <!-- Top Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_social_button"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back"
+            app:tint="@color/slas_text_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attendance"
+                android:textColor="@color/slas_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track class participation, attendance rate, and monthly trends"
+                android:textColor="@color/slas_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Scrollable Body Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="24dp">
+
+            <!-- Semester Selector Dropdown Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSemesterSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/slas_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/slas_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
+
+                    <TextView
+                        android:id="@+id/tvSemesterLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Semester 1, 2024"
+                        android:textColor="@color/slas_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="Dropdown"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="@color/slas_text_primary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Loading / Empty state (hidden by default) -->
+            <ProgressBar
+                android:id="@+id/loading_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/empty_state_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textColor="@color/slas_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <!-- 3 Summary Statistics Cards -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <!-- 1. Total Classes -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/slas_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/slas_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Classes"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvTotalClasses"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="25"
+                            android:textColor="@color/slas_primary_purple"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 2. Present -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/slas_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/slas_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Present"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvPresentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="22"
+                            android:textColor="@color/slas_success"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 3. Absent -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/slas_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/slas_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Absent"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvAbsentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="3"
+                            android:textColor="@color/slas_danger"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Attendance Rate Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/slas_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/slas_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Attendance Rate"
+                        android:textColor="@color/slas_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- MPAndroidChart Donut Chart -->
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/donutChart"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp" />
+
+                        <!-- Right Legend Column -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <!-- Present Legend Item -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/bg_notif_unread_dot"
+                                    android:backgroundTint="@color/slas_success" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Present"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvPresentLegend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="22 (88%)"
+                                    android:textColor="@color/slas_success"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <!-- Late Legend Item -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/bg_notif_unread_dot"
+                                    android:backgroundTint="@color/slas_warning" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Late"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvLateLegend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="0 (0%)"
+                                    android:textColor="@color/slas_warning"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <!-- Excused Legend Item -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/bg_notif_unread_dot"
+                                    android:backgroundTint="#6366F1" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Excused"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvExcusedLegend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="0 (0%)"
+                                    android:textColor="#6366F1"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <!-- Absent Legend Item -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/bg_notif_unread_dot"
+                                    android:backgroundTint="@color/slas_danger" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Absent"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvAbsentLegend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
+                                    android:text="3 (12%)"
+                                    android:textColor="@color/slas_danger"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <!-- Other/unknown status (shown only when present in data) -->
+                            <LinearLayout
+                                android:id="@+id/rowOtherLegend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/bg_notif_unread_dot"
+                                    android:backgroundTint="@color/slas_text_hint" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Other"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/tvOtherLegend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="0 (0%)"
+                                    android:textColor="@color/slas_text_secondary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Monthly Attendance Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/slas_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/slas_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monthly Attendance Trend"
+                        android:textColor="@color/slas_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- Stacked Bar Chart -->
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartMonthly"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="12dp" />
+
+                    <!-- Custom Bottom Legend -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_notif_unread_dot"
+                            android:backgroundTint="@color/slas_success" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Present"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="14dp"
+                            android:background="@drawable/bg_notif_unread_dot"
+                            android:backgroundTint="@color/slas_warning" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Late"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="14dp"
+                            android:background="@drawable/bg_notif_unread_dot"
+                            android:backgroundTint="#6366F1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Excused"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="14dp"
+                            android:background="@drawable/bg_notif_unread_dot"
+                            android:backgroundTint="@color/slas_danger" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Absent"
+                            android:textColor="@color/slas_text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        app:cardBackgroundColor="@color/slas_surface"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- 1. Home -->
+            <LinearLayout
+                android:id="@+id/nav_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="Home"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/slas_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Home"
+                    android:textColor="@color/slas_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- 2. Analytics -->
+            <LinearLayout
+                android:id="@+id/nav_analytics"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="Analytics"
+                    android:src="@drawable/ic_analytics"
+                    app:tint="@color/slas_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Analytics"
+                    android:textColor="@color/slas_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- 3. Prediction -->
+            <LinearLayout
+                android:id="@+id/nav_prediction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="Prediction"
+                    android:src="@drawable/ic_prediction"
+                    app:tint="@color/slas_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Prediction"
+                    android:textColor="@color/slas_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- 4. Notifications (with Red Badge 3) -->
+            <FrameLayout
+                android:id="@+id/nav_notifications"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="Notifications"
+                        android:src="@drawable/ic_notifications"
+                        app:tint="@color/slas_text_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Notifications"
+                        android:textColor="@color/slas_text_secondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|center_horizontal"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_nav_badge_red"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- 5. Profile -->
+            <LinearLayout
+                android:id="@+id/nav_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="Profile"
+                    android:src="@drawable/ic_profile"
+                    app:tint="@color/slas_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Profile"
+                    android:textColor="@color/slas_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

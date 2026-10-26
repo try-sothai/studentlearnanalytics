@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/teacher_bg"
+    android:fitsSystemWindows="true">
+
+    <!-- Native Status Bar Simulated Row -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvStatusBarTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9:41"
+            android:textColor="@color/teacher_dark_navy"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_signal_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Signal" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_wifi_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="WiFi" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_battery_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Battery" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/btnTeacherPendingScoresBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/teacher_dark_navy"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending Scores"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Assessments waiting for scores"
+                android:textColor="@color/teacher_secondary_text"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Course Selector Dropdown Button -->
+        <LinearLayout
+            android:id="@+id/btnCourseSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_teacher_dropdown"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_graduation_cap"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Course" />
+
+            <TextView
+                android:id="@+id/tvSelectedCourseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="CS101 - Data Structures"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_chevron_down"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Dropdown" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp">
+
+            <!-- Summary Panel (4 Metric Cards Container) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/teacher_card_bg"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/teacher_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <!-- Main Metric: Total Pending Scores -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_metric_purple"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_pencil_edit"
+                            app:tint="#7C3AED"
+                            android:contentDescription="Pencil" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Pending Scores"
+                                android:textColor="@color/teacher_dark_navy"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTotalPendingSubtext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="out of 28 assessments"
+                                android:textColor="@color/teacher_secondary_text"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvTotalPendingCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12"
+                            android:textColor="#7C3AED"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Row of 3 Type Sub-metrics -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <!-- Assignments -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_metric_red"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="6dp"
+                            android:layout_marginEnd="2dp">
+
+                            <TextView
+                                android:id="@+id/tvCountAssignments"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6"
+                                android:textColor="@color/status_at_risk_text"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Assignments"
+                                android:textColor="@color/status_at_risk_text"
+                                android:textSize="9sp" />
+                        </LinearLayout>
+
+                        <!-- Quizzes -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_metric_purple"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="6dp"
+                            android:layout_marginHorizontal="2dp">
+
+                            <TextView
+                                android:id="@+id/tvCountQuizzes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4"
+                                android:textColor="@color/status_attention_text"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Quizzes"
+                                android:textColor="@color/status_attention_text"
+                                android:textSize="9sp" />
+                        </LinearLayout>
+
+                        <!-- Midterm/Final Exams -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_metric_blue"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingVertical="6dp"
+                            android:layout_marginStart="2dp">
+
+                            <TextView
+                                android:id="@+id/tvCountExams"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textColor="@color/teacher_primary_blue"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Midterm/Final"
+                                android:textColor="@color/teacher_primary_blue"
+                                android:textSize="9sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Search Field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_search_input"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/teacher_secondary_text"
+                    android:contentDescription="Search" />
+
+                <EditText
+                    android:id="@+id/edtSearchPending"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:hint="Search by assignment title, course code, or type..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textColorHint="@color/teacher_secondary_text"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Filter Chips Row -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterAllPending"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="All (12)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/teacher_primary_blue"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterAssignments"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Assignments (6)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_at_risk_text"
+                        app:backgroundTint="@color/status_at_risk_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterQuizzes"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Quizzes (4)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_attention_text"
+                        app:backgroundTint="@color/status_attention_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterExams"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Exams (2)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/teacher_primary_blue"
+                        app:backgroundTint="@color/teacher_surface_light"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterOverdue"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Overdue (3)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_at_risk_text"
+                        app:backgroundTint="@color/status_at_risk_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <LinearLayout
+                        android:id="@+id/btnFilterDropdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_teacher_dropdown"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_filter_sliders"
+                            app:tint="@color/teacher_primary_blue"
+                            android:contentDescription="Filter" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="Filter"
+                            android:textColor="@color/teacher_primary_blue"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_chevron_down"
+                            app:tint="@color/teacher_primary_blue"
+                            android:contentDescription="Chevron" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Pending Assessments RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPendingAssessments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_drawer_dashboard"
+            android:icon="@drawable/ic_home"
+            android:title="Dashboard" />
+
+        <item
+            android:id="@+id/nav_drawer_students"
+            android:icon="@drawable/ic_profile"
+            android:title="Students" />
+
+        <item
+            android:id="@+id/nav_drawer_courses"
+            android:icon="@drawable/ic_book"
+            android:title="Courses" />
+
+        <item
+            android:id="@+id/nav_drawer_analytics"
+            android:icon="@drawable/ic_analytics"
+            android:title="Class Analytics" />
+
+        <item
+            android:id="@+id/nav_drawer_prediction_risk"
+            android:icon="@drawable/ic_prediction"
+            android:title="Prediction &amp; Risk" />
+
+        <item
+            android:id="@+id/nav_drawer_scores"
+            android:icon="@drawable/ic_assignment"
+            android:title="Manage Scores" />
+
+        <item
+            android:id="@+id/nav_drawer_attendance"
+            android:icon="@drawable/ic_calendar"
+            android:title="Attendance" />
+
+        <item
+            android:id="@+id/nav_drawer_recommendation"
+            android:icon="@drawable/ic_prediction"
+            android:title="Recommendations" />
+
+        <item
+            android:id="@+id/nav_drawer_reports"
+            android:icon="@drawable/ic_analytics"
+            android:title="Reports" />
+
+        <item
+            android:id="@+id/nav_drawer_evaluation"
+            android:icon="@drawable/ic_analytics"
+            android:title="Prediction Evaluation" />
+
+        <item
+            android:id="@+id/nav_drawer_notifications"
+            android:icon="@drawable/ic_notifications"
+            android:title="Notifications" />
+
+        <item
+            android:id="@+id/nav_drawer_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="Profile" />
+    </group>
+
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_logout"
+                android:icon="@drawable/ic_back"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutDrawerItemRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="3dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="10dp">
+
+    <ImageView
+        android:id="@+id/imgDrawerItemIcon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:contentDescription="Menu Icon"
+        android:src="@drawable/ic_home"
+        app:tint="@color/drawer_primary_blue" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDrawerItemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dashboard"
+            android:textColor="@color/drawer_dark_navy"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDrawerItemSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Overview and statistics"
+            android:textColor="@color/drawer_secondary_text"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgDrawerItemChevron"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:contentDescription="Chevron Right"
+        android:src="@drawable/ic_chevron_right"
+        app:tint="@color/drawer_primary_blue" />
+
+</LinearLayout>

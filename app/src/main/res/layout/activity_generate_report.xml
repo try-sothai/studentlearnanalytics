@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/admin_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/btnBackGenerateReport"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Back"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/admin_text_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Generate Report"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Section A: Report Type -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Report Type"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/admin_border" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/typeStudents"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="6dp"
+                                android:backgroundTint="@color/admin_primary_blue"
+                                android:text="Students"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                app:cornerRadius="10dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/typeTeachers"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginHorizontal="4dp"
+                                android:backgroundTint="#F4F7FF"
+                                android:text="Teachers"
+                                android:textAllCaps="false"
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp"
+                                app:cornerRadius="10dp"
+                                app:strokeColor="@color/admin_border" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/typeCourses"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginHorizontal="4dp"
+                                android:backgroundTint="#F4F7FF"
+                                android:text="Courses"
+                                android:textAllCaps="false"
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp"
+                                app:cornerRadius="10dp"
+                                app:strokeColor="@color/admin_border" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/typeAcademic"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginHorizontal="4dp"
+                                android:backgroundTint="#F4F7FF"
+                                android:text="Academic"
+                                android:textAllCaps="false"
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp"
+                                app:cornerRadius="10dp"
+                                app:strokeColor="@color/admin_border" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/typeActivity"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="4dp"
+                                android:backgroundTint="#F4F7FF"
+                                android:text="Activity"
+                                android:textAllCaps="false"
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp"
+                                app:cornerRadius="10dp"
+                                app:strokeColor="@color/admin_border" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section B: Report Period -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Report Period"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/admin_border" />
+
+                    <!-- Academic Year -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Academic Year"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spGenerateReportYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_spinner" />
+
+                    <!-- Semester -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Semester"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spGenerateReportSemester"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_spinner" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section C: Report Filters -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Report Filters"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/admin_border" />
+
+                    <!-- Department -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Department"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spGenerateReportDept"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_spinner" />
+
+                    <!-- Program -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Program"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spGenerateReportProgram"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_spinner" />
+
+                    <!-- Status -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Status"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spGenerateReportStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_spinner" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section D: Report Metrics -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Report Metrics"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/admin_border" />
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2">
+
+                        <CheckBox android:id="@+id/cbMetric1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Total Students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="New Enrollments" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Active Students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Graduated" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Enrollment Trend" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Student Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Academic Perf." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Attendance Sum." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric9" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="GPA Stats" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric10" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Course Enroll." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric11" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Gender Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric12" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Nationality Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                    </GridLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section E: Export Format -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Export Format"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@color/admin_border" />
+
+                    <RadioGroup
+                        android:id="@+id/rgExportFormat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rbFormatPdf"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="PDF"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/rbFormatExcel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Excel"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/rbFormatCsv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="CSV"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="6dp"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelGenerateReport"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/admin_border"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmitGenerateReport"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/admin_primary_blue"
+            android:text="Generate Report"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/slas_surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/slas_border"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="14dp">
+
+        <View
+            android:id="@+id/indicator_view"
+            android:layout_width="4dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_score_label"
+            android:backgroundTint="@color/slas_primary_purple"
+            android:layout_marginEnd="12dp" />
+
+        <ImageView
+            android:id="@+id/assessment_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="9dp"
+            android:background="@drawable/bg_circle_soft_blue"
+            android:backgroundTint="@color/slas_light_purple"
+            android:src="@drawable/ic_assignment"
+            app:tint="@color/slas_primary_purple"
+            android:contentDescription="Assessment Icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/assessment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Assignment 1"
+                android:textColor="@color/slas_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/assessment_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="Sep 15, 2024"
+                android:textColor="@color/slas_text_secondary"
+                android:textSize="12sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/assessment_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="85 / 100"
+            android:textColor="@color/slas_text_primary"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

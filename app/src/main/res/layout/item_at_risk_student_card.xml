@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/teacher_card_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/teacher_border"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Column 1: Student Identity (Left) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvAvatarChar"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text="D"
+                android:textColor="@color/status_at_risk_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_circle_soft_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvStudentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dara"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvStudentId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="STU023002"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvProgram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="Data Science"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="2nd Year"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Vertical Divider 1 -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="64dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@color/teacher_border" />
+
+        <!-- Column 2: Risk Badge & Metrics (Middle) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvRiskBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text="High Risk"
+                android:textColor="@color/status_at_risk_text"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_status_at_risk" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <!-- Metric 1: GPA -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_metric_red"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="3dp"
+                    android:layout_marginEnd="2dp">
+
+                    <TextView
+                        android:id="@+id/tvMetricGpa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2.10"
+                        android:textColor="@color/status_at_risk_text"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GPA"
+                        android:textColor="@color/status_at_risk_text"
+                        android:textSize="8sp" />
+                </LinearLayout>
+
+                <!-- Metric 2: Avg Score -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_metric_purple"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="3dp"
+                    android:layout_marginHorizontal="2dp">
+
+                    <TextView
+                        android:id="@+id/tvMetricAvgScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="58%"
+                        android:textColor="@color/status_attention_text"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Avg Score"
+                        android:textColor="@color/status_attention_text"
+                        android:textSize="8sp" />
+                </LinearLayout>
+
+                <!-- Metric 3: Absence -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_metric_blue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="3dp"
+                    android:layout_marginStart="2dp">
+
+                    <TextView
+                        android:id="@+id/tvMetricAbsence"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12%"
+                        android:textColor="@color/teacher_primary_blue"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Absence"
+                        android:textColor="@color/teacher_primary_blue"
+                        android:textSize="8sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Vertical Divider 2 -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="64dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@color/teacher_border" />
+
+        <!-- Column 3: Main Reasons (Right) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main Reasons"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvReason1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="• Low GPA"
+                android:textColor="@color/status_at_risk_text"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvReason2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="• Low assignment scores"
+                android:textColor="@color/teacher_secondary_text"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvReason3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="• High absence rate"
+                android:textColor="@color/teacher_secondary_text"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <!-- Far-Right Chevron Arrow -->
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/teacher_secondary_text"
+            android:contentDescription="Details" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

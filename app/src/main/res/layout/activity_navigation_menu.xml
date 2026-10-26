@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_navigation_gradient"
+    android:fitsSystemWindows="true"
+    tools:context=".student.NavigationMenuActivity">
+
+    <!-- Ambient background glow top right -->
+    <ImageView
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:background="@drawable/bg_ambient_circle_top"
+        android:contentDescription="Ambient glow"
+        android:importantForAccessibility="no"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Ambient background glow bottom right -->
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/bg_ambient_circle_bottom"
+        android:contentDescription="Ambient glow"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Close 'X' Button Top Right -->
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="Close Menu"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_close_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Profile Header Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardProfileAvatar"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="36dp"
+        app:cardElevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#FFFFFF"
+        app:strokeWidth="2.5dp">
+
+        <ImageView
+            android:id="@+id/imgUserProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="User Profile Picture"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_student_avatar" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/layoutProfileInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/cardProfileAvatar"
+        app:layout_constraintEnd_toStartOf="@id/btnClose"
+        app:layout_constraintStart_toEndOf="@id/cardProfileAvatar"
+        app:layout_constraintTop_toTopOf="@id/cardProfileAvatar">
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sophea"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStudentId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="STU023001"
+            android:textColor="#D0D6FF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvMajor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Computer Science"
+            android:textColor="#D0D6FF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="3rd Year"
+            android:textColor="#D0D6FF"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Scrollable Vertical Navigation Menu -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollMenu"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/layoutFooter"
+        app:layout_constraintTop_toBottomOf="@id/cardProfileAvatar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="4dp">
+
+            <!-- 1. Home (Active State) -->
+            <LinearLayout
+                android:id="@+id/menu_home"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginVertical="4dp"
+                android:background="@drawable/bg_nav_menu_active"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Home Icon"
+                    android:src="@drawable/ic_nav_home" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Home"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 2. Learning Analytics -->
+            <LinearLayout
+                android:id="@+id/menu_analytics"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Learning Analytics Icon"
+                    android:src="@drawable/ic_nav_analytics" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Learning Analytics"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 3. Prediction & Risk -->
+            <LinearLayout
+                android:id="@+id/menu_prediction"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Prediction &amp; Risk Icon"
+                    android:src="@drawable/ic_nav_prediction" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Prediction &amp; Risk"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 4. Recommendations -->
+            <LinearLayout
+                android:id="@+id/menu_recommendation"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Recommendations Icon"
+                    android:src="@drawable/ic_nav_recommendation" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Recommendations"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 5. Notifications (with Red Badge "3") -->
+            <LinearLayout
+                android:id="@+id/menu_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Notifications Icon"
+                    android:src="@drawable/ic_nav_notifications" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Notifications"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvNotifBadge"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_nav_badge_red"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 6. Reports -->
+            <LinearLayout
+                android:id="@+id/menu_reports"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Reports Icon"
+                    android:src="@drawable/ic_nav_reports" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Reports"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 7. Profile -->
+            <LinearLayout
+                android:id="@+id/menu_profile"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Profile Icon"
+                    android:src="@drawable/ic_nav_profile" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Profile"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 8. Settings -->
+            <LinearLayout
+                android:id="@+id/menu_settings"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Settings Icon"
+                    android:src="@drawable/ic_nav_settings" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Settings"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 9. Logout -->
+            <LinearLayout
+                android:id="@+id/menu_logout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Logout Icon"
+                    android:src="@drawable/ic_nav_logout" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Logout"
+                    android:textColor="#FF5252"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Footer Section Center Bottom -->
+    <LinearLayout
+        android:id="@+id/layoutFooter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="Graduation Cap"
+            android:src="@drawable/ic_nav_graduation_cap" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="&quot;Learn Today, Achieve Tomorrow&quot;"
+            android:textColor="#C0C8FF"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

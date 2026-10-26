@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LearnAnalytics</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_courses">Courses</string>
+    <string name="nav_analytics">Analytics</string>
+    <string name="nav_notifications">Notifications</string>
+    <string name="nav_profile">Profile</string>
+    <string name="forgot_password">Forgot password?</string>
+</resources>

@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootStudentCourses"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Back"
+            android:focusable="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#111B6B" />
+
+        <TextView
+            android:id="@+id/tvHeaderTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:text="My Courses"
+            android:textColor="#111B6B"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSearch"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btnSearch"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="Search"
+            android:focusable="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#111B6B" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Semester Selector Dropdown -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardSemesterSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#D6E2FB"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="Calendar"
+                        android:src="@drawable/ic_calendar" />
+
+                    <TextView
+                        android:id="@+id/tvSemesterText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="Semester 1, 2024"
+                        android:textColor="#111B6B"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="Dropdown"
+                        android:src="@drawable/ic_chevron_down"
+                        app:tint="#111B6B" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Course Summary Stat Cards Row -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Card 1: Courses -->
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="72dp"
+                        android:background="@drawable/bg_stat_card_purple"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="Book"
+                            android:src="@drawable/ic_book" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStatCourseCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6"
+                                android:textColor="#111B6B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Courses"
+                                android:textColor="#7A7D8F"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Card 2: GPA -->
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="72dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_stat_card_green"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="GPA"
+                            android:src="@drawable/ic_graduation_cap" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStatGpa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3.30"
+                                android:textColor="#111B6B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GPA"
+                                android:textColor="#7A7D8F"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Card 3: Average -->
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="72dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_stat_card_blue"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="Average"
+                            android:src="@drawable/ic_chart_bar" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStatAverage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="78.17%"
+                                android:textColor="#111B6B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Average"
+                                android:textColor="#7A7D8F"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Card 4: Completed -->
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="72dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_stat_card_orange"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:contentDescription="Completed"
+                            android:src="@drawable/ic_star" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvStatCompleted"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6"
+                                android:textColor="#111B6B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Completed"
+                                android:textColor="#7A7D8F"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Section Title: My Courses -->
+            <TextView
+                android:id="@+id/tvSectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="12dp"
+                android:text="My Courses"
+                android:textColor="#111B6B"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Dynamic Course List Container -->
+            <LinearLayout
+                android:id="@+id/containerCourseList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <!-- COURSE 1: Data Structures -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCourse1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <!-- Icon Container -->
+                            <FrameLayout
+                                android:id="@+id/iconContainer1"
+                                android:layout_width="52dp"
+                                android:layout_height="52dp"
+                                android:background="@drawable/bg_course_icon_blue"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Code Icon"
+                                    android:src="@drawable/ic_code_symbol" />
+                            </FrameLayout>
+
+                            <!-- Course Info -->
+                            <LinearLayout
+                                android:id="@+id/infoContainer1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toStartOf="@id/btnChevron1"
+                                app:layout_constraintStart_toEndOf="@id/iconContainer1"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Data Structures"
+                                    android:textColor="#111B6B"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="CS101 • Mr. Chan"
+                                    android:textColor="#7A7D8F"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_badge_core"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="Core"
+                                        android:textColor="#315CFF"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:background="@drawable/bg_badge_credit"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="3 Credits"
+                                        android:textColor="#64748B"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Top Right Chevron Arrow -->
+                            <ImageView
+                                android:id="@+id/btnChevron1"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="Arrow"
+                                android:src="@drawable/ic_chevron_right_purple"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#315CFF" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Progress Bar & Percentage Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="8dp"
+                                android:layout_weight="1"
+                                android:max="100"
+                                android:progress="82"
+                                android:progressDrawable="@drawable/progress_bar_blue" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="82%"
+                                android:textColor="#315CFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- COURSE 2: Database Systems -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCourse2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <!-- Icon Container -->
+                            <FrameLayout
+                                android:id="@+id/iconContainer2"
+                                android:layout_width="52dp"
+                                android:layout_height="52dp"
+                                android:background="@drawable/bg_course_icon_orange"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Database Icon"
+                                    android:src="@drawable/ic_database_symbol" />
+                            </FrameLayout>
+
+                            <!-- Course Info -->
+                            <LinearLayout
+                                android:id="@+id/infoContainer2"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toStartOf="@id/btnChevron2"
+                                app:layout_constraintStart_toEndOf="@id/iconContainer2"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Database Systems"
+                                    android:textColor="#111B6B"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="CS102 • Ms. Dara"
+                                    android:textColor="#7A7D8F"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_badge_core"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="Core"
+                                        android:textColor="#315CFF"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:background="@drawable/bg_badge_credit"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="3 Credits"
+                                        android:textColor="#64748B"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Top Right Chevron Arrow -->
+                            <ImageView
+                                android:id="@+id/btnChevron2"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="Arrow"
+                                android:src="@drawable/ic_chevron_right_purple"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#FF9800" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Progress Bar & Percentage Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="8dp"
+                                android:layout_weight="1"
+                                android:max="100"
+                                android:progress="76"
+                                android:progressDrawable="@drawable/progress_bar_orange" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="76%"
+                                android:textColor="#FF9800"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- COURSE 3: Web Development -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCourse3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <!-- Icon Container -->
+                            <FrameLayout
+                                android:id="@+id/iconContainer3"
+                                android:layout_width="52dp"
+                                android:layout_height="52dp"
+                                android:background="@drawable/bg_course_icon_green"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Desktop Icon"
+                                    android:src="@drawable/ic_desktop_symbol" />
+                            </FrameLayout>
+
+                            <!-- Course Info -->
+                            <LinearLayout
+                                android:id="@+id/infoContainer3"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toStartOf="@id/btnChevron3"
+                                app:layout_constraintStart_toEndOf="@id/iconContainer3"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Web Development"
+                                    android:textColor="#111B6B"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="CS201 • Mr. Vireak"
+                                    android:textColor="#7A7D8F"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_badge_elective"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="Elective"
+                                        android:textColor="#16C784"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:background="@drawable/bg_badge_credit"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="3 Credits"
+                                        android:textColor="#64748B"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Top Right Chevron Arrow -->
+                            <ImageView
+                                android:id="@+id/btnChevron3"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="Arrow"
+                                android:src="@drawable/ic_chevron_right_purple"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#16C784" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Progress Bar & Percentage Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="8dp"
+                                android:layout_weight="1"
+                                android:max="100"
+                                android:progress="88"
+                                android:progressDrawable="@drawable/progress_bar_green" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="88%"
+                                android:textColor="#16C784"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- COURSE 4: Computer Networks -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCourse4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <!-- Icon Container -->
+                            <FrameLayout
+                                android:id="@+id/iconContainer4"
+                                android:layout_width="52dp"
+                                android:layout_height="52dp"
+                                android:background="@drawable/bg_course_icon_purple"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Network Icon"
+                                    android:src="@drawable/ic_network_symbol" />
+                            </FrameLayout>
+
+                            <!-- Course Info -->
+                            <LinearLayout
+                                android:id="@+id/infoContainer4"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toStartOf="@id/btnChevron4"
+                                app:layout_constraintStart_toEndOf="@id/iconContainer4"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Computer Networks"
+                                    android:textColor="#111B6B"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="CS301 • Dr. Sokha"
+                                    android:textColor="#7A7D8F"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_badge_core"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="Core"
+                                        android:textColor="#315CFF"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:background="@drawable/bg_badge_credit"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="4dp"
+                                        android:text="3 Credits"
+                                        android:textColor="#64748B"
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <!-- Top Right Chevron Arrow -->
+                            <ImageView
+                                android:id="@+id/btnChevron4"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="Arrow"
+                                android:src="@drawable/ic_chevron_right_purple"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#6845FF" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Progress Bar & Percentage Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="8dp"
+                                android:layout_weight="1"
+                                android:max="100"
+                                android:progress="71"
+                                android:progressDrawable="@drawable/progress_bar_purple" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="71%"
+                                android:textColor="#6845FF"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

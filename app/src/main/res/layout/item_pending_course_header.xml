@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/teacher_card_bg"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="1dp"
+    app:strokeColor="@color/teacher_border"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <FrameLayout
+            android:id="@+id/iconHeaderContainer"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_course_icon_blue">
+
+            <ImageView
+                android:id="@+id/imgHeaderCourseIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_book"
+                app:tint="@color/white"
+                android:contentDescription="Course" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvHeaderCourseCodeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CS101 - Data Structures"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHeaderDepartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="Computer Science Department"
+                android:textColor="@color/teacher_secondary_text"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvHeaderPendingBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="5 Pending Scores"
+            android:textColor="#7C3AED"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_metric_purple" />
+
+        <ImageView
+            android:id="@+id/imgHeaderChevron"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_chevron_down"
+            app:tint="@color/teacher_dark_navy"
+            android:contentDescription="Expand" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

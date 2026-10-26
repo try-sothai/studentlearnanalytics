@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/teacher_bg"
+    android:fitsSystemWindows="true">
+
+    <!-- Native Status Bar Simulated Row -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvStatusBarTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9:41"
+            android:textColor="@color/teacher_dark_navy"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_signal_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Signal" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_wifi_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="WiFi" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_battery_status"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Battery" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/btnTeacherStudentsBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            app:tint="@color/teacher_dark_navy"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Students"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Students in my class"
+                android:textColor="@color/teacher_secondary_text"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Course Selector Dropdown Button -->
+        <LinearLayout
+            android:id="@+id/btnCourseSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_teacher_dropdown"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_graduation_cap"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Course" />
+
+            <TextView
+                android:id="@+id/tvSelectedCourseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="CS101 - Data Structures"
+                android:textColor="@color/teacher_dark_navy"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_chevron_down"
+                app:tint="@color/teacher_dark_navy"
+                android:contentDescription="Dropdown" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp">
+
+            <!-- Selected Class Summary Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSelectedClassSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/teacher_card_bg"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/teacher_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Left Section: Course & Teacher -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_book"
+                            app:tint="@color/white"
+                            android:background="@drawable/bg_course_icon_blue"
+                            android:contentDescription="Course Icon" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvSummaryCourseName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CS101 - Data Structures"
+                                android:textColor="@color/teacher_dark_navy"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                android:singleLine="true" />
+
+                            <TextView
+                                android:id="@+id/tvSummaryTeacherName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Teacher: Mr. Chan"
+                                android:textColor="@color/teacher_secondary_text"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/tvSummaryDepartmentName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Computer Science Dept."
+                                android:textColor="@color/teacher_secondary_text"
+                                android:textSize="10sp"
+                                android:ellipsize="end"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Divider 1 -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_marginHorizontal="6dp"
+                        android:background="@color/teacher_border" />
+
+                    <!-- Middle Section: Semester -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Semester"
+                            android:textColor="@color/teacher_secondary_text"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvSummarySemester"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Semester 1, 2024"
+                            android:textColor="@color/teacher_dark_navy"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <!-- Divider 2 -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_marginHorizontal="6dp"
+                        android:background="@color/teacher_border" />
+
+                    <!-- Right Section: Total Students -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Students"
+                            android:textColor="@color/teacher_secondary_text"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tvSummaryTotalStudents"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="35"
+                            android:textColor="@color/teacher_primary_blue"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Search Field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_search_input"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/teacher_secondary_text"
+                    android:contentDescription="Search" />
+
+                <EditText
+                    android:id="@+id/edtSearchStudents"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:background="@null"
+                    android:hint="Search students by name, student ID, or program..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textColorHint="@color/teacher_secondary_text"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Status Filters Row -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterAll"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="All (35)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/teacher_primary_blue"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterAtRisk"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="At Risk (5)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_at_risk_text"
+                        app:backgroundTint="@color/status_at_risk_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterGood"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Good (24)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_good_text"
+                        app:backgroundTint="@color/status_good_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnFilterNeedAttention"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Need Attention (6)"
+                        android:textAllCaps="false"
+                        android:textSize="12sp"
+                        android:textColor="@color/status_attention_text"
+                        app:backgroundTint="@color/status_attention_bg"
+                        app:cornerRadius="18dp"
+                        android:paddingHorizontal="14dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
+
+                    <LinearLayout
+                        android:id="@+id/btnFilterDropdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_teacher_dropdown"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="12dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_filter_sliders"
+                            app:tint="@color/teacher_primary_blue"
+                            android:contentDescription="Filter" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginEnd="4dp"
+                            android:text="Filter"
+                            android:textColor="@color/teacher_primary_blue"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_chevron_down"
+                            app:tint="@color/teacher_primary_blue"
+                            android:contentDescription="Chevron" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Student List Container -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvStudentList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Pagination Control Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/tvPaginationInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Showing 1–8 of 35 students"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/layoutPaginationControls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/btnPagePrev"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="&lt;"
+                        android:textColor="@color/teacher_dark_navy"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_inactive"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/btnPage1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_active"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/btnPage2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/teacher_dark_navy"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_inactive"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/btnPage3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/teacher_dark_navy"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_inactive"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/tvPageEllipsis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="..."
+                        android:textColor="@color/teacher_secondary_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/btnPage5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textColor="@color/teacher_dark_navy"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_inactive"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
+                        android:id="@+id/btnPageNext"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:text="&gt;"
+                        android:textColor="@color/teacher_dark_navy"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pagination_button_inactive"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

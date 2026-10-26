@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/teacher_card_bg"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/teacher_border"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <!-- Left: Course Accent Icon & Information -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.3"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:id="@+id/iconCardContainer"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_course_icon_blue"
+                android:layout_gravity="top">
+
+                <ImageView
+                    android:id="@+id/imgCardCourseIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_book"
+                    app:tint="@color/white"
+                    android:contentDescription="Course" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCardCourseCodeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CS101 - Data Structures"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCardInstructor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Instructor: Mr. Chan"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvCardMetadata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="156 students • Semester 1, 2024"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Vertical Divider -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="64dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/teacher_border" />
+
+        <!-- Right: Score, Progress Bar, Status Badge & Chevron -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Avg: "
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvCardAvgScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="82%"
+                    android:textColor="@color/teacher_dark_navy"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCardStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:text="Good"
+                    android:textColor="@color/status_good_text"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_status_good" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBarAvgScore"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="100dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="6dp"
+                android:max="100"
+                android:progress="82"
+                android:progressDrawable="@drawable/bg_circular_progress" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/teacher_secondary_text"
+                android:contentDescription="Details" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

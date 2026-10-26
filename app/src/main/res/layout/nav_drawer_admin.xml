@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/admin_drawer_view"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@drawable/bg_admin_drawer"
+    android:clickable="true"
+    android:elevation="16dp"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <!-- Compact Profile Header -->
+    <include
+        android:id="@+id/headerAdminDrawer"
+        layout="@layout/nav_header_admin" />
+
+    <!-- Scrollable Navigation Items -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="8dp">
+
+            <!-- Primary Navigation Menu Items -->
+
+            <!-- 1. Dashboard -->
+            <include
+                android:id="@+id/itemDrawerDashboard"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 2. User Management -->
+            <include
+                android:id="@+id/itemDrawerUserManagement"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 3. Course Management -->
+            <include
+                android:id="@+id/itemDrawerCourseManagement"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 4. Reports & Analytics -->
+            <include
+                android:id="@+id/itemDrawerReports"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 5. Notifications -->
+            <include
+                android:id="@+id/itemDrawerNotifications"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 6. Settings -->
+            <include
+                android:id="@+id/itemDrawerSettings"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- Divider Line -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/drawer_divider" />
+
+            <!-- "Other" Section Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="6dp"
+                android:text="Other"
+                android:textColor="@color/drawer_secondary_text"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Secondary Navigation Menu Items -->
+
+            <!-- 7. Help & Support -->
+            <include
+                android:id="@+id/itemDrawerHelp"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 8. About -->
+            <include
+                android:id="@+id/itemDrawerAbout"
+                layout="@layout/item_admin_drawer_menu" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Logout Button Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:id="@+id/btnAdminDrawerLogout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_admin_drawer_logout"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="Log Out Icon"
+                android:src="@drawable/ic_logout_red"
+                app:tint="@color/drawer_logout_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Log Out"
+                android:textColor="@color/drawer_logout_red"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

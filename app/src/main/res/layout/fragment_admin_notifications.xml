@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/notif_spec_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Top App Bar Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnNotifMenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Menu"
+                android:focusable="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_menu"
+                app:tint="@color/notif_spec_dark_navy" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notifications"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Stay updated with system activities"
+                    android:textColor="@color/notif_spec_secondary_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Notification Bell with Badge -->
+            <FrameLayout
+                android:id="@+id/btnHeaderBell"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_circle_soft_blue">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Notifications Bell"
+                    android:src="@drawable/ic_notifications"
+                    app:tint="@color/notif_spec_primary_blue" />
+
+                <TextView
+                    android:id="@+id/tvNotifBadgeCount"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/bg_nav_badge_red"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- Three-Dot Overflow Menu Icon -->
+            <ImageView
+                android:id="@+id/btnNotifOverflow"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="More Options"
+                android:focusable="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_more_vert"
+                app:tint="@color/notif_spec_dark_navy" />
+
+        </LinearLayout>
+
+        <!-- Category Filter Chips (Horizontal ScrollView) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pillNotifAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_notif_chip_active"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="All (24)"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pillNotifUnread"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginHorizontal="6dp"
+                    android:background="@drawable/bg_notif_chip_inactive"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="Unread (3)"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pillNotifSystem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginHorizontal="6dp"
+                    android:background="@drawable/bg_notif_chip_inactive"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="System (8)"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pillNotifUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginHorizontal="6dp"
+                    android:background="@drawable/bg_notif_chip_inactive"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="User (6)"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pillNotifCourse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_notif_chip_inactive"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="Course (5)"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Search Bar and Funnel Filter Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxStrokeColor="@color/notif_spec_primary_blue"
+                app:hintEnabled="false"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="@color/notif_spec_secondary_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearchNotification"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:hint="Search notifications..."
+                    android:inputType="text"
+                    android:paddingVertical="8dp"
+                    android:textColor="@color/notif_spec_dark_navy"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/btnFilterNotifications"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_circle_soft_blue"
+                android:clickable="true"
+                android:contentDescription="Filter Notifications"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_funnel_filter"
+                app:tint="@color/notif_spec_primary_blue" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Main Scrollable Notifications List Container -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="16dp"
+            tools:listitem="@layout/item_notification_row" />
+
+        <!-- Empty State Container -->
+        <LinearLayout
+            android:id="@+id/layoutNotifEmptyState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/bg_circle_soft_blue">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Empty Notifications Illustration"
+                    android:src="@drawable/ic_notifications"
+                    app:tint="@color/notif_spec_primary_blue" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvEmptyStateTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="No Notifications"
+                android:textColor="@color/notif_spec_dark_navy"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmptyStateDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="You're all caught up! There are no notifications at the moment."
+                android:textColor="@color/notif_spec_secondary_text"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetNotifSearch"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:text="Reset Search &amp; Filters"
+                android:textAllCaps="false"
+                android:textColor="@color/notif_spec_primary_blue"
+                android:textSize="13sp"
+                android:visibility="gone"
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/notif_spec_primary_blue"
+                app:strokeWidth="1dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
