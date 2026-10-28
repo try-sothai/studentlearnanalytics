@@ -36,6 +36,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.view.View;
+import android.view.LayoutInflater;
+import java.util.List;
+import java.util.ArrayList;
+
 public class LearningReportActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
@@ -48,10 +55,22 @@ public class LearningReportActivity extends AppCompatActivity {
     private TextView tvReportQuiz;
     private TextView tvReportGpa;
     private TextView tvReportRiskLevel;
+    
+    private Spinner spinnerReportType;
+    private Spinner spinnerSemester;
+    private LinearLayout layoutCoursesContainer;
 
     private String loadedStudentCode = "";
     private String loadedStudentName = "";
     private String loadedDepartment = "";
+    
+    private android.widget.ProgressBar progressBar;
+    private TextView tvReportSemesterTitle;
+    private TextView tvReportSemesterSubtitle;
+
+    private List<DashboardResponse.SemesterInfo> availableSemesters = new ArrayList<>();
+    private Long selectedSemesterId = null;
+    private List<DashboardResponse.EnrollmentInfo> currentEnrollments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +89,19 @@ public class LearningReportActivity extends AppCompatActivity {
         tvReportQuiz = findViewById(R.id.tvReportQuiz);
         tvReportGpa = findViewById(R.id.tvReportGpa);
         tvReportRiskLevel = findViewById(R.id.tvReportRiskLevel);
+        layoutCoursesContainer = findViewById(R.id.layoutCoursesContainer);
+        progressBar = findViewById(R.id.progressBar);
+        tvReportSemesterTitle = findViewById(R.id.tvReportSemesterTitle);
+        tvReportSemesterSubtitle = findViewById(R.id.tvReportSemesterSubtitle);
 
-        Spinner exportSpinner = findViewById(R.id.export_spinner);
-        if (exportSpinner != null) {
-            String[] semesters = {"Semester 1, 2024", "Semester 2, 2024", "Semester 1, 2025"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, semesters);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            exportSpinner.setAdapter(adapter);
+        spinnerReportType = findViewById(R.id.spinnerReportType);
+        spinnerSemester = findViewById(R.id.spinnerSemester);
+        
+        if (spinnerReportType != null) {
+            String[] types = {"Overall Academic Performance"};
+            ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
+            typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerReportType.setAdapter(typeAdapter);
         }
 
         Button btnDownloadPdf = findViewById(R.id.btnDownloadPdf);
@@ -88,9 +113,11 @@ public class LearningReportActivity extends AppCompatActivity {
     }
 
     private void fetchReportData() {
-        ApiClient.getApiService(this).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        ApiClient.getApiService(this).getStudentDashboardFiltered(selectedSemesterId, null).enqueue(new Callback<DashboardResponse>() {
             @Override
             public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null && !isFinishing() && !isDestroyed()) {
                     DashboardResponse.DashboardData data = response.body().getData();
                     if (data != null) {
@@ -111,20 +138,18 @@ public class LearningReportActivity extends AppCompatActivity {
                             }
                         }
 
-                        if (tvReportAttendance != null) {
-                            tvReportAttendance.setText(data.getAttendanceRateFormatted());
-                        }
-                        if (tvReportAssignment != null) {
-                            tvReportAssignment.setText(data.getAssignmentScoreFormatted());
-                        }
-                        if (tvReportQuiz != null) {
-                            tvReportQuiz.setText(data.getQuizScoreFormatted());
-                        }
-                        if (tvReportGpa != null) {
-                            tvReportGpa.setText(data.getGpaFormatted());
-                        }
-                        if (tvReportRiskLevel != null) {
-                            tvReportRiskLevel.setText(data.getRiskLevel());
+                        if (tvReportAttendance != null) tvReportAttendance.setText(data.getAttendanceRateFormatted());
+                        if (tvReportAssignment != null) tvReportAssignment.setText(data.getAssignmentScoreFormatted());
+                        if (tvReportQuiz != null) tvReportQuiz.setText(data.getQuizScoreFormatted());
+                        if (tvReportGpa != null) tvReportGpa.setText(data.getGpaFormatted());
+                        if (tvReportRiskLevel != null) tvReportRiskLevel.setText(data.getRiskLevel());
+
+                        currentEnrollments = data.getEnrollments();
+                        renderCourses();
+
+                        if (availableSemesters.isEmpty() && data.getSemesters() != null && !data.getSemesters().isEmpty()) {
+                            availableSemesters = data.getSemesters();
+                            setupSemesterSpinner();
                         }
                     }
                 }
@@ -132,9 +157,119 @@ public class LearningReportActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 Log.e("SLAS_REPORT", "Failed to fetch student report data: " + t.getMessage());
             }
         });
+    }
+
+    private void setupSemesterSpinner() {
+        if (spinnerSemester == null) return;
+        List<String> semesterNames = new ArrayList<>();
+        semesterNames.add("All Semesters");
+        for (DashboardResponse.SemesterInfo sem : availableSemesters) {
+            semesterNames.add(sem.name != null ? sem.name : "Semester ID: " + sem.id);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, semesterNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSemester.setAdapter(adapter);
+        
+        spinnerSemester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Long newSemesterId = null;
+                String selectedName = "All Semesters";
+                if (position > 0) {
+                    try {
+                        DashboardResponse.SemesterInfo sem = availableSemesters.get(position - 1);
+                        Object semIdObj = sem.id;
+                        selectedName = sem.name != null ? sem.name : "Semester ID: " + sem.id;
+                        if (semIdObj instanceof Number) {
+                            newSemesterId = ((Number) semIdObj).longValue();
+                        } else if (semIdObj instanceof String) {
+                            newSemesterId = Long.parseLong((String) semIdObj);
+                        }
+                    } catch (Exception ignored) {}
+                }
+                
+                if (tvReportSemesterTitle != null) tvReportSemesterTitle.setText(selectedName);
+                if (tvReportSemesterSubtitle != null) tvReportSemesterSubtitle.setText(selectedName);
+                
+                if ((selectedSemesterId == null && newSemesterId != null) ||
+                    (selectedSemesterId != null && !selectedSemesterId.equals(newSemesterId))) {
+                    selectedSemesterId = newSemesterId;
+                    fetchReportData();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    private void renderCourses() {
+        if (layoutCoursesContainer == null) return;
+        layoutCoursesContainer.removeAllViews();
+        
+        if (currentEnrollments == null || currentEnrollments.isEmpty()) {
+            TextView emptyView = new TextView(this);
+            emptyView.setText("No courses enrolled for this period.");
+            emptyView.setTextColor(Color.parseColor("#64748B"));
+            emptyView.setPadding(0, 16, 0, 16);
+            layoutCoursesContainer.addView(emptyView);
+            return;
+        }
+
+        for (DashboardResponse.EnrollmentInfo enr : currentEnrollments) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.VERTICAL);
+            row.setPadding(0, 16, 0, 16);
+
+            TextView tvCodeName = new TextView(this);
+            String courseText = (enr.course != null && enr.course.courseCode != null ? enr.course.courseCode : "") + " - " + 
+                                (enr.course != null && enr.course.courseName != null ? enr.course.courseName : "Unknown Course");
+            tvCodeName.setText(courseText);
+            tvCodeName.setTextColor(Color.parseColor("#18245A")); // Dark navy matches Performance Details
+            tvCodeName.setTextSize(14f);
+            tvCodeName.setTypeface(null, android.graphics.Typeface.BOLD);
+            row.addView(tvCodeName);
+
+            LinearLayout detailsRow = new LinearLayout(this);
+            detailsRow.setOrientation(LinearLayout.HORIZONTAL);
+            detailsRow.setPadding(0, 8, 0, 0);
+
+            TextView tvScore = new TextView(this);
+            tvScore.setText(String.format("Score: %s", (enr.finalScore != null ? enr.finalScore : "N/A")));
+            tvScore.setTextColor(Color.parseColor("#7A86A5")); // Muted blue-gray
+            tvScore.setTextSize(13f);
+            tvScore.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+            detailsRow.addView(tvScore);
+
+            TextView tvGrade = new TextView(this);
+            tvGrade.setText(String.format("Grade: %s", (enr.grade != null ? enr.grade : "N/A")));
+            tvGrade.setTextColor(Color.parseColor("#7A86A5"));
+            tvGrade.setTextSize(13f);
+            tvGrade.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+            detailsRow.addView(tvGrade);
+            
+            TextView tvStatus = new TextView(this);
+            tvStatus.setText(String.format("Status: %s", (enr.status != null ? enr.status.toUpperCase() : "N/A")));
+            tvStatus.setTextColor(Color.parseColor("#7A86A5"));
+            tvStatus.setTextSize(13f);
+            tvStatus.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+            detailsRow.addView(tvStatus);
+
+            row.addView(detailsRow);
+
+            View divider = new View(this);
+            divider.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1));
+            divider.setBackgroundColor(Color.parseColor("#E8ECF7")); // Light gray-blue
+            divider.setPadding(0, 8, 0, 0);
+            row.addView(divider);
+
+            layoutCoursesContainer.addView(row);
+        }
     }
 
     private void generateAndOpenPdfReport() {
@@ -223,8 +358,56 @@ public class LearningReportActivity extends AppCompatActivity {
         canvas.drawText("• Cumulative GPA: " + gpa, 40, y, bodyPaint);
         y += 18;
         canvas.drawText("• Academic Risk Level: " + risk, 40, y, bodyPaint);
-        y += 40;
+        y += 30;
 
+        canvas.drawText("Enrolled Courses", 40, y, headerPaint);
+        y += 20;
+
+        if (currentEnrollments != null && !currentEnrollments.isEmpty()) {
+            Paint tableHeaderPaint = new Paint();
+            tableHeaderPaint.setColor(Color.parseColor("#155DFC"));
+            tableHeaderPaint.setTextSize(10f);
+            tableHeaderPaint.setFakeBoldText(true);
+
+            Paint tableBodyPaint = new Paint();
+            tableBodyPaint.setColor(Color.parseColor("#172554"));
+            tableBodyPaint.setTextSize(10f);
+
+            canvas.drawText("Course Code", 40, y, tableHeaderPaint);
+            canvas.drawText("Course Name", 140, y, tableHeaderPaint);
+            canvas.drawText("Score", 420, y, tableHeaderPaint);
+            canvas.drawText("Grade", 480, y, tableHeaderPaint);
+            canvas.drawText("Status", 530, y, tableHeaderPaint);
+            y += 15;
+            canvas.drawLine(40, y, 555, y, linePaint);
+            y += 15;
+
+            for (DashboardResponse.EnrollmentInfo enr : currentEnrollments) {
+                if (y > 780) { // Very simple pagination fallback
+                    canvas.drawText("... (More courses on next page)", 40, y, tableBodyPaint);
+                    break;
+                }
+                String code = enr.course != null && enr.course.courseCode != null ? enr.course.courseCode : "N/A";
+                String name = enr.course != null && enr.course.courseName != null ? enr.course.courseName : "N/A";
+                if (name.length() > 30) name = name.substring(0, 27) + "..."; // prevent overlap
+
+                String score = enr.finalScore != null ? String.valueOf(enr.finalScore) : "N/A";
+                String grade = enr.grade != null ? enr.grade : "N/A";
+                String status = enr.status != null ? enr.status : "N/A";
+
+                canvas.drawText(code, 40, y, tableBodyPaint);
+                canvas.drawText(name, 140, y, tableBodyPaint);
+                canvas.drawText(score, 420, y, tableBodyPaint);
+                canvas.drawText(grade, 480, y, tableBodyPaint);
+                canvas.drawText(status, 530, y, tableBodyPaint);
+                y += 18;
+            }
+        } else {
+            canvas.drawText("No courses enrolled for this period.", 40, y, bodyPaint);
+            y += 20;
+        }
+
+        y += 20;
         canvas.drawText("Report Generated On: " + new Date(), 40, y, bodyPaint);
 
         pdfDocument.finishPage(page);

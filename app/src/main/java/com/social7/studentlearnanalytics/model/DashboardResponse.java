@@ -42,6 +42,7 @@ public class DashboardResponse {
 
         @SerializedName("gpa")
         private Object gpa;
+
         @SerializedName("gpa_record")
         private GpaRecordInfo gpaRecord;
 
@@ -79,6 +80,29 @@ public class DashboardResponse {
         @SerializedName("predictions")
         private List<PredictionInfo> predictions;
 
+        @SerializedName("semesters")
+        private List<SemesterInfo> semesters;
+
+        public List<SemesterInfo> getSemesters() {
+            return semesters;
+        }
+
+        public Double getPredictionConfidence() {
+            if (predictions != null && !predictions.isEmpty() && predictions.get(0).confidenceScore != null) {
+                try {
+                    return Double.parseDouble(String.valueOf(predictions.get(0).confidenceScore).trim());
+                } catch (Exception ignored) {}
+            }
+            return 0.85; // Default standard model confidence
+        }
+
+        public String getModelVersion() {
+            if (predictions != null && !predictions.isEmpty() && predictions.get(0).modelVersion != null) {
+                return predictions.get(0).modelVersion;
+            }
+            return "v1.0.0";
+        }
+
         public Object getGpaValue() {
             if (gpa != null) return gpa;
             return gpaRecord != null ? gpaRecord.gpa : null;
@@ -103,18 +127,27 @@ public class DashboardResponse {
             return studentId != null ? studentId : "";
         }
 
-        public String getDepartment() {
-            if (student != null && student.getDepartmentName() != null) {
-                return student.getDepartmentName();
+        public String getMajorOrDepartment() {
+            if (student != null) {
+                String m = student.getMajorOrDepartment();
+                if (!m.isEmpty()) return m;
             }
             return "";
         }
 
-        public String getYearLevel() {
+        public String getDepartment() {
+            return getMajorOrDepartment();
+        }
+
+        public String getYearLevelFormatted() {
             if (student != null) {
-                return student.getYearLevel();
+                return student.getYearLevelFormatted();
             }
-            return "1";
+            return "Year 1";
+        }
+
+        public String getYearLevel() {
+            return getYearLevelFormatted();
         }
 
         public String getOverallPerformanceFormatted() {
@@ -204,6 +237,23 @@ public class DashboardResponse {
             return "Not available yet";
         }
 
+        public Double getRiskScoreVal() {
+            if (riskAssessment != null && riskAssessment.riskScore != null) {
+                try {
+                    return Double.parseDouble(String.valueOf(riskAssessment.riskScore).trim());
+                } catch (Exception ignored) {}
+            }
+            return null;
+        }
+
+        public String getRiskScoreFormatted() {
+            Double score = getRiskScoreVal();
+            if (score != null) {
+                return String.format(java.util.Locale.US, "%.0f / 100", score);
+            }
+            return null;
+        }
+
         public List<Float> getChartData() {
             return chartData;
         }
@@ -258,7 +308,7 @@ public class DashboardResponse {
 
     public static class GpaRecordInfo {
         @SerializedName("gpa")
-        private Object gpa;
+        public Object gpa;
     }
 
     public static class StudentInfo {
@@ -274,6 +324,9 @@ public class DashboardResponse {
         @SerializedName("student_id")
         private String studentId;
 
+        @SerializedName("major")
+        private String major;
+
         @SerializedName("user")
         private UserInfo user;
 
@@ -281,7 +334,7 @@ public class DashboardResponse {
         private DepartmentInfo department;
 
         @SerializedName("year_level")
-        private String yearLevel;
+        private Object yearLevel;
 
         public String getDisplayName() {
             if (user != null && user.name != null && !user.name.isEmpty()) {
@@ -301,12 +354,33 @@ public class DashboardResponse {
             return "";
         }
 
+        public String getMajorOrDepartment() {
+            if (major != null && !major.trim().isEmpty()) {
+                return major.trim();
+            }
+            if (department != null && department.name != null && !department.name.trim().isEmpty()) {
+                return department.name.trim();
+            }
+            return "";
+        }
+
         public String getDepartmentName() {
-            return department != null && department.name != null ? department.name : "";
+            return getMajorOrDepartment();
+        }
+
+        public String getYearLevelFormatted() {
+            if (yearLevel == null) return "Year 1";
+            String raw = String.valueOf(yearLevel).trim();
+            if (raw.isEmpty() || "null".equalsIgnoreCase(raw)) return "Year 1";
+            if (raw.endsWith(".0")) {
+                raw = raw.substring(0, raw.length() - 2);
+            }
+            if (raw.toLowerCase().contains("year")) return raw;
+            return "Year " + raw;
         }
 
         public String getYearLevel() {
-            return yearLevel != null ? yearLevel : "1";
+            return getYearLevelFormatted();
         }
     }
 
@@ -320,35 +394,38 @@ public class DashboardResponse {
 
     public static class DepartmentInfo {
         @SerializedName("name")
-        private String name;
+        public String name;
     }
 
     public static class AnalyticsInfo {
         @SerializedName("overall_performance")
-        private Object overallScore;
+        public Object overallScore;
 
         @SerializedName("attendance_rate")
-        private Object attendanceRate;
+        public Object attendanceRate;
 
         @SerializedName("assignment_average")
-        private Object assignmentAvg;
+        public Object assignmentAvg;
 
         @SerializedName("quiz_average")
-        private Object quizAvg;
+        public Object quizAvg;
 
         @SerializedName("exam_average")
         public Object examAvg;
 
         @SerializedName("gpa")
-        private Object gpa;
+        public Object gpa;
 
         @SerializedName("predicted_score")
-        private Object predictedScore;
+        public Object predictedScore;
     }
 
     public static class RiskAssessmentInfo {
         @SerializedName("risk_level")
-        private String riskLevel;
+        public String riskLevel;
+
+        @SerializedName("risk_score")
+        public Object riskScore;
     }
 
     public static class EnrollmentInfo {
@@ -360,6 +437,9 @@ public class DashboardResponse {
 
         @SerializedName("final_score")
         public Float finalScore;
+
+        @SerializedName("grade")
+        public String grade;
 
         @SerializedName("course")
         public CourseModelInfo course;
@@ -404,6 +484,11 @@ public class DashboardResponse {
     public static class PredictionInfo {
         @SerializedName("predicted_score")
         public Object predictedScore;
+
+        @SerializedName("confidence_score")
+        public Object confidenceScore;
+
+        @SerializedName("model_version")
+        public String modelVersion;
     }
 }
-

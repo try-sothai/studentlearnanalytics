@@ -80,22 +80,31 @@ public class ProfileFragment extends Fragment {
         }
 
         if (cardPersonalInfo != null) {
-            cardPersonalInfo.setOnClickListener(v -> showInfoDialog("Personal Information",
-                    "• Full Name: " + sessionManager.getStudentName() + "\n" +
-                    "• Student ID: " + sessionManager.getUserId() + "\n" +
-                    "• Email: student@slas.edu.kh\n" +
-                    "• Phone: +855 12 345 678\n" +
-                    "• Department: Computer Science\n" +
-                    "• Academic Year: 3rd Year"));
+            cardPersonalInfo.setOnClickListener(v -> {
+                String name = (tvStudentName != null && tvStudentName.getText() != null) ? tvStudentName.getText().toString() : sessionManager.getStudentName();
+                String id = sessionManager.getUserId();
+                String email = !profileEmail.isEmpty() ? profileEmail : "Authenticated Student";
+                String phone = !profilePhone.isEmpty() ? profilePhone : "Not provided";
+                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Computer Science";
+                String year = !profileYearLevel.isEmpty() ? profileYearLevel + " Year" : "3rd Year";
+
+                showInfoDialog("Personal Information",
+                        "• Full Name: " + name + "\n" +
+                        "• Student ID: " + id + "\n" +
+                        "• Email: " + email + "\n" +
+                        "• Phone: " + phone + "\n" +
+                        "• Department: " + dept + "\n" +
+                        "• Year Level: " + year);
+            });
         }
 
         if (cardAcademicInfo != null) {
-            cardAcademicInfo.setOnClickListener(v -> showInfoDialog("Academic Information",
-                    "• Major: Software Engineering\n" +
-                    "• Faculty: Science & Technology\n" +
-                    "• Total Credits Completed: 84 Credits\n" +
-                    "• Current Cumulative GPA: 3.25 / 4.00\n" +
-                    "• Enrollment Status: Active Student"));
+            cardAcademicInfo.setOnClickListener(v -> {
+                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Computer Science";
+                showInfoDialog("Academic Information",
+                        "• Department: " + dept + "\n" +
+                        "• Enrollment Status: Active Student");
+            });
         }
 
         if (cardChangePassword != null) {
@@ -128,12 +137,71 @@ public class ProfileFragment extends Fragment {
         fetchProfile();
     }
 
+    private String profileEmail = "";
+    private String profilePhone = "";
+    private String profileDepartment = "";
+    private String profileYearLevel = "";
+
     private void fetchProfile() {
+        if (getContext() == null) return;
+
         ApiClient.getApiService(requireContext()).getProfile().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Profile API fetched: " + response.body().toString());
+                    try {
+                        JsonObject root = response.body();
+                        JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data") : root;
+
+                        String name = "";
+                        String code = "";
+
+                        if (data.has("name") && !data.get("name").isJsonNull()) {
+                            name = data.get("name").getAsString();
+                        }
+                        if (data.has("email") && !data.get("email").isJsonNull()) {
+                            profileEmail = data.get("email").getAsString();
+                        }
+
+                        if (data.has("student") && data.get("student").isJsonObject()) {
+                            JsonObject studentObj = data.getAsJsonObject("student");
+                            if (studentObj.has("student_code") && !studentObj.get("student_code").isJsonNull()) {
+                                code = studentObj.get("student_code").getAsString();
+                            } else if (studentObj.has("student_id") && !studentObj.get("student_id").isJsonNull()) {
+                                code = studentObj.get("student_id").getAsString();
+                            }
+                            if (studentObj.has("phone") && !studentObj.get("phone").isJsonNull()) {
+                                profilePhone = studentObj.get("phone").getAsString();
+                            }
+                            if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
+                                profileYearLevel = studentObj.get("year_level").getAsString();
+                            }
+                            if (studentObj.has("department") && studentObj.get("department").isJsonObject()) {
+                                JsonObject dept = studentObj.getAsJsonObject("department");
+                                if (dept.has("name") && !dept.get("name").isJsonNull()) {
+                                    profileDepartment = dept.get("name").getAsString();
+                                }
+                            }
+                        }
+
+                        if (name.isEmpty() && sessionManager != null) {
+                            name = sessionManager.getStudentName();
+                        }
+                        if (code.isEmpty() && sessionManager != null) {
+                            code = sessionManager.getUserId();
+                        }
+
+                        if (tvStudentName != null && !name.isEmpty()) {
+                            tvStudentName.setText(name);
+                        }
+                        if (tvStudentId != null && !code.isEmpty()) {
+                            tvStudentId.setText("ID: " + code);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing profile data", e);
+                    }
                 } else {
                     Log.d(TAG, "Profile HTTP code: " + response.code());
                 }

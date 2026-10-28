@@ -80,7 +80,13 @@ public class StudentDashboardFragment extends Fragment {
         // Header Navigation Listeners
         View btnMenu = view.findViewById(R.id.btnMenu);
         if (btnMenu != null) {
-            btnMenu.setOnClickListener(v -> startActivity(new Intent(getActivity(), NavigationMenuActivity.class)));
+            btnMenu.setOnClickListener(v -> {
+                if (getActivity() instanceof StudentMainActivity) {
+                    ((StudentMainActivity) getActivity()).openDrawer();
+                } else {
+                    startActivity(new Intent(getActivity(), NavigationMenuActivity.class));
+                }
+            });
         }
 
         View profileContainer = view.findViewById(R.id.profileContainer);
@@ -218,23 +224,38 @@ public class StudentDashboardFragment extends Fragment {
     private void bindDashboardData(View root, DashboardResponse.DashboardData data) {
         if (data == null || root == null) return;
 
-        if (tvUserName != null && !data.getStudentName().isEmpty()) {
-            tvUserName.setText(data.getStudentName() + "! 👋");
+        if (tvUserName != null) {
+            String studentName = data.getStudentName();
+            if (studentName != null && !studentName.trim().isEmpty()) {
+                tvUserName.setText(studentName + "! 👋");
+            } else if (sessionManager != null && !sessionManager.getStudentName().trim().isEmpty()) {
+                tvUserName.setText(sessionManager.getStudentName() + "! 👋");
+            }
         }
 
         TextView tvStudentId = root.findViewById(R.id.tvStudentId);
-        if (tvStudentId != null && !data.getStudentId().isEmpty()) {
-            tvStudentId.setText("Student ID: " + data.getStudentId());
+        if (tvStudentId != null) {
+            String studentId = data.getStudentId();
+            if (studentId == null || studentId.trim().isEmpty()) {
+                studentId = sessionManager != null ? sessionManager.getUserId() : "";
+            }
+            if (studentId != null && !studentId.trim().isEmpty()) {
+                tvStudentId.setText("Student ID: " + studentId.trim());
+            } else {
+                tvStudentId.setText("Student ID: Unavailable");
+            }
         }
 
         TextView tvDepartmentYear = root.findViewById(R.id.tvDepartmentYear);
-        if (tvDepartmentYear != null && !data.getDepartment().isEmpty()) {
-            String yearLvl = data.getYearLevel();
-            String suffix = "th";
-            if ("1".equals(yearLvl)) suffix = "st";
-            else if ("2".equals(yearLvl)) suffix = "nd";
-            else if ("3".equals(yearLvl)) suffix = "rd";
-            tvDepartmentYear.setText(data.getDepartment() + " | " + yearLvl + suffix + " Year");
+        if (tvDepartmentYear != null) {
+            String majorOrDept = data.getMajorOrDepartment();
+            String yearLvl = data.getYearLevelFormatted();
+
+            if (majorOrDept != null && !majorOrDept.trim().isEmpty()) {
+                tvDepartmentYear.setText(majorOrDept.trim() + " | " + yearLvl);
+            } else {
+                tvDepartmentYear.setText("Major information unavailable | " + yearLvl);
+            }
         }
 
         if (tvPerfScore != null) {
@@ -286,7 +307,9 @@ public class StudentDashboardFragment extends Fragment {
                     }
                 }
                 if (tvConfidence != null) {
-                    tvConfidence.setText("✓ Model Confidence: 87%");
+                    Double conf = data.getPredictionConfidence();
+                    int confPct = (int) Math.round((conf != null ? conf : 0.85) * 100);
+                    tvConfidence.setText("✓ Model Confidence: " + confPct + "% (" + data.getModelVersion() + ")");
                     tvConfidence.setTextColor(Color.parseColor("#10B981"));
                 }
             }
@@ -329,18 +352,18 @@ public class StudentDashboardFragment extends Fragment {
     private void setupPerformanceChart(LineChart chart, List<Float> values) {
         if (chart == null) return;
 
+        if (values == null || values.isEmpty()) {
+            chart.clear();
+            chart.setNoDataText("No historical trend data available");
+            chart.setNoDataTextColor(Color.parseColor("#64748B"));
+            chart.invalidate();
+            return;
+        }
+
         List<Entry> entries = new ArrayList<>();
-        if (values != null && !values.isEmpty()) {
-            for (int i = 0; i < values.size(); i++) {
-                entries.add(new Entry(i, values.get(i)));
-            }
-        } else {
-            entries.add(new Entry(0, 20));
-            entries.add(new Entry(1, 45));
-            entries.add(new Entry(2, 60));
-            entries.add(new Entry(3, 75));
-            entries.add(new Entry(4, 82));
-            entries.add(new Entry(5, 85));
+        for (int i = 0; i < values.size(); i++) {
+            Float val = values.get(i);
+            entries.add(new Entry(i, val != null ? val : 0f));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Performance");

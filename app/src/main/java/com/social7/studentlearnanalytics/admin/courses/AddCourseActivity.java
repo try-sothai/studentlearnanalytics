@@ -19,6 +19,10 @@ public class AddCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
+
         setContentView(R.layout.activity_add_course);
 
         View btnBack = findViewById(R.id.btnBackAddCourse);
@@ -73,6 +77,14 @@ public class AddCourseActivity extends AppCompatActivity {
         if (isValid) {
             Toast.makeText(this, "Course " + code + " - " + name + " added successfully!", Toast.LENGTH_LONG).show();
             finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
         }
     }
 }

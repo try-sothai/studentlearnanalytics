@@ -136,13 +136,13 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="4dp">
 
-            <!-- 1. Home (Active State) -->
+            <!-- 1. Home -->
             <LinearLayout
                 android:id="@+id/menu_home"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginVertical="4dp"
-                android:background="@drawable/bg_nav_menu_active"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -156,16 +156,45 @@
                     android:src="@drawable/ic_nav_home" />
 
                 <TextView
+                    android:id="@+id/tv_menu_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:text="Home"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 2. Learning Analytics -->
+            <!-- 2. Courses -->
+            <LinearLayout
+                android:id="@+id/menu_courses"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Courses Icon"
+                    android:src="@drawable/ic_book" />
+
+                <TextView
+                    android:id="@+id/tv_menu_courses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Courses"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- 3. Learning Analytics -->
             <LinearLayout
                 android:id="@+id/menu_analytics"
                 android:layout_width="match_parent"
@@ -185,6 +214,7 @@
                     android:src="@drawable/ic_nav_analytics" />
 
                 <TextView
+                    android:id="@+id/tv_menu_analytics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -193,7 +223,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 3. Prediction & Risk -->
+            <!-- 4. Prediction & Risk -->
             <LinearLayout
                 android:id="@+id/menu_prediction"
                 android:layout_width="match_parent"
@@ -213,6 +243,7 @@
                     android:src="@drawable/ic_nav_prediction" />
 
                 <TextView
+                    android:id="@+id/tv_menu_prediction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -221,7 +252,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 4. Recommendations -->
+            <!-- 5. Recommendations -->
             <LinearLayout
                 android:id="@+id/menu_recommendation"
                 android:layout_width="match_parent"
@@ -241,6 +272,7 @@
                     android:src="@drawable/ic_nav_recommendation" />
 
                 <TextView
+                    android:id="@+id/tv_menu_recommendation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -249,7 +281,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 5. Notifications (with Red Badge "3") -->
+            <!-- 6. Notifications (with Red Badge "3") -->
             <LinearLayout
                 android:id="@+id/menu_notifications"
                 android:layout_width="match_parent"
@@ -269,6 +301,7 @@
                     android:src="@drawable/ic_nav_notifications" />
 
                 <TextView
+                    android:id="@+id/tv_menu_notifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -283,13 +316,14 @@
                     android:layout_marginStart="10dp"
                     android:background="@drawable/bg_nav_badge_red"
                     android:gravity="center"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="#FFFFFF"
                     android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
 
-            <!-- 6. Reports -->
+            <!-- 7. Reports -->
             <LinearLayout
                 android:id="@+id/menu_reports"
                 android:layout_width="match_parent"
@@ -309,6 +343,7 @@
                     android:src="@drawable/ic_nav_reports" />
 
                 <TextView
+                    android:id="@+id/tv_menu_reports"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -317,7 +352,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 7. Profile -->
+            <!-- 8. Profile -->
             <LinearLayout
                 android:id="@+id/menu_profile"
                 android:layout_width="match_parent"
@@ -337,6 +372,7 @@
                     android:src="@drawable/ic_nav_profile" />
 
                 <TextView
+                    android:id="@+id/tv_menu_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -345,7 +381,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 8. Settings -->
+            <!-- 9. Settings -->
             <LinearLayout
                 android:id="@+id/menu_settings"
                 android:layout_width="match_parent"
@@ -365,6 +401,7 @@
                     android:src="@drawable/ic_nav_settings" />
 
                 <TextView
+                    android:id="@+id/tv_menu_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -373,7 +410,7 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
-            <!-- 9. Logout -->
+            <!-- 10. Logout -->
             <LinearLayout
                 android:id="@+id/menu_logout"
                 android:layout_width="match_parent"
@@ -393,6 +430,7 @@
                     android:src="@drawable/ic_nav_logout" />
 
                 <TextView
+                    android:id="@+id/tv_menu_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"

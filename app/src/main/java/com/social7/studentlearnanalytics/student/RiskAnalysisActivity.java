@@ -66,12 +66,18 @@ public class RiskAnalysisActivity extends AppCompatActivity {
 
     private void bindRiskData(DashboardResponse.DashboardData data) {
         String risk = data.getRiskLevel();
-        if (risk == null || risk.trim().isEmpty()) {
+        if (risk == null || risk.trim().isEmpty() || "Not available yet".equalsIgnoreCase(risk.trim())) {
             displayUnavailableState();
             return;
         }
 
+        Double serverScoreVal = data.getRiskScoreVal();
+        String scoreStr = data.getRiskScoreFormatted();
+
         if ("HIGH".equalsIgnoreCase(risk)) {
+            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 82;
+            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
+
             if (tvRiskLevel != null) {
                 tvRiskLevel.setText("HIGH RISK");
                 tvRiskLevel.setTextColor(Color.parseColor("#EF4444"));
@@ -84,12 +90,15 @@ public class RiskAnalysisActivity extends AppCompatActivity {
             if (tvRiskMsg != null) {
                 tvRiskMsg.setText("Your academic progress is at high risk. Urgent attention is required to improve attendance and assessment scores.");
             }
-            if (tvRiskScore != null) tvRiskScore.setText("82 / 100");
+            if (tvRiskScore != null) tvRiskScore.setText(scoreStr);
             if (pbRiskScore != null) {
-                pbRiskScore.setProgress(82);
+                pbRiskScore.setProgress(scoreProgress);
                 pbRiskScore.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#EF4444")));
             }
         } else if ("MEDIUM".equalsIgnoreCase(risk)) {
+            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 65;
+            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
+
             if (tvRiskLevel != null) {
                 tvRiskLevel.setText("MEDIUM RISK");
                 tvRiskLevel.setTextColor(Color.parseColor("#F59E0B"));
@@ -102,12 +111,15 @@ public class RiskAnalysisActivity extends AppCompatActivity {
             if (tvRiskMsg != null) {
                 tvRiskMsg.setText("You are at medium risk. Keep improving your attendance and quiz performance to lower academic risk.");
             }
-            if (tvRiskScore != null) tvRiskScore.setText("65 / 100");
+            if (tvRiskScore != null) tvRiskScore.setText(scoreStr);
             if (pbRiskScore != null) {
-                pbRiskScore.setProgress(65);
+                pbRiskScore.setProgress(scoreProgress);
                 pbRiskScore.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#F59E0B")));
             }
         } else if ("LOW".equalsIgnoreCase(risk)) {
+            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 25;
+            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
+
             if (tvRiskLevel != null) {
                 tvRiskLevel.setText("LOW RISK");
                 tvRiskLevel.setTextColor(Color.parseColor("#10B981"));
@@ -120,9 +132,9 @@ public class RiskAnalysisActivity extends AppCompatActivity {
             if (tvRiskMsg != null) {
                 tvRiskMsg.setText("Your academic progress is on track! Maintain your current study habits and high class attendance.");
             }
-            if (tvRiskScore != null) tvRiskScore.setText("25 / 100");
+            if (tvRiskScore != null) tvRiskScore.setText(scoreStr);
             if (pbRiskScore != null) {
-                pbRiskScore.setProgress(25);
+                pbRiskScore.setProgress(scoreProgress);
                 pbRiskScore.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#10B981")));
             }
         } else {

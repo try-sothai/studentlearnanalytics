@@ -209,7 +209,7 @@ public class StudentCoursesFragment extends Fragment {
         int completedCount = 0;
 
         for (DashboardResponse.EnrollmentInfo info : currentList) {
-            float score = info.finalScore != null ? info.finalScore : 85.5f;
+            float score = info.finalScore != null ? info.finalScore : 0f;
             scoreSum += score;
             if (info.status != null && ("completed".equalsIgnoreCase(info.status) || "enrolled".equalsIgnoreCase(info.status))) {
                 completedCount++;
@@ -220,8 +220,8 @@ public class StudentCoursesFragment extends Fragment {
 
         if (tvStatCourseCount != null) tvStatCourseCount.setText(String.valueOf(totalCourses));
         if (tvStatGpa != null) {
-            String gpaStr = dashboardData != null ? formatGpa(dashboardData.getGpaValue()) : "3.30";
-            tvStatGpa.setText(gpaStr != null ? gpaStr : "3.30");
+            String gpaStr = dashboardData != null ? formatGpa(dashboardData.getGpaValue()) : null;
+            tvStatGpa.setText(gpaStr != null ? gpaStr : "--");
         }
         if (tvStatAverage != null) tvStatAverage.setText(String.format(Locale.US, "%.1f%%", avgScore));
         if (tvStatCompleted != null) tvStatCompleted.setText(String.valueOf(completedCount));
@@ -246,7 +246,7 @@ public class StudentCoursesFragment extends Fragment {
             String cCode = course.courseCode != null ? course.courseCode.trim() : "CS";
             String teacherName = course.teacher != null && course.teacher.user != null && course.teacher.user.name != null
                     ? course.teacher.user.name : "Lecturer";
-            float finalScore = info.finalScore != null ? info.finalScore : 85.5f;
+            float finalScore = info.finalScore != null ? info.finalScore : 0f;
 
             CardView card = new CardView(requireContext());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

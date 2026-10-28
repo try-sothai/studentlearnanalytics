@@ -91,7 +91,7 @@ public class ExamDetailActivity extends AppCompatActivity {
         refreshList();
 
         ApiService apiService = ApiClient.getApiService(this);
-        apiService.getStudentExams().enqueue(new Callback<JsonObject>() {
+        apiService.getStudentExams(null).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;

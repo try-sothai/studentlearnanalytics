@@ -298,55 +298,108 @@ public class UserManagementFragment extends Fragment implements UserAdapter.OnUs
     }
 
     private void loadUserList(String role) {
+        if (getContext() == null) return;
+
         if ("Admin".equalsIgnoreCase(role)) {
-            masterAdminList.clear();
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(getContext()).getAdmins().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                @Override
+                public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                    if (!isAdded()) return;
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            com.google.gson.JsonArray dataArray = response.body().has("data") && response.body().get("data").isJsonArray()
+                                    ? response.body().getAsJsonArray("data") : null;
+                            if (dataArray != null && !dataArray.isEmpty()) {
+                                masterAdminList.clear();
+                                for (com.google.gson.JsonElement el : dataArray) {
+                                    if (!el.isJsonObject()) continue;
+                                    com.google.gson.JsonObject obj = el.getAsJsonObject();
+                                    String id = obj.has("id") && !obj.get("id").isJsonNull() ? obj.get("id").getAsString() : "ADM";
+                                    String name = obj.has("name") && !obj.get("name").isJsonNull() ? obj.get("name").getAsString() : "Admin";
+                                    String email = obj.has("email") && !obj.get("email").isJsonNull() ? obj.get("email").getAsString() : "";
+                                    masterAdminList.add(new Admin(id, name, email, "Administrator", "Active"));
+                                }
+                            }
+                        } catch (Exception e) {
+                            android.util.Log.e("UserManagement", "Error parsing admins API", e);
+                        }
+                    }
+                    bindAdminList();
+                }
+
+                @Override
+                public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
+                    if (!isAdded()) return;
+                    bindAdminList();
+                }
+            });
+        } else {
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(getContext()).getStudents().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                @Override
+                public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                    if (!isAdded()) return;
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            com.google.gson.JsonArray dataArray = response.body().has("data") && response.body().get("data").isJsonArray()
+                                    ? response.body().getAsJsonArray("data") : null;
+                            if (dataArray != null && !dataArray.isEmpty()) {
+                                masterUserList.clear();
+                                for (com.google.gson.JsonElement el : dataArray) {
+                                    if (!el.isJsonObject()) continue;
+                                    com.google.gson.JsonObject obj = el.getAsJsonObject();
+                                    String id = obj.has("student_code") && !obj.get("student_code").isJsonNull()
+                                            ? obj.get("student_code").getAsString()
+                                            : (obj.has("id") ? obj.get("id").getAsString() : "STU");
+                                    String name = obj.has("first_name") && !obj.get("first_name").isJsonNull()
+                                            ? obj.get("first_name").getAsString() + " " + (obj.has("last_name") ? obj.get("last_name").getAsString() : "")
+                                            : "Student";
+                                    masterUserList.add(new User(id, name.trim(), id.toLowerCase() + "@univ.edu", "Student", "Active"));
+                                }
+                            }
+                        } catch (Exception e) {
+                            android.util.Log.e("UserManagement", "Error parsing students API", e);
+                        }
+                    }
+                    bindUserList();
+                }
+
+                @Override
+                public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
+                    if (!isAdded()) return;
+                    bindUserList();
+                }
+            });
+        }
+    }
+
+    private void bindAdminList() {
+        if (masterAdminList.isEmpty()) {
             masterAdminList.add(new Admin("ADM001", "Mr. Chan", "chan@univ.edu", "System Admin", "Active"));
             masterAdminList.add(new Admin("ADM002", "Ms. Sokha", "sokha@univ.edu", "Academic Admin", "Active"));
-            masterAdminList.add(new Admin("ADM003", "Mr. Vanna", "vanna@univ.edu", "Course Admin", "Active"));
-            masterAdminList.add(new Admin("ADM004", "Ms. Dany", "dany@univ.edu", "Data Analyst", "Inactive"));
-            masterAdminList.add(new Admin("ADM005", "Mr. Rith", "rith@univ.edu", "Support Admin", "Active"));
-            masterAdminList.add(new Admin("ADM006", "Ms. Lina", "lina@univ.edu", "Content Admin", "Active"));
-            masterAdminList.add(new Admin("ADM007", "Mr. Sophak", "sophak@univ.edu", "System Admin", "Active"));
-            masterAdminList.add(new Admin("ADM008", "Ms. Kimsan", "kimsan@univ.edu", "Report Admin", "Inactive"));
-            masterAdminList.add(new Admin("ADM009", "Mr. Piseth", "piseth@univ.edu", "User Admin", "Active"));
-            masterAdminList.add(new Admin("ADM010", "Ms. Sreypov", "sreypov@univ.edu", "Report Admin", "Active"));
+        }
+        updateFilterPillCounts();
+        adminAdapter = new AdminAdapter(getContext(), masterAdminList, this);
+        if (rvUsers != null) {
+            rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvUsers.setAdapter(adminAdapter);
+        }
+        String search = (etSearchUser != null) ? etSearchUser.getText().toString() : "";
+        adminAdapter.filter(search, currentStatusFilter, "All Roles");
+    }
 
-            updateFilterPillCounts();
-
-            adminAdapter = new AdminAdapter(getContext(), masterAdminList, this);
-
-            if (rvUsers != null) {
-                rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvUsers.setAdapter(adminAdapter);
-            }
-
-            String search = (etSearchUser != null) ? etSearchUser.getText().toString() : "";
-            adminAdapter.filter(search, currentStatusFilter, "All Roles");
-        } else {
-            masterUserList.clear();
+    private void bindUserList() {
+        if (masterUserList.isEmpty()) {
             masterUserList.add(new User("STU23001", "Sophea", "sophea@univ.edu", "Student", "Active"));
             masterUserList.add(new User("STU23002", "Dara", "dara@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23003", "Rathana", "rathana@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23004", "Vannak", "vannak@univ.edu", "Student", "Inactive"));
-            masterUserList.add(new User("STU23005", "Sreypov", "sreypov@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23006", "Chenda", "chenda@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23007", "Kimson", "kimson@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23008", "Sokun", "sokun@univ.edu", "Student", "Inactive"));
-            masterUserList.add(new User("STU23009", "Dany", "dany@univ.edu", "Student", "Active"));
-            masterUserList.add(new User("STU23010", "Malis", "malis@univ.edu", "Student", "Active"));
-
-            updateFilterPillCounts();
-
-            userAdapter = new UserAdapter(getContext(), masterUserList, this);
-
-            if (rvUsers != null) {
-                rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvUsers.setAdapter(userAdapter);
-            }
-
-            String search = (etSearchUser != null) ? etSearchUser.getText().toString() : "";
-            userAdapter.filter(search, currentStatusFilter);
         }
+        updateFilterPillCounts();
+        userAdapter = new UserAdapter(getContext(), masterUserList, this);
+        if (rvUsers != null) {
+            rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvUsers.setAdapter(userAdapter);
+        }
+        String search = (etSearchUser != null) ? etSearchUser.getText().toString() : "";
+        userAdapter.filter(search, currentStatusFilter);
     }
 
     private void updateFilterPillCounts() {

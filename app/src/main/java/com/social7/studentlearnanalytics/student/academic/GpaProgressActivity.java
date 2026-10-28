@@ -447,7 +447,7 @@ public class GpaProgressActivity extends AppCompatActivity {
             footer.addView(tvAvg);
 
             TextView tvSemGpa = new TextView(this);
-            tvSemGpa.setText("GPA: " + (semGpa != null ? semGpa : "3.30"));
+            tvSemGpa.setText("GPA: " + (semGpa != null ? semGpa : "N/A"));
             tvSemGpa.setTextColor(Color.parseColor("#5B3DF5"));
             tvSemGpa.setTextSize(12);
             tvSemGpa.setTypeface(null, Typeface.BOLD);

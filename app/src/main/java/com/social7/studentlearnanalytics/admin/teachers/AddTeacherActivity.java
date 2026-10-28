@@ -25,11 +25,24 @@ public class AddTeacherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
+
         setContentView(R.layout.activity_add_teacher);
 
         initViews();
         setupSpinners();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
     }
 
     private void initViews() {
@@ -137,8 +150,60 @@ public class AddTeacherActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            Toast.makeText(this, "Teacher " + name + " created successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            String firstName = name;
+            String lastName = "";
+            if (name.contains(" ")) {
+                int idx = name.indexOf(" ");
+                firstName = name.substring(0, idx).trim();
+                lastName = name.substring(idx + 1).trim();
+            }
+
+            String selectedDept = spAddTeacherDept != null ? spAddTeacherDept.getSelectedItem().toString() : "Computer Science";
+            String selectedPos = spAddTeacherPosition != null ? spAddTeacherPosition.getSelectedItem().toString() : "Lecturer";
+
+            com.google.gson.JsonObject body = new com.google.gson.JsonObject();
+            body.addProperty("teacher_id", teacherId);
+            body.addProperty("first_name", firstName);
+            body.addProperty("last_name", !lastName.isEmpty() ? lastName : firstName);
+            body.addProperty("email", email);
+            body.addProperty("password", "12345678");
+            body.addProperty("password_confirmation", "12345678");
+            body.addProperty("department", selectedDept);
+            body.addProperty("position", selectedPos);
+
+            if (btnSaveTeacher != null) btnSaveTeacher.setEnabled(false);
+
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).createTeacher(body).enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                @Override
+                public void onResponse(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveTeacher != null) btnSaveTeacher.setEnabled(true);
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(AddTeacherActivity.this, "Teacher " + name + " created successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        String errorMsg = "Failed to create teacher (HTTP " + response.code() + ")";
+                        try (okhttp3.ResponseBody errorBody = response.errorBody()) {
+                            if (errorBody != null) {
+                                String rawError = errorBody.string();
+                                com.google.gson.JsonObject errObj = com.google.gson.JsonParser.parseString(rawError).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errorMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(AddTeacherActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveTeacher != null) btnSaveTeacher.setEnabled(true);
+                    Toast.makeText(AddTeacherActivity.this, "Network error creating teacher", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

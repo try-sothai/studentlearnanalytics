@@ -1,6 +1,7 @@
 package com.social7.studentlearnanalytics.student;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.model.DashboardResponse;
+import com.social7.studentlearnanalytics.network.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RecentActivitiesActivity extends AppCompatActivity {
 
+    private static final String TAG = "SLAS_ACTIVITIES";
     private RecyclerView rvRecentActivities;
 
     @Override
@@ -32,22 +40,113 @@ public class RecentActivitiesActivity extends AppCompatActivity {
         }
 
         rvRecentActivities = findViewById(R.id.rvRecentActivities);
+
         if (rvRecentActivities != null) {
             rvRecentActivities.setLayoutManager(new LinearLayoutManager(this));
-            List<ActivityItem> items = getSampleActivities();
-            rvRecentActivities.setAdapter(new ActivityAdapter(items));
         }
+
+        fetchRecentActivities();
     }
 
-    private List<ActivityItem> getSampleActivities() {
+    private void fetchRecentActivities() {
+        ApiClient.getApiService(this).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
+                if (isFinishing() || isDestroyed()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    DashboardResponse.DashboardData data = response.body().getData();
+                    List<ActivityItem> items = buildActivitiesFromDashboard(data);
+                    bindActivities(items);
+                } else {
+                    Log.d(TAG, "Dashboard API code: " + response.code());
+                    bindActivities(new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                Log.d(TAG, "Dashboard API failed: " + t.getMessage());
+                bindActivities(new ArrayList<>());
+            }
+        });
+    }
+
+    private List<ActivityItem> buildActivitiesFromDashboard(DashboardResponse.DashboardData data) {
         List<ActivityItem> list = new ArrayList<>();
-        list.add(new ActivityItem("New Assignment Added", "Data Structures - Due May 25, 2024", "2 hours ago", R.drawable.ic_assignment, R.color.primary));
-        list.add(new ActivityItem("Quiz Result Released", "Web Development - Score: 85/100", "5 hours ago", R.drawable.ic_analytics, R.color.warning_orange));
-        list.add(new ActivityItem("Grade Updated", "Database Systems - Grade: A-", "1 day ago", R.drawable.ic_prediction, R.color.success_green));
-        list.add(new ActivityItem("New Course Material", "Computer Networks - Chapter 4 Lecture Notes", "2 days ago", R.drawable.ic_book, R.color.primary));
-        list.add(new ActivityItem("Attendance Recorded", "Software Engineering - Present", "3 days ago", R.drawable.ic_home, R.color.success_green));
-        list.add(new ActivityItem("Exam Schedule Published", "Final Exam - Room 302, June 10", "4 days ago", R.drawable.ic_prediction, R.color.danger_red));
+        if (data == null) return list;
+
+        List<DashboardResponse.EnrollmentInfo> enrollments = data.getEnrollments();
+        if (enrollments != null && !enrollments.isEmpty()) {
+            for (DashboardResponse.EnrollmentInfo info : enrollments) {
+                if (info != null && info.course != null) {
+                    String cName = info.course.courseName != null ? info.course.courseName : "Course";
+                    String cCode = info.course.courseCode != null ? info.course.courseCode : "";
+                    float score = info.finalScore != null ? info.finalScore : 0f;
+
+                    list.add(new ActivityItem(
+                            "Course Enrollment: " + cCode,
+                            cName + " • Overall Score: " + Math.round(score) + "%",
+                            "Current Semester",
+                            R.drawable.ic_book,
+                            R.color.primary
+                    ));
+                }
+            }
+        }
+
+        String att = data.getAttendanceRateFormatted();
+        if (!"N/A".equalsIgnoreCase(att)) {
+            list.add(new ActivityItem(
+                    "Attendance Record Updated",
+                    "Attendance Rate: " + att,
+                    "Recent Record",
+                    R.drawable.ic_home,
+                    R.color.success_green
+            ));
+        }
+
+        String assign = data.getAssignmentScoreFormatted();
+        if (!"N/A".equalsIgnoreCase(assign)) {
+            list.add(new ActivityItem(
+                    "Assignment Summary",
+                    "Average Assignment Score: " + assign,
+                    "Recent Submissions",
+                    R.drawable.ic_assignment,
+                    R.color.primary
+            ));
+        }
+
+        String quiz = data.getQuizScoreFormatted();
+        if (!"N/A".equalsIgnoreCase(quiz)) {
+            list.add(new ActivityItem(
+                    "Quiz Summary",
+                    "Average Quiz Score: " + quiz,
+                    "Recent Attempts",
+                    R.drawable.ic_analytics,
+                    R.color.warning_orange
+            ));
+        }
+
+        String pred = data.getPredictedScoreFormatted();
+        if (!"Not available yet".equalsIgnoreCase(pred)) {
+            list.add(new ActivityItem(
+                    "ML Score Prediction",
+                    "Predicted Exam Score: " + pred,
+                    "Latest Evaluation",
+                    R.drawable.ic_prediction,
+                    R.color.success_green
+            ));
+        }
+
         return list;
+    }
+
+    private void bindActivities(List<ActivityItem> items) {
+        if (rvRecentActivities != null) {
+            rvRecentActivities.setAdapter(new ActivityAdapter(items));
+        }
     }
 
     public static class ActivityItem {

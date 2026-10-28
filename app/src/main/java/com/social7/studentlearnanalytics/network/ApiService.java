@@ -23,6 +23,13 @@ public interface ApiService {
     Call<DashboardResponse> getStudentDashboard();
 
     @Headers({"Accept: application/json"})
+    @GET("dashboard/student")
+    Call<DashboardResponse> getStudentDashboardFiltered(
+            @retrofit2.http.Query("semester_id") Long semesterId,
+            @retrofit2.http.Query("course_id") Long courseId
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("gpa-records")
     Call<GpaRecordsResponse> getGpaRecords();
 
@@ -64,17 +71,61 @@ public interface ApiService {
 
     @Headers({"Accept: application/json"})
     @GET("student/attendance")
-    Call<JsonObject> getStudentAttendance();
+    Call<JsonObject> getStudentAttendance(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
     @GET("student/assignments")
-    Call<JsonObject> getStudentAssignments();
+    Call<JsonObject> getStudentAssignments(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
     @GET("student/quizzes")
-    Call<JsonObject> getStudentQuizzes();
+    Call<JsonObject> getStudentQuizzes(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
     @GET("student/exams")
-    Call<JsonObject> getStudentExams();
+    Call<JsonObject> getStudentExams(@retrofit2.http.Query("semester_id") Long semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("dashboard/teacher")
+    Call<JsonObject> getTeacherDashboard();
+
+    @Headers({"Accept: application/json"})
+    @GET("dashboard/admin")
+    Call<JsonObject> getAdminDashboard();
+
+    @Headers({"Accept: application/json"})
+    @GET("students")
+    Call<JsonObject> getStudents();
+
+    @Headers({"Accept: application/json"})
+    @GET("teachers")
+    Call<JsonObject> getTeachers();
+
+    @Headers({"Accept: application/json"})
+    @GET("admins")
+    Call<JsonObject> getAdmins();
+
+    @Headers({"Accept: application/json"})
+    @GET("departments")
+    Call<JsonObject> getDepartments();
+
+    @Headers({"Accept: application/json"})
+    @GET("classes")
+    Call<JsonObject> getClasses();
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("profile")
+    Call<JsonObject> updateProfile(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("change-password")
+    Call<JsonObject> changePassword(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("students")
+    Call<JsonObject> createStudent(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teachers")
+    Call<JsonObject> createTeacher(@Body JsonObject body);
 }

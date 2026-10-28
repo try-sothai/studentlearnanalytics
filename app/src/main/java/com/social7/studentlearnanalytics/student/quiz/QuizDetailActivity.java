@@ -124,7 +124,7 @@ public class QuizDetailActivity extends AppCompatActivity {
         }
 
         ApiService apiService = ApiClient.getApiService(this);
-        Call<JsonObject> call = apiService.getStudentQuizzes();
+        Call<JsonObject> call = apiService.getStudentQuizzes(null);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override

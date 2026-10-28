@@ -216,8 +216,55 @@ public class StudentListFragment extends Fragment {
         if (tvSummaryDepartmentName != null) tvSummaryDepartmentName.setText("Computer Science Dept.");
         if (tvSummarySemester != null) tvSummarySemester.setText("Semester 1, 2024");
 
-        currentCourseAllStudents = getStudentsForCourse(courseCode);
+        if (getContext() != null) {
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(requireContext()).getStudents().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                @Override
+                public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                    if (!isAdded()) return;
+                    if (response.isSuccessful() && response.body() != null) {
+                        try {
+                            com.google.gson.JsonArray dataArray = response.body().has("data") && response.body().get("data").isJsonArray()
+                                    ? response.body().getAsJsonArray("data") : null;
+                            if (dataArray != null && !dataArray.isEmpty()) {
+                                List<Student> apiStudents = new ArrayList<>();
+                                for (com.google.gson.JsonElement el : dataArray) {
+                                    if (!el.isJsonObject()) continue;
+                                    com.google.gson.JsonObject obj = el.getAsJsonObject();
+                                    String id = obj.has("student_code") && !obj.get("student_code").isJsonNull()
+                                            ? obj.get("student_code").getAsString()
+                                            : (obj.has("id") ? obj.get("id").getAsString() : "STU");
+                                    String name = obj.has("first_name") && !obj.get("first_name").isJsonNull()
+                                            ? obj.get("first_name").getAsString() + " " + (obj.has("last_name") ? obj.get("last_name").getAsString() : "")
+                                            : "Student";
+                                    apiStudents.add(new Student(id, name.trim(), id.toLowerCase() + "@university.edu", "Computer Science", courseCode, "3rd Year", 3.25, "Good", 76.5, "#EAF0FF", "#2563FF", courseCode));
+                                }
+                                if (!apiStudents.isEmpty()) {
+                                    currentCourseAllStudents = apiStudents;
+                                }
+                            }
+                        } catch (Exception e) {
+                            android.util.Log.e("StudentList", "Error parsing students API", e);
+                        }
+                    }
+                    bindStudentSummaryAndFilters();
+                }
 
+                @Override
+                public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
+                    if (!isAdded()) return;
+                    bindStudentSummaryAndFilters();
+                }
+            });
+        } else {
+            currentCourseAllStudents = getStudentsForCourse(courseCode);
+            bindStudentSummaryAndFilters();
+        }
+    }
+
+    private void bindStudentSummaryAndFilters() {
+        if (currentCourseAllStudents.isEmpty()) {
+            currentCourseAllStudents = getStudentsForCourse("CS101");
+        }
         int totalCount = currentCourseAllStudents.size();
         int atRiskCount = 0;
         int goodCount = 0;

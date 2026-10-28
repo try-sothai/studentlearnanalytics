@@ -32,9 +32,7 @@ public class TeacherMainActivity extends AppCompatActivity implements Navigation
 
         sessionManager = new SessionManager(this);
 
-        if (!sessionManager.isLoggedIn()) {
-            Log.d("SLAS_AUTH", "SLAS: Invalid session in TeacherMainActivity onCreate. Redirecting to LoginActivity.");
-            redirectToLogin();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Teacher")) {
             return;
         }
 
@@ -92,9 +90,8 @@ public class TeacherMainActivity extends AppCompatActivity implements Navigation
     @Override
     protected void onResume() {
         super.onResume();
-        if (sessionManager != null && !sessionManager.isLoggedIn()) {
-            Log.d("SLAS_AUTH", "SLAS: Invalid session in TeacherMainActivity onResume. Redirecting to LoginActivity.");
-            redirectToLogin();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Teacher")) {
+            return;
         }
     }
 

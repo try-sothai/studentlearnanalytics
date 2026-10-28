@@ -86,11 +86,28 @@ public class RecommendationFragment extends Fragment {
     }
 
     private void fetchRecommendations() {
+        if (getContext() == null) return;
+
         ApiClient.getApiService(requireContext()).getRecommendations().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Recommendations fetched: " + response.body().toString());
+                    try {
+                        JsonObject body = response.body();
+                        com.google.gson.JsonArray dataArray = null;
+                        if (body.has("data") && body.get("data").isJsonArray()) {
+                            dataArray = body.getAsJsonArray("data");
+                        } else if (body.has("recommendations") && body.get("recommendations").isJsonArray()) {
+                            dataArray = body.getAsJsonArray("recommendations");
+                        }
+
+                        if (dataArray != null && !dataArray.isEmpty()) {
+                            Log.d(TAG, "Loaded " + dataArray.size() + " recommendations from API");
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing recommendations", e);
+                    }
                 } else {
                     Log.d(TAG, "Recommendations HTTP code: " + response.code());
                 }

@@ -121,7 +121,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.VISIBLE);
         if (emptyStateText != null) emptyStateText.setVisibility(View.GONE);
 
-        ApiClient.getApiService(this).getStudentAttendance().enqueue(new Callback<JsonObject>() {
+        ApiClient.getApiService(this).getStudentAttendance(null).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;

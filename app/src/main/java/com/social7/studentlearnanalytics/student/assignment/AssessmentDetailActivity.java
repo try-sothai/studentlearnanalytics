@@ -121,7 +121,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         }
 
         ApiService apiService = ApiClient.getApiService(this);
-        Call<JsonObject> call = apiService.getStudentAssignments();
+        Call<JsonObject> call = apiService.getStudentAssignments(null);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override

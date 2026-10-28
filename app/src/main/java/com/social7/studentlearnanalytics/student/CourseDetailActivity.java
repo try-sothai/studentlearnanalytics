@@ -1,6 +1,5 @@
 package com.social7.studentlearnanalytics.student;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.android.material.button.MaterialButton;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Course;
-import com.social7.studentlearnanalytics.teacher.TeacherMainActivity;
+import com.social7.studentlearnanalytics.utils.RoleGuard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +29,29 @@ public class CourseDetailActivity extends AppCompatActivity {
     private MaterialButton tabOverview, tabStudents, tabAssignments, tabQuizzes, tabExams;
     private LinearLayout layoutOverview, layoutSubContent;
     private TextView tvSubTitle;
+    private Course currentCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!RoleGuard.checkAccess(this, "Student", "Teacher", "Admin")) {
+            return;
+        }
+
         setContentView(R.layout.activity_course_detail);
 
         initViews();
         setupCourseData();
         setupTabListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!RoleGuard.checkAccess(this, "Student", "Teacher", "Admin")) {
+            return;
+        }
     }
 
     private void initViews() {
@@ -60,10 +73,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         TextView btnViewAllStudents = findViewById(R.id.btnViewAllStudents);
         if (btnViewAllStudents != null) {
-            btnViewAllStudents.setOnClickListener(v -> {
-                Intent intent = new Intent(this, TeacherMainActivity.class);
-                startActivity(intent);
-            });
+            btnViewAllStudents.setOnClickListener(v -> selectTab(1));
         }
     }
 
@@ -75,12 +85,17 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         popup.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == 1) {
-                Toast.makeText(this, "Schedule: Mon, Wed, Fri 08:00–09:30 (Room A101)", Toast.LENGTH_SHORT).show();
+                String scheduleText = (currentCourse != null && currentCourse.getSchedule() != null && !currentCourse.getSchedule().trim().isEmpty())
+                        ? "Schedule: " + currentCourse.getSchedule() + (currentCourse.getRoom() != null && !currentCourse.getRoom().trim().isEmpty() ? " (" + currentCourse.getRoom() + ")" : "")
+                        : "Schedule: Mon, Wed, Fri 08:00–09:30 (Room A101)";
+                Toast.makeText(this, scheduleText, Toast.LENGTH_SHORT).show();
             } else if (item.getItemId() == 2) {
-                Intent intent = new Intent(this, TeacherMainActivity.class);
-                startActivity(intent);
+                selectTab(1);
             } else if (item.getItemId() == 3) {
-                Toast.makeText(this, "Course Info: CS101 Data Structures • 35 Students", Toast.LENGTH_SHORT).show();
+                String infoText = (currentCourse != null)
+                        ? "Course Info: " + currentCourse.getCode() + " " + currentCourse.getName() + " • " + (currentCourse.getStudentCount() > 0 ? currentCourse.getStudentCount() : 35) + " Students"
+                        : "Course Info: CS101 Data Structures • 35 Students";
+                Toast.makeText(this, infoText, Toast.LENGTH_SHORT).show();
             }
             return true;
         });
@@ -88,7 +103,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void setupCourseData() {
-        Course course = (Course) getIntent().getSerializableExtra("course");
+        currentCourse = (Course) getIntent().getSerializableExtra("course");
 
         TextView tvCourseTitle = findViewById(R.id.tvCourseTitle);
         TextView tvCourseDept = findViewById(R.id.tvCourseDept);
@@ -103,44 +118,51 @@ public class CourseDetailActivity extends AppCompatActivity {
         TextView tvClassAvgVal = findViewById(R.id.tvClassAvgVal);
         TextView tvTotalStudentsSubtext = findViewById(R.id.tvTotalStudentsSubtext);
 
-        if (course != null) {
-            if (tvCourseTitle != null) tvCourseTitle.setText(course.getCode() + " – " + course.getName());
-            if (tvCourseDept != null) tvCourseDept.setText(course.getDepartment() != null ? course.getDepartment() : "Computer Science Department");
-            if (tvCourseSubtext != null) tvCourseSubtext.setText("Teacher: " + course.getTeacher());
-            if (tvStatusBadge != null) tvStatusBadge.setText(course.getStatus());
+        if (currentCourse != null) {
+            if (tvCourseTitle != null) tvCourseTitle.setText(currentCourse.getCode() + " – " + currentCourse.getName());
+            if (tvCourseDept != null) tvCourseDept.setText(currentCourse.getDepartment() != null && !currentCourse.getDepartment().trim().isEmpty() ? currentCourse.getDepartment() : "Department");
+            if (tvCourseSubtext != null) tvCourseSubtext.setText("Teacher: " + (currentCourse.getTeacher() != null && !currentCourse.getTeacher().trim().isEmpty() ? currentCourse.getTeacher() : "Lecturer"));
+            if (tvStatusBadge != null) tvStatusBadge.setText(currentCourse.getStatus() != null && !currentCourse.getStatus().trim().isEmpty() ? currentCourse.getStatus() : "Active");
 
-            if (tvChipStudentCount != null) tvChipStudentCount.setText(course.getStudentCount() + " Students");
-            if (tvChipSemester != null) tvChipSemester.setText(course.getSemester());
-            if (tvChipRoom != null) tvChipRoom.setText(course.getRoom().isEmpty() ? "Room A101" : course.getRoom());
+            if (tvChipStudentCount != null) tvChipStudentCount.setText((currentCourse.getStudentCount() > 0 ? currentCourse.getStudentCount() : 35) + " Students");
+            if (tvChipSemester != null) tvChipSemester.setText(currentCourse.getSemester() != null && !currentCourse.getSemester().trim().isEmpty() ? currentCourse.getSemester() : "Semester 1, 2024");
+            if (tvChipRoom != null) tvChipRoom.setText(currentCourse.getRoom() == null || currentCourse.getRoom().trim().isEmpty() ? "Room A101" : currentCourse.getRoom());
 
-            if (tvTotalStudentsSubtext != null) tvTotalStudentsSubtext.setText("Total: " + course.getStudentCount() + " Students");
+            if (tvTotalStudentsSubtext != null) tvTotalStudentsSubtext.setText("Total: " + (currentCourse.getStudentCount() > 0 ? currentCourse.getStudentCount() : 35) + " Students");
+
+            float avg = currentCourse.getPerformance() > 0 ? currentCourse.getPerformance() : 82f;
+            if (tvClassAvgVal != null) tvClassAvgVal.setText(Math.round(avg) + "%");
+            if (tvPassRateVal != null) tvPassRateVal.setText(Math.round(Math.min(100f, avg * 1.05f)) + "%");
         } else {
-            if (tvCourseTitle != null) tvCourseTitle.setText("CS101 – Data Structures");
-            if (tvCourseDept != null) tvCourseDept.setText("Computer Science Department");
-            if (tvCourseSubtext != null) tvCourseSubtext.setText("Teacher: Mr. Chan");
+            if (tvCourseTitle != null) tvCourseTitle.setText("Course Overview");
+            if (tvCourseDept != null) tvCourseDept.setText("Academic Course Details");
+            if (tvCourseSubtext != null) tvCourseSubtext.setText("Teacher: Course Lecturer");
             if (tvStatusBadge != null) tvStatusBadge.setText("Active");
 
             if (tvChipStudentCount != null) tvChipStudentCount.setText("35 Students");
-            if (tvChipSemester != null) tvChipSemester.setText("Semester 1, 2024");
+            if (tvChipSemester != null) tvChipSemester.setText("Current Semester");
             if (tvChipRoom != null) tvChipRoom.setText("Room A101");
 
             if (tvTotalStudentsSubtext != null) tvTotalStudentsSubtext.setText("Total: 35 Students");
+            if (tvPassRateVal != null) tvPassRateVal.setText("--%");
+            if (tvClassAvgVal != null) tvClassAvgVal.setText("--%");
         }
-
-        if (tvPassRateVal != null) tvPassRateVal.setText("86%");
-        if (tvClassAvgVal != null) tvClassAvgVal.setText("82%");
 
         PieChart pieChart = findViewById(R.id.pieChartPerformanceSummary);
         if (pieChart != null) {
-            setupPieChart(pieChart);
+            setupPieChart(pieChart, currentCourse != null && currentCourse.getPerformance() > 0 ? currentCourse.getPerformance() : 82f);
         }
     }
 
-    private void setupPieChart(PieChart chart) {
+    private void setupPieChart(PieChart chart, float avgScore) {
+        float passedHigh = Math.max(0f, Math.min(100f, avgScore * 0.8f));
+        float passedMid = Math.max(0f, Math.min(100f - passedHigh, avgScore * 0.15f));
+        float failed = Math.max(0f, 100f - passedHigh - passedMid);
+
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(68f, "Passed (B+)"));
-        entries.add(new PieEntry(14f, "Passed (C+)"));
-        entries.add(new PieEntry(18f, "Failed (F)"));
+        if (passedHigh > 0) entries.add(new PieEntry(passedHigh, "Passed (B+)"));
+        if (passedMid > 0) entries.add(new PieEntry(passedMid, "Passed (C+)"));
+        if (failed > 0) entries.add(new PieEntry(failed, "Failed (F)"));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(new int[]{
@@ -160,7 +182,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         chart.setTransparentCircleRadius(60f);
         chart.setHoleColor(Color.WHITE);
 
-        chart.setCenterText("82%\nAverage");
+        chart.setCenterText(Math.round(avgScore) + "%\nAverage");
         chart.setCenterTextColor(Color.parseColor("#111B67"));
         chart.setCenterTextSize(13f);
 
@@ -185,6 +207,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         int primaryBlue = Color.parseColor("#2463FF");
         int white = Color.WHITE;
 
+        int studentCount = (currentCourse != null && currentCourse.getStudentCount() > 0) ? currentCourse.getStudentCount() : 35;
+
         if (index == 0) {
             setButtonActive(tabOverview, primaryBlue, white);
             if (layoutOverview != null) layoutOverview.setVisibility(View.VISIBLE);
@@ -193,7 +217,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             setButtonActive(tabStudents, primaryBlue, white);
             if (layoutOverview != null) layoutOverview.setVisibility(View.GONE);
             if (layoutSubContent != null) layoutSubContent.setVisibility(View.VISIBLE);
-            if (tvSubTitle != null) tvSubTitle.setText("Enrolled Students (35)");
+            if (tvSubTitle != null) tvSubTitle.setText("Enrolled Students (" + studentCount + ")");
         } else if (index == 2) {
             setButtonActive(tabAssignments, primaryBlue, white);
             if (layoutOverview != null) layoutOverview.setVisibility(View.GONE);

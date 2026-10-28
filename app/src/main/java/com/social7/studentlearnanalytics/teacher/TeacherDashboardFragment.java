@@ -3,10 +3,12 @@ package com.social7.studentlearnanalytics.teacher;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,12 +21,24 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.storage.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TeacherDashboardFragment extends Fragment {
+
+    private static final String TAG = "SLAS_TEACHER_DASH";
+
+    private TextView tvTeacherName;
+    private SessionManager sessionManager;
 
     public TeacherDashboardFragment() {
     }
@@ -41,6 +55,19 @@ public class TeacherDashboardFragment extends Fragment {
                 container,
                 false
         );
+
+        if (getContext() != null) {
+            sessionManager = new SessionManager(requireContext());
+        }
+
+        tvTeacherName = view.findViewById(R.id.tvTeacherName);
+
+        if (tvTeacherName != null && sessionManager != null) {
+            String name = sessionManager.getUserName();
+            if (name != null && !name.trim().isEmpty()) {
+                tvTeacherName.setText(name);
+            }
+        }
 
         ImageView btnTeacherMenu = view.findViewById(R.id.btnTeacherMenu);
         if (btnTeacherMenu != null) {
@@ -97,9 +124,47 @@ public class TeacherDashboardFragment extends Fragment {
         }
 
         LineChart lineChart = view.findViewById(R.id.lineChartPerformance);
-        setupLineChart(lineChart);
+        fetchTeacherDashboard(lineChart);
 
         return view;
+    }
+
+    private void fetchTeacherDashboard(LineChart chart) {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherDashboard().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JsonObject root = response.body();
+                        JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data") : root;
+
+                        if (data.has("teacher_name") && !data.get("teacher_name").isJsonNull() && tvTeacherName != null) {
+                            tvTeacherName.setText(data.get("teacher_name").getAsString() + "! 👋");
+                        }
+
+                        setupLineChart(chart);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing teacher dashboard", e);
+                        setupLineChart(chart);
+                    }
+                } else {
+                    Log.d(TAG, "Teacher Dashboard HTTP code: " + response.code());
+                    setupLineChart(chart);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Log.d(TAG, "Teacher Dashboard API failure: " + t.getMessage());
+                setupLineChart(chart);
+            }
+        });
     }
 
     private void setupLineChart(LineChart chart) {

@@ -34,9 +34,7 @@ public class AdminMainActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
-        if (!sessionManager.isLoggedIn()) {
-            Log.d("SLAS_AUTH", "SLAS: Invalid session in AdminMainActivity onCreate. Redirecting to LoginActivity.");
-            redirectToLogin();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
             return;
         }
 
@@ -262,9 +260,8 @@ public class AdminMainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (sessionManager != null && !sessionManager.isLoggedIn()) {
-            Log.d("SLAS_AUTH", "SLAS: Invalid session in AdminMainActivity onResume. Redirecting to LoginActivity.");
-            redirectToLogin();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
         }
     }
 

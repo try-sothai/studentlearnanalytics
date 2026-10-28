@@ -167,7 +167,15 @@ public class OverallPerformanceActivity extends AppCompatActivity {
                     showContent();
                 } else {
                     Log.d(TAG, "Failed to load dashboard data: " + response.code());
-                    showError("Server returned code " + response.code() + ". Please tap Retry.");
+                    String msg;
+                    if (response.code() == 404) {
+                        msg = "Student profile record not found for active user. Please sign in with a Student account.";
+                    } else if (response.code() == 401 || response.code() == 403) {
+                        msg = "Authentication required or session expired. Please sign in as a Student.";
+                    } else {
+                        msg = "Server returned code " + response.code() + ". Please tap Retry.";
+                    }
+                    showError(msg);
                 }
             }
 

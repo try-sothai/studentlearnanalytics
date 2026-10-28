@@ -25,11 +25,24 @@ public class AddAdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
+
         setContentView(R.layout.activity_add_admin);
 
         initViews();
         setupSpinners();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
     }
 
     private void initViews() {

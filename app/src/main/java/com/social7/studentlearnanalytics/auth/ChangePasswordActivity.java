@@ -118,8 +118,42 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            com.google.gson.JsonObject body = new com.google.gson.JsonObject();
+            body.addProperty("current_password", currentPass);
+            body.addProperty("password", newPass);
+            body.addProperty("password_confirmation", confirmPass);
+
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).changePassword(body).enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                @Override
+                public void onResponse(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (response.isSuccessful()) {
+                        Toast.makeText(ChangePasswordActivity.this, "Password changed successfully!", Toast.LENGTH_LONG).show();
+                        if (etCurrentPassword != null) etCurrentPassword.setText("");
+                        if (etNewPassword != null) etNewPassword.setText("");
+                        if (etConfirmPassword != null) etConfirmPassword.setText("");
+                        finish();
+                    } else {
+                        String errorMsg = "Password change failed (HTTP " + response.code() + ")";
+                        try (okhttp3.ResponseBody errorBody = response.errorBody()) {
+                            if (errorBody != null) {
+                                String rawError = errorBody.string();
+                                com.google.gson.JsonObject errObj = com.google.gson.JsonParser.parseString(rawError).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errorMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(ChangePasswordActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+                    if (isFinishing() || isDestroyed()) return;
+                    Toast.makeText(ChangePasswordActivity.this, "Network error updating password", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

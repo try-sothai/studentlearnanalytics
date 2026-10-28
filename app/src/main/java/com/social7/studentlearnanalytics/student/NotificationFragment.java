@@ -91,11 +91,28 @@ public class NotificationFragment extends Fragment {
     }
 
     private void fetchNotifications() {
+        if (getContext() == null) return;
+
         ApiClient.getApiService(requireContext()).getNotifications().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getView() == null) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Notifications fetched: " + response.body().toString());
+                    try {
+                        JsonObject body = response.body();
+                        com.google.gson.JsonArray array = null;
+                        if (body.has("data") && body.get("data").isJsonArray()) {
+                            array = body.getAsJsonArray("data");
+                        } else if (body.has("notifications") && body.get("notifications").isJsonArray()) {
+                            array = body.getAsJsonArray("notifications");
+                        }
+
+                        if (array != null && array.size() > 0) {
+                            Log.d(TAG, "Loaded " + array.size() + " notifications from API");
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing notifications", e);
+                    }
                 } else {
                     Log.d(TAG, "Notifications HTTP code: " + response.code());
                 }

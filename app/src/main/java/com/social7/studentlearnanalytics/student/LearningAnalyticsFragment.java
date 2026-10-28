@@ -171,12 +171,29 @@ public class LearningAnalyticsFragment extends Fragment {
         startActivity(intent);
     }
 
+    private List<DashboardResponse.SemesterInfo> availableSemesters = new ArrayList<>();
+    private Long selectedSemesterId = null;
+
     private void fetchLearningAnalytics() {
-        ApiClient.getApiService(requireContext()).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
+        fetchLearningAnalytics(selectedSemesterId);
+    }
+
+    private void fetchLearningAnalytics(Long semesterId) {
+        Call<DashboardResponse> call;
+        if (semesterId != null) {
+            call = ApiClient.getApiService(requireContext()).getStudentDashboardFiltered(semesterId, null);
+        } else {
+            call = ApiClient.getApiService(requireContext()).getStudentDashboard();
+        }
+
+        call.enqueue(new Callback<DashboardResponse>() {
             @Override
             public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     DashboardResponse.DashboardData data = response.body().getData();
+                    if (data != null && data.getSemesters() != null && !data.getSemesters().isEmpty()) {
+                        availableSemesters = data.getSemesters();
+                    }
                     updateUI(data);
                 } else {
                     Log.d(TAG, "Learning Analytics HTTP code: " + response.code());
@@ -191,7 +208,7 @@ public class LearningAnalyticsFragment extends Fragment {
     }
 
     private void updateUI(DashboardResponse.DashboardData data) {
-        if (getView() == null) return;
+        if (getView() == null || data == null) return;
 
         TextView tvHeroPercentage = getView().findViewById(R.id.tvHeroPercentage);
         if (tvHeroPercentage != null) {
@@ -204,9 +221,66 @@ public class LearningAnalyticsFragment extends Fragment {
         updateMetricCard(R.id.cardExamsMetric, data.getExamScoreFormatted());
         
         LineChart lineChart = getView().findViewById(R.id.lineChartAnalytics);
-        if (data.getChartData() != null && data.getChartLabels() != null) {
-            setupRealAnalyticsChart(lineChart, data.getChartData(), data.getChartLabels());
+        if (lineChart != null) {
+            if (data.getChartData() != null && data.getChartLabels() != null && !data.getChartData().isEmpty()) {
+                setupRealAnalyticsChart(lineChart, data.getChartData(), data.getChartLabels());
+            } else {
+                lineChart.clear();
+                lineChart.setNoDataText("No trend records available for selected scope");
+                lineChart.setNoDataTextColor(Color.parseColor("#64748B"));
+                lineChart.invalidate();
+            }
         }
+    }
+
+    private void showSemesterDialog() {
+        if (getContext() == null) return;
+
+        List<String> names = new ArrayList<>();
+        final List<Long> ids = new ArrayList<>();
+
+        if (availableSemesters != null && !availableSemesters.isEmpty()) {
+            for (DashboardResponse.SemesterInfo sem : availableSemesters) {
+                if (sem != null && sem.name != null) {
+                    names.add(sem.name);
+                    Long idVal = null;
+                    if (sem.id instanceof Number) {
+                        idVal = ((Number) sem.id).longValue();
+                    } else if (sem.id != null) {
+                        try { idVal = Long.parseLong(String.valueOf(sem.id)); } catch (Exception ignored) {}
+                    }
+                    ids.add(idVal);
+                }
+            }
+        }
+
+        if (names.isEmpty()) {
+            names.add("Semester 1, 2024");
+            names.add("Semester 2, 2024");
+            names.add("Semester 1, 2025");
+            ids.add(null);
+            ids.add(null);
+            ids.add(null);
+        }
+
+        String[] items = names.toArray(new String[0]);
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Select Semester")
+                .setItems(items, (dialog, which) -> {
+                    currentSelectedSemester = items[which];
+                    if (tvAnalyticsSemester != null) {
+                        tvAnalyticsSemester.setText(currentSelectedSemester + " ▾");
+                    }
+                    selectedSemesterId = (which < ids.size()) ? ids.get(which) : null;
+                    fetchLearningAnalytics(selectedSemesterId);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void setupAnalyticsChart(LineChart chart) {
+        // Fallback or placeholder until data loads
     }
 
     private void updateMetricCard(int cardId, String value) {
@@ -256,32 +330,6 @@ public class LearningAnalyticsFragment extends Fragment {
                 nav.setSelectedItemId(navId);
             }
         }
-    }
-
-    private void showSemesterDialog() {
-        String[] semesters = {
-                "Semester 1, 2024",
-                "Semester 2, 2024",
-                "Semester 1, 2025"
-        };
-
-        if (getContext() == null) return;
-
-        new AlertDialog.Builder(getContext())
-                .setTitle("Select Semester")
-                .setItems(semesters, (dialog, which) -> {
-                    currentSelectedSemester = semesters[which];
-                    if (tvAnalyticsSemester != null) {
-                        tvAnalyticsSemester.setText(currentSelectedSemester + " ▾");
-                    }
-                    fetchLearningAnalytics();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    private void setupAnalyticsChart(LineChart chart) {
-        // Fallback or placeholder until data loads
     }
 
     private void setupRealAnalyticsChart(LineChart chart, List<Float> values, List<String> labels) {

@@ -39,19 +39,19 @@ public class SessionManager {
     }
 
     public String getUserId() {
-        return pref.getString(KEY_USER_ID, "STU023001");
+        return pref.getString(KEY_USER_ID, "");
     }
 
     public String getStudentName() {
-        return pref.getString(KEY_USER_NAME, "Sophea");
+        return pref.getString(KEY_USER_NAME, "");
     }
 
     public String getUserName() {
-        return pref.getString(KEY_USER_NAME, "Mr. Chan");
+        return pref.getString(KEY_USER_NAME, "");
     }
 
     public String getUserRole() {
-        return pref.getString(KEY_USER_ROLE, "Student");
+        return pref.getString(KEY_USER_ROLE, "");
     }
 
     public String getToken() {

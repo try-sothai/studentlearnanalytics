@@ -155,11 +155,20 @@ public class PredictionFragment extends Fragment {
     }
 
     private void setupRealLineChart(LineChart chart, List<Float> values, List<String> labels) {
-        if (chart == null || values == null || labels == null || values.isEmpty()) return;
+        if (chart == null) return;
+
+        if (values == null || values.isEmpty() || labels == null || labels.isEmpty()) {
+            chart.clear();
+            chart.setNoDataText("No prediction trend records available");
+            chart.setNoDataTextColor(Color.parseColor("#64748B"));
+            chart.invalidate();
+            return;
+        }
 
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < values.size(); i++) {
-            entries.add(new Entry(i, values.get(i)));
+            Float val = values.get(i);
+            entries.add(new Entry(i, val != null ? val : 0f));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Prediction Score");

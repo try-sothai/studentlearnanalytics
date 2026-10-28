@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="310dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Light Blue Profile Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_student_drawer_header"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="20dp">
+
+        <!-- Top Right Close Button -->
+        <ImageView
+            android:id="@+id/btnStudentDrawerClose"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_close"
+            app:tint="#12234A"
+            android:contentDescription="Close Drawer" />
+
+        <!-- Student Profile Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btnStudentDrawerClose"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Avatar Container -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#FFFFFF"
+                app:strokeWidth="2.5dp">
+
+                <ImageView
+                    android:id="@+id/imgStudentDrawerProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_student_avatar"
+                    android:contentDescription="Student Profile Avatar" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Student Profile Information -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sophea"
+                    android:textColor="#12234A"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Student ID: ST2024001"
+                    android:textColor="#65738B"
+                    android:textSize="12sp"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerAcademic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Year 2 · Semester 2"
+                    android:textColor="#65738B"
+                    android:textSize="12sp"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Vertically Scrollable Menu -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp">
+
+            <!-- 1. Home -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerHome"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="@drawable/bg_student_drawer_active"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_blue">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerHome"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_home"
+                        app:tint="#246BFD"
+                        android:contentDescription="Home" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Home"
+                    android:textColor="#246BFD"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerHome"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#246BFD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 2. My Courses -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerCourses"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_blue">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerCourses"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_book"
+                        app:tint="#246BFD"
+                        android:contentDescription="My Courses" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerCourses"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="My Courses"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerCourses"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 3. Learning Analytics -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerAnalytics"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_green">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerAnalytics"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_analytics"
+                        app:tint="#16B978"
+                        android:contentDescription="Learning Analytics" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerAnalytics"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Learning Analytics"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerAnalytics"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 4. Prediction & Risk -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerPrediction"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_purple">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerPrediction"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_prediction"
+                        app:tint="#8B5CF6"
+                        android:contentDescription="Prediction &amp; Risk" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerPrediction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Prediction &amp; Risk"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerPrediction"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 5. Recommendations -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerRecommendations"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_orange">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerRecommendations"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_recommendation"
+                        app:tint="#F97316"
+                        android:contentDescription="Recommendations" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerRecommendations"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Recommendations"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerRecommendations"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 6. Notifications -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_blue">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerNotifications"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_notifications"
+                        app:tint="#246BFD"
+                        android:contentDescription="Notifications" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerNotifications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Notifications"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <!-- Unread Notification Badge -->
+                <TextView
+                    android:id="@+id/tvStudentDrawerNotifBadge"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_nav_badge_red"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerNotifications"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 7. Reports -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerReports"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_gray">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerReports"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_reports"
+                        app:tint="#64748B"
+                        android:contentDescription="Reports" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerReports"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Reports"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerReports"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 8. Profile -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_teal">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerProfile"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_profile"
+                        app:tint="#14B8A6"
+                        android:contentDescription="Profile" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerProfile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Profile"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerProfile"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- 9. Settings -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerSettings"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_amber">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerSettings"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_settings"
+                        app:tint="#F59E0B"
+                        android:contentDescription="Settings" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerSettings"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Settings"
+                    android:textColor="#12234A"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/chevronStudentDrawerSettings"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#8494AD"
+                    android:contentDescription="Chevron" />
+            </LinearLayout>
+
+            <!-- Separator Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#E6EAF0" />
+
+            <!-- 13. Logout -->
+            <LinearLayout
+                android:id="@+id/itemStudentDrawerLogout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_circle_red">
+                    <ImageView
+                        android:id="@+id/iconStudentDrawerLogout"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_logout"
+                        app:tint="#FF4D4F"
+                        android:contentDescription="Logout" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvStudentDrawerLogout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Logout"
+                    android:textColor="#FF4D4F"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

@@ -102,7 +102,7 @@ public class ReportFragment extends Fragment {
         tvReportPredictedScore = view.findViewById(R.id.tvReportPredictedScore);
         tvReportRiskLevel = view.findViewById(R.id.tvReportRiskLevel);
 
-        Spinner exportSpinner = view.findViewById(R.id.export_spinner);
+        Spinner exportSpinner = view.findViewById(R.id.spinnerSemester);
         if (exportSpinner != null && getContext() != null) {
             String[] semesters = {"Semester 1, 2024", "Semester 2, 2024", "Semester 1, 2025"};
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, semesters);

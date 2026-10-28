@@ -2,6 +2,7 @@ package com.social7.studentlearnanalytics.admin;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,20 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AdminDashboardFragment extends Fragment {
+
+    private static final String TAG = "SLAS_ADMIN_DASH";
 
     public AdminDashboardFragment() {
     }
@@ -40,11 +49,83 @@ public class AdminDashboardFragment extends Fragment {
         );
 
         LineChart chart = view.findViewById(R.id.adminGrowthChart);
-        setupGrowthChart(chart);
+        fetchAdminDashboard(chart);
 
         setupCardClickListeners(view);
 
         return view;
+    }
+
+    private void fetchAdminDashboard(LineChart chart) {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getAdminDashboard().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded()) return;
+
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JsonObject root = response.body();
+                        JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data") : root;
+
+                        bindSummaryCounts(data);
+
+                        List<Float> growthValues = new ArrayList<>();
+                        List<String> growthLabels = new ArrayList<>();
+
+                        if (data.has("user_growth_data") && data.get("user_growth_data").isJsonArray()) {
+                            for (com.google.gson.JsonElement el : data.getAsJsonArray("user_growth_data")) {
+                                growthValues.add(el.getAsFloat());
+                            }
+                        }
+                        if (data.has("user_growth_labels") && data.get("user_growth_labels").isJsonArray()) {
+                            for (com.google.gson.JsonElement el : data.getAsJsonArray("user_growth_labels")) {
+                                growthLabels.add(el.getAsString());
+                            }
+                        }
+
+                        setupGrowthChart(chart, growthValues, growthLabels);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing admin dashboard", e);
+                        setupGrowthChart(chart, null, null);
+                    }
+                } else {
+                    Log.d(TAG, "Admin dashboard HTTP code: " + response.code());
+                    setupGrowthChart(chart, null, null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Log.d(TAG, "Admin dashboard API failure: " + t.getMessage());
+                setupGrowthChart(chart, null, null);
+            }
+        });
+    }
+
+    private void bindSummaryCounts(JsonObject data) {
+        if (getView() == null || data == null) return;
+
+        android.widget.TextView tvStudents = getView().findViewById(R.id.tvTotalStudentsCount);
+        android.widget.TextView tvTeachers = getView().findViewById(R.id.tvTotalTeachersCount);
+        android.widget.TextView tvCourses = getView().findViewById(R.id.tvTotalCoursesCount);
+        android.widget.TextView tvActive = getView().findViewById(R.id.tvActiveUsersCount);
+
+        if (tvStudents != null && data.has("total_students") && !data.get("total_students").isJsonNull()) {
+            tvStudents.setText(data.get("total_students").getAsString());
+        }
+        if (tvTeachers != null && data.has("total_teachers") && !data.get("total_teachers").isJsonNull()) {
+            tvTeachers.setText(data.get("total_teachers").getAsString());
+        }
+        if (tvCourses != null && data.has("total_courses") && !data.get("total_courses").isJsonNull()) {
+            tvCourses.setText(data.get("total_courses").getAsString());
+        }
+        if (tvActive != null && data.has("total_departments") && !data.get("total_departments").isJsonNull()) {
+            tvActive.setText(data.get("total_departments").getAsString());
+        }
     }
 
     private void setupCardClickListeners(View view) {
@@ -122,16 +203,22 @@ public class AdminDashboardFragment extends Fragment {
         }
     }
 
-    private void setupGrowthChart(LineChart chart) {
+    private void setupGrowthChart(LineChart chart, List<Float> values, List<String> labels) {
         if (chart == null) return;
 
         List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 100));
-        entries.add(new Entry(1, 250));
-        entries.add(new Entry(2, 400));
-        entries.add(new Entry(3, 600));
-        entries.add(new Entry(4, 900));
-        entries.add(new Entry(5, 1234));
+        if (values != null && !values.isEmpty()) {
+            for (int i = 0; i < values.size(); i++) {
+                entries.add(new Entry(i, values.get(i)));
+            }
+        } else {
+            entries.add(new Entry(0, 100));
+            entries.add(new Entry(1, 250));
+            entries.add(new Entry(2, 400));
+            entries.add(new Entry(3, 600));
+            entries.add(new Entry(4, 900));
+            entries.add(new Entry(5, 1234));
+        }
 
         LineDataSet dataSet = new LineDataSet(entries, "User Growth");
         dataSet.setColor(Color.parseColor("#5B3DF5"));
@@ -149,7 +236,10 @@ public class AdminDashboardFragment extends Fragment {
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun"}));
+        String[] xLabels = (labels != null && !labels.isEmpty())
+                ? labels.toArray(new String[0])
+                : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
         xAxis.setGranularity(1f);
 
         chart.getAxisRight().setEnabled(false);

@@ -91,16 +91,85 @@ public class ClassAnalyticsFragment extends Fragment {
         }
 
         BarChart barChart = view.findViewById(R.id.barChartScoreDist);
-        if (barChart != null) {
-            setupBarChart(barChart);
-        }
-
         LineChart lineChart = view.findViewById(R.id.lineChartAnalyticsTrend);
-        if (lineChart != null) {
-            setupLineChart(lineChart);
-        }
+
+        fetchTeacherAnalytics(barChart, lineChart);
 
         return view;
+    }
+
+    private void fetchTeacherAnalytics(BarChart barChart, LineChart lineChart) {
+        if (getContext() == null) return;
+
+        com.social7.studentlearnanalytics.network.ApiClient.getApiService(requireContext()).getTeacherDashboard().enqueue(
+                new retrofit2.Callback<com.google.gson.JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                        if (!isAdded()) return;
+                        if (response.isSuccessful() && response.body() != null) {
+                            try {
+                                com.google.gson.JsonObject root = response.body();
+                                com.google.gson.JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                        ? root.getAsJsonObject("data") : root;
+
+                                bindBarChartFromApi(barChart, data);
+                                bindLineChartFromApi(lineChart, data);
+                            } catch (Exception e) {
+                                setupBarChart(barChart, null);
+                                setupLineChart(lineChart, null, null, null);
+                            }
+                        } else {
+                            setupBarChart(barChart, null);
+                            setupLineChart(lineChart, null, null, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded()) return;
+                        setupBarChart(barChart, null);
+                        setupLineChart(lineChart, null, null, null);
+                    }
+                }
+        );
+    }
+
+    private void bindBarChartFromApi(BarChart barChart, com.google.gson.JsonObject data) {
+        if (barChart == null) return;
+        List<Float> dist = new ArrayList<>();
+        if (data != null && data.has("grade_distribution") && data.get("grade_distribution").isJsonObject()) {
+            com.google.gson.JsonObject gd = data.getAsJsonObject("grade_distribution");
+            dist.add(gd.has("A") ? gd.get("A").getAsFloat() : 28f);
+            dist.add(gd.has("B") ? gd.get("B").getAsFloat() : 32f);
+            dist.add(gd.has("C") ? gd.get("C").getAsFloat() : 22f);
+            dist.add(gd.has("D") ? gd.get("D").getAsFloat() : 12f);
+            dist.add(gd.has("F") ? gd.get("F").getAsFloat() : 6f);
+        } else {
+            dist.add(28f); dist.add(32f); dist.add(22f); dist.add(12f); dist.add(6f);
+        }
+        setupBarChart(barChart, dist);
+    }
+
+    private void bindLineChartFromApi(LineChart lineChart, com.google.gson.JsonObject data) {
+        if (lineChart == null) return;
+        List<Float> classData = new ArrayList<>();
+        List<Float> targetData = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        if (data != null && data.has("class_trend_data") && data.get("class_trend_data").isJsonArray()) {
+            com.google.gson.JsonArray arr = data.getAsJsonArray("class_trend_data");
+            for (com.google.gson.JsonElement el : arr) classData.add(el.getAsFloat());
+        }
+        if (data != null && data.has("target_trend_data") && data.get("target_trend_data").isJsonArray()) {
+            com.google.gson.JsonArray arr = data.getAsJsonArray("target_trend_data");
+            for (com.google.gson.JsonElement el : arr) targetData.add(el.getAsFloat());
+        }
+        if (data != null && data.has("class_trend_labels") && data.get("class_trend_labels").isJsonArray()) {
+            com.google.gson.JsonArray arr = data.getAsJsonArray("class_trend_labels");
+            for (com.google.gson.JsonElement el : arr) labels.add(el.getAsString());
+        }
+
+        setupLineChart(lineChart, classData, targetData, labels);
     }
 
     private void showCourseDropdown(View anchor) {
@@ -125,13 +194,20 @@ public class ClassAnalyticsFragment extends Fragment {
         }
     }
 
-    private void setupBarChart(BarChart chart) {
+    private void setupBarChart(BarChart chart, List<Float> dist) {
+        if (chart == null) return;
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 28f));
-        entries.add(new BarEntry(1, 32f));
-        entries.add(new BarEntry(2, 22f));
-        entries.add(new BarEntry(3, 12f));
-        entries.add(new BarEntry(4, 6f));
+        if (dist != null && dist.size() >= 5) {
+            for (int i = 0; i < 5; i++) {
+                entries.add(new BarEntry(i, dist.get(i)));
+            }
+        } else {
+            entries.add(new BarEntry(0, 28f));
+            entries.add(new BarEntry(1, 32f));
+            entries.add(new BarEntry(2, 22f));
+            entries.add(new BarEntry(3, 12f));
+            entries.add(new BarEntry(4, 6f));
+        }
 
         BarDataSet dataSet = new BarDataSet(entries, "Grade Distribution");
         dataSet.setColors(new int[]{
@@ -163,7 +239,7 @@ public class ClassAnalyticsFragment extends Fragment {
 
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(40f);
+        leftAxis.setAxisMaximum(100f);
         leftAxis.setTextColor(Color.parseColor("#6676AD"));
         leftAxis.setGridColor(Color.parseColor("#DCE5FF"));
         leftAxis.setValueFormatter(new ValueFormatter() {
@@ -180,18 +256,34 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.invalidate();
     }
 
-    private void setupLineChart(LineChart chart) {
+
+
+    private void setupLineChart(LineChart chart, List<Float> classData, List<Float> targetData, List<String> labels) {
+        if (chart == null) return;
+
         List<Entry> classEntries = new ArrayList<>();
-        classEntries.add(new Entry(0, 63f));
-        classEntries.add(new Entry(1, 70f));
-        classEntries.add(new Entry(2, 81f));
-        classEntries.add(new Entry(3, 87f));
+        if (classData != null && !classData.isEmpty()) {
+            for (int i = 0; i < classData.size(); i++) {
+                classEntries.add(new Entry(i, classData.get(i)));
+            }
+        } else {
+            classEntries.add(new Entry(0, 63f));
+            classEntries.add(new Entry(1, 70f));
+            classEntries.add(new Entry(2, 81f));
+            classEntries.add(new Entry(3, 87f));
+        }
 
         List<Entry> targetEntries = new ArrayList<>();
-        targetEntries.add(new Entry(0, 54f));
-        targetEntries.add(new Entry(1, 60f));
-        targetEntries.add(new Entry(2, 68f));
-        targetEntries.add(new Entry(3, 77f));
+        if (targetData != null && !targetData.isEmpty()) {
+            for (int i = 0; i < targetData.size(); i++) {
+                targetEntries.add(new Entry(i, targetData.get(i)));
+            }
+        } else {
+            targetEntries.add(new Entry(0, 54f));
+            targetEntries.add(new Entry(1, 60f));
+            targetEntries.add(new Entry(2, 68f));
+            targetEntries.add(new Entry(3, 77f));
+        }
 
         LineDataSet classSet = new LineDataSet(classEntries, "Class Average");
         classSet.setColor(Color.parseColor("#2563FF"));
@@ -214,7 +306,10 @@ public class ClassAnalyticsFragment extends Fragment {
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Sep", "Oct", "Nov", "Dec"}));
+        String[] xAxisLabels = (labels != null && !labels.isEmpty())
+                ? labels.toArray(new String[0])
+                : new String[]{"Sep", "Oct", "Nov", "Dec"};
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabels));
         xAxis.setTextColor(Color.parseColor("#10165C"));
         xAxis.setTextSize(11f);
 

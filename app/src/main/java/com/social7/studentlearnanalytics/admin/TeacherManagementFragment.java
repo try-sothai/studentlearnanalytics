@@ -262,27 +262,63 @@ public class TeacherManagementFragment extends Fragment implements TeacherAdapte
     }
 
     private void loadTeacherList() {
-        masterTeacherList.clear();
-        masterTeacherList.add(new Teacher("TCH001", "Mr. Chan", "chan@univ.edu", "Data Structures", "Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH002", "Ms. Sokha", "sokha@univ.edu", "Database Systems", "Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH003", "Mr. Vanna", "vanna@univ.edu", "Web Development", "Senior Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH004", "Ms. Dany", "dany@univ.edu", "Computer Networks", "Assistant Lecturer", "Inactive"));
-        masterTeacherList.add(new Teacher("TCH005", "Mr. Rith", "rith@univ.edu", "Software Engineering", "Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH006", "Ms. Lina", "lina@univ.edu", "Mobile Application", "Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH007", "Mr. Sophak", "sophak@univ.edu", "Artificial Intelligence", "Professor", "Active"));
-        masterTeacherList.add(new Teacher("TCH008", "Ms. Kimsan", "kimsan@univ.edu", "Cloud Computing", "Lecturer", "Inactive"));
-        masterTeacherList.add(new Teacher("TCH009", "Mr. Piseth", "piseth@univ.edu", "Cyber Security", "Senior Lecturer", "Active"));
-        masterTeacherList.add(new Teacher("TCH010", "Ms. Sreypov", "sreypov@univ.edu", "Information Systems", "Lecturer", "Active"));
+        if (getContext() == null) return;
 
+        com.social7.studentlearnanalytics.network.ApiClient.getApiService(getContext()).getTeachers().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+            @Override
+            public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        com.google.gson.JsonArray dataArray = response.body().has("data") && response.body().get("data").isJsonArray()
+                                ? response.body().getAsJsonArray("data") : null;
+                        if (dataArray != null && !dataArray.isEmpty()) {
+                            masterTeacherList.clear();
+                            for (com.google.gson.JsonElement el : dataArray) {
+                                if (!el.isJsonObject()) continue;
+                                com.google.gson.JsonObject obj = el.getAsJsonObject();
+                                String id = obj.has("teacher_code") && !obj.get("teacher_code").isJsonNull()
+                                        ? obj.get("teacher_code").getAsString()
+                                        : (obj.has("id") ? obj.get("id").getAsString() : "TCH");
+                                String name = obj.has("first_name") && !obj.get("first_name").isJsonNull()
+                                        ? obj.get("first_name").getAsString() + " " + (obj.has("last_name") ? obj.get("last_name").getAsString() : "")
+                                        : "Teacher";
+                                String dept = "Computer Science";
+                                if (obj.has("department") && obj.get("department").isJsonObject()) {
+                                    com.google.gson.JsonObject dObj = obj.getAsJsonObject("department");
+                                    if (dObj.has("name") && !dObj.get("name").isJsonNull()) {
+                                        dept = dObj.get("name").getAsString();
+                                    }
+                                }
+                                masterTeacherList.add(new Teacher(id, name.trim(), id.toLowerCase() + "@univ.edu", dept, "Lecturer", "Active"));
+                            }
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.e("TeacherManagement", "Error parsing teachers API", e);
+                    }
+                }
+                bindTeacherList();
+            }
+
+            @Override
+            public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                bindTeacherList();
+            }
+        });
+    }
+
+    private void bindTeacherList() {
+        if (masterTeacherList.isEmpty()) {
+            masterTeacherList.add(new Teacher("TCH001", "Mr. Chan", "chan@univ.edu", "Data Structures", "Lecturer", "Active"));
+            masterTeacherList.add(new Teacher("TCH002", "Ms. Sokha", "sokha@univ.edu", "Database Systems", "Lecturer", "Active"));
+        }
         updateFilterPillCounts();
-
         teacherAdapter = new TeacherAdapter(getContext(), masterTeacherList, this);
-
         if (rvTeachers != null) {
             rvTeachers.setLayoutManager(new LinearLayoutManager(getContext()));
             rvTeachers.setAdapter(teacherAdapter);
         }
-
         String search = (etSearchTeacher != null) ? etSearchTeacher.getText().toString() : "";
         teacherAdapter.filter(search, currentStatusFilter, currentDepartmentFilter);
     }

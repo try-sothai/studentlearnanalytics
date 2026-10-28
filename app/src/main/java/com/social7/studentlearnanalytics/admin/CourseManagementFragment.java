@@ -102,14 +102,35 @@ public class CourseManagementFragment extends Fragment {
     }
 
     private void setupCourseList() {
-        List<Course> courseList = new ArrayList<>();
-        courseList.add(new Course("CS101", "Data Structures", 3, "Active"));
-        courseList.add(new Course("CS102", "Database Systems", 3, "Active"));
-        courseList.add(new Course("CS201", "Web Development", 3, "Active"));
-        courseList.add(new Course("CS202", "Computer Networks", 3, "Active"));
-        courseList.add(new Course("CS301", "Machine Learning", 3, "Active"));
-        courseList.add(new Course("CS401", "Mobile Application", 3, "Inactive"));
+        if (getContext() == null) return;
 
+        com.social7.studentlearnanalytics.network.ApiClient.getApiService(getContext()).getCourses().enqueue(new retrofit2.Callback<List<Course>>() {
+            @Override
+            public void onResponse(@NonNull retrofit2.Call<List<Course>> call, @NonNull retrofit2.Response<List<Course>> response) {
+                if (!isAdded()) return;
+                List<Course> list = new ArrayList<>();
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    list = response.body();
+                } else {
+                    list.add(new Course("CS101", "Data Structures", 3, "Active"));
+                    list.add(new Course("CS102", "Database Systems", 3, "Active"));
+                    list.add(new Course("CS201", "Web Development", 3, "Active"));
+                }
+                bindCourseList(list);
+            }
+
+            @Override
+            public void onFailure(@NonNull retrofit2.Call<List<Course>> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                List<Course> list = new ArrayList<>();
+                list.add(new Course("CS101", "Data Structures", 3, "Active"));
+                list.add(new Course("CS102", "Database Systems", 3, "Active"));
+                bindCourseList(list);
+            }
+        });
+    }
+
+    private void bindCourseList(List<Course> courseList) {
         courseAdapter = new CourseAdapter(getContext(), courseList, course -> 
             Toast.makeText(getContext(), "Selected: " + course.getName(), Toast.LENGTH_SHORT).show()
         );
