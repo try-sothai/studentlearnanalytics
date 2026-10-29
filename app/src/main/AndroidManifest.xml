@@ -9,104 +9,104 @@
         android:allowBackup="true"
         android:label="LearnAnalytics"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.Studentlearnanalytics">
 
         <activity
             android:name=".student.StudentMainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".teacher.TeacherMainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".teacher.student.StudentDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.AdminMainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AddUserActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AddStudentActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AdminStudentDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.EditStudentActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AddAdminActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AdminDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.EditAdminActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.teachers.AddTeacherActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.teachers.AdminTeacherDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.teachers.EditTeacherActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.reports.StudentReportActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.reports.CourseReportActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.reports.GenerateReportActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.ProfileSettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.AccountSecurityActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.users.NotificationSettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.NotificationDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".admin.courses.AddCourseActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".auth.ForgotPasswordActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".auth.LoginActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".auth.SplashActivity"
@@ -122,71 +122,71 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".auth.ChangePasswordActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.attendance.AttendanceDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.assignment.AssessmentDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.quiz.QuizDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.academic.GpaProgressActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.LearningReportActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.NavigationMenuActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.OverallPerformanceActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.RiskAnalysisActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.AllFeaturesActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.RecentActivitiesActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.LearningProgressDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.RecommendationDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.PredictionDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.CourseDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".student.ExamDetailActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

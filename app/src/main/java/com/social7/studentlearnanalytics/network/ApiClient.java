@@ -25,7 +25,11 @@ public class ApiClient {
             final Context appContext = context.getApplicationContext();
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            if (com.social7.studentlearnanalytics.BuildConfig.DEBUG) {
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            } else {
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+            }
 
             Interceptor authInterceptor = new Interceptor() {
                 @Override
