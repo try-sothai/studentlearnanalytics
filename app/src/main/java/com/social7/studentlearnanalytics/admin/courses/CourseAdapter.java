@@ -23,28 +23,61 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     }
 
     private final Context context;
-    private final List<Course> courseList;
-    private final List<Course> filteredList;
+    private final List<Course> masterList;
+    private final List<Course> displayedList;
     private final OnCourseClickListener listener;
+
+    private String currentQuery = "";
+    private String currentStatusFilter = "ALL";
+    private String currentDepartmentFilter = "ALL";
 
     public CourseAdapter(Context context, List<Course> courseList, OnCourseClickListener listener) {
         this.context = context;
-        this.courseList = courseList;
-        this.filteredList = new ArrayList<>(courseList);
+        this.masterList = courseList != null ? courseList : new ArrayList<>();
+        this.displayedList = new ArrayList<>(this.masterList);
         this.listener = listener;
     }
 
+    public void updateData(List<Course> newList) {
+        masterList.clear();
+        if (newList != null) {
+            masterList.addAll(newList);
+        }
+        applyFilters();
+    }
+
     public void filter(String query) {
-        filteredList.clear();
-        if (query == null || query.trim().isEmpty()) {
-            filteredList.addAll(courseList);
-        } else {
-            String lowerQuery = query.toLowerCase().trim();
-            for (Course course : courseList) {
-                if ((course.getName() != null && course.getName().toLowerCase().contains(lowerQuery)) ||
-                    (course.getCode() != null && course.getCode().toLowerCase().contains(lowerQuery))) {
-                    filteredList.add(course);
-                }
+        this.currentQuery = query != null ? query.trim().toLowerCase() : "";
+        applyFilters();
+    }
+
+    public void filterByStatus(String status) {
+        this.currentStatusFilter = status != null ? status.trim().toUpperCase() : "ALL";
+        applyFilters();
+    }
+
+    public void filterByDepartment(String dept) {
+        this.currentDepartmentFilter = dept != null ? dept.trim().toLowerCase() : "all";
+        applyFilters();
+    }
+
+    private void applyFilters() {
+        displayedList.clear();
+        for (Course course : masterList) {
+            boolean matchesQuery = currentQuery.isEmpty() ||
+                    (course.getName() != null && course.getName().toLowerCase().contains(currentQuery)) ||
+                    (course.getCode() != null && course.getCode().toLowerCase().contains(currentQuery)) ||
+                    (course.getDepartment() != null && course.getDepartment().toLowerCase().contains(currentQuery)) ||
+                    (course.getTeacher() != null && course.getTeacher().toLowerCase().contains(currentQuery));
+
+            boolean matchesStatus = currentStatusFilter.equals("ALL") ||
+                    (course.getStatus() != null && course.getStatus().equalsIgnoreCase(currentStatusFilter));
+
+            boolean matchesDept = currentDepartmentFilter.equals("all") ||
+                    (course.getDepartment() != null && course.getDepartment().toLowerCase().contains(currentDepartmentFilter));
+
+            if (matchesQuery && matchesStatus && matchesDept) {
+                displayedList.add(course);
             }
         }
         notifyDataSetChanged();
@@ -59,13 +92,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = filteredList.get(position);
+        Course course = displayedList.get(position);
         holder.bind(course, listener);
     }
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return displayedList.size();
+    }
+
+    public List<Course> getDisplayedList() {
+        return displayedList;
     }
 
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
@@ -82,9 +119,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         public void bind(final Course course, final OnCourseClickListener listener) {
             if (tvCourseCode != null) tvCourseCode.setText(course.getCode());
             if (tvCourseName != null) tvCourseName.setText(course.getName());
+
             if (tvCourseCredits != null) {
-                String creditsText = course.getCredits() + " Credits";
-                tvCourseCredits.setText(creditsText);
+                StringBuilder details = new StringBuilder();
+                details.append(course.getCredits()).append(" Credits");
+                if (course.getDepartment() != null && !course.getDepartment().isEmpty()) {
+                    details.append(" • ").append(course.getDepartment());
+                }
+                if (course.getTeacher() != null && !course.getTeacher().isEmpty()) {
+                    details.append(" • ").append(course.getTeacher());
+                }
+                tvCourseCredits.setText(details.toString());
             }
 
             if (tvCourseStatus != null) {

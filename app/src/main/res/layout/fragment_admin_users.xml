@@ -47,7 +47,7 @@
                     android:id="@+id/tvHeaderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Student Management"
+                    android:text="User Management"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Manage and monitor registered students"
+                    android:text="Manage students, teachers and administrators"
                     android:textColor="@color/admin_text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -73,112 +73,11 @@
                 app:tint="@color/admin_primary_blue" />
         </LinearLayout>
 
-        <!-- User Role Filter Tabs Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnTabStudents"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/admin_primary_blue"
-                android:text="Students"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:cornerRadius="10dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnTabTeachers"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="4dp"
-                android:layout_weight="1"
-                android:backgroundTint="#F4F7FF"
-                android:text="Teachers"
-                android:textAllCaps="false"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="13sp"
-                app:cornerRadius="10dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnTabAdmins"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:backgroundTint="#F4F7FF"
-                android:text="Admins"
-                android:textAllCaps="false"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="13sp"
-                app:cornerRadius="10dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp" />
-        </LinearLayout>
-
-        <!-- Search and Filter Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilSearchUsers"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxStrokeColor="@color/admin_primary_blue"
-                app:hintEnabled="false"
-                app:startIconDrawable="@drawable/ic_search"
-                app:startIconTint="@color/admin_text_secondary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearchUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:hint="Search students..."
-                    android:inputType="text"
-                    android:paddingVertical="8dp"
-                    android:textColor="@color/admin_text_primary"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/btnFilterIcon"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/bg_circle_soft_blue"
-                android:contentDescription="Filter"
-                android:padding="10dp"
-                android:src="@drawable/ic_filter"
-                app:tint="@color/admin_primary_blue" />
-        </LinearLayout>
-
-        <!-- Status Filter Pills Row -->
+        <!-- Primary User Role Filter Tabs Row -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:scrollbars="none">
 
             <LinearLayout
@@ -186,87 +85,602 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/pillFilterAll"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabStudents"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_notif_tab_active"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="All Students (35)"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="Students"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp" />
 
-                <TextView
-                    android:id="@+id/pillFilterActive"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabTeachers"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="6dp"
-                    android:background="@drawable/bg_notif_tab_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="Active (28)"
-                    android:textColor="@color/admin_active_green"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Teachers"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
 
-                <TextView
-                    android:id="@+id/pillFilterInactive"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabAdmins"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_notif_tab_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="Inactive (7)"
-                    android:textColor="@color/admin_inactive_red"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Admins"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTabFacultyEval"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Faculty Evaluation"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
 
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- Prominent + Add Student Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddUser"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/admin_primary_blue"
-            android:text="+ Add Student"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/ic_add"
-            app:iconGravity="textStart"
-            app:iconPadding="6dp"
-            app:iconTint="@color/white" />
-
     </LinearLayout>
 
-    <!-- Student Table List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvUsers"
+    <!-- Main Content Area Frame -->
+    <FrameLayout
+        android:id="@+id/layoutUserContentFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:padding="16dp"
-        tools:listitem="@layout/item_admin_user" />
+        android:layout_weight="1">
 
-    <!-- Pagination Controls at Bottom -->
+        <!-- TAB 1: STUDENTS CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutStudentsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@drawable/ic_search"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchUser"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:hint="Search students..."
+                            android:inputType="text"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnFilterIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_circle_soft_blue"
+                        android:contentDescription="Filter"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_filter"
+                        app:tint="@color/admin_primary_blue" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/pillFilterAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_notif_tab_active"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="All Students (35)"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterActive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginHorizontal="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Active (28)"
+                            android:textColor="@color/admin_active_green"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterInactive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Inactive (7)"
+                            android:textColor="@color/admin_inactive_red"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddUser"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:text="+ Add"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="4dp"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnImportStudents"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:text="Import"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="4dp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/admin_primary_blue" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnImportHistory"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        android:text="History"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="4dp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/admin_border" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExportStudents"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:text="Export"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_active_green"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:paddingHorizontal="4dp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/admin_active_green" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUsers"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                tools:listitem="@layout/item_admin_user" />
+
+        </LinearLayout>
+
+        <!-- TAB 2: TEACHERS CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutTeachersContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@drawable/ic_search"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchTeacher"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:hint="Search teachers..."
+                            android:inputType="text"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnTeacherFilterIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_circle_soft_blue"
+                        android:contentDescription="Filter"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_filter"
+                        app:tint="@color/admin_primary_blue" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/pillFilterAllTeachers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_notif_tab_active"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="All Teachers (56)"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterActiveTeachers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginHorizontal="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="Active (48)"
+                            android:textColor="@color/admin_active_green"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterInactiveTeachers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="Inactive (8)"
+                            android:textColor="@color/admin_inactive_red"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Department:"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spDepartmentFilter"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_spinner" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddTeacher"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="+ Add Teacher"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/white" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTeachers"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                tools:listitem="@layout/item_admin_teacher" />
+
+        </LinearLayout>
+
+        <!-- TAB 3: ADMINS CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutAdminsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@drawable/ic_search"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchAdmin"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:hint="Search administrators..."
+                            android:inputType="text"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnAdminFilterIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_circle_soft_blue"
+                        android:contentDescription="Filter"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_filter"
+                        app:tint="@color/admin_primary_blue" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/pillFilterAllAdmins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_notif_tab_active"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="All Admins (5)"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterActiveAdmins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginHorizontal="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Active (5)"
+                            android:textColor="@color/admin_active_green"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterInactiveAdmins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Inactive (0)"
+                            android:textColor="@color/admin_inactive_red"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddAdmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="+ Add Admin"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/white" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAdmins"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                tools:listitem="@layout/item_admin_user" />
+
+        </LinearLayout>
+
+        <!-- TAB 4: FACULTY EVALUATION CONTAINER -->
+        <include
+            android:id="@+id/layoutFacultyEvalContainer"
+            layout="@layout/fragment_admin_faculty_evaluation"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- Shared Pagination Controls Bar -->
     <LinearLayout
+        android:id="@+id/layoutPagination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_white"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="10dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPrevPage"

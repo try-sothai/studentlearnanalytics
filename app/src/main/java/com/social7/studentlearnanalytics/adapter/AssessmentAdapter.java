@@ -75,6 +75,19 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                 holder.scoreText.setTextColor(Color.parseColor("#64748B"));
             }
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Context ctx = v.getContext();
+            if ("quiz".equalsIgnoreCase(assessment.getType())) {
+                android.content.Intent intent = new android.content.Intent(ctx, com.social7.studentlearnanalytics.student.quiz.TakeQuizActivity.class);
+                intent.putExtra("quiz_id", assessment.getId());
+                ctx.startActivity(intent);
+            } else {
+                android.content.Intent intent = new android.content.Intent(ctx, com.social7.studentlearnanalytics.student.assignment.SubmitAssignmentActivity.class);
+                intent.putExtra("assignment_id", assessment.getId());
+                ctx.startActivity(intent);
+            }
+        });
     }
 
     @Override

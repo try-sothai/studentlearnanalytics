@@ -2,260 +2,487 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_background"
-    android:fitsSystemWindows="true">
+    android:background="@color/teacher_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <!-- AppBar -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Top Header Bar -->
+    <include
+        android:id="@+id/headerTeacherAttendance"
+        layout="@layout/layout_teacher_header" />
+
+    <!-- Sub-Navigation Bar (5 Internal Tabs) -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        app:elevation="0dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
-
-            <ImageView
-                android:id="@+id/btnTeacherMenuAttendance"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_home"
-                app:tint="@color/text_primary"
-                android:contentDescription="Menu"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Attendance"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnTeacherMenuAttendance" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="16dp"
         android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_notif_tab_inactive"
+            android:orientation="horizontal"
+            android:padding="2dp">
 
-            <!-- Course & Semester Dropdowns -->
+            <TextView
+                android:id="@+id/tabAttOverview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_notif_tab_active"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Overview"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAttTake"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Take Attendance"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAttRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Attendance Records"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAttStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Student Attendance"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAttReports"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Attendance Reports"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Main Content Frame -->
+    <FrameLayout
+        android:id="@+id/layoutAttendanceContentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- SUB-TAB 0: ATTENDANCE OVERVIEW (Default Landing View) -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAttOverviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- Summary Cards Grid (2x3) -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1.2"
-                    android:layout_marginEnd="6dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="1dp"
-                    app:strokeColor="@color/divider_color"
+                    app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingHorizontal="12dp"
-                        android:text="CS101 - Data Structures ▾"
-                        android:textColor="@color/text_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Attendance Summary Overview"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="3"
+                            android:rowCount="2">
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overall Rate" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="92.8%" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Present" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="780" android:textColor="@color/admin_active_green" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absent" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="38" android:textColor="@color/admin_inactive_red" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Late" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="15" android:textColor="@color/warning_orange" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Excused" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7" android:textColor="@color/admin_purple_accent" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Roster" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="840" android:textColor="@color/admin_text_primary" android:textSize="16sp" android:textStyle="bold"/>
+                            </LinearLayout>
+                        </GridLayout>
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Attendance Doughnut Chart -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="1dp"
-                    app:strokeColor="@color/divider_color"
+                    app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingHorizontal="12dp"
-                        android:text="Semester 1, 2024 ▾"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Attendance Distribution Ratio"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/pieChartAttendance"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:layout_marginTop="12dp" />
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <!-- Stat Summary Cards Banner (Total 25, Present 22, Absent 3) -->
-            <com.google.android.material.card.MaterialCardView
+        <!-- SUB-TAB 1: TAKE ATTENDANCE CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAttTakeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/divider_color"
-                app:strokeWidth="1dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- Search Input Bar for Taking Attendance -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchTakeAttendance"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:hint="Search student name or ID..."
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Real-Time Counter Panel -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_notif_tab_inactive"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="10dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total" android:textColor="@color/text_secondary" android:textSize="12sp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="25" android:textColor="@color/text_primary" android:textStyle="bold" android:textSize="22sp"/>
-                    </LinearLayout>
-
-                    <View android:layout_width="1dp" android:layout_height="32dp" android:layout_gravity="center_vertical" android:background="@color/divider_color"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Present" android:textColor="@color/success_green" android:textSize="12sp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="22" android:textColor="@color/success_green" android:textStyle="bold" android:textSize="22sp"/>
-                    </LinearLayout>
-
-                    <View android:layout_width="1dp" android:layout_height="32dp" android:layout_gravity="center_vertical" android:background="@color/divider_color"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absent" android:textColor="@color/danger_red" android:textSize="12sp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textColor="@color/danger_red" android:textStyle="bold" android:textSize="22sp"/>
-                    </LinearLayout>
-
+                    <TextView android:id="@+id/tvTakeCountPresent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="P: 3" android:textColor="@color/admin_active_green" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountAbsent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="A: 1" android:textColor="@color/admin_inactive_red" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountLate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="L: 1" android:textColor="@color/warning_orange" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountExcused" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="E: 1" android:textColor="@color/admin_purple_accent" android:textSize="12sp" android:textStyle="bold"/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <!-- Donut Attendance Chart Card -->
-            <com.google.android.material.card.MaterialCardView
+                <!-- Actions Header Row (Date Picker + Mark All Present) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTakeAttDatePicker"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:text="May 12, 2026"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="12sp"
+                        app:cornerRadius="8dp"
+                        app:icon="@drawable/ic_calendar"
+                        app:iconTint="@color/admin_primary_blue" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMarkAllPresent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/admin_active_green"
+                        android:text="Mark All Present"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <!-- Take Attendance Roster List -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTakeAttendanceRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveAttendance"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="Save Class Attendance"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 2: ATTENDANCE RECORDS CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAttRecordsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/divider_color"
-                app:strokeWidth="1dp">
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Search Input Bar for Attendance Records -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchAttendanceRecords"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:hint="Search session by date or status..."
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="20dp">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
-                    <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/pieChartAttendance"
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Attendance Session Archives" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddAttendanceRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:text="+ Add Session"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAttendanceRecords"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 3: STUDENT ATTENDANCE CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAttStudentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Search Input Bar for Student Attendance Roster -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchStudentAttendance"
                         android:layout_width="match_parent"
-                        android:layout_height="160dp" />
+                        android:layout_height="44dp"
+                        android:hint="Search student by name or ID..."
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Legend Row -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Student Attendance Analytics Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvStudentAttendanceRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 4: ATTENDANCE REPORTS CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAttReportsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:layout_marginEnd="20dp">
-                            <View android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_notification_dot" android:backgroundTint="@color/success_green"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:text="Present (22)" android:textColor="@color/text_primary" android:textStyle="bold" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance Report Actions" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnExportAttendancePdf"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:layout_marginEnd="4dp"
+                                android:text="Export PDF" android:textAllCaps="false" android:textColor="@color/admin_primary_blue" android:textSize="13sp" app:cornerRadius="8dp" app:strokeColor="@color/admin_primary_blue" app:strokeWidth="1dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnExportAttendanceExcel"
+                                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:layout_marginStart="4dp"
+                                android:backgroundTint="@color/admin_primary_blue"
+                                android:text="Export Excel" android:textAllCaps="false" android:textColor="@color/white" android:textSize="13sp" app:cornerRadius="8dp"/>
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-                            <View android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_notification_dot" android:backgroundTint="@color/danger_red"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:text="Absent (3)" android:textColor="@color/text_primary" android:textStyle="bold" android:textSize="12sp"/>
-                        </LinearLayout>
-
                     </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Records Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Attendance Records"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <!-- Records List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAttendanceRecords"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddAttendanceRecord"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/primary"
-                android:text="+ Add Attendance"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:cornerRadius="16dp" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
 </LinearLayout>

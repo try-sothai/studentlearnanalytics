@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Student implements Serializable {
     private String id;
+    private String studentCode;
+    private Long dbId;
     private String name;
     private String email;
     private String phone;
@@ -15,9 +17,9 @@ public class Student implements Serializable {
     private String academicYear;
     private String enrolledCoursesCount;
     private double gpa;
-    private String riskLevel; // "Good", "At Risk", "Need Attention", "High", "Medium", "Low"
+    private String riskLevel;
     private double predictedScore;
-    private String status; // "Active", "Inactive"
+    private String status;
     private String advisor;
     private String createdAt;
     private String lastLogin;
@@ -29,8 +31,9 @@ public class Student implements Serializable {
     private String avatarTextColor;
     private String courseCode;
 
-    public Student(String id, String name, String email, String department, String program, String year, double gpa, String riskLevel, double predictedScore, String avatarBgColor, String avatarTextColor, String courseCode) {
-        this.id = id;
+    public Student(String studentCode, String name, String email, String department, String program, String year, double gpa, String riskLevel, double predictedScore, String avatarBgColor, String avatarTextColor, String courseCode) {
+        this.id = studentCode != null ? studentCode : "STD001";
+        this.studentCode = this.id;
         this.name = name;
         this.email = email;
         this.phone = "+855 12 345 678";
@@ -56,20 +59,24 @@ public class Student implements Serializable {
         this.quizScore = 78;
     }
 
-    public Student(String id, String name, String email, String department, String year, double gpa, String riskLevel, double predictedScore) {
-        this(id, name, email, department, department, year, gpa, riskLevel, predictedScore, "#EAF0FF", "#2563FF", "CS101");
+    public Student(String studentCode, String name, String email, String department, String year, double gpa, String riskLevel, double predictedScore) {
+        this(studentCode, name, email, department, department, year, gpa, riskLevel, predictedScore, "#EAF0FF", "#2563FF", "CS101");
     }
 
-    public Student(String id, String name, String email, String status) {
-        this(id, name, email, "Computer Science", "Bachelor of Computer Science", "Year 3", 3.25, "Good", 85.0, "#EAF0FF", "#2563FF", "CS101");
+    public Student(String studentCode, String name, String email, String status) {
+        this(studentCode, name, email, "Computer Science", "Bachelor of Computer Science", "Year 3", 3.25, "Good", 85.0, "#EAF0FF", "#2563FF", "CS101");
         this.status = status != null ? status : "Active";
     }
 
-    public Student(String id, String name, double gpa, String riskLevel) {
-        this(id, name, name.toLowerCase().replace(" ", "") + "@univ.edu", "Computer Science", "Year 3", gpa, riskLevel, 75.0);
+    public Student(String studentCode, String name, double gpa, String riskLevel) {
+        this(studentCode, name, name.toLowerCase().replace(" ", "") + "@univ.edu", "Computer Science", "Year 3", gpa, riskLevel, 75.0);
     }
 
-    public String getId() { return id; }
+    public String getId() { return studentCode != null ? studentCode : (id != null ? id : "STD001"); }
+    public String getStudentCode() { return getId(); }
+    public Long getDbId() { return dbId; }
+    public void setDbId(Long dbId) { this.dbId = dbId; }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPhone() { return phone != null ? phone : "+855 12 345 678"; }
@@ -95,7 +102,8 @@ public class Student implements Serializable {
     public String getAvatarTextColor() { return avatarTextColor; }
     public String getCourseCode() { return courseCode; }
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) { this.id = id; this.studentCode = id; }
+    public void setStudentCode(String studentCode) { this.studentCode = studentCode; this.id = studentCode; }
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setPhone(String phone) { this.phone = phone; }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,29 @@ import java.util.Locale;
 
 public class ClassAnalyticsFragment extends Fragment {
 
+    private static final String ARG_COURSE_CODE = "course_code";
+    private static final String ARG_COURSE_NAME = "course_name";
+    private static final String ARG_CLASS_NAME = "class_name";
+    private static final String ARG_SEMESTER = "semester";
+    private static final String ARG_OPENED_FROM_REPORTS = "opened_from_reports";
+
+    private TextView tvSelectedCourseName, tvSelectedSemester;
+    private TextView tvClassAvgScore, tvClassPassRate, tvAtRiskCount, tvTopPerformerCount;
+    private BarChart barChartScoreDist;
+    private LineChart lineChartAnalyticsTrend;
+
+    public static ClassAnalyticsFragment newInstance(String courseCode, String courseName, String className, String semester, boolean openedFromReports) {
+        ClassAnalyticsFragment fragment = new ClassAnalyticsFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_COURSE_CODE, courseCode);
+        args.putString(ARG_COURSE_NAME, courseName);
+        args.putString(ARG_CLASS_NAME, className);
+        args.putString(ARG_SEMESTER, semester);
+        args.putBoolean(ARG_OPENED_FROM_REPORTS, openedFromReports);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public ClassAnalyticsFragment() {
     }
 
@@ -44,21 +68,19 @@ public class ClassAnalyticsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(
-                R.layout.fragment_teacher_analytics,
-                container,
-                false
-        );
+        View view = inflater.inflate(R.layout.fragment_teacher_analytics, container, false);
 
-        ImageView btnBack = view.findViewById(R.id.btnTeacherAnalyticsBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openDrawer();
-                } else if (getActivity() != null) {
-                    getActivity().getOnBackPressedDispatcher().onBackPressed();
-                }
-            });
+        tvSelectedCourseName = view.findViewById(R.id.tvSelectedCourseName);
+        tvSelectedSemester = view.findViewById(R.id.tvSelectedSemester);
+
+        boolean openedFromReports = getArguments() != null && getArguments().getBoolean(ARG_OPENED_FROM_REPORTS, false);
+
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherClassAnalytics),
+                    "Class Analytics",
+                    "Detailed performance metrics"
+            );
         }
 
         View btnCourseSelector = view.findViewById(R.id.btnCourseSelector);
@@ -90,12 +112,30 @@ public class ClassAnalyticsFragment extends Fragment {
             });
         }
 
-        BarChart barChart = view.findViewById(R.id.barChartScoreDist);
-        LineChart lineChart = view.findViewById(R.id.lineChartAnalyticsTrend);
+        barChartScoreDist = view.findViewById(R.id.barChartScoreDist);
+        lineChartAnalyticsTrend = view.findViewById(R.id.lineChartAnalyticsTrend);
 
-        fetchTeacherAnalytics(barChart, lineChart);
+        applySelectedCourseArguments();
+        fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
 
         return view;
+    }
+
+    private void applySelectedCourseArguments() {
+        if (getArguments() == null) return;
+
+        String courseCode = getArguments().getString(ARG_COURSE_CODE);
+        String courseName = getArguments().getString(ARG_COURSE_NAME);
+        String className = getArguments().getString(ARG_CLASS_NAME);
+        String semester = getArguments().getString(ARG_SEMESTER);
+
+        if (tvSelectedCourseName != null && courseCode != null && courseName != null) {
+            tvSelectedCourseName.setText(courseCode + " - " + courseName);
+        }
+
+        if (tvSelectedSemester != null && semester != null) {
+            tvSelectedSemester.setText(semester);
+        }
     }
 
     private void fetchTeacherAnalytics(BarChart barChart, LineChart lineChart) {
@@ -174,17 +214,37 @@ public class ClassAnalyticsFragment extends Fragment {
 
     private void showCourseDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "CS101 - Data Structures");
-        popup.getMenu().add(0, 2, 1, "CS102 - Web Development");
-        popup.getMenu().add(0, 3, 2, "CS201 - Database Systems");
+        popup.getMenu().add(0, 1, 0, "CS101 - Intro to Computer Science");
+        popup.getMenu().add(0, 2, 1, "IT201 - Web Development Systems");
+        popup.getMenu().add(0, 3, 2, "MA101 - Calculus I for Engineers");
+        popup.getMenu().add(0, 4, 3, "BUS101 - Principles of Business");
+        popup.getMenu().add(0, 5, 4, "EN101 - English Communication");
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (tvSelectedCourseName != null) {
+                tvSelectedCourseName.setText(item.getTitle());
+            }
+            fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
+            return true;
+        });
+
         popup.show();
     }
 
     private void showSemesterDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "Semester 1, 2024");
-        popup.getMenu().add(0, 2, 1, "Semester 2, 2023");
-        popup.getMenu().add(0, 3, 2, "Semester 1, 2023");
+        popup.getMenu().add(0, 1, 0, "Semester 1, 2024-2025");
+        popup.getMenu().add(0, 2, 1, "Semester 2, 2023-2024");
+        popup.getMenu().add(0, 3, 2, "Semester 1, 2023-2024");
+
+        popup.setOnMenuItemClickListener(item -> {
+            if (tvSelectedSemester != null) {
+                tvSelectedSemester.setText(item.getTitle());
+            }
+            fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
+            return true;
+        });
+
         popup.show();
     }
 
@@ -211,11 +271,11 @@ public class ClassAnalyticsFragment extends Fragment {
 
         BarDataSet dataSet = new BarDataSet(entries, "Grade Distribution");
         dataSet.setColors(new int[]{
-                Color.parseColor("#2563FF"), // A - Bright Blue
-                Color.parseColor("#16C784"), // B - Green
-                Color.parseColor("#FF9B16"), // C - Yellow
-                Color.parseColor("#F97316"), // D - Orange
-                Color.parseColor("#FF4055")  // F - Red
+                Color.parseColor("#2563FF"),
+                Color.parseColor("#16C784"),
+                Color.parseColor("#FF9B16"),
+                Color.parseColor("#F97316"),
+                Color.parseColor("#FF4055")
         });
         dataSet.setValueTextSize(11f);
         dataSet.setValueTextColor(Color.parseColor("#10165C"));
@@ -255,8 +315,6 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.animateY(800);
         chart.invalidate();
     }
-
-
 
     private void setupLineChart(LineChart chart, List<Float> classData, List<Float> targetData, List<String> labels) {
         if (chart == null) return;

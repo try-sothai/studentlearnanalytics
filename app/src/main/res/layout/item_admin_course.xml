@@ -11,7 +11,7 @@
     app:cardBackgroundColor="@color/card_white"
     app:cardCornerRadius="14dp"
     app:cardElevation="2dp"
-    app:strokeColor="#EAECF0"
+    app:strokeColor="@color/divider_color"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -81,3 +81,4 @@
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
+

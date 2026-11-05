@@ -17,7 +17,7 @@
 
     <!-- Hoodie Inner Collar / shirt -->
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="@color/white"
         android:pathData="M50,80L70,80L65,96L55,96Z" />
 
     <path
@@ -26,10 +26,10 @@
 
     <!-- Hoodie Strings -->
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="@color/white"
         android:pathData="M52,82L50,98A2,2 0,0 0,54,98L54,82Z" />
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="@color/white"
         android:pathData="M68,82L66,98A2,2 0,0 0,70,98L70,82Z" />
 
     <!-- Neck -->
@@ -113,3 +113,4 @@
         android:pathData="M76,54A3,2 0,1 1,75.99,54Z" />
 
 </vector>
+

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -88,35 +87,38 @@ public class SystemSettingsFragment extends Fragment {
         }
 
         if (cardAppearance != null) {
-            cardAppearance.setOnClickListener(v ->
-                    Toast.makeText(getContext(), "Appearance settings: Theme, Language, Display Options", Toast.LENGTH_SHORT).show()
-            );
+            cardAppearance.setOnClickListener(v -> {
+                Intent intent = new Intent(requireContext(), AdminAppearanceActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (cardConfig != null) {
-            cardConfig.setOnClickListener(v ->
-                    Toast.makeText(getContext(), "System Configuration & Preferences", Toast.LENGTH_SHORT).show()
-            );
+            cardConfig.setOnClickListener(v -> {
+                Intent intent = new Intent(requireContext(), AdminSystemConfigActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (cardUserRoles != null) {
             cardUserRoles.setOnClickListener(v -> {
-                if (getActivity() instanceof AdminMainActivity) {
-                    ((AdminMainActivity) getActivity()).openFragment(new UserManagementFragment());
-                }
+                Intent intent = new Intent(requireContext(), AdminUserRolesSettingsActivity.class);
+                startActivity(intent);
             });
         }
 
         if (cardBackup != null) {
-            cardBackup.setOnClickListener(v ->
-                    Toast.makeText(getContext(), "Database Backup & Data Options", Toast.LENGTH_SHORT).show()
-            );
+            cardBackup.setOnClickListener(v -> {
+                Intent intent = new Intent(requireContext(), AdminBackupDataActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (cardAbout != null) {
-            cardAbout.setOnClickListener(v ->
-                    Toast.makeText(getContext(), "SLAS Admin Panel v1.0.0 — Student Learning Analytics System", Toast.LENGTH_LONG).show()
-            );
+            cardAbout.setOnClickListener(v -> {
+                Intent intent = new Intent(requireContext(), AdminAboutSystemActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (cardLogout != null) {
@@ -126,9 +128,9 @@ public class SystemSettingsFragment extends Fragment {
 
     private void showLogoutConfirmationDialog() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout from the admin panel?")
-                .setPositiveButton("Logout", (dialog, which) -> {
+                .setTitle("Confirm Logout")
+                .setMessage("Are you sure you want to log out of your administrator account?")
+                .setPositiveButton("Log Out", (dialog, which) -> {
                     if (sessionManager != null) {
                         sessionManager.clearSession();
                     }

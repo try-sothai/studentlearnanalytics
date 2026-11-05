@@ -73,15 +73,12 @@ public class StudentListFragment extends Fragment {
                 false
         );
 
-        ImageView btnBack = view.findViewById(R.id.btnTeacherStudentsBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openDrawer();
-                } else if (getActivity() != null) {
-                    getActivity().getOnBackPressedDispatcher().onBackPressed();
-                }
-            });
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherStudents),
+                    "Students",
+                    "Students in my class"
+            );
         }
 
         tvSelectedCourseName = view.findViewById(R.id.tvSelectedCourseName);

@@ -71,7 +71,7 @@
             android:gravity="center"
             android:paddingHorizontal="10dp"
             android:text="5 Pending Scores"
-            android:textColor="#7C3AED"
+            android:textColor="@color/primary_purple"
             android:textSize="11sp"
             android:textStyle="bold"
             android:background="@drawable/bg_metric_purple" />
@@ -88,3 +88,4 @@
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
+

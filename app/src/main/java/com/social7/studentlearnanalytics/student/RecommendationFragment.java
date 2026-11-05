@@ -51,7 +51,7 @@ public class RecommendationFragment extends Fragment {
     }
 
     private void setupListeners(View view) {
-        View btnMenu = view.findViewById(R.id.btnTeacherMenuRec);
+        View btnMenu = view.findViewById(R.id.btnTeacherMenu);
         if (btnMenu != null) {
             btnMenu.setOnClickListener(v -> {
                 if (getActivity() != null) {

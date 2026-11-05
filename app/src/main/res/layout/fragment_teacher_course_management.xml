@@ -8,52 +8,9 @@
     android:background="@color/teacher_bg"
     android:fitsSystemWindows="true">
 
-    <!-- Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
-
-        <ImageView
-            android:id="@+id/btnTeacherCoursesBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="4dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/teacher_dark_navy"
-            android:contentDescription="Back"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Courses"
-                android:textColor="@color/teacher_dark_navy"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manage your courses and class information"
-                android:textColor="@color/teacher_secondary_text"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </LinearLayout>
+    <include
+        android:id="@+id/headerTeacherCourseManagement"
+        layout="@layout/layout_teacher_header" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -271,3 +228,4 @@
         android:clipToPadding="false" />
 
 </LinearLayout>
+

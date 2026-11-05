@@ -77,6 +77,16 @@ public class NavigationMenuActivity extends AppCompatActivity {
             finish();
         });
 
+        // 5.5. Assessments
+        View menuAssessments = findViewById(R.id.menu_assessments);
+        if (menuAssessments != null) {
+            menuAssessments.setOnClickListener(v -> {
+                Intent intent = new Intent(this, com.social7.studentlearnanalytics.student.assignment.AssessmentDetailActivity.class);
+                startActivity(intent);
+                finish();
+            });
+        }
+
         // 6. Notifications
         findViewById(R.id.menu_notifications).setOnClickListener(v -> openTab(R.id.nav_notifications));
 

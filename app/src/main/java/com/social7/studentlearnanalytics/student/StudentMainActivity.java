@@ -21,10 +21,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.auth.LoginActivity;
 import com.social7.studentlearnanalytics.storage.SessionManager;
-import com.social7.studentlearnanalytics.student.academic.GpaProgressActivity;
-import com.social7.studentlearnanalytics.student.assignment.AssessmentDetailActivity;
-import com.social7.studentlearnanalytics.student.attendance.AttendanceDetailActivity;
-import com.social7.studentlearnanalytics.student.quiz.QuizDetailActivity;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
 
 public class StudentMainActivity extends AppCompatActivity {
@@ -32,30 +28,30 @@ public class StudentMainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigation;
     private SessionManager sessionManager;
-    private final View[] drawerItems = new View[9];
+    private final View[] drawerItems = new View[12];
     private final int[] drawerIconIds = {
-            R.id.iconStudentDrawerHome, R.id.iconStudentDrawerCourses, R.id.iconStudentDrawerAnalytics,
-            R.id.iconStudentDrawerPrediction, R.id.iconStudentDrawerRecommendations,
-            R.id.iconStudentDrawerNotifications, R.id.iconStudentDrawerReports, R.id.iconStudentDrawerProfile,
-            R.id.iconStudentDrawerSettings
+            R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon,
+            R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon,
+            R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon,
+            R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon, R.id.imgDrawerItemIcon
     };
     private final int[] drawerTextIds = {
-            R.id.tvStudentDrawerHome, R.id.tvStudentDrawerCourses, R.id.tvStudentDrawerAnalytics,
-            R.id.tvStudentDrawerPrediction, R.id.tvStudentDrawerRecommendations,
-            R.id.tvStudentDrawerNotifications, R.id.tvStudentDrawerReports, R.id.tvStudentDrawerProfile,
-            R.id.tvStudentDrawerSettings
+            R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle,
+            R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle,
+            R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle,
+            R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle, R.id.tvDrawerItemTitle
     };
     private final int[] drawerChevronIds = {
-            R.id.chevronStudentDrawerHome, R.id.chevronStudentDrawerCourses, R.id.chevronStudentDrawerAnalytics,
-            R.id.chevronStudentDrawerPrediction, R.id.chevronStudentDrawerRecommendations,
-            R.id.chevronStudentDrawerNotifications, R.id.chevronStudentDrawerReports, R.id.chevronStudentDrawerProfile,
-            R.id.chevronStudentDrawerSettings
+            R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron,
+            R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron,
+            R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron,
+            R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron, R.id.imgDrawerItemChevron
     };
-    private final int[] defaultIconTints = {
-            Color.parseColor("#246BFD"), Color.parseColor("#246BFD"), Color.parseColor("#16B978"),
-            Color.parseColor("#8B5CF6"), Color.parseColor("#F97316"),
-            Color.parseColor("#246BFD"), Color.parseColor("#64748B"), Color.parseColor("#14B8A6"),
-            Color.parseColor("#F59E0B")
+    private final int[] defaultIconColorRes = {
+            R.color.drawer_primary_blue, R.color.drawer_primary_blue, R.color.drawer_primary_blue,
+            R.color.drawer_primary_blue, R.color.drawer_primary_blue, R.color.drawer_primary_blue,
+            R.color.drawer_primary_blue, R.color.drawer_primary_blue, R.color.drawer_primary_blue,
+            R.color.drawer_primary_blue, R.color.drawer_primary_blue, R.color.drawer_primary_blue
     };
 
     @Override
@@ -80,6 +76,10 @@ public class StudentMainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (isDrawerOpen()) {
                     closeDrawer();
+                } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                } else if (bottomNavigation != null && bottomNavigation.getSelectedItemId() != R.id.nav_home) {
+                    bottomNavigation.setSelectedItemId(R.id.nav_home);
                 } else {
                     setEnabled(false);
                     getOnBackPressedDispatcher().onBackPressed();
@@ -142,15 +142,18 @@ public class StudentMainActivity extends AppCompatActivity {
         drawerItems[2] = findViewById(R.id.itemStudentDrawerAnalytics);
         drawerItems[3] = findViewById(R.id.itemStudentDrawerPrediction);
         drawerItems[4] = findViewById(R.id.itemStudentDrawerRecommendations);
-        drawerItems[5] = findViewById(R.id.itemStudentDrawerNotifications);
-        drawerItems[6] = findViewById(R.id.itemStudentDrawerReports);
-        drawerItems[7] = findViewById(R.id.itemStudentDrawerProfile);
-        drawerItems[8] = findViewById(R.id.itemStudentDrawerSettings);
+        drawerItems[5] = findViewById(R.id.itemStudentDrawerAssessments);
+        drawerItems[6] = findViewById(R.id.itemStudentDrawerNotifications);
+        drawerItems[7] = findViewById(R.id.itemStudentDrawerReports);
+        drawerItems[8] = findViewById(R.id.itemStudentDrawerProfile);
+        drawerItems[9] = findViewById(R.id.itemStudentDrawerSettings);
+        drawerItems[10] = findViewById(R.id.itemStudentDrawerHelp);
+        drawerItems[11] = findViewById(R.id.itemStudentDrawerAbout);
 
-        for (int i = 0; i < 9; i++) {
-            final int index = i;
-            if (drawerItems[i] != null) {
-                drawerItems[i].setOnClickListener(v -> {
+        for (int j = 0; j < 12; j++) {
+            final int index = j;
+            if (drawerItems[j] != null) {
+                drawerItems[j].setOnClickListener(v -> {
                     closeDrawer();
                     onDrawerItemClicked(index);
                 });
@@ -219,7 +222,7 @@ public class StudentMainActivity extends AppCompatActivity {
                             }
                         }
                     } catch (Exception e) {
-                        android.util.Log.e("StudentMain", "Error parsing profile data", e);
+                        Log.e("StudentMain", "Error parsing profile data", e);
                     }
                 }
             }
@@ -229,8 +232,6 @@ public class StudentMainActivity extends AppCompatActivity {
             }
         });
 
-        TextView tvNotifBadge = findViewById(R.id.tvStudentDrawerNotifBadge);
-        
         // Fetch Real Notifications
         com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).getNotifications().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
             @Override
@@ -256,17 +257,10 @@ public class StudentMainActivity extends AppCompatActivity {
                                 }
                             }
                             
-                            if (tvNotifBadge != null) {
-                                if (unreadCount > 0) {
-                                    tvNotifBadge.setVisibility(View.VISIBLE);
-                                    tvNotifBadge.setText(String.valueOf(unreadCount));
-                                } else {
-                                    tvNotifBadge.setVisibility(View.GONE);
-                                }
-                            }
+                            updateGlobalNotificationBadge(unreadCount);
                         }
                     } catch (Exception e) {
-                        android.util.Log.e("StudentMain", "Error parsing notifications", e);
+                        Log.e("StudentMain", "Error parsing notifications", e);
                     }
                 }
             }
@@ -276,52 +270,77 @@ public class StudentMainActivity extends AppCompatActivity {
             }
         });
     }
+    
+    public void updateGlobalNotificationBadge(int unreadCount) {
+        TextView tvNotifBadge = findViewById(R.id.tvStudentNotifBadge);
+        if (tvNotifBadge == null) tvNotifBadge = findViewById(R.id.tvTeacherNotifBadge);
+        if (tvNotifBadge != null) {
+            if (unreadCount > 0) {
+                tvNotifBadge.setVisibility(View.VISIBLE);
+                tvNotifBadge.setText(String.valueOf(unreadCount));
+            } else {
+                tvNotifBadge.setVisibility(View.GONE);
+            }
+        }
+        
+        if (bottomNavigation != null) {
+            com.google.android.material.badge.BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.nav_notifications);
+            if (unreadCount > 0) {
+                badge.setVisible(true);
+                badge.setNumber(unreadCount);
+            } else {
+                badge.setVisible(false);
+            }
+        }
+    }
 
     private void onDrawerItemClicked(int index) {
         switch (index) {
             case 0:
-                selectBottomNav(R.id.nav_home);
                 openFragment(new StudentDashboardFragment());
                 break;
             case 1:
-                selectBottomNav(R.id.nav_courses);
                 openFragment(new StudentCoursesFragment());
                 break;
             case 2:
-                selectBottomNav(R.id.nav_analytics);
                 openFragment(new LearningAnalyticsFragment());
                 break;
             case 3:
-                startActivity(new Intent(this, RiskAnalysisActivity.class));
+                openFragment(new PredictionFragment());
                 break;
             case 4:
-                openFragment(new RecommendationFragment());
+                openFragment(new StudentRecommendationFragment());
                 break;
             case 5:
-                selectBottomNav(R.id.nav_notifications);
-                openFragment(new NotificationFragment());
+                openFragment(new StudentAssessmentFragment());
                 break;
             case 6:
-                startActivity(new Intent(this, LearningReportActivity.class));
+                openFragment(new NotificationFragment());
                 break;
             case 7:
-                selectBottomNav(R.id.nav_profile);
-                openFragment(new ProfileFragment());
+                openFragment(new ReportFragment());
                 break;
             case 8:
-                // Settings routes to ProfileFragment for students
-                selectBottomNav(R.id.nav_profile);
                 openFragment(new ProfileFragment());
+                break;
+            case 9:
+                openFragment(new StudentSettingsFragment());
+                break;
+            case 10:
+                // Help Support handling
+                break;
+            case 11:
+                // About handling
                 break;
         }
     }
 
     public void updateDrawerActiveItem(int activeIndex) {
-        int primaryBlue = Color.parseColor("#246BFD");
-        int primaryText = Color.parseColor("#12234A");
-        int chevronMuted = Color.parseColor("#8494AD");
+        int primaryBlue = androidx.core.content.ContextCompat.getColor(this, R.color.primary);
+        int primaryText = androidx.core.content.ContextCompat.getColor(this, R.color.text_primary);
+        int chevronMuted = androidx.core.content.ContextCompat.getColor(this, R.color.text_hint);
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 12; i++) {
             View itemView = drawerItems[i];
             if (itemView == null) continue;
 
@@ -329,24 +348,37 @@ public class StudentMainActivity extends AppCompatActivity {
             TextView tvTitle = itemView.findViewById(drawerTextIds[i]);
             ImageView imgChevron = itemView.findViewById(drawerChevronIds[i]);
 
-            if (i == activeIndex) {
-                itemView.setBackgroundResource(R.drawable.bg_student_drawer_active);
-                if (tvTitle != null) {
-                    tvTitle.setTextColor(primaryBlue);
-                    tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
-                }
-                if (imgIcon != null) imgIcon.setImageTintList(ColorStateList.valueOf(primaryBlue));
-                if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(primaryBlue));
+            boolean isActive = (i == activeIndex);
+
+            if (isActive) {
+                rootItemActive(itemView, imgIcon, tvTitle, imgChevron, primaryBlue);
             } else {
-                itemView.setBackgroundResource(android.R.color.transparent);
-                if (tvTitle != null) {
-                    tvTitle.setTextColor(primaryText);
-                    tvTitle.setTypeface(null, android.graphics.Typeface.NORMAL);
-                }
-                if (imgIcon != null) imgIcon.setImageTintList(ColorStateList.valueOf(defaultIconTints[i]));
-                if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(chevronMuted));
+                rootItemInactive(itemView, imgIcon, tvTitle, imgChevron, primaryText, chevronMuted, defaultIconColorRes[i]);
             }
         }
+    }
+
+    private void rootItemActive(View root, ImageView imgIcon, TextView tvTitle, ImageView imgChevron, int primaryBlue) {
+        root.setBackgroundResource(R.drawable.bg_student_drawer_active);
+        if (tvTitle != null) {
+            tvTitle.setTextColor(primaryBlue);
+            tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        }
+        if (imgIcon != null) imgIcon.setImageTintList(ColorStateList.valueOf(primaryBlue));
+        if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(primaryBlue));
+    }
+
+    private void rootItemInactive(View root, ImageView imgIcon, TextView tvTitle, ImageView imgChevron, int primaryText, int chevronMuted, int iconColorRes) {
+        root.setBackgroundResource(android.R.color.transparent);
+        if (tvTitle != null) {
+            tvTitle.setTextColor(primaryText);
+            tvTitle.setTypeface(null, android.graphics.Typeface.NORMAL);
+        }
+        if (imgIcon != null) {
+            int defaultTint = androidx.core.content.ContextCompat.getColor(this, iconColorRes);
+            imgIcon.setImageTintList(ColorStateList.valueOf(defaultTint));
+        }
+        if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(chevronMuted));
     }
 
     public void openDrawer() {
@@ -366,8 +398,22 @@ public class StudentMainActivity extends AppCompatActivity {
     }
 
     public void selectBottomNav(int itemId) {
-        if (bottomNavigation != null) {
+        if (bottomNavigation != null && bottomNavigation.getSelectedItemId() != itemId) {
+            // Unregister listener to prevent infinite loop during programmatic selection
+            bottomNavigation.setOnItemSelectedListener(null);
             bottomNavigation.setSelectedItemId(itemId);
+            
+            // Re-register listener
+            bottomNavigation.setOnItemSelectedListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.nav_home) openFragment(new StudentDashboardFragment());
+                else if (id == R.id.nav_courses) openFragment(new StudentCoursesFragment());
+                else if (id == R.id.nav_analytics) openFragment(new LearningAnalyticsFragment());
+                else if (id == R.id.nav_notifications) openFragment(new NotificationFragment());
+                else if (id == R.id.nav_profile) openFragment(new ProfileFragment());
+                else return false;
+                return true;
+            });
         }
     }
 
@@ -410,26 +456,92 @@ public class StudentMainActivity extends AppCompatActivity {
     }
 
     public void openFragment(@NonNull Fragment fragment) {
-        getSupportFragmentManager()
+        androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+                .replace(R.id.fragment_container, fragment);
+
+        if (!(fragment instanceof StudentDashboardFragment || 
+              fragment instanceof StudentCoursesFragment || 
+              fragment instanceof LearningAnalyticsFragment || 
+              fragment instanceof NotificationFragment || 
+              fragment instanceof ProfileFragment)) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
 
         if (fragment instanceof StudentDashboardFragment) {
             updateDrawerActiveItem(0);
+            selectBottomNav(R.id.nav_home);
         } else if (fragment instanceof StudentCoursesFragment) {
             updateDrawerActiveItem(1);
+            selectBottomNav(R.id.nav_courses);
         } else if (fragment instanceof LearningAnalyticsFragment) {
             updateDrawerActiveItem(2);
+            selectBottomNav(R.id.nav_analytics);
         } else if (fragment instanceof PredictionFragment) {
             updateDrawerActiveItem(3);
-        } else if (fragment instanceof RecommendationFragment) {
+        } else if (fragment instanceof StudentRecommendationFragment || fragment instanceof RecommendationFragment) {
             updateDrawerActiveItem(4);
-        } else if (fragment instanceof NotificationFragment) {
+        } else if (fragment instanceof StudentAssessmentFragment) {
             updateDrawerActiveItem(5);
+        } else if (fragment instanceof NotificationFragment) {
+            updateDrawerActiveItem(6);
+            selectBottomNav(R.id.nav_notifications);
+        } else if (fragment instanceof ReportFragment) {
+            updateDrawerActiveItem(7);
         } else if (fragment instanceof ProfileFragment) {
-            updateDrawerActiveItem(7); // Can also be 8 (Settings)
+            updateDrawerActiveItem(8);
+            selectBottomNav(R.id.nav_profile);
+        } else if (fragment instanceof StudentSettingsFragment) {
+            updateDrawerActiveItem(9);
+        }
+    }
+
+    public void setupStudentHeader(View root, String title, String subtitle) {
+        if (root == null) return;
+
+        View btnMenu = root.findViewById(R.id.btnStudentMenuHeader);
+        if (btnMenu == null) btnMenu = root.findViewById(R.id.btnTeacherMenu);
+        if (btnMenu != null) {
+            btnMenu.setOnClickListener(v -> openDrawer());
+        }
+
+        TextView tvTitle = root.findViewById(R.id.tvHeaderTitle);
+        if (tvTitle != null && title != null) {
+            tvTitle.setText(title);
+        }
+
+        TextView tvSubtitle = root.findViewById(R.id.tvHeaderSubtitle);
+        if (tvSubtitle != null && subtitle != null) {
+            tvSubtitle.setText(subtitle);
+        }
+
+        View notifBtn = root.findViewById(R.id.layoutStudentNotifBtn);
+        if (notifBtn == null) notifBtn = root.findViewById(R.id.layoutTeacherNotifBtn);
+        if (notifBtn != null) {
+            notifBtn.setOnClickListener(v -> {
+                selectBottomNav(R.id.nav_notifications);
+                openFragment(new NotificationFragment());
+            });
+        }
+
+        View avatarBtn = root.findViewById(R.id.layoutStudentAvatarBtn);
+        if (avatarBtn == null) avatarBtn = root.findViewById(R.id.layoutTeacherAvatarBtn);
+        if (avatarBtn != null) {
+            avatarBtn.setOnClickListener(v -> {
+                selectBottomNav(R.id.nav_profile);
+                openFragment(new ProfileFragment());
+            });
+        }
+
+        TextView tvAvatarText = root.findViewById(R.id.tvStudentAvatarText);
+        if (tvAvatarText != null && sessionManager != null) {
+            String name = sessionManager.getStudentName();
+            if (name != null && !name.trim().isEmpty()) {
+                tvAvatarText.setText(String.valueOf(name.charAt(0)).toUpperCase());
+            }
         }
     }
 }

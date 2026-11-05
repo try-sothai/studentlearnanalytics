@@ -13,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.social7.studentlearnanalytics.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.AttendanceViewHolder> {
+
+    public interface OnRecordClickListener {
+        void onRecordClick(AttendanceRecordItem item);
+    }
 
     public static class AttendanceRecordItem {
         public String date;
@@ -28,11 +33,28 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     }
 
     private final Context context;
-    private final List<AttendanceRecordItem> recordList;
+    private final List<AttendanceRecordItem> originalList;
+    private final List<AttendanceRecordItem> filteredList;
+    private final OnRecordClickListener listener;
 
-    public AttendanceAdapter(Context context, List<AttendanceRecordItem> recordList) {
+    public AttendanceAdapter(Context context, List<AttendanceRecordItem> recordList, OnRecordClickListener listener) {
         this.context = context;
-        this.recordList = recordList;
+        this.originalList = recordList != null ? recordList : new ArrayList<>();
+        this.filteredList = new ArrayList<>(this.originalList);
+        this.listener = listener;
+    }
+
+    public void filter(String query) {
+        filteredList.clear();
+        String text = query != null ? query.trim().toLowerCase() : "";
+        for (AttendanceRecordItem item : originalList) {
+            if (text.isEmpty() ||
+                (item.date != null && item.date.toLowerCase().contains(text)) ||
+                (item.status != null && item.status.toLowerCase().contains(text))) {
+                filteredList.add(item);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -44,13 +66,13 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
 
     @Override
     public void onBindViewHolder(@NonNull AttendanceViewHolder holder, int position) {
-        AttendanceRecordItem record = recordList.get(position);
-        holder.bind(record);
+        AttendanceRecordItem record = filteredList.get(position);
+        holder.bind(record, listener);
     }
 
     @Override
     public int getItemCount() {
-        return recordList != null ? recordList.size() : 0;
+        return filteredList.size();
     }
 
     public static class AttendanceViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +84,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
             tvAttendanceStatus = itemView.findViewById(R.id.tvAttendanceStatus);
         }
 
-        public void bind(AttendanceRecordItem record) {
+        public void bind(AttendanceRecordItem record, OnRecordClickListener listener) {
             if (tvAttendanceDate != null) tvAttendanceDate.setText(record.date);
             if (tvAttendanceStatus != null) {
                 tvAttendanceStatus.setText(record.status);
@@ -77,6 +99,10 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
                     tvAttendanceStatus.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D1FAE5")));
                 }
             }
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onRecordClick(record);
+            });
         }
     }
 }

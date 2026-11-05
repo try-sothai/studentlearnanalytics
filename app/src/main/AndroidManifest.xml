@@ -25,6 +25,22 @@
             android:exported="false" />
 
         <activity
+            android:name=".teacher.assessment.AddAssessmentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".teacher.assessment.EnterScoreActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".teacher.assessment.AssessmentListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".teacher.assessment.EditAssessmentActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".admin.AdminMainActivity"
             android:exported="false" />
 
@@ -34,6 +50,22 @@
 
         <activity
             android:name=".admin.users.AddStudentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.users.StudentImportActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.users.StudentImportPreviewActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.users.StudentImportProgressActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.users.StudentImportHistoryActivity"
             android:exported="false" />
 
         <activity
@@ -93,6 +125,26 @@
             android:exported="false" />
 
         <activity
+            android:name=".admin.AdminAppearanceActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.AdminSystemConfigActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.AdminUserRolesSettingsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.AdminBackupDataActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".admin.AdminAboutSystemActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".admin.NotificationDetailActivity"
             android:exported="false" />
 
@@ -138,6 +190,14 @@
 
         <activity
             android:name=".student.quiz.QuizDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.quiz.TakeQuizActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.assignment.SubmitAssignmentActivity"
             android:exported="false" />
 
         <activity

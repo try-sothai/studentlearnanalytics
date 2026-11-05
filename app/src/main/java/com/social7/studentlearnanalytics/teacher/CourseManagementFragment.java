@@ -56,15 +56,12 @@ public class CourseManagementFragment extends Fragment {
                 false
         );
 
-        ImageView btnBack = view.findViewById(R.id.btnTeacherCoursesBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openDrawer();
-                } else if (getActivity() != null) {
-                    getActivity().getOnBackPressedDispatcher().onBackPressed();
-                }
-            });
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherCourseManagement),
+                    "Courses",
+                    "Manage assigned courses"
+            );
         }
 
         tabActiveCourses = view.findViewById(R.id.tabActiveCourses);

@@ -24,6 +24,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.AdminViewHol
         void onViewDetails(Admin admin);
         void onEditAdmin(Admin admin);
         void onToggleStatus(Admin admin);
+        void onDeleteAdmin(Admin admin);
     }
 
     private final Context context;
@@ -134,6 +135,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.AdminViewHol
                     popup.getMenu().add("Edit Admin");
                     boolean isActive = "Active".equalsIgnoreCase(admin.getStatus());
                     popup.getMenu().add(isActive ? "Deactivate Account" : "Activate Account");
+                    popup.getMenu().add("Delete Admin");
 
                     popup.setOnMenuItemClickListener(item -> {
                         String title = item.getTitle().toString();
@@ -145,6 +147,9 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.AdminViewHol
                             return true;
                         } else if ("Deactivate Account".equals(title) || "Activate Account".equals(title)) {
                             if (listener != null) listener.onToggleStatus(admin);
+                            return true;
+                        } else if ("Delete Admin".equals(title)) {
+                            if (listener != null) listener.onDeleteAdmin(admin);
                             return true;
                         }
                         return false;

@@ -40,10 +40,7 @@ public class StudentDetailActivity extends AppCompatActivity {
             currentStudent = new Student("STU023001", "Sophea", "sophea@university.edu", "Computer Science", "Year 3", 3.25, "Good", 76.5);
         }
 
-        ImageButton btnBack = findViewById(R.id.btnBackStudentDetail);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
-        }
+        com.social7.studentlearnanalytics.teacher.TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerTeacherDetail), "Student Details", "", true);
 
         TextView tvName = findViewById(R.id.tvStudentDetailName);
         TextView tvId = findViewById(R.id.tvStudentDetailId);

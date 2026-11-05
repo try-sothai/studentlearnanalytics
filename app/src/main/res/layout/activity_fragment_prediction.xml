@@ -10,77 +10,10 @@
     android:fitsSystemWindows="true"
     tools:context=".student.PredictionFragment">
 
-    <!-- Header Section -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        app:elevation="0dp"
-        android:fitsSystemWindows="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/semesterSelector"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Prediction &amp; Risk"
-                    android:textColor="@color/prediction_text_main"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AI-powered insights for your academic success"
-                    android:textColor="@color/prediction_text_secondary"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/semesterSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/prediction_border"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Semester 1, 2024 ▾"
-                        android:textColor="@color/prediction_text_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    <!-- Top Header Bar -->
+    <include
+        android:id="@+id/headerStudentPrediction"
+        layout="@layout/layout_student_header" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -91,118 +24,84 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
+            android:paddingHorizontal="20dp">
 
-            <!-- Main Prediction Card -->
+            <!-- Card 1: Predicted Score -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPrediction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/prediction_card"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:strokeColor="@color/prediction_border"
-                app:strokeWidth="1dp"
-                android:clickable="true"
-                android:focusable="true">
+                app:strokeWidth="1dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="20dp">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/iconFrame"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        app:cardBackgroundColor="@color/prediction_purple_light"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_prediction"
-                            android:contentDescription="Icon"
-                            app:tint="@color/prediction_purple"/>
-                    </com.google.android.material.card.MaterialCardView>
-
                     <TextView
-                        android:id="@+id/tvPredTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:text="Predicted Exam Score"
+                        android:text="PREDICTED FINAL EXAM SCORE"
                         android:textColor="@color/prediction_text_secondary"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toEndOf="@id/iconFrame"
-                        app:layout_constraintTop_toTopOf="@id/iconFrame" />
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/scoreBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp"
                         android:gravity="bottom"
-                        app:layout_constraintStart_toStartOf="@id/tvPredTitle"
-                        app:layout_constraintTop_toBottomOf="@id/tvPredTitle">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="76.5"
+                            android:text="82.8"
                             android:textColor="@color/prediction_purple"
-                            android:textSize="30sp"
+                            android:textSize="40sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:layout_marginBottom="4dp"
+                            android:layout_marginBottom="6dp"
                             android:text="/ 100"
                             android:textColor="@color/prediction_text_secondary"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginBottom="6dp"
-                            android:text="↑ +4.2%"
-                            android:textColor="@color/prediction_success"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_score_label"
-                        android:backgroundTint="@color/prediction_success_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:text="Confidence: 87%"
-                        android:textColor="@color/prediction_success"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@id/iconFrame"
-                        app:layout_constraintTop_toBottomOf="@id/iconFrame" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_marginTop="8dp"
+                        android:text="Based on current GPA (3.25), attendance (88%), and quiz performance."
+                        android:textColor="@color/prediction_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Risk Level Card -->
+            <!-- Card 2: Risk Level -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRiskLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:strokeColor="@color/prediction_border"
                 app:strokeWidth="1dp">
@@ -210,375 +109,338 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_quick_action"
-                        android:backgroundTint="@color/prediction_warning_bg"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_prediction"
-                        android:contentDescription="Risk Icon"
-                        app:tint="@color/prediction_warning" />
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:text="Risk Level"
-                                android:textColor="@color/prediction_text_secondary"
-                                android:textSize="12sp" />
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/bg_score_label"
-                                android:backgroundTint="@color/prediction_warning_bg"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="2dp"
-                                android:text="Moderate Risk"
+                                android:text="ACADEMIC RISK LEVEL"
+                                android:textColor="@color/prediction_text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="LOW RISK"
                                 android:textColor="@color/prediction_warning"
-                                android:textSize="10sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRiskDetails"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Risk Analysis"
+                            android:textColor="@color/prediction_purple"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/prediction_purple" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 3: Key Factors -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/prediction_card"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/prediction_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KEY FACTORS AFFECTING PREDICTION"
+                        android:textColor="@color/prediction_text_secondary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <!-- Factor 1: Attendance -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Class Attendance Rate"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="90dp"
+                            android:layout_height="6dp"
+                            android:layout_marginEnd="12dp"
+                            android:max="100"
+                            android:progress="88"
+                            android:progressBackgroundTint="@color/prediction_border"
+                            android:progressTint="@color/prediction_success" />
+
+                        <TextView
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="88%"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Factor 2: Assignments -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Assignment Performance"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="90dp"
+                            android:layout_height="6dp"
+                            android:layout_marginEnd="12dp"
+                            android:max="100"
+                            android:progress="80"
+                            android:progressBackgroundTint="@color/prediction_border"
+                            android:progressTint="@color/prediction_purple" />
+
+                        <TextView
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="80%"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Factor 3: Quizzes -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Quiz Performance"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="90dp"
+                            android:layout_height="6dp"
+                            android:layout_marginEnd="12dp"
+                            android:max="100"
+                            android:progress="78"
+                            android:progressBackgroundTint="@color/prediction_border"
+                            android:progressTint="@color/prediction_warning" />
+
+                        <TextView
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="78%"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Factor 4: Previous Exams -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Previous Exam Score"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="90dp"
+                            android:layout_height="6dp"
+                            android:layout_marginEnd="12dp"
+                            android:max="100"
+                            android:progress="76"
+                            android:progressBackgroundTint="@color/prediction_border"
+                            android:progressTint="@color/prediction_purple" />
+
+                        <TextView
+                            android:layout_width="45dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="76%"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Factor 5: Current GPA -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Current Cumulative GPA"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            tools:text="MEDIUM"
-                            android:textColor="@color/prediction_warning"
-                            android:textSize="20sp"
+                            android:gravity="end"
+                            android:text="3.25 / 4.00"
+                            android:textColor="@color/prediction_purple"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 4: Trend Chart -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/prediction_card"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/prediction_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PREDICTION SCORE TREND"
+                        android:textColor="@color/prediction_text_secondary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lineChartTrend"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="12dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 5: Recommendations CTA -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/prediction_card"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/prediction_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Improve Your Score"
+                            android:textColor="@color/prediction_text_main"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="You are at medium risk. Keep improving your attendance and quiz performance to reduce risk."
+                            android:text="View personalized AI recommendations to boost your exam grade."
                             android:textColor="@color/prediction_text_secondary"
-                            android:textSize="11sp"
-                            android:lineSpacingExtra="2dp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnViewRecommendations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:backgroundTint="@color/prediction_purple"
+                        android:text="View Recs"
+                        android:textSize="12sp"
+                        app:cornerRadius="12dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <!-- Key Factors Card -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Key Factors Affecting Prediction"
-                android:textColor="@color/prediction_text_main"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/prediction_border"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- Attendance -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingVertical="8dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_home" android:contentDescription="Attendance" app:tint="@color/prediction_success" android:background="@drawable/bg_stat_card_green" android:backgroundTint="@color/prediction_success_bg" android:padding="6dp"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Attendance" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="90dp" android:layout_height="6dp" android:progress="88" android:progressTint="@color/prediction_success" android:progressBackgroundTint="@color/prediction_border" android:layout_marginEnd="12dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="88%" android:textStyle="bold" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <!-- Assignment -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingVertical="8dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_assignment" android:contentDescription="Assignment" app:tint="@color/prediction_purple" android:background="@drawable/bg_stat_card_purple" android:backgroundTint="@color/prediction_purple_light" android:padding="6dp"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Assignment" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="90dp" android:layout_height="6dp" android:progress="80" android:progressTint="@color/prediction_purple" android:progressBackgroundTint="@color/prediction_border" android:layout_marginEnd="12dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="80%" android:textStyle="bold" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <!-- Quiz -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingVertical="8dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_analytics" android:contentDescription="Quiz" app:tint="@color/prediction_warning" android:background="@drawable/bg_stat_card_orange" android:backgroundTint="@color/prediction_warning_bg" android:padding="6dp"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Quiz" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="90dp" android:layout_height="6dp" android:progress="78" android:progressTint="@color/prediction_warning" android:progressBackgroundTint="@color/prediction_border" android:layout_marginEnd="12dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="78%" android:textStyle="bold" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <!-- Previous Exam -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingVertical="8dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_prediction" android:contentDescription="Exam" app:tint="@color/prediction_danger" android:background="@color/prediction_danger_bg" android:padding="6dp"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Previous Exam" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="90dp" android:layout_height="6dp" android:progress="76" android:progressTint="@color/prediction_danger" android:progressBackgroundTint="@color/prediction_border" android:layout_marginEnd="12dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="76%" android:textStyle="bold" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <!-- GPA -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingVertical="8dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_analytics" android:contentDescription="GPA" app:tint="@color/prediction_blue" android:background="@drawable/bg_stat_card_blue" android:backgroundTint="@color/prediction_blue_light" android:padding="6dp"/>
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="GPA (Current)" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="90dp" android:layout_height="6dp" android:max="400" android:progress="325" android:progressTint="@color/prediction_blue" android:progressBackgroundTint="@color/prediction_border" android:layout_marginEnd="12dp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="3.25 / 4.00" android:textStyle="bold" android:textColor="@color/prediction_text_main" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Prediction Trend Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Prediction Trend"
-                    android:textColor="@color/prediction_text_main"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Predicted Exam Score ▾"
-                    android:textColor="@color/prediction_text_secondary"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/prediction_border"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/lineChartTrend"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- AI Insights Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="AI Insights"
-                android:textColor="@color/prediction_text_main"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <!-- Insight 1 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="@color/prediction_card"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="@color/prediction_border"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="14dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/bg_filter_active"
-                            android:background="@drawable/bg_quick_action"
-                            android:backgroundTint="@color/prediction_success_bg"
-                            android:padding="6dp"
-                            android:contentDescription="Icon"
-                            app:tint="@color/prediction_success"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Positive Trend"
-                                android:textStyle="bold"
-                                android:textColor="@color/prediction_success"
-                                android:textSize="13sp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Your predicted exam score has increased by 4.2% compared to last month."
-                                android:textColor="@color/prediction_text_secondary"
-                                android:textSize="11sp"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Insight 2 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="@color/prediction_card"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="@color/prediction_border"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="14dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_analytics"
-                            android:background="@drawable/bg_quick_action"
-                            android:backgroundTint="@color/prediction_warning_bg"
-                            android:padding="6dp"
-                            android:contentDescription="Icon"
-                            app:tint="@color/prediction_warning"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Focus on Quizzes"
-                                android:textStyle="bold"
-                                android:textColor="@color/prediction_warning"
-                                android:textSize="13sp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Quiz performance is lower than other areas. Spend more time practicing."
-                                android:textColor="@color/prediction_text_secondary"
-                                android:textSize="11sp"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Insight 3 -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="@color/prediction_card"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="@color/prediction_border"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="14dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_prediction"
-                            android:background="@drawable/bg_quick_action"
-                            android:backgroundTint="@color/prediction_blue_light"
-                            android:padding="6dp"
-                            android:contentDescription="Icon"
-                            app:tint="@color/prediction_blue"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Good Potential"
-                                android:textStyle="bold"
-                                android:textColor="@color/prediction_blue"
-                                android:textSize="13sp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="With consistent effort, you can reach 80+ in the next exam."
-                                android:textColor="@color/prediction_text_secondary"
-                                android:textSize="11sp"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnViewRecommendations"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                android:text="View Recommendations →"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                app:cornerRadius="16dp"
-                app:backgroundTint="@color/prediction_purple" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

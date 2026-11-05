@@ -67,6 +67,10 @@ public class OverallPerformanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overall_performance);
+        
+        getWindow().setStatusBarColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
+        getWindow().setNavigationBarColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
+        getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
         if (getIntent() != null && getIntent().hasExtra("selected_semester")) {
             passedSemester = getIntent().getStringExtra("selected_semester");
@@ -254,15 +258,15 @@ public class OverallPerformanceActivity extends AppCompatActivity {
             if (d >= 85) {
                 tvStatus.setText("Good");
                 tvStatus.setTextColor(Color.parseColor("#10B981"));
-                tvStatus.setBackgroundColor(Color.parseColor("#D1FAE5"));
+                tvStatus.setBackgroundColor(Color.parseColor("#ECFDF5"));
             } else if (d >= 70) {
                 tvStatus.setText("Fair");
                 tvStatus.setTextColor(Color.parseColor("#F59E0B"));
-                tvStatus.setBackgroundColor(Color.parseColor("#FEF3C7"));
+                tvStatus.setBackgroundColor(Color.parseColor("#FFFBEB"));
             } else {
                 tvStatus.setText("Needs Attention");
                 tvStatus.setTextColor(Color.parseColor("#EF4444"));
-                tvStatus.setBackgroundColor(Color.parseColor("#FEE2E2"));
+                tvStatus.setBackgroundColor(Color.parseColor("#FEF2F2"));
             }
         } catch (Exception ignored) {
             tvStatus.setVisibility(View.GONE);
@@ -475,7 +479,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Performance Trend");
-        dataSet.setColor(Color.parseColor("#4C35E9"));
+        dataSet.setColor(Color.parseColor("#5B3DF5"));
         dataSet.setDrawValues(false);
 
         BarData barData = new BarData(dataSet);
@@ -487,6 +491,13 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         chart.getAxisRight().setEnabled(false);
         chart.getXAxis().setDrawGridLines(false);
         chart.getXAxis().setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
+        chart.getXAxis().setTextColor(Color.parseColor("#64748B"));
+        chart.getXAxis().setAxisLineColor(Color.parseColor("#E8E4FA"));
+
+        com.github.mikephil.charting.components.YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setTextColor(Color.parseColor("#64748B"));
+        leftAxis.setGridColor(Color.parseColor("#E8E4FA"));
+        leftAxis.setAxisLineColor(Color.parseColor("#E8E4FA"));
 
         if (labels != null && !labels.isEmpty()) {
             chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
@@ -496,3 +507,4 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         chart.invalidate();
     }
 }
+

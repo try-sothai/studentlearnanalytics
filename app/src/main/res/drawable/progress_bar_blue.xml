@@ -4,7 +4,7 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <corners android:radius="6dp" />
-            <solid android:color="#E2E8F0" />
+            <solid android:color="@color/divider_color" />
         </shape>
     </item>
     <!-- Progress fill -->
@@ -17,3 +17,4 @@
         </scale>
     </item>
 </layer-list>
+

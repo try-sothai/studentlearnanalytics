@@ -24,6 +24,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
         void onViewDetails(Teacher teacher);
         void onEditTeacher(Teacher teacher);
         void onToggleStatus(Teacher teacher);
+        void onDeleteTeacher(Teacher teacher);
     }
 
     private final Context context;
@@ -134,6 +135,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
                     popup.getMenu().add("Edit Teacher");
                     boolean isActive = "Active".equalsIgnoreCase(teacher.getStatus());
                     popup.getMenu().add(isActive ? "Deactivate Account" : "Activate Account");
+                    popup.getMenu().add("Delete Teacher");
 
                     popup.setOnMenuItemClickListener(item -> {
                         String title = item.getTitle().toString();
@@ -145,6 +147,9 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
                             return true;
                         } else if ("Deactivate Account".equals(title) || "Activate Account".equals(title)) {
                             if (listener != null) listener.onToggleStatus(teacher);
+                            return true;
+                        } else if ("Delete Teacher".equals(title)) {
+                            if (listener != null) listener.onDeleteTeacher(teacher);
                             return true;
                         }
                         return false;

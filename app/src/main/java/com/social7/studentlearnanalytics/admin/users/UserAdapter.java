@@ -24,6 +24,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         void onViewDetails(User user);
         void onEditUser(User user);
         void onToggleStatus(User user);
+        void onDeleteUser(User user);
     }
 
     private final Context context;
@@ -96,7 +97,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         }
 
         public void bind(final Context context, final User user, final OnUserActionListener listener) {
-            if (tvUserId != null) tvUserId.setText(user.getId());
+            if (tvUserId != null) tvUserId.setText(user.getCode());
             if (tvUserName != null) tvUserName.setText(user.getName());
             if (tvUserEmail != null) tvUserEmail.setText(user.getEmail());
 
@@ -124,6 +125,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                     popup.getMenu().add("Edit Student");
                     boolean isActive = "Active".equalsIgnoreCase(user.getStatus());
                     popup.getMenu().add(isActive ? "Deactivate Account" : "Activate Account");
+                    popup.getMenu().add("Delete User");
 
                     popup.setOnMenuItemClickListener(item -> {
                         String title = item.getTitle().toString();
@@ -135,6 +137,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                             return true;
                         } else if ("Deactivate Account".equals(title) || "Activate Account".equals(title)) {
                             if (listener != null) listener.onToggleStatus(user);
+                            return true;
+                        } else if ("Delete User".equals(title)) {
+                            if (listener != null) listener.onDeleteUser(user);
                             return true;
                         }
                         return false;

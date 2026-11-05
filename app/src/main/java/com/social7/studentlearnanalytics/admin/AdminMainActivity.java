@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.admin.classes.ClassManagementFragment;
 import com.social7.studentlearnanalytics.auth.LoginActivity;
 import com.social7.studentlearnanalytics.storage.SessionManager;
 
@@ -26,7 +26,8 @@ public class AdminMainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigation;
     private SessionManager sessionManager;
-    private final View[] drawerItems = new View[8];
+    private final View[] drawerItems = new View[9];
+    private boolean isNavigating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,10 @@ public class AdminMainActivity extends AppCompatActivity {
 
         if (bottomNavigation != null) {
             bottomNavigation.setOnItemSelectedListener(item -> {
+                if (isNavigating) {
+                    return true;
+                }
+
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.nav_admin_dashboard) {
@@ -73,6 +78,22 @@ public class AdminMainActivity extends AppCompatActivity {
                 return true;
             });
         }
+        
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isDrawerOpen()) {
+                    closeDrawer();
+                } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                } else if (bottomNavigation != null && bottomNavigation.getSelectedItemId() != R.id.nav_admin_dashboard) {
+                    bottomNavigation.setSelectedItemId(R.id.nav_admin_dashboard);
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
     }
 
     private void setupDrawer() {
@@ -93,15 +114,28 @@ public class AdminMainActivity extends AppCompatActivity {
             }
         }
 
+        View avatarContainer = findViewById(R.id.layoutAvatarContainer);
+        View.OnClickListener profileClickListener = v -> {
+            closeDrawer();
+            Intent intent = new Intent(this, com.social7.studentlearnanalytics.admin.users.ProfileSettingsActivity.class);
+            startActivity(intent);
+        };
+
+        if (avatarContainer != null) avatarContainer.setOnClickListener(profileClickListener);
+        if (tvName != null) tvName.setOnClickListener(profileClickListener);
+        View tvRole = findViewById(R.id.tvAdminDrawerRole);
+        if (tvRole != null) tvRole.setOnClickListener(profileClickListener);
+
         bindDrawerItem(0, R.id.itemDrawerDashboard, R.drawable.ic_home, "Dashboard", null);
         bindDrawerItem(1, R.id.itemDrawerUserManagement, R.drawable.ic_users, "User Management", "Students, Teachers, Admins");
         bindDrawerItem(2, R.id.itemDrawerCourseManagement, R.drawable.ic_open_book, "Course Management", "Manage courses and curriculum");
-        bindDrawerItem(3, R.id.itemDrawerReports, R.drawable.ic_chart_bar, "Reports & Analytics", "View system reports and statistics");
-        bindDrawerItem(4, R.id.itemDrawerNotifications, R.drawable.ic_notifications, "Notifications", "View and manage notifications");
-        bindDrawerItem(5, R.id.itemDrawerSettings, R.drawable.ic_nav_settings, "Settings", "Account and system settings");
+        bindDrawerItem(3, R.id.itemDrawerClassManagement, R.drawable.ic_group, "Class Management", "Manage classes, schedules and classrooms");
+        bindDrawerItem(4, R.id.itemDrawerReports, R.drawable.ic_chart_bar, "Reports & Analytics", "View system reports and statistics");
+        bindDrawerItem(5, R.id.itemDrawerNotifications, R.drawable.ic_notifications, "Notifications", "View and manage notifications");
+        bindDrawerItem(6, R.id.itemDrawerSettings, R.drawable.ic_nav_settings, "Settings", "Account and system settings");
 
-        bindDrawerItem(6, R.id.itemDrawerHelp, R.drawable.ic_circle_help, "Help & Support", "Get help and contact support");
-        bindDrawerItem(7, R.id.itemDrawerAbout, R.drawable.ic_circle_info, "About", "App version and system information");
+        bindDrawerItem(7, R.id.itemDrawerHelp, R.drawable.ic_circle_help, "Help & Support", "Get help and contact support");
+        bindDrawerItem(8, R.id.itemDrawerAbout, R.drawable.ic_circle_info, "About", "App version and system information");
 
         View btnLogout = findViewById(R.id.btnAdminDrawerLogout);
         if (btnLogout != null) {
@@ -153,20 +187,23 @@ public class AdminMainActivity extends AppCompatActivity {
                 openFragment(new CourseManagementFragment());
                 break;
             case 3:
+                openFragment(new ClassManagementFragment());
+                break;
+            case 4:
                 selectTab(R.id.nav_admin_reports);
                 openFragment(new ReportsFragment());
                 break;
-            case 4:
+            case 5:
                 openFragment(new NotificationFragment());
                 break;
-            case 5:
+            case 6:
                 selectTab(R.id.nav_admin_settings);
                 openFragment(new SystemSettingsFragment());
                 break;
-            case 6:
+            case 7:
                 showHelpDialog();
                 break;
-            case 7:
+            case 8:
                 showAboutDialog();
                 break;
         }
@@ -177,7 +214,7 @@ public class AdminMainActivity extends AppCompatActivity {
         int darkNavy = Color.parseColor("#101A70");
         int mutedBlue = Color.parseColor("#6680B5");
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             View itemView = drawerItems[i];
             if (itemView == null) continue;
 
@@ -248,16 +285,6 @@ public class AdminMainActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isDrawerOpen()) {
-            closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
@@ -273,30 +300,50 @@ public class AdminMainActivity extends AppCompatActivity {
     }
 
     public void openFragment(@NonNull Fragment fragment) {
-        getSupportFragmentManager()
+        androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.admin_fragment_container, fragment)
-                .commit();
+                .replace(R.id.admin_fragment_container, fragment);
+
+        if (!(fragment instanceof AdminDashboardFragment || 
+              fragment instanceof UserManagementFragment || 
+              fragment instanceof CourseManagementFragment || 
+              fragment instanceof ClassManagementFragment ||
+              fragment instanceof ReportsFragment ||
+              fragment instanceof SystemSettingsFragment)) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
 
         if (fragment instanceof AdminDashboardFragment) {
             updateDrawerActiveItem(0);
-        } else if (fragment instanceof UserManagementFragment) {
+        } else if (fragment instanceof UserManagementFragment ||
+                   fragment instanceof TeacherManagementFragment ||
+                   fragment instanceof com.social7.studentlearnanalytics.admin.classes.FacultyEvaluationReviewFragment) {
             updateDrawerActiveItem(1);
         } else if (fragment instanceof CourseManagementFragment) {
             updateDrawerActiveItem(2);
-        } else if (fragment instanceof ReportsFragment) {
+            selectTab(R.id.nav_admin_courses);
+        } else if (fragment instanceof ClassManagementFragment) {
             updateDrawerActiveItem(3);
-        } else if (fragment instanceof NotificationFragment) {
+        } else if (fragment instanceof ReportsFragment ||
+                   fragment instanceof com.social7.studentlearnanalytics.admin.classes.IncidentResolutionWorkspaceFragment) {
             updateDrawerActiveItem(4);
-        } else if (fragment instanceof SystemSettingsFragment) {
+            selectTab(R.id.nav_admin_reports);
+        } else if (fragment instanceof NotificationFragment) {
             updateDrawerActiveItem(5);
+        } else if (fragment instanceof SystemSettingsFragment) {
+            updateDrawerActiveItem(6);
+            selectTab(R.id.nav_admin_settings);
         }
     }
 
     public void selectTab(int itemId) {
-        if (bottomNavigation != null) {
+        if (bottomNavigation != null && bottomNavigation.getSelectedItemId() != itemId) {
+            isNavigating = true;
             bottomNavigation.setSelectedItemId(itemId);
+            isNavigating = false;
         }
     }
 }

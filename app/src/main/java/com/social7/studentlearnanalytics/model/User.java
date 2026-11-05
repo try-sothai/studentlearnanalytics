@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private String id;
+    private Long numericId;
     private String name;
     private String email;
-    private String role; // "Student", "Teacher", "Admin"
-    private String status; // "Active", "Inactive"
+    private String role;
+    private String status;
+    private String code;
+    private String departmentName;
 
     public User(String id, String name, String email, String role, String status) {
         this.id = id;
@@ -15,10 +18,24 @@ public class User implements Serializable {
         this.email = email;
         this.role = role;
         this.status = status;
+        this.code = id;
+    }
+
+    public User(Long numericId, String id, String name, String email, String role, String status, String code) {
+        this.numericId = numericId;
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+        this.code = code != null ? code : id;
     }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+
+    public Long getNumericId() { return numericId; }
+    public void setNumericId(Long numericId) { this.numericId = numericId; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -31,4 +48,12 @@ public class User implements Serializable {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getCode() { return code != null ? code : id; }
+    public void setCode(String code) { this.code = code; }
+
+    public String getStudentCode() { return getCode(); }
+
+    public String getDepartmentName() { return departmentName; }
+    public void setDepartmentName(String departmentName) { this.departmentName = departmentName; }
 }

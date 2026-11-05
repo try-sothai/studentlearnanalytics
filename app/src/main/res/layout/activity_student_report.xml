@@ -8,50 +8,9 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <!-- Top AppBar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/card_white"
-        android:elevation="2dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Back"
-            android:focusable="true"
-            android:padding="4dp"
-            android:src="@drawable/ic_back"
-            app:tint="@color/text_primary" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:text="Student Academic Report"
-            android:textColor="@color/text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/btnMoreOptions"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="Options"
-            android:focusable="true"
-            android:padding="4dp"
-            android:src="@drawable/ic_more_vert"
-            app:tint="@color/text_primary" />
-    </LinearLayout>
+    <include
+        android:id="@+id/headerTeacherDetail"
+        layout="@layout/layout_teacher_header" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

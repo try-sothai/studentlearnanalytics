@@ -1,0 +1,90 @@
+package com.social7.studentlearnanalytics.adapter;
+
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.model.StudentImportItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportRowAdapter.RowViewHolder> {
+
+    private final List<StudentImportItem.RowItem> rows = new ArrayList<>();
+
+    public void setRows(List<StudentImportItem.RowItem> newRows) {
+        rows.clear();
+        if (newRows != null) rows.addAll(newRows);
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public RowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_student_import_row, parent, false);
+        return new RowViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RowViewHolder holder, int position) {
+        holder.bind(rows.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return rows.size();
+    }
+
+    static class RowViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tvRowNumber, tvStudentIdentifier, tvRowStatus, tvRowNames, tvRowErrors;
+
+        public RowViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvRowNumber = itemView.findViewById(R.id.tvRowNumber);
+            tvStudentIdentifier = itemView.findViewById(R.id.tvStudentIdentifier);
+            tvRowStatus = itemView.findViewById(R.id.tvRowStatus);
+            tvRowNames = itemView.findViewById(R.id.tvRowNames);
+            tvRowErrors = itemView.findViewById(R.id.tvRowErrors);
+        }
+
+        public void bind(StudentImportItem.RowItem item) {
+            tvRowNumber.setText("Row " + item.rowNumber);
+            tvStudentIdentifier.setText(item.studentIdentifier != null && !item.studentIdentifier.isEmpty()
+                    ? item.studentIdentifier : "(No ID)");
+
+            String status = item.status != null ? item.status.toUpperCase() : "UNKNOWN";
+            tvRowStatus.setText(status);
+
+            if ("VALID".equalsIgnoreCase(status) || "IMPORTED".equalsIgnoreCase(status)) {
+                tvRowStatus.setTextColor(Color.parseColor("#16A34A"));
+            } else if ("DUPLICATE".equalsIgnoreCase(status)) {
+                tvRowStatus.setTextColor(Color.parseColor("#EA580C"));
+            } else {
+                tvRowStatus.setTextColor(Color.parseColor("#DC2626"));
+            }
+
+            String en = item.englishName != null ? item.englishName : "";
+            String kh = item.khmerName != null ? " (" + item.khmerName + ")" : "";
+            tvRowNames.setText(en + kh);
+
+            if (item.errors != null && !item.errors.isEmpty()) {
+                tvRowErrors.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder();
+                for (String err : item.errors) {
+                    if (sb.length() > 0) sb.append("\n");
+                    sb.append("• ").append(err);
+                }
+                tvRowErrors.setText(sb.toString());
+            } else {
+                tvRowErrors.setVisibility(View.GONE);
+            }
+        }
+    }
+}

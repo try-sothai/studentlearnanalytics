@@ -281,6 +281,35 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
+            <!-- 5.5. Assessments (NEW) -->
+            <LinearLayout
+                android:id="@+id/menu_assessments"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Assessments Icon"
+                    android:src="@drawable/ic_assignment" />
+
+                <TextView
+                    android:id="@+id/tv_menu_assessments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="Assessments"
+                    android:textColor="#EFEFFF"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
             <!-- 6. Notifications (with Red Badge "3") -->
             <LinearLayout
                 android:id="@+id/menu_notifications"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -69,6 +70,14 @@ public class ReportsFragment extends Fragment {
                 false
         );
 
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherReports),
+                    "Reports",
+                    "Export class performance reports"
+            );
+        }
+
         btnFilterAll = view.findViewById(R.id.btnFilterAll);
         btnFilterGood = view.findViewById(R.id.btnFilterGood);
         btnFilterMedium = view.findViewById(R.id.btnFilterMedium);
@@ -122,7 +131,14 @@ public class ReportsFragment extends Fragment {
             List<CourseAnalyticsAdapter.CourseAnalyticsItem> items = getSampleCourseAnalytics();
             adapter = new CourseAnalyticsAdapter(requireContext(), items, item -> {
                 if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openFragment(new ClassAnalyticsFragment());
+                    ClassAnalyticsFragment fragment = ClassAnalyticsFragment.newInstance(
+                            item.code,
+                            item.name,
+                            "BSCS 3-A",
+                            item.semester,
+                            true
+                    );
+                    ((TeacherMainActivity) getActivity()).openFragment(fragment);
                 }
             });
             rvList.setAdapter(adapter);

@@ -111,6 +111,30 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     imgNotifIcon.setImageResource(R.drawable.ic_prediction);
                     imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FCE8E8")));
                     imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#F04444")));
+                } else if ("Assignment".equalsIgnoreCase(category) || "Homework".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_assignment);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D8E5FF")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#0755F5")));
+                } else if ("Quiz".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_assignment);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFEAD2")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#FF9C32")));
+                } else if ("Grade".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_chart_bar);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D4F8EB")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#08C985")));
+                } else if ("Exam".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_assignment);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FCE8E8")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#F04444")));
+                } else if ("Attendance".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_calendar);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D4F8EB")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#08C985")));
+                } else if ("Announcement".equalsIgnoreCase(category)) {
+                    imgNotifIcon.setImageResource(R.drawable.ic_notifications);
+                    imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EBF3FF")));
+                    imgNotifIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#0755F5")));
                 } else {
                     imgNotifIcon.setImageResource(R.drawable.ic_notifications);
                     imgNotifIcon.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D8E5FF")));

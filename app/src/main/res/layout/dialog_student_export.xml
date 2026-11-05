@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Export Students"
+        android:textColor="@color/admin_text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Choose file format and optional filters."
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="14dp"
+        android:background="@color/admin_border" />
+
+    <!-- Format Radio -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Export Format"
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rgExportFormat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbFormatXlsx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Excel (.xlsx)"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rbFormatCsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="CSV (.csv)"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="13sp" />
+    </RadioGroup>
+
+    <!-- Filters -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Department"
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+    <Spinner
+        android:id="@+id/spExportDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_spinner_border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Program"
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+    <Spinner
+        android:id="@+id/spExportProgram"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_spinner_border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Year Level"
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+    <Spinner
+        android:id="@+id/spExportYearLevel"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_spinner_border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Academic Year"
+        android:textColor="@color/admin_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+    <Spinner
+        android:id="@+id/spExportAcademicYear"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_spinner_border" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDoExport"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/admin_active_green"
+        android:text="Export Students"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
+
+</LinearLayout>

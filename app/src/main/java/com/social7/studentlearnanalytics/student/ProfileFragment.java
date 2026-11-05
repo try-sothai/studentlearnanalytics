@@ -63,21 +63,19 @@ public class ProfileFragment extends Fragment {
             tvStudentId.setText("ID: " + sessionManager.getUserId());
         }
 
-        View btnBack = view.findViewById(R.id.btnBack);
+        if (getActivity() instanceof StudentMainActivity) {
+            ((StudentMainActivity) getActivity()).setupStudentHeader(
+                    view,
+                    "My Profile",
+                    "Manage your personal and academic information"
+            );
+        }
         View cardPersonalInfo = view.findViewById(R.id.cardPersonalInfo);
         View cardAcademicInfo = view.findViewById(R.id.cardAcademicInfo);
         View cardChangePassword = view.findViewById(R.id.cardChangePassword);
         View cardAppSettings = view.findViewById(R.id.cardAppSettings);
         View cardHelpSupport = view.findViewById(R.id.cardHelpSupport);
         View cardLogout = view.findViewById(R.id.cardLogout);
-
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (getActivity() != null) {
-                    getActivity().getOnBackPressedDispatcher().onBackPressed();
-                }
-            });
-        }
 
         if (cardPersonalInfo != null) {
             cardPersonalInfo.setOnClickListener(v -> {

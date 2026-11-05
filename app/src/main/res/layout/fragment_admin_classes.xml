@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/admin_bg"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <!-- Top Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnUsersMenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Menu"
+                android:focusable="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_menu"
+                app:tint="@color/admin_text_primary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvHeaderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Class Management"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvHeaderSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Manage university classes, schedules and classrooms"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgNotifBell"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_circle_soft_blue"
+                android:padding="8dp"
+                android:src="@drawable/ic_notifications"
+                android:contentDescription="Notifications"
+                app:tint="@color/admin_primary_blue" />
+        </LinearLayout>
+
+        <!-- Sub-Navigation Bar for Class Management Workflows -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubTabClassDirectory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginEnd="6dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="Class Directory"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubTabClassSchedules"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Class Schedules"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubTabClassroomManagement"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Classroom Management"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubTabTeacherAssignments"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Teacher Assignments"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubTabClassEnrollment"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="4dp"
+                    android:backgroundTint="#F4F7FF"
+                    android:text="Class Enrollment"
+                    android:textAllCaps="false"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+    <!-- Main Content Frame for Class Management Tabs -->
+    <FrameLayout
+        android:id="@+id/layoutClassContentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- TAB 1: CLASS DIRECTORY CONTAINER -->
+        <LinearLayout
+            android:id="@+id/layoutClassDirectoryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_white"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
+
+                <!-- Summary Statistics Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        app:cardBackgroundColor="@color/card_white"
+                        app:cardElevation="1dp"
+                        app:strokeColor="@color/admin_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Classes" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvStatActiveClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="28" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        app:cardBackgroundColor="@color/card_white"
+                        app:cardElevation="1dp"
+                        app:strokeColor="@color/admin_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Students" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvStatTotalStudents" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="840" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="2dp"
+                        app:cardBackgroundColor="@color/card_white"
+                        app:cardElevation="1dp"
+                        app:strokeColor="@color/admin_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Avg. Pass Rate" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvStatAvgPerf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="86.4%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        app:cardBackgroundColor="@color/card_white"
+                        app:cardElevation="1dp"
+                        app:strokeColor="@color/admin_border"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attention" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvStatAttention" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- Search and Filter Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilSearchUsers"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@drawable/ic_search"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchUser"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:hint="Search classes by name, code or teacher..."
+                            android:inputType="text"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/btnFilterIcon"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_circle_soft_blue"
+                        android:contentDescription="Filter"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_filter"
+                        app:tint="@color/admin_primary_blue" />
+                </LinearLayout>
+
+                <!-- Status Filter Pills Row -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/pillFilterAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/bg_notif_tab_active"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="All Classes (28)"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterActive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginHorizontal="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Active (25)"
+                            android:textColor="@color/admin_active_green"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pillFilterInactive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="6dp"
+                            android:background="@drawable/bg_notif_tab_inactive"
+                            android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Inactive (3)"
+                            android:textColor="@color/admin_inactive_red"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- Prominent + Add Class Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/admin_primary_blue"
+                    android:text="+ Add New Class"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/white" />
+
+            </LinearLayout>
+
+            <!-- Class List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUsers"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="16dp"
+                tools:listitem="@layout/item_admin_class" />
+
+        </LinearLayout>
+
+        <!-- TAB 2: CLASS SCHEDULES CONTAINER -->
+        <include
+            android:id="@+id/layoutSchedulesContainer"
+            layout="@layout/fragment_admin_class_schedules"
+            android:visibility="gone" />
+
+        <!-- TAB 3: CLASSROOM MANAGEMENT CONTAINER -->
+        <include
+            android:id="@+id/layoutClassroomsContainer"
+            layout="@layout/fragment_admin_classrooms"
+            android:visibility="gone" />
+
+        <!-- TAB 4: TEACHER ASSIGNMENTS CONTAINER -->
+        <include
+            android:id="@+id/layoutTeacherAssignContainer"
+            layout="@layout/fragment_admin_teacher_assignments"
+            android:visibility="gone" />
+
+        <!-- TAB 5: CLASS ENROLLMENT CONTAINER -->
+        <include
+            android:id="@+id/layoutClassEnrollmentContainer"
+            layout="@layout/fragment_admin_class_enrollment"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <!-- Pagination Controls at Bottom -->
+    <LinearLayout
+        android:id="@+id/layoutPagination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/card_white"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPrevPage"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="&lt;"
+            android:textColor="@color/admin_text_primary"
+            app:cornerRadius="18dp"
+            app:strokeColor="@color/admin_border" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnPage1"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_notif_tab_active"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnPage2"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/btnPage3"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginHorizontal="4dp"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNextPage"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="&gt;"
+            android:textColor="@color/admin_text_primary"
+            app:cornerRadius="18dp"
+            app:strokeColor="@color/admin_border" />
+    </LinearLayout>
+
+</LinearLayout>

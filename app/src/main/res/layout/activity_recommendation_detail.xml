@@ -243,7 +243,7 @@
                             <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_home" android:contentDescription="Attendance Icon" app:tint="@color/slas_success" android:background="@drawable/bg_stat_card_green" android:padding="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="#087A52" android:background="#E1F8EF" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -266,7 +266,7 @@
                             <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_assignment" android:contentDescription="Assignment Icon" app:tint="@color/slas_primary_purple" android:background="@drawable/bg_stat_card_purple" android:padding="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignments" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="80%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="#087A52" android:background="#E1F8EF" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -288,7 +288,7 @@
                             <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_analytics" android:contentDescription="Quiz Icon" app:tint="@color/slas_warning" android:background="@drawable/bg_stat_card_orange" android:padding="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quizzes" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Improve" android:textSize="10sp" android:textStyle="bold" android:textColor="#8A5A00" android:background="#FFF1C9" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Improve" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/warning_orange" android:background="@color/warning_orange_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -342,7 +342,7 @@
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Improve Quiz Performance" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="#C62848" android:background="#FFE6EA" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/danger_red" android:background="@color/danger_red_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Your quiz performance has decreased by 2%. Review weak topics." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
@@ -394,7 +394,7 @@
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Maintain Good Attendance" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Keep Going" android:textSize="10sp" android:textStyle="bold" android:textColor="#087A52" android:background="#E1F8EF" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Keep Going" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Keep attending classes regularly to maintain your good performance." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
@@ -446,7 +446,7 @@
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Focus on Weak Topics" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="#C62848" android:background="#FFE6EA" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/danger_red" android:background="@color/danger_red_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Spend more time reviewing topics in Data Structures where your performance is lower." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
@@ -498,7 +498,7 @@
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Set Study Schedule" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recommended" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_indigo" android:background="#EEE9FF" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recommended" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_indigo" android:background="@color/primary_ultra_soft" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Create a consistent study routine to improve your learning progress." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
@@ -550,7 +550,7 @@
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Use Learning Resources" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recommended" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_indigo" android:background="#EEE9FF" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recommended" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_indigo" android:background="@color/primary_ultra_soft" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
                             <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Review learning resources and practice materials to strengthen your understanding." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
@@ -591,7 +591,7 @@
                     <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_prediction" android:contentDescription="Trophy" app:tint="@color/white" android:layout_marginEnd="14dp"/>
                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Small Steps Lead to Big Success!" android:textStyle="bold" android:textColor="@color/white" android:textSize="15sp"/>
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Be consistent and keep improving." android:textSize="12sp" android:textColor="#E0E0E0" android:layout_marginTop="2dp"/>
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Be consistent and keep improving." android:textSize="12sp" android:textColor="@color/text_hint" android:layout_marginTop="2dp"/>
                     </LinearLayout>
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnTrackProgress"
@@ -611,3 +611,4 @@
     </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
+

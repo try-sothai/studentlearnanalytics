@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <!-- Header with Back and Title -->
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white" app:cardElevation="0dp"
                 app:strokeColor="@color/divider_color"
                 app:strokeWidth="1dp">
 
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="8dp">
+                app:cardBackgroundColor="@color/white" app:cardElevation="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -193,7 +193,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Overall Performance"
-                            android:textColor="#E0E0E0"
+                            android:textColor="@color/text_hint"
                             android:textSize="13sp" />
 
                         <TextView
@@ -271,7 +271,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
+                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -334,7 +334,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginVertical="10dp"
-                                android:background="#F0F0F0" />
+                                android:background="@color/divider_color" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -355,7 +355,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
+                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -418,7 +418,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginVertical="10dp"
-                                android:background="#F0F0F0" />
+                                android:background="@color/divider_color" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -439,7 +439,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
+                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -502,7 +502,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginVertical="10dp"
-                                android:background="#F0F0F0" />
+                                android:background="@color/divider_color" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -532,7 +532,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="2dp">
+                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -563,7 +563,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="2dp">
+                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -624,7 +624,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="32dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="2dp">
+                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
 
                 <LinearLayout
                     android:id="@+id/layoutSubjectList"
@@ -637,3 +637,5 @@
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
+
+

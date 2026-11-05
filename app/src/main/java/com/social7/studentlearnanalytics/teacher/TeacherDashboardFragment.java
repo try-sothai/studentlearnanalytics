@@ -37,7 +37,6 @@ public class TeacherDashboardFragment extends Fragment {
 
     private static final String TAG = "SLAS_TEACHER_DASH";
 
-    private TextView tvTeacherName;
     private SessionManager sessionManager;
 
     public TeacherDashboardFragment() {
@@ -56,35 +55,12 @@ public class TeacherDashboardFragment extends Fragment {
                 false
         );
 
-        if (getContext() != null) {
-            sessionManager = new SessionManager(requireContext());
-        }
-
-        tvTeacherName = view.findViewById(R.id.tvTeacherName);
-
-        if (tvTeacherName != null && sessionManager != null) {
-            String name = sessionManager.getUserName();
-            if (name != null && !name.trim().isEmpty()) {
-                tvTeacherName.setText(name);
-            }
-        }
-
-        ImageView btnTeacherMenu = view.findViewById(R.id.btnTeacherMenu);
-        if (btnTeacherMenu != null) {
-            btnTeacherMenu.setOnClickListener(v -> {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openDrawer();
-                }
-            });
-        }
-
-        View profileContainer = view.findViewById(R.id.profileContainer);
-        if (profileContainer != null) {
-            profileContainer.setOnClickListener(v -> {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openFragment(new TeacherProfileFragment());
-                }
-            });
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherDashboard),
+                    "Teacher Dashboard",
+                    "Overview & analytics"
+            );
         }
 
         View cardTotalStudents = view.findViewById(R.id.cardTotalStudents);
@@ -142,10 +118,6 @@ public class TeacherDashboardFragment extends Fragment {
                         JsonObject root = response.body();
                         JsonObject data = root.has("data") && root.get("data").isJsonObject()
                                 ? root.getAsJsonObject("data") : root;
-
-                        if (data.has("teacher_name") && !data.get("teacher_name").isJsonNull() && tvTeacherName != null) {
-                            tvTeacherName.setText(data.get("teacher_name").getAsString() + "! 👋");
-                        }
 
                         setupLineChart(chart);
                     } catch (Exception e) {

@@ -5,689 +5,416 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_background"
-    android:fitsSystemWindows="true">
+    android:background="@color/teacher_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <!-- Header Toolbar -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Top Header Bar -->
+    <include
+        android:id="@+id/headerStudentAnalytics"
+        layout="@layout/layout_student_header" />
+
+    <!-- Sub-Navigation Bar (6 Internal Tabs) -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        app:elevation="0dp"
-        android:fitsSystemWindows="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
-
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
-                android:src="@drawable/ic_back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/slas_indigo" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@id/btnBack"
-                app:layout_constraintEnd_toStartOf="@id/semesterSelector"
-                app:layout_constraintStart_toEndOf="@id/btnBack"
-                app:layout_constraintTop_toTopOf="@id/btnBack">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Learning Analytics"
-                    android:textColor="@color/slas_text_dark_navy"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Track • Analyze • Improve"
-                    android:textColor="@color/slas_text_secondary"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/semesterSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/btnBack"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnBack"
-                app:strokeColor="@color/slas_border"
-                app:strokeWidth="1.5dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="12dp">
-
-                    <TextView
-                        android:id="@+id/tvAnalyticsSemester"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Semester 1, 2024 ▾"
-                        android:textColor="@color/slas_indigo"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Main Scroll Content (Guaranteed to start at TOP = 0) -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollViewAnalytics"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:focusableInTouchMode="true"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="16dp"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_notif_tab_inactive"
+            android:orientation="horizontal"
+            android:padding="2dp">
 
-            <!-- Category Tabs (Compact Pill Style) -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/tabBarContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnOverview"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Overview"
-                        android:textColor="@color/white"
-                        app:backgroundTint="@color/slas_primary_purple"
-                        app:cornerRadius="14dp"
-                        app:strokeWidth="0dp"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="18dp"
-                        android:layout_marginEnd="6dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAttendance"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Attendance"
-                        android:textColor="@color/slas_indigo"
-                        app:backgroundTint="@color/transparent"
-                        app:strokeWidth="0dp"
-                        app:cornerRadius="14dp"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="14dp"
-                        android:layout_marginEnd="6dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAssignments"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Assignments"
-                        android:textColor="@color/slas_indigo"
-                        app:backgroundTint="@color/transparent"
-                        app:strokeWidth="0dp"
-                        app:cornerRadius="14dp"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="14dp"
-                        android:layout_marginEnd="6dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnQuizzes"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Quizzes"
-                        android:textColor="@color/slas_indigo"
-                        app:backgroundTint="@color/transparent"
-                        app:strokeWidth="0dp"
-                        app:cornerRadius="14dp"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="14dp"
-                        android:layout_marginEnd="6dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnExams"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Exams"
-                        android:textColor="@color/slas_indigo"
-                        app:backgroundTint="@color/transparent"
-                        app:strokeWidth="0dp"
-                        app:cornerRadius="14dp"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="14dp"
-                        android:layout_marginEnd="6dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnGpa"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="GPA"
-                        android:textColor="@color/slas_indigo"
-                        app:backgroundTint="@color/transparent"
-                        app:strokeWidth="0dp"
-                        app:cornerRadius="14dp"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:paddingHorizontal="14dp"/>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Hero Scorecard (3-Color SLAS Brand Gradient) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardAcademicIndex"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_gradient_performance_card"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/tvHeroPercentage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="82%"
-                        android:textColor="@color/white"
-                        android:textSize="36sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="@id/tvHeroPercentage"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tvHeroPercentage"
-                        app:layout_constraintTop_toTopOf="@id/tvHeroPercentage">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Overall Performance"
-                            android:textColor="@color/white"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:background="@drawable/bg_notif_unread_dot"
-                            android:backgroundTint="#25FFFFFF"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="3dp"
-                            android:text="▲ +5% from last semester"
-                            android:textColor="@color/white"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Great progress! Keep it up! 🏆"
-                        android:textColor="@color/white"
-                        android:textSize="13sp"
-                        app:layout_constraintTop_toBottomOf="@id/tvHeroPercentage" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- 4 Metrics Grid (WHITE Cards, Border #D9D3F5, Semantic Icons) -->
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:columnCount="2">
-
-                <!-- 1. Attendance Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardAttendanceMetric"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:strokeColor="@color/slas_border"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="14dp">
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:background="@drawable/bg_stat_card_green"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_home"
-                            android:contentDescription="Attendance"
-                            app:tint="@color/slas_success" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textSize="11sp" android:textColor="@color/slas_text_secondary"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▲ +3%" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_success"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- 2. Assignments Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardAssignmentsMetric"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:strokeColor="@color/slas_border"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="14dp">
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:background="@drawable/bg_stat_card_purple"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_assignment"
-                            android:contentDescription="Assignments"
-                            app:tint="@color/slas_primary_purple" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignments" android:textSize="11sp" android:textColor="@color/slas_text_secondary"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="80%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▲ +2%" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_success"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- 3. Quizzes Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardQuizzesMetric"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:strokeColor="@color/slas_border"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="14dp">
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:background="@drawable/bg_stat_card_orange"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_analytics"
-                            android:contentDescription="Quizzes"
-                            app:tint="@color/slas_warning" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quizzes" android:textSize="11sp" android:textColor="@color/slas_text_secondary"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▼ -2%" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_danger"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- 4. Exams Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardExamsMetric"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:strokeColor="@color/slas_border"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="14dp">
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:background="@color/slas_danger_bg"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_prediction"
-                            android:contentDescription="Exams"
-                            app:tint="@color/slas_danger" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Exams" android:textSize="11sp" android:textColor="@color/slas_text_secondary"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="76%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▲ +1%" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/slas_success"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </GridLayout>
-
-            <!-- Performance Trend Chart Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Performance Trend"
-                    android:textColor="@color/slas_text_dark_navy"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Overall ▼"
-                    android:textColor="@color/slas_text_secondary"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPerformanceTrajectory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/white"
-                app:strokeColor="@color/slas_border"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/lineChartAnalytics"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- View Full Performance Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnViewFullPerformance"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/slas_primary_purple"
-                android:text="View Full Performance Details →"
-                android:textAllCaps="false"
+            <TextView
+                android:id="@+id/tabAnalyticsOverview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_notif_tab_active"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Overview"
                 android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:cornerRadius="14dp" />
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
-            <!-- Subject Performance & Key Insights Section -->
+            <TextView
+                android:id="@+id/tabAnalyticsAttendance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Attendance"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAnalyticsAssignments"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Assignments"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAnalyticsQuizzes"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Quizzes"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAnalyticsExams"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="Exams"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabAnalyticsGpa"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingHorizontal="14dp"
+                android:text="GPA Progress"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Main Content Frame -->
+    <FrameLayout
+        android:id="@+id/layoutAnalyticsContentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- SUB-TAB 0: OVERVIEW CONTAINER (Default) -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsOverviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <!-- Subject Performance Column -->
-                <LinearLayout
-                    android:layout_width="0dp"
+                <!-- Overall Performance Hero Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="8dp">
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical">
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="Subject Performance"
-                            android:textColor="@color/slas_text_dark_navy"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:id="@+id/btnViewAllSubjects"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View All →"
-                            android:textColor="@color/slas_primary_purple"
-                            android:textSize="11sp"
-                            android:textStyle="bold"
-                            android:padding="4dp"
-                            android:clickable="true"
-                            android:focusable="true"/>
+                            android:text="Overall Academic Performance Index"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="3"
+                            android:rowCount="2">
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overall Score" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="92.4%" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="98.5%" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignment Avg" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88.5%" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quiz Avg" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.0%" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Exam Avg" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="86.5%" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current GPA" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3.68" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+                        </GridLayout>
                     </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:strokeColor="@color/slas_border"
-                        app:strokeWidth="1dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="14dp">
-
-                            <!-- Data Structures 85% -->
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-                                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Data Structures" android:textSize="12sp" android:textColor="@color/slas_text_dark_navy" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="85%" android:textSize="12sp" android:textColor="@color/slas_primary_purple" android:textStyle="bold"/>
-                                </LinearLayout>
-                                <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="7dp" android:progress="85" android:progressTint="@color/slas_primary_purple" android:progressBackgroundTint="@color/slas_light_purple" android:layout_marginTop="6dp"/>
-                            </LinearLayout>
-
-                            <!-- Web Development 78% -->
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
-                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-                                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Web Development" android:textSize="12sp" android:textColor="@color/slas_text_dark_navy" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78%" android:textSize="12sp" android:textColor="@color/slas_blue" android:textStyle="bold"/>
-                                </LinearLayout>
-                                <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="7dp" android:progress="78" android:progressTint="@color/slas_blue" android:progressBackgroundTint="@color/slas_light_purple" android:layout_marginTop="6dp"/>
-                            </LinearLayout>
-
-                            <!-- Database Systems 76% -->
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="12dp">
-                                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-                                    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Database Systems" android:textSize="12sp" android:textColor="@color/slas_text_dark_navy" android:textStyle="bold"/>
-                                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="76%" android:textSize="12sp" android:textColor="@color/slas_indigo" android:textStyle="bold"/>
-                                </LinearLayout>
-                                <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="7dp" android:progress="76" android:progressTint="@color/slas_indigo" android:progressBackgroundTint="@color/slas_light_purple" android:layout_marginTop="6dp"/>
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <!-- Key Insights Column -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Key Insights"
-                        android:textColor="@color/slas_text_dark_navy"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <!-- Insight Card 1: Green Keep Going -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:cardBackgroundColor="#E1F8EF"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="0dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Keep Going!" android:textSize="12sp" android:textColor="#087A52" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance is above 85%." android:textSize="11sp" android:textColor="#087A52" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Insight Card 2: Pink/Red Needs Attention -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        app:cardBackgroundColor="#FFE6EA"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="0dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Needs Attention" android:textSize="12sp" android:textColor="#C62848" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quiz performance decreased by 2%." android:textSize="11sp" android:textColor="#C62848" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Small Progress Bottom CTA Banner -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardRecommendationCTA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/slas_light_purple"
-                app:strokeColor="@color/slas_border"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                android:clickable="true"
-                android:focusable="true">
-                <LinearLayout
+                <!-- Performance Score Trend LineChart -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="18dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Small Progress Makes Big Results!" android:textStyle="bold" android:textColor="@color/slas_indigo" android:textSize="14sp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="View Recommendations →" android:textSize="12sp" android:textStyle="bold" android:textColor="@color/slas_primary_purple" android:layout_marginTop="4dp"/>
-                    </LinearLayout>
-                    <ImageView android:layout_width="38dp" android:layout_height="38dp" android:src="@drawable/ic_prediction" android:contentDescription="Recommendations" app:tint="@color/slas_primary_purple"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Semester Score Performance Trajectory"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/lineChartAnalyticsTrend"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:layout_marginTop="12dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 1: ATTENDANCE CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsAttendanceContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Class Participation &amp; Attendance Rate" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/pieChartAttendanceDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Recent Session Attendance Log" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAttendanceSessionRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 2: ASSIGNMENTS CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsAssignmentsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignment &amp; Homework Performance" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAnalyticsAssignmentsRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 3: QUIZZES CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsQuizzesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quiz Performance &amp; Completion Records" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAnalyticsQuizzesRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 4: EXAMS CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsExamsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Midterm &amp; Final Exam Performance" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAnalyticsExamsRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- SUB-TAB 5: GPA PROGRESS CONTAINER -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/secAnalyticsGpaContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="GPA &amp; Cumulative Academic Standing" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
+
+                        <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current Semester GPA" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3.68" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cumulative GPA" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3.65 / 4.0" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Credits" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18 / 21 Credits" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Academic Standing" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Honor Roll" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                            </LinearLayout>
+                        </GridLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Semester GPA Progress History" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGpaHistoryRoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
 
 </LinearLayout>

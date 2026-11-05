@@ -83,13 +83,12 @@ public class ReportFragment extends Fragment {
     }
 
     private void setupUI(View view) {
-        View btnBack = view.findViewById(R.id.btnBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (getActivity() != null) {
-                    getActivity().getOnBackPressedDispatcher().onBackPressed();
-                }
-            });
+        if (getActivity() instanceof StudentMainActivity) {
+            ((StudentMainActivity) getActivity()).setupStudentHeader(
+                    view,
+                    "Academic Reports",
+                    "Review your academic progress and performance"
+            );
         }
 
         tvReportStudentName = view.findViewById(R.id.tvReportStudentName);

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_student_drawer_header"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="20dp">
+
+    <!-- Avatar Container -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="2dp"
+        app:strokeColor="@color/admin_border"
+        app:strokeWidth="2dp">
+
+        <ImageView
+            android:id="@+id/imgStudentDrawerProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Student Avatar"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_student_avatar" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvStudentDrawerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Student Name"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStudentDrawerId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="ST2024001"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvStudentDrawerAcademic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_badge_core"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="Year 2 • Semester 2"
+            android:textColor="@color/admin_primary_blue"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnStudentDrawerClose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="Close Drawer"
+        android:focusable="true"
+        android:padding="2dp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/admin_text_primary" />
+
+</LinearLayout>

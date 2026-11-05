@@ -1,5 +1,6 @@
 package com.social7.studentlearnanalytics.student.assignment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -52,6 +53,9 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private LinearLayout emptyStateLayout;
     private TextView emptyStateText;
 
+    private TextView tabAssignments, tabQuizzes, tabHomework;
+    private String currentTab = "ASSIGNMENTS"; // ASSIGNMENTS, QUIZZES, HOMEWORK
+
     private final List<String> semesterFilterList = new ArrayList<>();
     private ArrayAdapter<String> spinnerAdapter;
 
@@ -63,7 +67,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         initViews();
         setupSemesterSpinner();
         setupRecyclerView();
-        fetchAssignments();
+        selectTab("ASSIGNMENTS");
     }
 
     private void initViews() {
@@ -78,6 +82,44 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         loadingProgressBar = findViewById(R.id.loading_progress_bar);
         emptyStateLayout = findViewById(R.id.layout_empty_state);
         emptyStateText = findViewById(R.id.empty_state_text);
+
+        tabAssignments = findViewById(R.id.tabAssignments);
+        tabQuizzes = findViewById(R.id.tabQuizzes);
+        tabHomework = findViewById(R.id.tabHomework);
+
+        if (tabAssignments != null) tabAssignments.setOnClickListener(v -> selectTab("ASSIGNMENTS"));
+        if (tabQuizzes != null) tabQuizzes.setOnClickListener(v -> selectTab("QUIZZES"));
+        if (tabHomework != null) tabHomework.setOnClickListener(v -> selectTab("HOMEWORK"));
+    }
+
+    private void selectTab(String tab) {
+        currentTab = tab;
+        updateTabStyles();
+
+        if ("QUIZZES".equals(tab)) {
+            fetchQuizzes();
+        } else {
+            fetchAssignments();
+        }
+    }
+
+    private void updateTabStyles() {
+        if (tabAssignments == null || tabQuizzes == null || tabHomework == null) return;
+
+        tabAssignments.setBackgroundColor(Color.TRANSPARENT);
+        tabQuizzes.setBackgroundColor(Color.TRANSPARENT);
+        tabHomework.setBackgroundColor(Color.TRANSPARENT);
+
+        tabAssignments.setTextColor(getResources().getColor(R.color.text_secondary, null));
+        tabQuizzes.setTextColor(getResources().getColor(R.color.text_secondary, null));
+        tabHomework.setTextColor(getResources().getColor(R.color.text_secondary, null));
+
+        TextView activeTab = tabAssignments;
+        if ("QUIZZES".equals(currentTab)) activeTab = tabQuizzes;
+        else if ("HOMEWORK".equals(currentTab)) activeTab = tabHomework;
+
+        activeTab.setBackgroundResource(R.drawable.bg_notif_tab_active);
+        activeTab.setTextColor(Color.WHITE);
     }
 
     private void setupSemesterSpinner() {
@@ -110,25 +152,17 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     }
 
     private void fetchAssignments() {
-        if (loadingProgressBar != null) {
-            loadingProgressBar.setVisibility(View.VISIBLE);
-        }
-        if (emptyStateLayout != null) {
-            emptyStateLayout.setVisibility(View.GONE);
-        }
-        if (averageScoreText != null) {
-            averageScoreText.setText("--");
-        }
+        if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.VISIBLE);
+        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
+        if (averageScoreText != null) averageScoreText.setText("--");
 
         ApiService apiService = ApiClient.getApiService(this);
         Call<JsonObject> call = apiService.getStudentAssignments(null);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (loadingProgressBar != null) {
-                    loadingProgressBar.setVisibility(View.GONE);
-                }
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
 
                 if (response.isSuccessful() && response.body() != null) {
                     try {
@@ -142,7 +176,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                 JsonObject obj = element.getAsJsonObject();
 
                                 String id = obj.has("id") && !obj.get("id").isJsonNull() ? obj.get("id").getAsString() : "";
-                                String title = obj.has("title") && !obj.get("title").isJsonNull() ? obj.get("title").getAsString() : "Untitled Assignment";
+                                String title = obj.has("title") && !obj.get("title").isJsonNull() ? obj.get("title").getAsString() : "Untitled Task";
 
                                 String rawDate = obj.has("due_date") && !obj.get("due_date").isJsonNull() ? obj.get("due_date").getAsString() : "";
                                 String displayDate = formatDueDate(rawDate);
@@ -152,7 +186,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                 boolean isSubmitted = false;
                                 boolean isGraded = false;
 
-                                // Check for student's submission
                                 if (obj.has("submissions") && obj.get("submissions").isJsonArray()) {
                                     JsonArray submissions = obj.getAsJsonArray("submissions");
                                     if (submissions.size() > 0) {
@@ -165,22 +198,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     }
                                 }
 
-                                // Fallback: check attempts if not found in submissions
-                                if (!isSubmitted && obj.has("attempts") && obj.get("attempts").isJsonArray()) {
-                                    JsonArray attempts = obj.getAsJsonArray("attempts");
-                                    if (attempts.size() > 0) {
-                                        JsonObject firstAttempt = attempts.get(0).getAsJsonObject();
-                                        isSubmitted = true;
-                                        if (firstAttempt.has("score") && !firstAttempt.get("score").isJsonNull()) {
-                                            score = (int) Math.round(firstAttempt.get("score").getAsDouble());
-                                            isGraded = true;
-                                        }
-                                    }
-                                }
-
                                 String type = obj.has("assignment_type") && !obj.get("assignment_type").isJsonNull()
-                                        ? obj.get("assignment_type").getAsString()
-                                        : "assignment";
+                                        ? obj.get("assignment_type").getAsString() : "assignment";
 
                                 String semesterName = null;
                                 if (obj.has("semester") && !obj.get("semester").isJsonNull()) {
@@ -188,8 +207,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
                                         semesterName = semObj.get("name").getAsString();
                                     }
-                                } else if (obj.has("semester_id") && !obj.get("semester_id").isJsonNull()) {
-                                    semesterName = "Semester " + obj.get("semester_id").getAsString();
                                 }
 
                                 if (semesterName != null && !semesterName.trim().isEmpty()) {
@@ -201,54 +218,127 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     JsonObject courseObj = obj.getAsJsonObject("course");
                                     if (courseObj.has("course_name") && !courseObj.get("course_name").isJsonNull()) {
                                         courseName = courseObj.get("course_name").getAsString();
-                                    } else if (courseObj.has("name") && !courseObj.get("name").isJsonNull()) {
-                                        courseName = courseObj.get("name").getAsString();
                                     }
                                 }
 
                                 allAssessmentList.add(new Assessment(
-                                        id,
-                                        title,
-                                        displayDate,
-                                        score,
-                                        totalScore,
-                                        type,
-                                        semesterName,
-                                        courseName,
-                                        isSubmitted,
-                                        isGraded
+                                        id, title, displayDate, score, totalScore, type, semesterName, courseName, isSubmitted, isGraded
                                 ));
                             }
                         }
 
                         updateSemesterSpinnerOptions(uniqueSemesters);
-
                         String currentSemester = (semesterSpinner != null && semesterSpinner.getSelectedItem() != null)
-                                ? semesterSpinner.getSelectedItem().toString()
-                                : "All Semesters";
+                                ? semesterSpinner.getSelectedItem().toString() : "All Semesters";
                         filterAssignments(currentSemester);
 
                     } catch (Exception e) {
-                        Log.e(TAG, "Error parsing assignments JSON", e);
-                        Toast.makeText(AssessmentDetailActivity.this, "Error parsing assignments data", Toast.LENGTH_SHORT).show();
-                        showEmptyState("Error loading assignments");
+                        Log.e(TAG, "Error parsing assignment data", e);
+                        showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
                     }
-                } else if (response.code() == 401) {
-                    Toast.makeText(AssessmentDetailActivity.this, "Session expired, please login again", Toast.LENGTH_LONG).show();
-                    showEmptyState("Session expired. Please log in again.");
                 } else {
-                    Toast.makeText(AssessmentDetailActivity.this, "Failed to load assignments", Toast.LENGTH_SHORT).show();
-                    showEmptyState("No assignments available");
+                    showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                if (loadingProgressBar != null) {
-                    loadingProgressBar.setVisibility(View.GONE);
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
+                showEmptyState("Network error. Please check connection.");
+            }
+        });
+    }
+
+    private void fetchQuizzes() {
+        if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.VISIBLE);
+        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
+        if (averageScoreText != null) averageScoreText.setText("--");
+
+        ApiService apiService = ApiClient.getApiService(this);
+        Call<JsonObject> call = apiService.getStudentQuizzes(null);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        allAssessmentList.clear();
+                        JsonArray dataArray = response.body().getAsJsonArray("data");
+                        Set<String> uniqueSemesters = new LinkedHashSet<>();
+
+                        if (dataArray != null && dataArray.size() > 0) {
+                            for (JsonElement element : dataArray) {
+                                if (!element.isJsonObject()) continue;
+                                JsonObject obj = element.getAsJsonObject();
+
+                                String id = obj.has("id") && !obj.get("id").isJsonNull() ? obj.get("id").getAsString() : "";
+                                String title = obj.has("title") && !obj.get("title").isJsonNull() ? obj.get("title").getAsString() : "Untitled Quiz";
+
+                                String rawDate = obj.has("start_at") && !obj.get("start_at").isJsonNull() ? obj.get("start_at").getAsString() : "";
+                                String displayDate = formatDueDate(rawDate);
+
+                                int totalScore = obj.has("total_score") && !obj.get("total_score").isJsonNull() ? obj.get("total_score").getAsInt() : 100;
+                                int score = 0;
+                                boolean isSubmitted = false;
+                                boolean isGraded = false;
+
+                                if (obj.has("attempts") && obj.get("attempts").isJsonArray()) {
+                                    JsonArray attempts = obj.getAsJsonArray("attempts");
+                                    if (attempts.size() > 0) {
+                                        JsonObject firstAttempt = attempts.get(0).getAsJsonObject();
+                                        isSubmitted = true;
+                                        if (firstAttempt.has("score") && !firstAttempt.get("score").isJsonNull()) {
+                                            score = (int) Math.round(firstAttempt.get("score").getAsDouble());
+                                            isGraded = true;
+                                        }
+                                    }
+                                }
+
+                                String semesterName = null;
+                                if (obj.has("semester") && !obj.get("semester").isJsonNull()) {
+                                    JsonObject semObj = obj.getAsJsonObject("semester");
+                                    if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
+                                        semesterName = semObj.get("name").getAsString();
+                                    }
+                                }
+
+                                if (semesterName != null && !semesterName.trim().isEmpty()) {
+                                    uniqueSemesters.add(semesterName.trim());
+                                }
+
+                                String courseName = null;
+                                if (obj.has("course") && !obj.get("course").isJsonNull()) {
+                                    JsonObject courseObj = obj.getAsJsonObject("course");
+                                    if (courseObj.has("course_name") && !courseObj.get("course_name").isJsonNull()) {
+                                        courseName = courseObj.get("course_name").getAsString();
+                                    }
+                                }
+
+                                allAssessmentList.add(new Assessment(
+                                        id, title, displayDate, score, totalScore, "quiz", semesterName, courseName, isSubmitted, isGraded
+                                ));
+                            }
+                        }
+
+                        updateSemesterSpinnerOptions(uniqueSemesters);
+                        String currentSemester = (semesterSpinner != null && semesterSpinner.getSelectedItem() != null)
+                                ? semesterSpinner.getSelectedItem().toString() : "All Semesters";
+                        filterAssignments(currentSemester);
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing quiz data", e);
+                        showEmptyState("No quizzes available yet.");
+                    }
+                } else {
+                    showEmptyState("No quizzes available yet.");
                 }
-                Log.e(TAG, "Network failure fetching assignments", t);
-                Toast.makeText(AssessmentDetailActivity.this, "Network error: Unable to load assignments", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
                 showEmptyState("Network error. Please check connection.");
             }
         });
@@ -256,8 +346,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     private void updateSemesterSpinnerOptions(Set<String> uniqueSemesters) {
         String currentSelection = (semesterSpinner != null && semesterSpinner.getSelectedItem() != null)
-                ? semesterSpinner.getSelectedItem().toString()
-                : "All Semesters";
+                ? semesterSpinner.getSelectedItem().toString() : "All Semesters";
 
         semesterFilterList.clear();
         semesterFilterList.add("All Semesters");
@@ -275,13 +364,21 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private void filterAssignments(String semesterFilter) {
         assessmentList.clear();
 
-        if (semesterFilter == null || "All Semesters".equalsIgnoreCase(semesterFilter)) {
-            assessmentList.addAll(allAssessmentList);
-        } else {
-            for (Assessment a : allAssessmentList) {
-                if (semesterFilter.equalsIgnoreCase(a.getSemester())) {
-                    assessmentList.add(a);
-                }
+        for (Assessment a : allAssessmentList) {
+            boolean matchesSemester = semesterFilter == null || "All Semesters".equalsIgnoreCase(semesterFilter)
+                    || semesterFilter.equalsIgnoreCase(a.getSemester());
+
+            boolean matchesType = true;
+            if ("HOMEWORK".equals(currentTab)) {
+                matchesType = "homework".equalsIgnoreCase(a.getType());
+            } else if ("ASSIGNMENTS".equals(currentTab)) {
+                matchesType = !"quiz".equalsIgnoreCase(a.getType()) && !"homework".equalsIgnoreCase(a.getType());
+            } else if ("QUIZZES".equals(currentTab)) {
+                matchesType = "quiz".equalsIgnoreCase(a.getType());
+            }
+
+            if (matchesSemester && matchesType) {
+                assessmentList.add(a);
             }
         }
 
@@ -290,31 +387,19 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         }
 
         if (assessmentList.isEmpty()) {
-            showEmptyState("No assignments found");
+            showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
         } else {
-            if (emptyStateLayout != null) {
-                emptyStateLayout.setVisibility(View.GONE);
-            }
-            if (recyclerView != null) {
-                recyclerView.setVisibility(View.VISIBLE);
-            }
+            if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
+            if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
             updateAverageScore();
         }
     }
 
     private void showEmptyState(String message) {
-        if (emptyStateLayout != null) {
-            emptyStateLayout.setVisibility(View.VISIBLE);
-        }
-        if (emptyStateText != null) {
-            emptyStateText.setText(message);
-        }
-        if (recyclerView != null) {
-            recyclerView.setVisibility(View.GONE);
-        }
-        if (averageScoreText != null) {
-            averageScoreText.setText("--");
-        }
+        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.VISIBLE);
+        if (emptyStateText != null) emptyStateText.setText(message);
+        if (recyclerView != null) recyclerView.setVisibility(View.GONE);
+        if (averageScoreText != null) averageScoreText.setText("--");
     }
 
     private void updateAverageScore() {
@@ -345,9 +430,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     private String formatDueDate(String rawDate) {
         if (rawDate == null || rawDate.trim().isEmpty()) {
-            return "No due date";
+            return "No deadline";
         }
-
         String[] patterns = {
                 "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
                 "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -356,7 +440,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 "yyyy-MM-dd HH:mm:ss",
                 "yyyy-MM-dd"
         };
-
         SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
         for (String pattern : patterns) {
             try {

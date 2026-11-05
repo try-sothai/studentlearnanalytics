@@ -48,8 +48,7 @@ public class StudentReportActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ImageView btnBack = findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
+        com.social7.studentlearnanalytics.teacher.TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerTeacherDetail), "Student Report", "", true);
 
         ImageView btnMoreOptions = findViewById(R.id.btnMoreOptions);
         if (btnMoreOptions != null) btnMoreOptions.setOnClickListener(this::showMoreOptionsPopup);

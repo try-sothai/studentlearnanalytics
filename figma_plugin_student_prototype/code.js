@@ -37,21 +37,28 @@ const PATTERNS = {
     reports: [/teacher\s*reports/i],
     evaluation: [/evaluation/i, /model\s*evaluation/i],
     courseManagement: [/teacher\s*courses/i, /manage\s*courses/i],
-    notifications: [/teacher\s*notifications/i],
+    notifications: [/teacher\s*notifications/i, /notifications/i],
+    notificationDetail: [/notification\s*detail/i],
     profile: [/teacher\s*profile/i],
     drawer: [/teacher\s*drawer/i]
   },
   admin: {
     login: [/admin\s*login/i],
     dashboard: [/admin\s*dashboard/i, /admin\s*home/i],
-    userManagement: [/user\s*management/i, /manage\s*users/i],
+    classManagement: [/class\s*management/i, /active\s*classes/i],
+    studentManagement: [/student\s*management/i, /total\s*students/i],
     teacherManagement: [/teacher\s*management/i, /manage\s*teachers/i],
-    courseManagement: [/admin\s*course\s*management/i],
-    systemStats: [/system\s*statistics/i, /system\s*stats/i],
-    mlEvaluation: [/ml\s*model\s*evaluation/i, /ml\s*evaluation/i],
-    reports: [/admin\s*reports/i],
-    notifications: [/admin\s*notifications/i],
-    systemSettings: [/system\s*settings/i],
+    userManagement: [/user\s*management/i, /manage\s*users/i],
+    courseManagement: [/admin\s*course\s*management/i, /course\s*management/i],
+    academicStructure: [/academic\s*structure/i, /academic\s*year/i, /semester/i],
+    enrollmentManagement: [/enrollment\s*management/i, /enrollments/i],
+    reports: [/admin\s*reports/i, /reports\s*&\s*analytics/i],
+    performanceAnalytics: [/academic\s*performance/i, /performance\s*analytics/i, /avg\s*performance/i],
+    riskManagement: [/at-risk\s*alerts/i, /risk\s*&\s*intervention/i, /student\s*risk/i],
+    notifications: [/admin\s*notifications/i, /notifications/i],
+    systemSettings: [/system\s*settings/i, /settings/i],
+    helpSupport: [/help\s*&\s*support/i, /help/i],
+    about: [/about\s*slas/i, /about/i],
     profile: [/admin\s*profile/i],
     changePassword: [/change\s*password/i]
   }
@@ -197,12 +204,61 @@ function generateConnections(allFrames) {
     addConnection(btn, "Teacher Login", "On Click (Submit)", "teacher", "dashboard", "Auth Flow");
   }
 
+  if (tc.dashboard && tc.notifications) {
+    const notifBtn = findChildByNameOrText(tc.dashboard.node, [/notifications/i, /bell/i]);
+    if (notifBtn) addConnection(notifBtn, "Teacher Dashboard", "Notifications", "teacher", "notifications", "Teacher Notifications");
+  }
+
+  if (tc.notifications && tc.notificationDetail) {
+    const card = findChildByNameOrText(tc.notifications.node, [/card/i, /row/i, /item/i, /assignment/i, /quiz/i]);
+    if (card) addConnection(card, "Teacher Notifications", "Open Notification", "teacher", "notificationDetail", "Notification Details");
+  }
+
   // --- Admin Connections ---
   const ad = allFrames.admin;
   if (ad.login && ad.dashboard) {
     const btn = findChildByNameOrText(ad.login.node, [/login/i, /sign\s*in/i]) || ad.login.node;
     addConnection(btn, "Admin Login", "On Click (Submit)", "admin", "dashboard", "Auth Flow");
   }
+
+  if (ad.dashboard) {
+    const adminQa = [
+      { patterns: [/active\s*classes/i, /class\s*management/i], key: "classManagement", label: "Active Classes → Class Management" },
+      { patterns: [/total\s*students/i, /student\s*management/i], key: "studentManagement", label: "Total Students → Student Management" },
+      { patterns: [/avg\s*performance/i, /performance\s*analytics/i], key: "performanceAnalytics", label: "Avg Performance → Academic Performance Analytics" },
+      { patterns: [/at-risk\s*alerts/i, /risk\s*&\s*intervention/i], key: "riskManagement", label: "At-Risk Alerts → Student Risk & Intervention Management" }
+    ];
+    adminQa.forEach(item => {
+      const btn = findChildByNameOrText(ad.dashboard.node, item.patterns);
+      if (btn) addConnection(btn, "Admin Dashboard", item.label, "admin", item.key, "Dashboard Cards");
+    });
+  }
+
+  const adminMenuSpecs = [
+    { name: "Dashboard", key: "dashboard", patterns: [/dashboard/i, /home/i] },
+    { name: "Class Management", key: "classManagement", patterns: [/class\s*management/i] },
+    { name: "Student Management", key: "studentManagement", patterns: [/student\s*management/i] },
+    { name: "Teacher Management", key: "teacherManagement", patterns: [/teacher\s*management/i] },
+    { name: "User Management", key: "userManagement", patterns: [/user\s*management/i] },
+    { name: "Course Management", key: "courseManagement", patterns: [/course\s*management/i] },
+    { name: "Academic Structure", key: "academicStructure", patterns: [/academic\s*structure/i] },
+    { name: "Enrollment Management", key: "enrollmentManagement", patterns: [/enrollment\s*management/i] },
+    { name: "Reports & Analytics", key: "reports", patterns: [/reports\s*&\s*analytics/i, /reports/i] },
+    { name: "Academic Performance", key: "performanceAnalytics", patterns: [/academic\s*performance/i] },
+    { name: "Student Risk & Intervention", key: "riskManagement", patterns: [/risk\s*&\s*intervention/i, /student\s*risk/i] },
+    { name: "Notifications", key: "notifications", patterns: [/notifications/i] },
+    { name: "Settings", key: "systemSettings", patterns: [/settings/i] },
+    { name: "Help & Support", key: "helpSupport", patterns: [/help/i] },
+    { name: "About SLAS", key: "about", patterns: [/about/i] }
+  ];
+
+  const adminScreens = Object.values(ad).filter(Boolean);
+  adminScreens.forEach(screen => {
+    adminMenuSpecs.forEach(spec => {
+      const menuBtn = findChildByNameOrText(screen.node, spec.patterns);
+      if (menuBtn) addConnection(menuBtn, screen.name, `Admin Menu (${spec.name})`, "admin", spec.key, "Admin Navigation Drawer");
+    });
+  });
 
   return { connections, missing };
 }

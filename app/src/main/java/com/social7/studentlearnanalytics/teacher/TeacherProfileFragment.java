@@ -5,22 +5,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.auth.ChangePasswordActivity;
-import com.social7.studentlearnanalytics.auth.LoginActivity;
 import com.social7.studentlearnanalytics.storage.SessionManager;
 
 public class TeacherProfileFragment extends Fragment {
 
+    private TextView tvTeacherAvatar, tvTeacherNameSummary, tvTeacherRoleDept, tvTeacherAccountStatus;
+    private TextInputLayout tilTeacherName, tilTeacherEmail;
+    private EditText etTeacherName, etTeacherEmail, etTeacherPhone, etTeacherDob, etTeacherId, etTeacherDepartment, etTeacherQualifications;
+    private RadioGroup rgTeacherGender;
+    private RadioButton rbTeacherMale, rbTeacherFemale;
+    private MaterialButton btnTeacherSaveProfile, btnTeacherCancelProfile, btnTeacherChangePassword;
     private SessionManager sessionManager;
 
     public TeacherProfileFragment() {
@@ -33,62 +42,140 @@ public class TeacherProfileFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(
-                R.layout.fragment_teacher_profile,
-                container,
-                false
-        );
+        View view = inflater.inflate(R.layout.fragment_teacher_profile, container, false);
 
-        sessionManager = new SessionManager(requireContext());
+        if (getContext() != null) {
+            sessionManager = new SessionManager(requireContext());
+        }
 
-        ImageView btnMenu = view.findViewById(R.id.btnTeacherMenuProfile);
-        if (btnMenu != null) {
-            btnMenu.setOnClickListener(v -> {
+        initViews(view);
+        prepopulateData();
+        setupListeners(view);
+
+        return view;
+    }
+
+    private void initViews(View view) {
+        if (getActivity() instanceof TeacherMainActivity) {
+            ((TeacherMainActivity) getActivity()).setupTeacherHeader(
+                    view.findViewById(R.id.headerTeacherProfile),
+                    "Teacher Profile",
+                    ""
+            );
+        }
+
+        tvTeacherAvatar = view.findViewById(R.id.tvTeacherAvatar);
+        tvTeacherNameSummary = view.findViewById(R.id.tvTeacherNameSummary);
+        tvTeacherRoleDept = view.findViewById(R.id.tvTeacherRoleDept);
+        tvTeacherAccountStatus = view.findViewById(R.id.tvTeacherAccountStatus);
+
+        tilTeacherName = view.findViewById(R.id.tilTeacherName);
+        tilTeacherEmail = view.findViewById(R.id.tilTeacherEmail);
+
+        etTeacherName = view.findViewById(R.id.etTeacherName);
+        etTeacherEmail = view.findViewById(R.id.etTeacherEmail);
+        etTeacherPhone = view.findViewById(R.id.etTeacherPhone);
+        etTeacherDob = view.findViewById(R.id.etTeacherDob);
+
+        etTeacherId = view.findViewById(R.id.etTeacherId);
+        etTeacherDepartment = view.findViewById(R.id.etTeacherDepartment);
+        etTeacherQualifications = view.findViewById(R.id.etTeacherQualifications);
+
+        rgTeacherGender = view.findViewById(R.id.rgTeacherGender);
+        rbTeacherMale = view.findViewById(R.id.rbTeacherMale);
+        rbTeacherFemale = view.findViewById(R.id.rbTeacherFemale);
+
+        btnTeacherSaveProfile = view.findViewById(R.id.btnTeacherSaveProfile);
+        btnTeacherCancelProfile = view.findViewById(R.id.btnTeacherCancelProfile);
+        btnTeacherChangePassword = view.findViewById(R.id.btnTeacherChangePassword);
+    }
+
+    private void prepopulateData() {
+        String name = sessionManager != null && sessionManager.getUserName() != null && !sessionManager.getUserName().trim().isEmpty() ? sessionManager.getUserName() : "Mr. Chan";
+        String email = "chan@university.edu";
+
+        String initial = !name.isEmpty() ? String.valueOf(name.charAt(0)).toUpperCase() : "T";
+
+        if (tvTeacherAvatar != null) tvTeacherAvatar.setText(initial);
+        if (tvTeacherNameSummary != null) tvTeacherNameSummary.setText(name);
+        if (tvTeacherRoleDept != null) tvTeacherRoleDept.setText("Senior Lecturer • Computer Science Department");
+        if (tvTeacherAccountStatus != null) tvTeacherAccountStatus.setText("Active");
+
+        if (etTeacherName != null) etTeacherName.setText(name);
+        if (etTeacherEmail != null) etTeacherEmail.setText(email);
+        if (etTeacherPhone != null) etTeacherPhone.setText("+855 12 345 678");
+        if (etTeacherDob != null) etTeacherDob.setText("Mar 10, 1990");
+
+        if (etTeacherId != null) etTeacherId.setText("TCH-001");
+        if (etTeacherDepartment != null) etTeacherDepartment.setText("College of Computer Studies");
+        if (etTeacherQualifications != null) etTeacherQualifications.setText("M.Sc. Computer Science");
+
+        if (rbTeacherMale != null) rbTeacherMale.setChecked(true);
+    }
+
+    private void setupListeners(View view) {
+        View btnUpload = view.findViewById(R.id.btnTeacherUploadPhoto);
+        if (btnUpload != null) {
+            btnUpload.setOnClickListener(v ->
+                    Toast.makeText(getContext(), "Teacher profile photo selection opened", Toast.LENGTH_SHORT).show()
+            );
+        }
+
+        if (btnTeacherCancelProfile != null) {
+            btnTeacherCancelProfile.setOnClickListener(v -> {
                 if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openDrawer();
+                    ((TeacherMainActivity) getActivity()).openFragment(new TeacherProfileOverviewFragment());
                 }
             });
         }
 
-        View btnOptChangePassword = view.findViewById(R.id.btnOptChangePassword);
-        if (btnOptChangePassword != null) {
-            btnOptChangePassword.setOnClickListener(v -> {
+        if (btnTeacherChangePassword != null) {
+            btnTeacherChangePassword.setOnClickListener(v -> {
                 Intent intent = new Intent(requireActivity(), ChangePasswordActivity.class);
                 startActivity(intent);
             });
         }
 
-        View btnOptPersonalInfo = view.findViewById(R.id.btnOptPersonalInfo);
-        if (btnOptPersonalInfo != null) {
-            btnOptPersonalInfo.setOnClickListener(v -> Toast.makeText(requireContext(), "Mr. Chan - Computer Science Department", Toast.LENGTH_SHORT).show());
+        if (btnTeacherSaveProfile != null) {
+            btnTeacherSaveProfile.setOnClickListener(v -> attemptSaveProfile());
         }
-
-        Button btnLogout = view.findViewById(R.id.btnLogout);
-        if (btnLogout != null) {
-            btnLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
-        }
-
-        return view;
     }
 
-    private void showLogoutConfirmationDialog() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Logout Confirmation")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Logout", (dialog, which) -> {
-                    if (sessionManager != null) {
-                        sessionManager.clearSession();
-                    }
-                    if (getActivity() instanceof TeacherMainActivity) {
-                        ((TeacherMainActivity) getActivity()).logout();
-                    } else {
-                        Intent intent = new Intent(requireActivity(), LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        requireActivity().finish();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+    private void attemptSaveProfile() {
+        if (etTeacherName == null || etTeacherEmail == null) return;
+
+        String name = etTeacherName.getText().toString().trim();
+        String email = etTeacherEmail.getText().toString().trim();
+
+        boolean isValid = true;
+
+        if (name.isEmpty()) {
+            if (tilTeacherName != null) tilTeacherName.setError("Full name is required");
+            isValid = false;
+        } else {
+            if (tilTeacherName != null) tilTeacherName.setError(null);
+        }
+
+        if (email.isEmpty()) {
+            if (tilTeacherEmail != null) tilTeacherEmail.setError("Email address is required");
+            isValid = false;
+        } else {
+            if (tilTeacherEmail != null) tilTeacherEmail.setError(null);
+        }
+
+        if (isValid) {
+            if (sessionManager != null) {
+                sessionManager.saveSession(
+                        sessionManager.getUserId() != null ? sessionManager.getUserId() : "TCH-001",
+                        sessionManager.getToken() != null ? sessionManager.getToken() : "token",
+                        "Teacher",
+                        name
+                );
+            }
+            Toast.makeText(getContext(), "Teacher profile updated and saved successfully!", Toast.LENGTH_LONG).show();
+            if (getActivity() instanceof TeacherMainActivity) {
+                ((TeacherMainActivity) getActivity()).openFragment(new TeacherProfileOverviewFragment());
+            }
+        }
     }
 }

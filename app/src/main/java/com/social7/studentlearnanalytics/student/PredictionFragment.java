@@ -42,6 +42,15 @@ public class PredictionFragment extends Fragment {
                 false
         );
 
+        // Header Integration
+        if (getActivity() instanceof StudentMainActivity) {
+            ((StudentMainActivity) getActivity()).setupStudentHeader(
+                    view,
+                    "Prediction & Risk",
+                    "AI-powered insights for your academic success"
+            );
+        }
+
         // Chart setup
         LineChart chart = view.findViewById(R.id.lineChartTrend);
         setupLineChart(chart);

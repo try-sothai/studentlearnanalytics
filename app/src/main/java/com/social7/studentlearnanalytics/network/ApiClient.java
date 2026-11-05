@@ -16,12 +16,14 @@ import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://192.168.1.100:8000/api/";
+    private static final String BASE_URL = "http://192.168.1.51:8000/api/";
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
 
     public static synchronized ApiService getApiService(Context context) {
-        if (apiService == null || retrofit == null) {
+        if (apiService == null || retrofit == null || !retrofit.baseUrl().toString().equalsIgnoreCase(BASE_URL)) {
+            retrofit = null;
+            apiService = null;
             final Context appContext = context.getApplicationContext();
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();

@@ -46,7 +46,12 @@
                 android:id="@+id/itemDrawerCourseManagement"
                 layout="@layout/item_admin_drawer_menu" />
 
-            <!-- 4. Reports & Analytics -->
+            <!-- 4. Class Management -->
+            <include
+                android:id="@+id/itemDrawerClassManagement"
+                layout="@layout/item_admin_drawer_menu" />
+
+            <!-- 5. Reports & Analytics -->
             <include
                 android:id="@+id/itemDrawerReports"
                 layout="@layout/item_admin_drawer_menu" />
