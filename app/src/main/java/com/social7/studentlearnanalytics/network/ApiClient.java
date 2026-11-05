@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://192.168.1.51:8000/api/";
+    private static final String BASE_URL = "http://192.168.1.63:8000/api/";
     private static Retrofit retrofit = null;
     private static ApiService apiService = null;
 
