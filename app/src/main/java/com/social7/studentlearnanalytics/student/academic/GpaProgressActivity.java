@@ -475,9 +475,11 @@ public class GpaProgressActivity extends AppCompatActivity {
 
     private String findGpaForSemester(String semName) {
         if (historyRecords == null || semName == null) return null;
+        String cleanSem = semName.replaceAll("\\s*\\(Year.*?\\)", "").trim();
         for (GpaRecordsResponse.GpaRecord record : historyRecords) {
             if (record != null && record.getSemester() != null && record.getSemester().getName() != null) {
-                if (semName.trim().equalsIgnoreCase(record.getSemester().getName().trim())) {
+                String recordSemName = record.getSemester().getName().trim();
+                if (cleanSem.equalsIgnoreCase(recordSemName) || semName.trim().equalsIgnoreCase(recordSemName)) {
                     return formatGpa(record.getGpa());
                 }
             }

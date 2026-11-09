@@ -1,13 +1,14 @@
 package com.social7.studentlearnanalytics.admin.users;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +17,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
-import com.social7.studentlearnanalytics.network.ApiService;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
 
 import java.util.ArrayList;
@@ -56,9 +55,11 @@ public class AddStudentActivity extends AppCompatActivity {
 
     // Lookup data lists
     private final List<IdNameItem> departmentList = new ArrayList<>();
-    private final List<IdNameItem> programList = new ArrayList<>();
+    private final List<IdNameItem> allProgramList = new ArrayList<>();
+    private final List<IdNameItem> filteredProgramList = new ArrayList<>();
     private final List<IdNameItem> academicYearList = new ArrayList<>();
-    private final List<IdNameItem> semesterList = new ArrayList<>();
+    private final List<IdNameItem> allSemesterList = new ArrayList<>();
+    private final List<IdNameItem> filteredSemesterList = new ArrayList<>();
 
     public static class IdNameItem {
         public final int id;
@@ -69,13 +70,16 @@ public class AddStudentActivity extends AppCompatActivity {
         public IdNameItem(int id, String name, String code, int parentId) {
             this.id = id;
             this.name = name;
-            this.code = code;
+            this.code = code != null ? code : "";
             this.parentId = parentId;
         }
 
         @NonNull
         @Override
         public String toString() {
+            if (code != null && !code.isEmpty() && !name.contains("(" + code + ")")) {
+                return name + " (" + code + ")";
+            }
             return name;
         }
     }
@@ -92,6 +96,7 @@ public class AddStudentActivity extends AppCompatActivity {
 
         initViews();
         setupGenderAndYearLevelSpinners();
+        setupDependentSpinners();
         fetchAcademicLookups();
         setupListeners();
     }
@@ -161,6 +166,68 @@ public class AddStudentActivity extends AppCompatActivity {
         }
     }
 
+    private void setupDependentSpinners() {
+        if (spAddDepartment != null) {
+            spAddDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    IdNameItem dept = position >= 0 && position < departmentList.size() ? departmentList.get(position) : null;
+                    filterProgramsForDepartment(dept);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
+
+        if (spAddAcademicYear != null) {
+            spAddAcademicYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    IdNameItem ay = position >= 0 && position < academicYearList.size() ? academicYearList.get(position) : null;
+                    filterSemestersForAcademicYear(ay);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
+    }
+
+    private void filterProgramsForDepartment(IdNameItem dept) {
+        filteredProgramList.clear();
+        if (dept == null) {
+            filteredProgramList.addAll(allProgramList);
+        } else {
+            boolean isComputing = "CS".equalsIgnoreCase(dept.code) || "IT".equalsIgnoreCase(dept.code);
+            for (IdNameItem prog : allProgramList) {
+                if (prog.parentId == dept.id) {
+                    filteredProgramList.add(prog);
+                } else if (isComputing && ("CS".equalsIgnoreCase(prog.code) || "BSCS".equalsIgnoreCase(prog.code)
+                        || "SE".equalsIgnoreCase(prog.code) || "BSE".equalsIgnoreCase(prog.code)
+                        || "IT".equalsIgnoreCase(prog.code) || "BSIT".equalsIgnoreCase(prog.code))) {
+                    filteredProgramList.add(prog);
+                }
+            }
+            if (filteredProgramList.isEmpty()) {
+                filteredProgramList.addAll(allProgramList);
+            }
+        }
+        setSpinner(spAddProgram, filteredProgramList);
+    }
+
+    private void filterSemestersForAcademicYear(IdNameItem ay) {
+        filteredSemesterList.clear();
+        filteredSemesterList.add(new IdNameItem(0, "None", "", 0));
+        for (IdNameItem sem : allSemesterList) {
+            if (sem.id == 0) continue;
+            if (ay == null || sem.parentId == 0 || sem.parentId == ay.id) {
+                filteredSemesterList.add(sem);
+            }
+        }
+        setSpinner(spAddSemester, filteredSemesterList);
+    }
+
     private void fetchAcademicLookups() {
         ApiClient.getApiService(this).getStudentLookups().enqueue(new Callback<JsonObject>() {
             @Override
@@ -177,8 +244,8 @@ public class AddStudentActivity extends AppCompatActivity {
                             JsonObject o = el.getAsJsonObject();
                             departmentList.add(new IdNameItem(
                                     o.get("id").getAsInt(),
-                                    o.has("name") ? o.get("name").getAsString() : "",
-                                    o.has("code") ? o.get("code").getAsString() : "",
+                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
+                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
                                     0
                             ));
                         }
@@ -186,19 +253,19 @@ public class AddStudentActivity extends AppCompatActivity {
                     setSpinner(spAddDepartment, departmentList);
 
                     // Programs
-                    programList.clear();
+                    allProgramList.clear();
                     if (d.has("programs") && d.get("programs").isJsonArray()) {
                         for (JsonElement el : d.getAsJsonArray("programs")) {
                             JsonObject o = el.getAsJsonObject();
-                            programList.add(new IdNameItem(
+                            allProgramList.add(new IdNameItem(
                                     o.get("id").getAsInt(),
-                                    o.has("name") ? o.get("name").getAsString() : "",
-                                    o.has("code") ? o.get("code").getAsString() : "",
-                                    o.has("department_id") ? o.get("department_id").getAsInt() : 0
+                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
+                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
+                                    o.has("department_id") && !o.get("department_id").isJsonNull() ? o.get("department_id").getAsInt() : 0
                             ));
                         }
                     }
-                    setSpinner(spAddProgram, programList);
+                    filterProgramsForDepartment(departmentList.isEmpty() ? null : departmentList.get(0));
 
                     // Academic Years
                     academicYearList.clear();
@@ -207,7 +274,7 @@ public class AddStudentActivity extends AppCompatActivity {
                             JsonObject o = el.getAsJsonObject();
                             academicYearList.add(new IdNameItem(
                                     o.get("id").getAsInt(),
-                                    o.has("name") ? o.get("name").getAsString() : "",
+                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
                                     "",
                                     0
                             ));
@@ -216,20 +283,19 @@ public class AddStudentActivity extends AppCompatActivity {
                     setSpinner(spAddAcademicYear, academicYearList);
 
                     // Semesters
-                    semesterList.clear();
-                    semesterList.add(new IdNameItem(0, "None", "", 0));
+                    allSemesterList.clear();
                     if (d.has("semesters") && d.get("semesters").isJsonArray()) {
                         for (JsonElement el : d.getAsJsonArray("semesters")) {
                             JsonObject o = el.getAsJsonObject();
-                            semesterList.add(new IdNameItem(
+                            allSemesterList.add(new IdNameItem(
                                     o.get("id").getAsInt(),
-                                    o.has("name") ? o.get("name").getAsString() : "Semester " + o.get("semester_number").getAsInt(),
+                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "Semester " + o.get("semester_number").getAsInt(),
                                     "",
-                                    o.has("academic_year_id") ? o.get("academic_year_id").getAsInt() : 0
+                                    o.has("academic_year_id") && !o.get("academic_year_id").isJsonNull() ? o.get("academic_year_id").getAsInt() : 0
                             ));
                         }
                     }
-                    setSpinner(spAddSemester, semesterList);
+                    filterSemestersForAcademicYear(academicYearList.isEmpty() ? null : academicYearList.get(0));
                 } else {
                     if (!isFinishing()) {
                         Toast.makeText(AddStudentActivity.this, "Server Error: Failed to load lookups", Toast.LENGTH_SHORT).show();

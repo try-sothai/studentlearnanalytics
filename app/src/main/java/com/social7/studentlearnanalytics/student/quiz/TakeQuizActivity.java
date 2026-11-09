@@ -38,6 +38,7 @@ public class TakeQuizActivity extends AppCompatActivity {
 
     private String quizId = "1";
     private String attemptId = null;
+    private int quizDurationMinutes = 30;
     private SessionManager sessionManager;
 
     private TextView tvHeaderTitle, tvTimer;
@@ -183,6 +184,7 @@ public class TakeQuizActivity extends AppCompatActivity {
                 ? quizData.get("total_score").getAsInt() : 100;
         int duration = quizData.has("duration_minutes") && !quizData.get("duration_minutes").isJsonNull()
                 ? quizData.get("duration_minutes").getAsInt() : 30;
+        quizDurationMinutes = duration > 0 ? duration : 30;
 
         questions.clear();
         selectedAnswers.clear();
@@ -197,7 +199,7 @@ public class TakeQuizActivity extends AppCompatActivity {
         }
 
         tvQuizMetaDetails.setText(String.format(Locale.US, "Questions: %d • Total Marks: %d • Time Limit: %d Mins",
-                questions.size(), totalScore, duration));
+                questions.size(), totalScore, quizDurationMinutes));
 
         if (quizData.has("description") && !quizData.get("description").isJsonNull()) {
             tvInstructionsBody.setText(quizData.get("description").getAsString());
@@ -208,12 +210,34 @@ public class TakeQuizActivity extends AppCompatActivity {
         pbLoading.setVisibility(View.VISIBLE);
 
         JsonObject body = new JsonObject();
-        body.addProperty("quiz_id", Integer.parseInt(quizId));
-        String userId = sessionManager.getUserId();
+        int qId = 1;
         try {
-            body.addProperty("student_id", Integer.parseInt(userId));
-        } catch (Exception ignored) {
-            body.addProperty("student_id", 1);
+            if (quizId != null) qId = Integer.parseInt(quizId.replaceAll("\\D+", ""));
+        } catch (Exception ignored) {}
+        body.addProperty("quiz_id", qId > 0 ? qId : 1);
+
+        String studentDbId = sessionManager.getStudentDbId();
+        String numericUserId = sessionManager.getNumericUserId();
+        String studentCode = sessionManager.getUserId();
+
+        if (studentDbId != null && !studentDbId.isEmpty()) {
+            try {
+                body.addProperty("student_id", Integer.parseInt(studentDbId));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", studentDbId);
+            }
+        } else if (numericUserId != null && !numericUserId.isEmpty()) {
+            try {
+                body.addProperty("student_id", Integer.parseInt(numericUserId));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", numericUserId);
+            }
+        } else {
+            try {
+                body.addProperty("student_id", Integer.parseInt(studentCode.replaceAll("\\D+", "")));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", 1);
+            }
         }
 
         ApiClient.getApiService(this).startQuizAttempt(body).enqueue(new Callback<JsonObject>() {
@@ -230,7 +254,6 @@ public class TakeQuizActivity extends AppCompatActivity {
 
                     showTakingScreen();
                 } else {
-                    // Fallback to taking screen if attempt was already created
                     attemptId = "1";
                     showTakingScreen();
                 }
@@ -250,7 +273,8 @@ public class TakeQuizActivity extends AppCompatActivity {
         layoutTaking.setVisibility(View.VISIBLE);
         tvTimer.setVisibility(View.VISIBLE);
 
-        startTimer(30 * 60 * 1000); // 30 mins
+        long timerMillis = (quizDurationMinutes > 0 ? quizDurationMinutes : 30) * 60 * 1000L;
+        startTimer(timerMillis);
         currentQuestionIndex = 0;
         displayQuestion(currentQuestionIndex);
     }
@@ -299,7 +323,11 @@ public class TakeQuizActivity extends AppCompatActivity {
         if (!q.has("id")) return;
 
         JsonObject body = new JsonObject();
-        body.addProperty("quiz_attempt_id", Integer.parseInt(attemptId));
+        int parsedAttempt = 1;
+        try {
+            parsedAttempt = Integer.parseInt(attemptId.replaceAll("\\D+", ""));
+        } catch (Exception ignored) {}
+        body.addProperty("quiz_attempt_id", parsedAttempt > 0 ? parsedAttempt : 1);
         body.addProperty("question_id", q.get("id").getAsInt());
         body.addProperty("answer", answerStr);
 

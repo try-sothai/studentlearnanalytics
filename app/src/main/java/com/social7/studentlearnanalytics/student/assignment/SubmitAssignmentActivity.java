@@ -157,7 +157,13 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
     }
 
     private void fetchStudentSubmission() {
-        String studentId = sessionManager.getUserId();
+        String studentId = sessionManager.getStudentDbId();
+        if (studentId == null || studentId.isEmpty()) {
+            studentId = sessionManager.getNumericUserId();
+        }
+        if (studentId == null || studentId.isEmpty()) {
+            studentId = sessionManager.getUserId();
+        }
         if (studentId == null || studentId.isEmpty()) studentId = "1";
 
         ApiClient.getApiService(this).getAssignmentSubmissions(assignmentId, studentId).enqueue(new Callback<JsonObject>() {
@@ -215,12 +221,36 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
         String text = etSubmissionText.getText() != null ? etSubmissionText.getText().toString().trim() : "";
 
         JsonObject body = new JsonObject();
-        body.addProperty("assignment_id", Integer.parseInt(assignmentId));
-        String studentId = sessionManager.getUserId();
+        int aId = 1;
         try {
-            body.addProperty("student_id", Integer.parseInt(studentId));
-        } catch (Exception ignored) {
-            body.addProperty("student_id", 1);
+            if (assignmentId != null) {
+                aId = Integer.parseInt(assignmentId.replaceAll("\\D+", ""));
+            }
+        } catch (Exception ignored) {}
+        body.addProperty("assignment_id", aId > 0 ? aId : 1);
+
+        String studentDbId = sessionManager.getStudentDbId();
+        String numericUserId = sessionManager.getNumericUserId();
+        String studentCode = sessionManager.getUserId();
+
+        if (studentDbId != null && !studentDbId.isEmpty()) {
+            try {
+                body.addProperty("student_id", Integer.parseInt(studentDbId));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", studentDbId);
+            }
+        } else if (numericUserId != null && !numericUserId.isEmpty()) {
+            try {
+                body.addProperty("student_id", Integer.parseInt(numericUserId));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", numericUserId);
+            }
+        } else {
+            try {
+                body.addProperty("student_id", Integer.parseInt(studentCode.replaceAll("\\D+", "")));
+            } catch (Exception ignored) {
+                body.addProperty("student_id", 1);
+            }
         }
 
         body.addProperty("file_path", selectedFileName != null ? selectedFileName : (text.isEmpty() ? "written_submission.txt" : text));
@@ -242,16 +272,21 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
                         tvStatusMessage.setText("Status: Draft (Saved)");
                     }
                 } else {
-                    Toast.makeText(SubmitAssignmentActivity.this, "Action complete.", Toast.LENGTH_SHORT).show();
-                    if (isFinalSubmission) finish();
+                    String msg = "Failed to submit assignment (HTTP " + response.code() + ")";
+                    try {
+                        if (response.errorBody() != null) {
+                            JsonObject err = com.google.gson.JsonParser.parseString(response.errorBody().string()).getAsJsonObject();
+                            if (err.has("message")) msg = err.get("message").getAsString();
+                        }
+                    } catch (Exception ignored) {}
+                    Toast.makeText(SubmitAssignmentActivity.this, msg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 pbLoading.setVisibility(View.GONE);
-                Toast.makeText(SubmitAssignmentActivity.this, isFinalSubmission ? "Work submitted." : "Draft saved locally.", Toast.LENGTH_SHORT).show();
-                if (isFinalSubmission) finish();
+                Toast.makeText(SubmitAssignmentActivity.this, "Network error submitting work: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

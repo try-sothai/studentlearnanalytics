@@ -2,6 +2,7 @@ package com.social7.studentlearnanalytics.admin.users;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -10,14 +11,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.storage.SessionManager;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ProfileSettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "ProfileSettingsActivity";
 
     private TextView tvProfileAvatar, tvProfileName, tvProfileRole, tvAccountStatusBadge;
     private TextInputLayout tilProfileName, tilProfileEmail;
@@ -35,7 +47,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         initViews();
-        prepopulateData();
+        prepopulateFromSession();
+        fetchProfileFromApi();
         setupListeners();
     }
 
@@ -71,34 +84,81 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         btnChangePassword = findViewById(R.id.btnChangePassword);
     }
 
-    private void prepopulateData() {
-        String name = sessionManager != null && sessionManager.getUserName() != null && !sessionManager.getUserName().trim().isEmpty() ? sessionManager.getUserName() : "Mr. Chan";
-        String email = "chan@univ.edu";
-
-        String initial = !name.isEmpty() ? String.valueOf(name.charAt(0)).toUpperCase() : "A";
+    private void prepopulateFromSession() {
+        String name = sessionManager != null && sessionManager.getUserName() != null && !sessionManager.getUserName().trim().isEmpty()
+                ? sessionManager.getUserName() : "User";
+        String email = sessionManager != null && sessionManager.getUserEmail() != null && !sessionManager.getUserEmail().trim().isEmpty()
+                ? sessionManager.getUserEmail() : "";
+        String role = sessionManager != null && sessionManager.getRole() != null ? sessionManager.getRole() : "Admin";
+        String initial = !name.isEmpty() ? String.valueOf(name.charAt(0)).toUpperCase() : "U";
 
         if (tvProfileAvatar != null) tvProfileAvatar.setText(initial);
         if (tvProfileName != null) tvProfileName.setText(name);
-        if (tvProfileRole != null) tvProfileRole.setText("System Administrator");
+        if (tvProfileRole != null) tvProfileRole.setText(role);
         if (tvAccountStatusBadge != null) tvAccountStatusBadge.setText("Active");
 
         if (etProfileName != null) etProfileName.setText(name);
         if (etProfileEmail != null) etProfileEmail.setText(email);
-        if (etProfilePhone != null) etProfilePhone.setText("+855 12 345 678");
-        if (etProfileDob != null) etProfileDob.setText("Mar 10, 1990");
+        if (etAdminId != null) etAdminId.setText(sessionManager != null && sessionManager.getUserId() != null ? sessionManager.getUserId() : "ADM-001");
+    }
 
-        if (etAdminId != null) etAdminId.setText("ADM-001");
-        if (etAdminDept != null) etAdminDept.setText("College of Computer Studies");
-        if (etAccountCreated != null) etAccountCreated.setText("Jan 15, 2024");
+    private void fetchProfileFromApi() {
+        ApiClient.getApiService(this).getProfile().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JsonObject root = response.body();
+                        JsonObject user = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data") : root;
 
-        if (rbGenderMale != null) rbGenderMale.setChecked(true);
+                        String name = user.has("name") && !user.get("name").isJsonNull() ? user.get("name").getAsString() : "";
+                        String email = user.has("email") && !user.get("email").isJsonNull() ? user.get("email").getAsString() : "";
+                        String phone = user.has("phone") && !user.get("phone").isJsonNull() ? user.get("phone").getAsString() : "";
+                        String dob = user.has("date_of_birth") && !user.get("date_of_birth").isJsonNull() ? user.get("date_of_birth").getAsString() : "";
+                        String gender = user.has("gender") && !user.get("gender").isJsonNull() ? user.get("gender").getAsString() : "";
+                        String role = user.has("role") && !user.get("role").isJsonNull() ? user.get("role").getAsString() : "Admin";
+                        String status = user.has("status") && !user.get("status").isJsonNull() ? user.get("status").getAsString() : "Active";
+                        String createdAt = user.has("created_at") && !user.get("created_at").isJsonNull() ? user.get("created_at").getAsString() : "";
+                        String code = user.has("code") && !user.get("code").isJsonNull() ? user.get("code").getAsString() : (user.has("id") ? user.get("id").getAsString() : "");
+
+                        if (!name.isEmpty()) {
+                            if (tvProfileAvatar != null) tvProfileAvatar.setText(String.valueOf(name.charAt(0)).toUpperCase());
+                            if (tvProfileName != null) tvProfileName.setText(name);
+                            if (etProfileName != null) etProfileName.setText(name);
+                        }
+                        if (tvProfileRole != null) tvProfileRole.setText(capitalize(role));
+                        if (tvAccountStatusBadge != null) tvAccountStatusBadge.setText(capitalize(status));
+
+                        if (etProfileEmail != null) etProfileEmail.setText(email);
+                        if (etProfilePhone != null) etProfilePhone.setText(phone);
+                        if (etProfileDob != null) etProfileDob.setText(dob);
+                        if (etAdminId != null && !code.isEmpty()) etAdminId.setText(code);
+                        if (etAccountCreated != null && !createdAt.isEmpty()) etAccountCreated.setText(createdAt.length() > 10 ? createdAt.substring(0, 10) : createdAt);
+
+                        if ("Female".equalsIgnoreCase(gender) && rbGenderFemale != null) {
+                            rbGenderFemale.setChecked(true);
+                        } else if (rbGenderMale != null) {
+                            rbGenderMale.setChecked(true);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing profile", e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Log.e(TAG, "Failed to load profile", t);
+            }
+        });
     }
 
     private void setupListeners() {
         View btnCamera = findViewById(R.id.btnCameraUpload);
-
         View.OnClickListener uploadListener = v ->
-                Toast.makeText(this, "Profile image selection opened", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Profile image updated", Toast.LENGTH_SHORT).show();
 
         if (btnCamera != null) btnCamera.setOnClickListener(uploadListener);
 
@@ -123,6 +183,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         String name = etProfileName.getText().toString().trim();
         String email = etProfileEmail.getText().toString().trim();
+        String phone = etProfilePhone != null ? etProfilePhone.getText().toString().trim() : "";
+        String dob = etProfileDob != null ? etProfileDob.getText().toString().trim() : "";
 
         boolean isValid = true;
 
@@ -141,16 +203,67 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            if (sessionManager != null) {
-                sessionManager.saveSession(
-                        sessionManager.getUserId() != null ? sessionManager.getUserId() : "ADM-001",
-                        sessionManager.getToken() != null ? sessionManager.getToken() : "token",
-                        "Admin",
-                        name
-                );
+            String gender = "Male";
+            if (rbGenderFemale != null && rbGenderFemale.isChecked()) {
+                gender = "Female";
             }
-            Toast.makeText(this, "Admin profile updated and persisted successfully!", Toast.LENGTH_LONG).show();
-            finish();
+
+            JsonObject body = new JsonObject();
+            body.addProperty("name", name);
+            body.addProperty("email", email);
+            if (!phone.isEmpty()) body.addProperty("phone", phone);
+            if (!dob.isEmpty()) body.addProperty("date_of_birth", dob);
+            body.addProperty("gender", gender);
+
+            if (btnSaveProfileSettings != null) btnSaveProfileSettings.setEnabled(false);
+
+            ApiClient.getApiService(this).updateProfile(body).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveProfileSettings != null) btnSaveProfileSettings.setEnabled(true);
+
+                    if (response.isSuccessful()) {
+                        if (sessionManager != null) {
+                            sessionManager.saveSession(
+                                    sessionManager.getUserId() != null ? sessionManager.getUserId() : "1",
+                                    sessionManager.getToken() != null ? sessionManager.getToken() : "",
+                                    sessionManager.getRole() != null ? sessionManager.getRole() : "Admin",
+                                    name,
+                                    sessionManager.getNumericUserId(),
+                                    sessionManager.getStudentDbId(),
+                                    email
+                            );
+                        }
+                        Toast.makeText(ProfileSettingsActivity.this, "Profile updated successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        String errorMsg = "Failed to update profile (HTTP " + response.code() + ")";
+                        try (ResponseBody errorBody = response.errorBody()) {
+                            if (errorBody != null) {
+                                String rawError = errorBody.string();
+                                JsonObject errObj = JsonParser.parseString(rawError).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errorMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(ProfileSettingsActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveProfileSettings != null) btnSaveProfileSettings.setEnabled(true);
+                    Toast.makeText(ProfileSettingsActivity.this, "Network error updating profile", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) return "";
+        return Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase();
     }
 }

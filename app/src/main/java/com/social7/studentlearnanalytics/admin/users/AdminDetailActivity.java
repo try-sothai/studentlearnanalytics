@@ -4,21 +4,35 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Admin;
+import com.social7.studentlearnanalytics.network.ApiClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdminDetailActivity extends AppCompatActivity {
 
+    private static final String TAG = "AdminDetailActivity";
     private Admin currentAdmin;
+    private String customNotes = "";
 
     private TextView tabOverview, tabPermissions, tabActivityLog, tabNotes;
     private LinearLayout containerOverview, containerOtherTabs;
@@ -46,6 +60,12 @@ public class AdminDetailActivity extends AppCompatActivity {
         initViews();
         bindData();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchAdminDetails();
     }
 
     private void initViews() {
@@ -87,6 +107,83 @@ public class AdminDetailActivity extends AppCompatActivity {
 
         btnDeactivateAdminAccount = findViewById(R.id.btnDeactivateAdminAccount);
         btnEditAdmin = findViewById(R.id.btnEditAdmin);
+    }
+
+    private String getAdminIdentifier() {
+        if (currentAdmin == null) return "1";
+        if (currentAdmin.getUserId() != null && currentAdmin.getUserId() > 0) {
+            return String.valueOf(currentAdmin.getUserId());
+        }
+        return currentAdmin.getId() != null ? currentAdmin.getId() : "1";
+    }
+
+    private void fetchAdminDetails() {
+        String identifier = getAdminIdentifier();
+        ApiClient.getApiService(this).getUser(identifier).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JsonObject root = response.body();
+                        JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data") : root;
+
+                        if (data.has("id") && !data.get("id").isJsonNull()) {
+                            currentAdmin.setUserId(data.get("id").getAsLong());
+                        }
+                        if (data.has("name") && !data.get("name").isJsonNull()) {
+                            currentAdmin.setName(data.get("name").getAsString());
+                        }
+                        if (data.has("email") && !data.get("email").isJsonNull()) {
+                            currentAdmin.setEmail(data.get("email").getAsString());
+                        }
+                        if (data.has("phone") && !data.get("phone").isJsonNull()) {
+                            currentAdmin.setPhone(data.get("phone").getAsString());
+                        }
+                        if (data.has("gender") && !data.get("gender").isJsonNull()) {
+                            currentAdmin.setGender(data.get("gender").getAsString());
+                        }
+                        if (data.has("date_of_birth") && !data.get("date_of_birth").isJsonNull()) {
+                            currentAdmin.setDob(data.get("date_of_birth").getAsString());
+                        }
+                        if (data.has("status") && !data.get("status").isJsonNull()) {
+                            currentAdmin.setStatus(capitalize(data.get("status").getAsString()));
+                        }
+                        if (data.has("created_at") && !data.get("created_at").isJsonNull()) {
+                            currentAdmin.setCreatedAt(data.get("created_at").getAsString());
+                        }
+                        if (data.has("last_login_at") && !data.get("last_login_at").isJsonNull()) {
+                            currentAdmin.setLastLogin(data.get("last_login_at").getAsString());
+                        }
+
+                        if (data.has("admin_profile") && data.get("admin_profile").isJsonObject()) {
+                            JsonObject ap = data.getAsJsonObject("admin_profile");
+                            if (ap.has("role_title") && !ap.get("role_title").isJsonNull()) {
+                                currentAdmin.setRole(ap.get("role_title").getAsString());
+                            }
+                            if (ap.has("access_level") && !ap.get("access_level").isJsonNull()) {
+                                currentAdmin.setAccessLevel(ap.get("access_level").getAsString());
+                            }
+                            if (ap.has("managed_modules") && !ap.get("managed_modules").isJsonNull()) {
+                                currentAdmin.setManagedModules(ap.get("managed_modules").getAsString());
+                            }
+                            if (ap.has("description") && !ap.get("description").isJsonNull()) {
+                                currentAdmin.setDescription(ap.get("description").getAsString());
+                            }
+                        }
+
+                        bindData();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing admin details", e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Log.e(TAG, "Failed to load admin details", t);
+            }
+        });
     }
 
     private void bindData() {
@@ -165,15 +262,36 @@ public class AdminDetailActivity extends AppCompatActivity {
     private void confirmToggleAccountStatus() {
         boolean isActive = "Active".equalsIgnoreCase(currentAdmin.getStatus());
         String action = isActive ? "deactivate" : "activate";
+        String nextStatus = isActive ? "inactive" : "active";
 
         new AlertDialog.Builder(this)
                 .setTitle(isActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + currentAdmin.getName() + " (" + currentAdmin.getId() + ")?")
                 .setPositiveButton("Confirm", (dialog, which) -> {
-                    boolean newActiveState = !isActive;
-                    currentAdmin.setStatus(newActiveState ? "Active" : "Inactive");
-                    updateStatusDisplay(newActiveState);
-                    Toast.makeText(AdminDetailActivity.this, "Admin account " + action + "d successfully", Toast.LENGTH_SHORT).show();
+                    String identifier = getAdminIdentifier();
+                    JsonObject statusBody = new JsonObject();
+                    statusBody.addProperty("status", nextStatus);
+
+                    ApiClient.getApiService(AdminDetailActivity.this)
+                            .updateUserStatus(identifier, statusBody)
+                            .enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                    if (response.isSuccessful()) {
+                                        boolean newActiveState = !isActive;
+                                        currentAdmin.setStatus(newActiveState ? "Active" : "Inactive");
+                                        updateStatusDisplay(newActiveState);
+                                        Toast.makeText(AdminDetailActivity.this, "Admin account " + action + "d successfully", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(AdminDetailActivity.this, "Failed to update account status (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                    Toast.makeText(AdminDetailActivity.this, "Network error updating status: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -188,18 +306,65 @@ public class AdminDetailActivity extends AppCompatActivity {
             if (containerOtherTabs != null) containerOtherTabs.setVisibility(View.VISIBLE);
             setTabActive(tabPermissions);
             if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Module Permissions Overview");
-            if (tvOtherTabContent != null) tvOtherTabContent.setText("• User Management: " + currentAdmin.getAccessLevel() + "\n• Course Management: " + currentAdmin.getAccessLevel() + "\n• Reports & Analytics: " + currentAdmin.getAccessLevel() + "\n• System Settings: Full Access\n• ML Model Evaluation: Read-only");
+            if (tvOtherTabContent != null) {
+                tvOtherTabContent.setText("• User Management: " + currentAdmin.getAccessLevel() + "\n"
+                        + "• Course Management: " + currentAdmin.getAccessLevel() + "\n"
+                        + "• Reports & Analytics: " + currentAdmin.getAccessLevel() + "\n"
+                        + "• System Settings: Full Access\n"
+                        + "• ML Model Evaluation: Read-only");
+            }
         } else if (index == 2) {
             if (containerOtherTabs != null) containerOtherTabs.setVisibility(View.VISIBLE);
             setTabActive(tabActivityLog);
             if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Recent Activity Log");
-            if (tvOtherTabContent != null) tvOtherTabContent.setText("• May 29, 2024 09:45 AM: Signed in from Building A.\n• May 20, 2024 14:10 PM: Updated system configuration settings.\n• May 10, 2024 11:30 AM: Approved new course registration batch.");
+            if (tvOtherTabContent != null) {
+                tvOtherTabContent.setText("• Created at: " + currentAdmin.getCreatedAt() + "\n"
+                        + "• Last active: " + currentAdmin.getLastLogin() + "\n"
+                        + "• Status: " + currentAdmin.getStatus());
+            }
         } else if (index == 3) {
             if (containerOtherTabs != null) containerOtherTabs.setVisibility(View.VISIBLE);
             setTabActive(tabNotes);
-            if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Administrative Notes");
-            if (tvOtherTabContent != null) tvOtherTabContent.setText("• Sep 01, 2020: Assigned " + currentAdmin.getRole() + " role.\n• Jan 15, 2024: Annual administrative policy compliance verified.");
+            if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Administrative Notes (Tap to edit)");
+            displayNotes();
+            if (containerOtherTabs != null) {
+                containerOtherTabs.setOnClickListener(v -> showEditNotesDialog());
+            }
         }
+    }
+
+    private void displayNotes() {
+        if (tvOtherTabContent == null) return;
+        StringBuilder sb = new StringBuilder();
+        sb.append("• Assigned Role: ").append(currentAdmin.getRole()).append("\n");
+        sb.append("• Access Level: ").append(currentAdmin.getAccessLevel()).append("\n");
+        sb.append("• Managed Modules: ").append(currentAdmin.getManagedModules()).append("\n");
+        sb.append("• Status: ").append(currentAdmin.getStatus()).append("\n");
+        if (customNotes != null && !customNotes.trim().isEmpty()) {
+            sb.append("\nNotes:\n").append(customNotes.trim());
+        }
+        tvOtherTabContent.setText(sb.toString());
+    }
+
+    private void showEditNotesDialog() {
+        final EditText input = new EditText(this);
+        input.setText(customNotes);
+        input.setHint("Enter administrative note for admin...");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Admin Administrative Notes")
+                .setView(input)
+                .setPositiveButton("Save", (d, w) -> {
+                    customNotes = input.getText().toString().trim();
+                    displayNotes();
+                    Toast.makeText(this, "Notes updated", Toast.LENGTH_SHORT).show();
+                })
+                .setNeutralButton("Clear", (d, w) -> {
+                    customNotes = "";
+                    displayNotes();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void resetTabs() {
@@ -222,5 +387,10 @@ public class AdminDetailActivity extends AppCompatActivity {
         if (tv == null) return;
         tv.setTextColor(Color.parseColor("#64748B"));
         tv.setBackground(null);
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) return "";
+        return Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase();
     }
 }

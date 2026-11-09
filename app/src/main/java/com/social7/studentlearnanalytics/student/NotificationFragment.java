@@ -96,7 +96,7 @@ public class NotificationFragment extends Fragment {
                 } else if ("Course".equalsIgnoreCase(notification.getCategory())) {
                     startActivity(new Intent(requireContext(), CourseDetailActivity.class));
                 } else if ("Assignment".equalsIgnoreCase(notification.getCategory()) || "Homework".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), StudentAssessmentFragment.class));
+                    startActivity(new Intent(requireContext(), AssessmentDetailActivity.class));
                 } else if ("Quiz".equalsIgnoreCase(notification.getCategory())) {
                     startActivity(new Intent(requireContext(), QuizDetailActivity.class));
                 } else if ("Exam".equalsIgnoreCase(notification.getCategory())) {
@@ -106,10 +106,18 @@ public class NotificationFragment extends Fragment {
                 } else if ("Grade".equalsIgnoreCase(notification.getCategory())) {
                     startActivity(new Intent(requireContext(), AssessmentDetailActivity.class));
                 }
-                
+
                 if (!notification.isRead()) {
                     notification.setRead(true);
                     updateTabsAndFilter();
+                    if (notification.getId() != null && !notification.getId().isEmpty()) {
+                        ApiClient.getApiService(requireContext()).markNotificationRead(notification.getId()).enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {}
+                            @Override
+                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+                        });
+                    }
                 }
             });
             recyclerView.setAdapter(adapter);
@@ -240,14 +248,6 @@ public class NotificationFragment extends Fragment {
                                 
                                 allNotifications.add(new Notification(id, title, message, timeAgo, category, dateGroup, isRead));
                             }
-                        }
-
-                        // Add mock notifications if empty to simulate data per requirements
-                        if (allNotifications.isEmpty()) {
-                            allNotifications.add(new Notification("N1", "New Assignment: Binary Search Trees", "Please complete the CS101 assignment by Oct 28.", "10 mins ago", "Course", "RECENT", false));
-                            allNotifications.add(new Notification("N2", "Quiz Available: REST APIs", "IT402 Quiz is now open. You have 30 mins.", "1 hour ago", "Course", "RECENT", false));
-                            allNotifications.add(new Notification("N3", "Attendance Alert", "You have been marked absent for CS204.", "2 hours ago", "Security", "RECENT", false));
-                            allNotifications.add(new Notification("N4", "Grade Published", "Your CS101 Midterm exam grade has been published.", "Yesterday", "Report", "OLDER", true));
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing notifications", e);

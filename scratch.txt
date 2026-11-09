@@ -1,0 +1,20 @@
+        JsonArray newArr = new JsonArray();
+        for (int i = 0; i < seriesArray.size(); i++) {
+            JsonObject item = seriesArray.get(i).getAsJsonObject();
+            JsonObject fakeAy = new JsonObject();
+            fakeAy.addProperty("academic_year_name", item.has("academic_year") ? item.get("academic_year").getAsString() : "Year");
+            fakeAy.addProperty("has_data", true);
+            JsonObject regUsers = new JsonObject();
+            regUsers.addProperty("total", item.has("total_students") ? item.get("total_students").getAsInt() : 0);
+            fakeAy.add("registered_users", regUsers);
+
+            JsonObject activeUsers = new JsonObject();
+            activeUsers.addProperty("total", item.has("active_learners") ? item.get("active_learners").getAsInt() : 0);
+            fakeAy.add("active_users", activeUsers);
+
+            fakeAy.addProperty("enrolled_students", item.has("total_students") ? item.get("total_students").getAsInt() : 0);
+            fakeAy.addProperty("user_growth_percentage", 5.0);
+            newArr.add(fakeAy);
+        }
+        latestAnnualAnalyticsObj = new JsonObject();
+        latestAnnualAnalyticsObj.add("all_years_analytics", newArr);

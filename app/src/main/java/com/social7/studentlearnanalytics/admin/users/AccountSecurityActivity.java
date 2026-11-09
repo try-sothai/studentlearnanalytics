@@ -7,11 +7,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountSecurityActivity extends AppCompatActivity {
 
@@ -90,8 +99,44 @@ public class AccountSecurityActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            JsonObject body = new JsonObject();
+            body.addProperty("current_password", currentPass);
+            body.addProperty("new_password", newPass);
+            body.addProperty("new_password_confirmation", confirmPass);
+
+            if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(false);
+
+            ApiClient.getApiService(this).changePassword(body).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(true);
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(AccountSecurityActivity.this, "Password updated successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        String errorMsg = "Failed to update password (HTTP " + response.code() + ")";
+                        try (ResponseBody errorBody = response.errorBody()) {
+                            if (errorBody != null) {
+                                String rawError = errorBody.string();
+                                JsonObject errObj = JsonParser.parseString(rawError).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errorMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(AccountSecurityActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(true);
+                    Toast.makeText(AccountSecurityActivity.this, "Network error updating password", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

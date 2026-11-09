@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Admin implements Serializable {
     private String id;
+    private Long dbId;
+    private Long userId;
     private String name;
     private String email;
     private String phone;
@@ -21,16 +23,11 @@ public class Admin implements Serializable {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.phone = "+855 12 345 678";
-        this.gender = "Male";
-        this.dob = "Mar 10, 1988";
         this.role = role != null ? role : "System Administrator";
         this.accessLevel = "Full Access";
         this.managedModules = "All Modules";
         this.description = "Has permission to manage the entire system, subject to assigned access policies.";
         this.status = status != null ? status : "Active";
-        this.createdAt = "Sep 01, 2020";
-        this.lastLogin = "May 29, 2024, 09:45 AM";
     }
 
     public Admin(String id, String name, String email, String role, String accessLevel, String managedModules, String status) {
@@ -40,18 +37,22 @@ public class Admin implements Serializable {
     }
 
     public String getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPhone() { return phone != null ? phone : "+855 12 345 678"; }
-    public String getGender() { return gender != null ? gender : "Male"; }
-    public String getDob() { return dob != null ? dob : "Mar 10, 1988"; }
-    public String getRole() { return role != null ? role : "System Administrator"; }
-    public String getAccessLevel() { return accessLevel != null ? accessLevel : "Full Access"; }
-    public String getManagedModules() { return managedModules != null ? managedModules : "All Modules"; }
+    public Long getDbId() { return dbId; }
+    public void setDbId(Long dbId) { this.dbId = dbId; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public String getName() { return name != null ? name : ""; }
+    public String getEmail() { return email != null ? email : ""; }
+    public String getPhone() { return phone != null && !phone.isEmpty() ? phone : "N/A"; }
+    public String getGender() { return gender != null && !gender.isEmpty() ? gender : "N/A"; }
+    public String getDob() { return dob != null && !dob.isEmpty() ? dob : "N/A"; }
+    public String getRole() { return role != null && !role.isEmpty() ? role : "System Administrator"; }
+    public String getAccessLevel() { return accessLevel != null && !accessLevel.isEmpty() ? accessLevel : "Full Access"; }
+    public String getManagedModules() { return managedModules != null && !managedModules.isEmpty() ? managedModules : "All Modules"; }
     public String getDescription() { return description != null ? description : "Has permission to manage the system."; }
-    public String getStatus() { return status != null ? status : "Active"; }
-    public String getCreatedAt() { return createdAt != null ? createdAt : "Sep 01, 2020"; }
-    public String getLastLogin() { return lastLogin != null ? lastLogin : "May 29, 2024, 09:45 AM"; }
+    public String getStatus() { return status != null && !status.isEmpty() ? status : "Active"; }
+    public String getCreatedAt() { return createdAt != null && !createdAt.isEmpty() ? createdAt : "N/A"; }
+    public String getLastLogin() { return lastLogin != null && !lastLogin.isEmpty() ? lastLogin : "N/A"; }
 
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -64,4 +65,6 @@ public class Admin implements Serializable {
     public void setManagedModules(String managedModules) { this.managedModules = managedModules; }
     public void setDescription(String description) { this.description = description; }
     public void setStatus(String status) { this.status = status; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setLastLogin(String lastLogin) { this.lastLogin = lastLogin; }
 }

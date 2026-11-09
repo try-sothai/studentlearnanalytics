@@ -4,15 +4,25 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddAdminActivity extends AppCompatActivity {
 
@@ -108,6 +118,9 @@ public class AddAdminActivity extends AppCompatActivity {
         String name = etAddAdminName.getText().toString().trim();
         String adminId = etAddAdminId.getText().toString().trim();
         String email = etAddAdminEmail.getText().toString().trim();
+        String phone = etAddAdminPhone != null ? etAddAdminPhone.getText().toString().trim() : "";
+        String dob = etAddAdminDob != null ? etAddAdminDob.getText().toString().trim() : "";
+        String desc = etAddAdminDesc != null ? etAddAdminDesc.getText().toString().trim() : "";
 
         boolean isValid = true;
 
@@ -138,8 +151,71 @@ public class AddAdminActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            Toast.makeText(this, "Admin " + name + " created successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            String role = spAddAdminRole != null ? spAddAdminRole.getSelectedItem().toString() : "System Administrator";
+            String accessLevel = spAddAdminAccessLevel != null && spAddAdminAccessLevel.getSelectedItemPosition() > 0
+                    ? spAddAdminAccessLevel.getSelectedItem().toString() : "Full Access";
+            String modules = spAddAdminModules != null && spAddAdminModules.getSelectedItemPosition() > 0
+                    ? spAddAdminModules.getSelectedItem().toString() : "All Modules";
+
+            boolean isActive = true;
+            if (rgAddAdminAccountStatus != null) {
+                int selectedId = rgAddAdminAccountStatus.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    RadioButton rb = findViewById(selectedId);
+                    if (rb != null && "Inactive".equalsIgnoreCase(rb.getText().toString())) {
+                        isActive = false;
+                    }
+                }
+            }
+
+            JsonObject body = new JsonObject();
+            body.addProperty("name", name);
+            body.addProperty("email", email);
+            body.addProperty("password", "12345678");
+            body.addProperty("password_confirmation", "12345678");
+            body.addProperty("role", "admin");
+            body.addProperty("code", adminId);
+            body.addProperty("status", isActive ? "active" : "inactive");
+            if (!phone.isEmpty()) body.addProperty("phone", phone);
+            if (!dob.isEmpty()) body.addProperty("date_of_birth", dob);
+            if (!desc.isEmpty()) body.addProperty("description", desc);
+            body.addProperty("role_title", role);
+            body.addProperty("access_level", accessLevel);
+            body.addProperty("managed_modules", modules);
+
+            if (btnSaveAdmin != null) btnSaveAdmin.setEnabled(false);
+
+            ApiClient.getApiService(this).createUser(body).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveAdmin != null) btnSaveAdmin.setEnabled(true);
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(AddAdminActivity.this, "Admin " + name + " created successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        String errorMsg = "Failed to create admin (HTTP " + response.code() + ")";
+                        try (ResponseBody errorBody = response.errorBody()) {
+                            if (errorBody != null) {
+                                String rawError = errorBody.string();
+                                JsonObject errObj = JsonParser.parseString(rawError).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errorMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(AddAdminActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (btnSaveAdmin != null) btnSaveAdmin.setEnabled(true);
+                    Toast.makeText(AddAdminActivity.this, "Network error creating admin", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

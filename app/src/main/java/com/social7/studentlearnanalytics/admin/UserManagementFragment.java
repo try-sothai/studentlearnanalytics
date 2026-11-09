@@ -1359,21 +1359,16 @@ public class UserManagementFragment extends Fragment implements
     @Override
     public void onViewDetails(User user) {
         String studentCode = user.getCode() != null ? user.getCode() : user.getId();
-        Student student = new Student(
-                studentCode,
-                user.getName(),
-                user.getEmail(),
-                "Computer Science",
-                "Bachelor of Computer Science",
-                "Year 3",
-                3.25,
-                "Good Standing",
-                85.0,
-                "#EAF0FF",
-                "#3155F5",
-                "CS101"
-        );
+        Student student = new Student();
+        student.setId(studentCode);
+        student.setStudentCode(studentCode);
+        student.setName(user.getName());
+        student.setEnglishName(user.getName());
+        student.setEmail(user.getEmail());
         student.setStatus(user.getStatus());
+        if (user.getNumericId() != null) {
+            student.setUserId(user.getNumericId());
+        }
 
         Intent intent = new Intent(requireContext(), AdminStudentDetailActivity.class);
         intent.putExtra("student", student);
@@ -1384,21 +1379,16 @@ public class UserManagementFragment extends Fragment implements
     @Override
     public void onEditUser(User user) {
         String studentCode = user.getCode() != null ? user.getCode() : user.getId();
-        Student student = new Student(
-                studentCode,
-                user.getName(),
-                user.getEmail(),
-                "Computer Science",
-                "Bachelor of Computer Science",
-                "Year 3",
-                3.25,
-                "Good Standing",
-                85.0,
-                "#EAF0FF",
-                "#3155F5",
-                "CS101"
-        );
+        Student student = new Student();
+        student.setId(studentCode);
+        student.setStudentCode(studentCode);
+        student.setName(user.getName());
+        student.setEnglishName(user.getName());
+        student.setEmail(user.getEmail());
         student.setStatus(user.getStatus());
+        if (user.getNumericId() != null) {
+            student.setUserId(user.getNumericId());
+        }
 
         Intent intent = new Intent(requireContext(), EditStudentActivity.class);
         intent.putExtra("student", student);
@@ -1444,7 +1434,8 @@ public class UserManagementFragment extends Fragment implements
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + teacher.getName() + " (" + teacher.getId() + ")?")
                 .setPositiveButton("Confirm", (dialog, which) -> {
-                    updateUserStatusOnBackend(teacher.getId(), newStatus, action);
+                    String targetId = teacher.getUserId() != null ? String.valueOf(teacher.getUserId()) : teacher.getId();
+                    updateUserStatusOnBackend(targetId, newStatus, action);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -1460,7 +1451,8 @@ public class UserManagementFragment extends Fragment implements
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + admin.getName() + " (" + admin.getId() + ")?")
                 .setPositiveButton("Confirm", (dialog, which) -> {
-                    updateUserStatusOnBackend(admin.getId(), newStatus, action);
+                    String targetId = admin.getUserId() != null ? String.valueOf(admin.getUserId()) : admin.getId();
+                    updateUserStatusOnBackend(targetId, newStatus, action);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -1476,7 +1468,8 @@ public class UserManagementFragment extends Fragment implements
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + user.getName() + " (" + user.getId() + ")?")
                 .setPositiveButton("Confirm", (dialog, which) -> {
-                    updateUserStatusOnBackend(user.getId(), newStatus, action);
+                    String targetId = user.getApiUserId();
+                    updateUserStatusOnBackend(targetId, newStatus, action);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -1490,29 +1483,32 @@ public class UserManagementFragment extends Fragment implements
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (!isAdded()) return;
-                Toast.makeText(requireContext(), "Account " + actionLabel + "d successfully", Toast.LENGTH_SHORT).show();
-                fetchUserStatistics();
-                reloadCurrentTab();
+                if (response.isSuccessful()) {
+                    Toast.makeText(requireContext(), "Account " + actionLabel + "d successfully", Toast.LENGTH_SHORT).show();
+                    fetchUserStatistics();
+                    reloadCurrentTab();
+                } else {
+                    Toast.makeText(requireContext(), "Failed to " + actionLabel + " account (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 if (!isAdded()) return;
-                Toast.makeText(requireContext(), "Updated account status locally.", Toast.LENGTH_SHORT).show();
-                fetchUserStatistics();
-                reloadCurrentTab();
+                Toast.makeText(requireContext(), "Network error updating status: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public void onDeleteUser(User user) {
-        confirmAndDeleteUser(user.getId(), user.getName());
+        confirmAndDeleteUser(user.getApiUserId(), user.getName());
     }
 
     @Override
     public void onDeleteTeacher(Teacher teacher) {
-        confirmAndDeleteUser(teacher.getId(), teacher.getName());
+        String targetId = teacher.getUserId() != null ? String.valueOf(teacher.getUserId()) : teacher.getId();
+        confirmAndDeleteUser(targetId, teacher.getName());
     }
 
     @Override
@@ -1524,7 +1520,8 @@ public class UserManagementFragment extends Fragment implements
             return;
         }
 
-        confirmAndDeleteUser(admin.getId(), admin.getName());
+        String targetId = admin.getUserId() != null ? String.valueOf(admin.getUserId()) : admin.getId();
+        confirmAndDeleteUser(targetId, admin.getName());
     }
 
     private void confirmAndDeleteUser(String userId, String name) {
@@ -1538,19 +1535,19 @@ public class UserManagementFragment extends Fragment implements
                             if (!isAdded()) return;
                             if (response.code() == 403) {
                                 Toast.makeText(requireContext(), "Self-deletion is prohibited. You cannot delete your own account.", Toast.LENGTH_LONG).show();
-                            } else {
+                            } else if (response.isSuccessful()) {
                                 Toast.makeText(requireContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
                                 fetchUserStatistics();
                                 reloadCurrentTab();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to delete user (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                             if (!isAdded()) return;
-                            Toast.makeText(requireContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
-                            fetchUserStatistics();
-                            reloadCurrentTab();
+                            Toast.makeText(requireContext(), "Network error deleting user: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 })

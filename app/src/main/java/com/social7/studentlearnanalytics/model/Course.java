@@ -115,6 +115,21 @@ public class Course implements Serializable {
         this.type = "Core";
     }
 
+    public Course(String id, String code, String name, String teacher, String semester, int credits, String room, String schedule, int studentCount, int performance, String status) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.teacher = teacher;
+        this.semester = semester;
+        this.credits = credits;
+        this.room = room;
+        this.schedule = schedule;
+        this.studentCount = studentCount;
+        this.performance = performance;
+        this.status = status;
+        this.type = "Core";
+    }
+
     public String getId() { return id != null ? id : ""; }
     public String getCode() { return code != null ? code : ""; }
     public String getName() { return name != null ? name : ""; }

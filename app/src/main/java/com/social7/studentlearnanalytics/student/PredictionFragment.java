@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.social7.studentlearnanalytics.R;
-
 import com.social7.studentlearnanalytics.model.DashboardResponse;
 import com.social7.studentlearnanalytics.network.ApiClient;
 
@@ -72,6 +72,7 @@ public class PredictionFragment extends Fragment {
     }
 
     private void fetchPredictionData() {
+        if (getContext() == null) return;
         ApiClient.getApiService(requireContext()).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
             @Override
             public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
@@ -88,29 +89,37 @@ public class PredictionFragment extends Fragment {
     }
 
     private void updateUI(DashboardResponse.DashboardData data) {
-        if (getView() == null) return;
+        if (getView() == null || data == null) return;
 
-        // Find main score text view
-        View scoreBox = getView().findViewById(R.id.scoreBox);
-        if (scoreBox instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup) scoreBox;
-            if (vg.getChildCount() > 0 && vg.getChildAt(0) instanceof android.widget.TextView) {
-                String scoreStr = data.getPredictedScoreFormatted();
-                if (scoreStr.contains("/")) {
-                    scoreStr = scoreStr.split("/")[0].trim();
+        // Score value
+        TextView tvScoreVal = getView().findViewById(R.id.tvPredictionScoreValue);
+        String scoreStr = data.getPredictedScoreFormatted();
+        if (scoreStr.contains("/")) {
+            scoreStr = scoreStr.split("/")[0].trim();
+        }
+        if (tvScoreVal != null) {
+            tvScoreVal.setText(scoreStr);
+        } else {
+            View scoreBox = getView().findViewById(R.id.scoreBox);
+            if (scoreBox instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) scoreBox;
+                if (vg.getChildCount() > 0 && vg.getChildAt(0) instanceof TextView) {
+                    ((TextView) vg.getChildAt(0)).setText(scoreStr);
                 }
-                ((android.widget.TextView) vg.getChildAt(0)).setText(scoreStr);
             }
         }
 
-        // Find Risk Level
-        android.widget.TextView tvRisk = findTextViewWithText(getView(), "MEDIUM");
+        // Risk Level
+        TextView tvRisk = getView().findViewById(R.id.tvPredictionRiskValue);
+        if (tvRisk == null) tvRisk = findTextViewWithText(getView(), "MEDIUM");
         if (tvRisk == null) tvRisk = findTextViewWithText(getView(), "HIGH");
         if (tvRisk == null) tvRisk = findTextViewWithText(getView(), "LOW");
+        if (tvRisk == null) tvRisk = findTextViewWithText(getView(), "LOW RISK");
 
         if (tvRisk != null) {
             String risk = data.getRiskLevel();
-            tvRisk.setText(risk);
+            String displayRisk = (risk != null && !risk.toUpperCase().contains("RISK")) ? (risk + " RISK") : (risk != null ? risk : "LOW RISK");
+            tvRisk.setText(displayRisk);
             if ("HIGH".equalsIgnoreCase(risk)) {
                 tvRisk.setTextColor(Color.parseColor("#EF4444"));
             } else if ("MEDIUM".equalsIgnoreCase(risk)) {
@@ -128,31 +137,36 @@ public class PredictionFragment extends Fragment {
             setupRealLineChart(chart, data.getPredictionChartData(), data.getPredictionChartLabels());
         }
 
-        // Update Key Factors
-        android.widget.TextView tvAtt = findTextViewWithText(getView(), "88%");
+        // Update Key Factors by ID
+        TextView tvAtt = getView().findViewById(R.id.tvPredictionAttendanceValue);
+        if (tvAtt == null) tvAtt = findTextViewWithText(getView(), "88%");
         if (tvAtt != null) tvAtt.setText(data.getAttendanceRateFormatted());
 
-        android.widget.TextView tvAssign = findTextViewWithText(getView(), "80%");
+        TextView tvAssign = getView().findViewById(R.id.tvPredictionAssignmentValue);
+        if (tvAssign == null) tvAssign = findTextViewWithText(getView(), "80%");
         if (tvAssign != null) tvAssign.setText(data.getAssignmentScoreFormatted());
 
-        android.widget.TextView tvQuiz = findTextViewWithText(getView(), "78%");
+        TextView tvQuiz = getView().findViewById(R.id.tvPredictionQuizValue);
+        if (tvQuiz == null) tvQuiz = findTextViewWithText(getView(), "78%");
         if (tvQuiz != null) tvQuiz.setText(data.getQuizScoreFormatted());
 
-        android.widget.TextView tvExam = findTextViewWithText(getView(), "76%");
+        TextView tvExam = getView().findViewById(R.id.tvPredictionExamValue);
+        if (tvExam == null) tvExam = findTextViewWithText(getView(), "76%");
         if (tvExam != null) tvExam.setText(data.getExamScoreFormatted());
 
-        android.widget.TextView tvGpa = findTextViewWithText(getView(), "3.25 / 4.00");
+        TextView tvGpa = getView().findViewById(R.id.tvPredictionGpaValue);
+        if (tvGpa == null) tvGpa = findTextViewWithText(getView(), "3.25 / 4.00");
         if (tvGpa != null) tvGpa.setText(data.getGpaFormatted() + " / 4.00");
     }
 
-    private android.widget.TextView findTextViewWithText(View view, String text) {
-        if (view instanceof android.widget.TextView) {
-            android.widget.TextView tv = (android.widget.TextView) view;
+    private TextView findTextViewWithText(View view, String text) {
+        if (view instanceof TextView) {
+            TextView tv = (TextView) view;
             if (text.equals(tv.getText().toString())) return tv;
         } else if (view instanceof ViewGroup) {
             ViewGroup vg = (ViewGroup) view;
             for (int i = 0; i < vg.getChildCount(); i++) {
-                android.widget.TextView found = findTextViewWithText(vg.getChildAt(i), text);
+                TextView found = findTextViewWithText(vg.getChildAt(i), text);
                 if (found != null) return found;
             }
         }
@@ -160,7 +174,7 @@ public class PredictionFragment extends Fragment {
     }
 
     private void setupLineChart(LineChart chart) {
-        // Fallback
+        // Default placeholder
     }
 
     private void setupRealLineChart(LineChart chart, List<Float> values, List<String> labels) {

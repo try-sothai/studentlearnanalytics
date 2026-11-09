@@ -89,18 +89,22 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     LoginResponse.UserData user = loginResponse.getUser();
-
-                    String role = user != null && !user.getRole().isEmpty() ? user.getRole() : "Student";
-                    String name = user != null && !user.getName().isEmpty() ? user.getName() : "Sophea";
-                    String userId = !loginResponse.getStudentId().isEmpty() ? loginResponse.getStudentId() : studentId;
                     String token = loginResponse.getToken();
 
-                    if (token.isEmpty()) {
-                        token = "session_token_" + System.currentTimeMillis();
+                    if (token == null || token.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "Authentication failed: No token returned from server.", Toast.LENGTH_LONG).show();
+                        return;
                     }
 
-                    Log.d(TAG, "Login successful for " + userId + " (" + role + ")");
-                    sessionManager.saveSession(userId, token, role, name);
+                    String role = user != null && !user.getRole().isEmpty() ? user.getRole() : "student";
+                    String name = user != null && !user.getName().isEmpty() ? user.getName() : studentId;
+                    String userId = !loginResponse.getStudentId().isEmpty() ? loginResponse.getStudentId() : studentId;
+                    String numericUserId = user != null ? user.getId() : "";
+                    String studentDbId = user != null ? user.getStudentDbId() : "";
+                    String email = user != null ? user.getEmail() : "";
+
+                    Log.d(TAG, "Login successful for " + userId + " (user_id=" + numericUserId + ", role=" + role + ")");
+                    sessionManager.saveSession(userId, numericUserId, studentDbId, email, token, role, name);
 
                     navigateToRoleMain(role);
                 } else {
@@ -108,6 +112,8 @@ public class LoginActivity extends AppCompatActivity {
                     String message;
                     if (response.code() == 401) {
                         message = "Invalid Student / Teacher / Admin ID or password.";
+                    } else if (response.code() == 403) {
+                        message = "Account is inactive or deactivated.";
                     } else {
                         message = "Login failed (server error " + response.code() + "). Please try again.";
                     }

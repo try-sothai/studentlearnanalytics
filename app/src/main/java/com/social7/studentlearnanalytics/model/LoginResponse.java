@@ -1,6 +1,8 @@
 package com.social7.studentlearnanalytics.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class LoginResponse {
 
@@ -84,8 +86,24 @@ public class LoginResponse {
         @SerializedName("year")
         private String year;
 
+        @SerializedName("student")
+        private JsonElement student;
+
         public String getId() {
+            if (id instanceof Number) {
+                return String.valueOf(((Number) id).longValue());
+            }
             return id != null ? String.valueOf(id) : "";
+        }
+
+        public String getStudentDbId() {
+            if (student != null && student.isJsonObject()) {
+                JsonObject studentObj = student.getAsJsonObject();
+                if (studentObj.has("id") && !studentObj.get("id").isJsonNull()) {
+                    return String.valueOf(studentObj.get("id").getAsLong());
+                }
+            }
+            return "";
         }
 
         public String getName() {
@@ -105,7 +123,16 @@ public class LoginResponse {
         }
 
         public String getStudentId() {
-            return studentId != null ? studentId : (loginId != null ? loginId : "");
+            if (studentId != null && !studentId.isEmpty()) {
+                return studentId;
+            }
+            if (student != null && student.isJsonObject()) {
+                JsonObject studentObj = student.getAsJsonObject();
+                if (studentObj.has("student_code") && !studentObj.get("student_code").isJsonNull()) {
+                    return studentObj.get("student_code").getAsString();
+                }
+            }
+            return loginId != null ? loginId : "";
         }
 
         public String getLoginId() {

@@ -2,6 +2,7 @@ package com.social7.studentlearnanalytics.admin.users;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,15 +12,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Admin;
+import com.social7.studentlearnanalytics.network.ApiClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditAdminActivity extends AppCompatActivity {
 
+    private static final String TAG = "EditAdminActivity";
     private Admin currentAdmin;
 
     private TextView tvEditAdminAvatarChar, tvEditAdminHeaderName, tvEditAdminHeaderId, tvEditAdminHeaderStatus;
@@ -123,8 +135,8 @@ public class EditAdminActivity extends AppCompatActivity {
         if (etEditAdminName != null) etEditAdminName.setText(name);
         if (etEditAdminId != null) etEditAdminId.setText(currentAdmin.getId());
         if (etEditAdminEmail != null) etEditAdminEmail.setText(currentAdmin.getEmail());
-        if (etEditAdminPhone != null) etEditAdminPhone.setText(currentAdmin.getPhone());
-        if (etEditAdminDob != null) etEditAdminDob.setText(currentAdmin.getDob());
+        if (etEditAdminPhone != null) etEditAdminPhone.setText("N/A".equals(currentAdmin.getPhone()) ? "" : currentAdmin.getPhone());
+        if (etEditAdminDob != null) etEditAdminDob.setText("N/A".equals(currentAdmin.getDob()) ? "" : currentAdmin.getDob());
         if (etEditAdminDesc != null) etEditAdminDesc.setText(currentAdmin.getDescription());
 
         setSpinnerSelection(spEditAdminRole, currentAdmin.getRole());
@@ -184,27 +196,62 @@ public class EditAdminActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            currentAdmin.setName(name);
-            currentAdmin.setEmail(email);
-            if (!phone.isEmpty()) currentAdmin.setPhone(phone);
-            if (!dob.isEmpty()) currentAdmin.setDob(dob);
-            if (!desc.isEmpty()) currentAdmin.setDescription(desc);
-
-            if (spEditAdminRole != null && spEditAdminRole.getSelectedItem() != null) {
-                currentAdmin.setRole(spEditAdminRole.getSelectedItem().toString());
-            }
-            if (spEditAdminAccessLevel != null && spEditAdminAccessLevel.getSelectedItem() != null) {
-                currentAdmin.setAccessLevel(spEditAdminAccessLevel.getSelectedItem().toString());
-            }
-            if (spEditAdminModules != null && spEditAdminModules.getSelectedItem() != null) {
-                currentAdmin.setManagedModules(spEditAdminModules.getSelectedItem().toString());
-            }
-
+            String role = spEditAdminRole != null && spEditAdminRole.getSelectedItem() != null ? spEditAdminRole.getSelectedItem().toString() : currentAdmin.getRole();
+            String accessLevel = spEditAdminAccessLevel != null && spEditAdminAccessLevel.getSelectedItem() != null ? spEditAdminAccessLevel.getSelectedItem().toString() : currentAdmin.getAccessLevel();
+            String modules = spEditAdminModules != null && spEditAdminModules.getSelectedItem() != null ? spEditAdminModules.getSelectedItem().toString() : currentAdmin.getManagedModules();
             boolean isCheckedActive = (rbEditAdminActive != null && rbEditAdminActive.isChecked());
-            currentAdmin.setStatus(isCheckedActive ? "Active" : "Inactive");
+            String status = isCheckedActive ? "active" : "inactive";
 
-            Toast.makeText(this, "Admin account updated successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            JsonObject payload = new JsonObject();
+            payload.addProperty("name", name);
+            payload.addProperty("email", email);
+            if (!phone.isEmpty()) payload.addProperty("phone", phone);
+            if (!dob.isEmpty()) payload.addProperty("date_of_birth", dob);
+            if (!desc.isEmpty()) payload.addProperty("description", desc);
+            payload.addProperty("role_title", role);
+            payload.addProperty("access_level", accessLevel);
+            payload.addProperty("managed_modules", modules);
+            payload.addProperty("status", status);
+
+            String identifier = "1";
+            if (currentAdmin != null) {
+                if (currentAdmin.getUserId() != null && currentAdmin.getUserId() > 0) {
+                    identifier = String.valueOf(currentAdmin.getUserId());
+                } else if (currentAdmin.getId() != null) {
+                    identifier = currentAdmin.getId();
+                }
+            }
+
+            if (btnUpdateAdmin != null) btnUpdateAdmin.setEnabled(false);
+
+            ApiClient.getApiService(this).updateUser(identifier, payload).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (btnUpdateAdmin != null) btnUpdateAdmin.setEnabled(true);
+                    if (response.isSuccessful()) {
+                        currentAdmin.setName(name);
+                        currentAdmin.setEmail(email);
+                        if (!phone.isEmpty()) currentAdmin.setPhone(phone);
+                        if (!dob.isEmpty()) currentAdmin.setDob(dob);
+                        if (!desc.isEmpty()) currentAdmin.setDescription(desc);
+                        currentAdmin.setRole(role);
+                        currentAdmin.setAccessLevel(accessLevel);
+                        currentAdmin.setManagedModules(modules);
+                        currentAdmin.setStatus(isCheckedActive ? "Active" : "Inactive");
+
+                        Toast.makeText(EditAdminActivity.this, "Admin account updated successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(EditAdminActivity.this, "Failed to update admin: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (btnUpdateAdmin != null) btnUpdateAdmin.setEnabled(true);
+                    Toast.makeText(EditAdminActivity.this, "Network error updating admin: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 }

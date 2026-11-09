@@ -11,6 +11,9 @@ public class User implements Serializable {
     private String status;
     private String code;
     private String departmentName;
+    private Student studentRecord;
+    private Teacher teacherRecord;
+    private Admin adminRecord;
 
     public User(String id, String name, String email, String role, String status) {
         this.id = id;
@@ -37,6 +40,13 @@ public class User implements Serializable {
     public Long getNumericId() { return numericId; }
     public void setNumericId(Long numericId) { this.numericId = numericId; }
 
+    public String getApiUserId() {
+        if (numericId != null && numericId > 0) {
+            return String.valueOf(numericId);
+        }
+        return id;
+    }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
@@ -56,4 +66,13 @@ public class User implements Serializable {
 
     public String getDepartmentName() { return departmentName; }
     public void setDepartmentName(String departmentName) { this.departmentName = departmentName; }
+
+    public Student getStudentRecord() { return studentRecord; }
+    public void setStudentRecord(Student studentRecord) { this.studentRecord = studentRecord; }
+
+    public Teacher getTeacherRecord() { return teacherRecord; }
+    public void setTeacherRecord(Teacher teacherRecord) { this.teacherRecord = teacherRecord; }
+
+    public Admin getAdminRecord() { return adminRecord; }
+    public void setAdminRecord(Admin adminRecord) { this.adminRecord = adminRecord; }
 }

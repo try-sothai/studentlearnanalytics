@@ -19,8 +19,19 @@ public interface ApiService {
     Call<LoginResponse> login(@Body LoginRequest request);
 
     @Headers({"Accept: application/json"})
+    @POST("logout")
+    Call<JsonObject> logout();
+
+    @Headers({"Accept: application/json"})
     @GET("dashboard/student")
     Call<DashboardResponse> getStudentDashboard();
+
+    @Headers({"Accept: application/json"})
+    @GET("dashboard/student")
+    Call<JsonObject> getStudentDashboard(
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("course_id") Integer courseId
+    );
 
     @Headers({"Accept: application/json"})
     @GET("dashboard/student")
@@ -57,6 +68,10 @@ public interface ApiService {
     @GET("recommendations")
     Call<JsonObject> getRecommendations();
 
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("recommendations/{id}")
+    Call<JsonObject> updateRecommendation(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
     @Headers({"Accept: application/json"})
     @GET("notifications")
     Call<JsonObject> getNotifications();
@@ -64,6 +79,22 @@ public interface ApiService {
     @Headers({"Accept: application/json"})
     @GET("notifications/unread-count")
     Call<JsonObject> getUnreadNotificationsCount(@retrofit2.http.Header("Authorization") String token);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("notifications")
+    Call<JsonObject> createNotification(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PATCH("notifications/{id}/read")
+    Call<JsonObject> markNotificationRead(@retrofit2.http.Path("id") String id);
+
+    @Headers({"Accept: application/json"})
+    @POST("notifications/read-all")
+    Call<JsonObject> markAllNotificationsRead();
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("notifications/{id}")
+    Call<JsonObject> deleteNotification(@retrofit2.http.Path("id") String id);
 
     @Headers({"Accept: application/json"})
     @GET("profile")
@@ -120,11 +151,34 @@ public interface ApiService {
             @retrofit2.http.Query("compare_year_id") String compareYearId
     );
 
+    @GET("admin/analytics/enrollment")
+    Call<JsonObject> getAdminAnalyticsEnrollment();
+
+    @GET("admin/analytics/performance")
+    Call<JsonObject> getAdminAnalyticsPerformance();
+
+    @GET("admin/analytics/attendance")
+    Call<JsonObject> getAdminAnalyticsAttendance();
+
+    @GET("admin/analytics/student-risk")
+    Call<JsonObject> getAdminAnalyticsStudentRisk();
+
     @Headers({"Accept: application/json"})
     @GET("admin/users")
     Call<JsonObject> getUsers(
             @retrofit2.http.Query("role") String role,
             @retrofit2.http.Query("status") String status,
+            @retrofit2.http.Query("search") String search,
+            @retrofit2.http.Query("page") int page,
+            @retrofit2.http.Query("per_page") int perPage
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/users")
+    Call<JsonObject> getUsers(
+            @retrofit2.http.Query("role") String role,
+            @retrofit2.http.Query("status") String status,
+            @retrofit2.http.Query("department") String department,
             @retrofit2.http.Query("search") String search,
             @retrofit2.http.Query("page") int page,
             @retrofit2.http.Query("per_page") int perPage
@@ -218,12 +272,40 @@ public interface ApiService {
     @GET("courses")
     Call<JsonObject> getCoursesCatalog();
 
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("courses")
+    Call<JsonObject> createCourse(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("courses/{id}")
+    Call<JsonObject> updateCourse(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("courses/{id}")
+    Call<JsonObject> deleteCourse(@retrofit2.http.Path("id") String id);
+
     @GET("classes")
     Call<JsonObject> getClassesCatalog();
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("classes")
+    Call<JsonObject> createClass(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("classes/{id}")
+    Call<JsonObject> updateClass(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("classes/{id}")
+    Call<JsonObject> deleteClass(@retrofit2.http.Path("id") String id);
 
     @Headers({"Accept: application/json"})
     @GET("admin/users/{id}")
     Call<JsonObject> getUserDetails(@retrofit2.http.Path("id") String userId);
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/users/{id}")
+    Call<JsonObject> getUser(@retrofit2.http.Path("id") String userId);
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("admin/users")
@@ -249,9 +331,29 @@ public interface ApiService {
     @GET("teachers")
     Call<JsonObject> getTeachers();
 
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("teachers/{id}")
+    Call<JsonObject> updateTeacher(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("teachers/{id}")
+    Call<JsonObject> deleteTeacher(@retrofit2.http.Path("id") String id);
+
     @Headers({"Accept: application/json"})
     @GET("admins")
     Call<JsonObject> getAdmins();
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("admins")
+    Call<JsonObject> createAdmin(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("admins/{id}")
+    Call<JsonObject> updateAdmin(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("admins/{id}")
+    Call<JsonObject> deleteAdmin(@retrofit2.http.Path("id") String id);
 
     @Headers({"Accept: application/json"})
     @GET("departments")

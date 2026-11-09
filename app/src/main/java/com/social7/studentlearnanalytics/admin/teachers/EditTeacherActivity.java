@@ -2,6 +2,7 @@ package com.social7.studentlearnanalytics.admin.teachers;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,15 +12,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Teacher;
+import com.social7.studentlearnanalytics.network.ApiClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditTeacherActivity extends AppCompatActivity {
 
+    private static final String TAG = "EditTeacherActivity";
     private Teacher currentTeacher;
 
     private TextView tvEditTeacherAvatarChar, tvEditTeacherHeaderName, tvEditTeacherHeaderId, tvEditTeacherHeaderStatus;
@@ -89,8 +101,8 @@ public class EditTeacherActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        String[] departments = {"Computer Science", "Information Technology", "Software Engineering", "Data Science", "Data Structures", "Database Systems"};
-        String[] positions = {"Lecturer", "Assistant Lecturer", "Senior Lecturer", "Professor"};
+        String[] departments = {"Computer Science", "Information Technology", "Software Engineering", "Business Administration", "Data Science"};
+        String[] positions = {"Lecturer", "Assistant Lecturer", "Senior Lecturer", "Professor", "Associate Professor"};
         String[] workTypes = {"Full-time", "Part-time"};
 
         setSpinnerAdapter(spEditTeacherDept, departments);
@@ -125,8 +137,8 @@ public class EditTeacherActivity extends AppCompatActivity {
         if (etEditTeacherName != null) etEditTeacherName.setText(name);
         if (etEditTeacherId != null) etEditTeacherId.setText(currentTeacher.getId());
         if (etEditTeacherEmail != null) etEditTeacherEmail.setText(currentTeacher.getEmail());
-        if (etEditTeacherPhone != null) etEditTeacherPhone.setText(currentTeacher.getPhone());
-        if (etEditTeacherDob != null) etEditTeacherDob.setText(currentTeacher.getDob());
+        if (etEditTeacherPhone != null) etEditTeacherPhone.setText("N/A".equals(currentTeacher.getPhone()) ? "" : currentTeacher.getPhone());
+        if (etEditTeacherDob != null) etEditTeacherDob.setText("N/A".equals(currentTeacher.getDob()) ? "" : currentTeacher.getDob());
         if (etEditTeacherOffice != null) etEditTeacherOffice.setText(currentTeacher.getOfficeLocation());
         if (etEditTeacherBio != null) etEditTeacherBio.setText(currentTeacher.getBio());
 
@@ -188,28 +200,64 @@ public class EditTeacherActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            currentTeacher.setName(name);
-            currentTeacher.setEmail(email);
-            if (!phone.isEmpty()) currentTeacher.setPhone(phone);
-            if (!dob.isEmpty()) currentTeacher.setDob(dob);
-            if (!office.isEmpty()) currentTeacher.setOfficeLocation(office);
-            if (!bio.isEmpty()) currentTeacher.setBio(bio);
-
-            if (spEditTeacherDept != null && spEditTeacherDept.getSelectedItem() != null) {
-                currentTeacher.setDepartment(spEditTeacherDept.getSelectedItem().toString());
-            }
-            if (spEditTeacherPosition != null && spEditTeacherPosition.getSelectedItem() != null) {
-                currentTeacher.setPosition(spEditTeacherPosition.getSelectedItem().toString());
-            }
-            if (spEditTeacherWorkType != null && spEditTeacherWorkType.getSelectedItem() != null) {
-                currentTeacher.setWorkType(spEditTeacherWorkType.getSelectedItem().toString());
-            }
-
+            String dept = spEditTeacherDept != null && spEditTeacherDept.getSelectedItem() != null ? spEditTeacherDept.getSelectedItem().toString() : currentTeacher.getDepartment();
+            String pos = spEditTeacherPosition != null && spEditTeacherPosition.getSelectedItem() != null ? spEditTeacherPosition.getSelectedItem().toString() : currentTeacher.getPosition();
+            String workType = spEditTeacherWorkType != null && spEditTeacherWorkType.getSelectedItem() != null ? spEditTeacherWorkType.getSelectedItem().toString() : currentTeacher.getWorkType();
             boolean isCheckedActive = (rbEditTeacherActive != null && rbEditTeacherActive.isChecked());
-            currentTeacher.setStatus(isCheckedActive ? "Active" : "Inactive");
+            String status = isCheckedActive ? "active" : "inactive";
 
-            Toast.makeText(this, "Teacher account updated successfully!", Toast.LENGTH_LONG).show();
-            finish();
+            JsonObject payload = new JsonObject();
+            payload.addProperty("name", name);
+            payload.addProperty("email", email);
+            if (!phone.isEmpty()) payload.addProperty("phone", phone);
+            if (!dob.isEmpty()) payload.addProperty("date_of_birth", dob);
+            if (!office.isEmpty()) payload.addProperty("office_location", office);
+            if (!bio.isEmpty()) payload.addProperty("bio", bio);
+            payload.addProperty("department_name", dept);
+            payload.addProperty("position", pos);
+            payload.addProperty("work_type", workType);
+            payload.addProperty("status", status);
+
+            String identifier = "1";
+            if (currentTeacher != null) {
+                if (currentTeacher.getUserId() != null && currentTeacher.getUserId() > 0) {
+                    identifier = String.valueOf(currentTeacher.getUserId());
+                } else if (currentTeacher.getId() != null) {
+                    identifier = currentTeacher.getId();
+                }
+            }
+
+            if (btnUpdateTeacher != null) btnUpdateTeacher.setEnabled(false);
+
+            ApiClient.getApiService(this).updateUser(identifier, payload).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (btnUpdateTeacher != null) btnUpdateTeacher.setEnabled(true);
+                    if (response.isSuccessful()) {
+                        currentTeacher.setName(name);
+                        currentTeacher.setEmail(email);
+                        if (!phone.isEmpty()) currentTeacher.setPhone(phone);
+                        if (!dob.isEmpty()) currentTeacher.setDob(dob);
+                        if (!office.isEmpty()) currentTeacher.setOfficeLocation(office);
+                        if (!bio.isEmpty()) currentTeacher.setBio(bio);
+                        currentTeacher.setDepartment(dept);
+                        currentTeacher.setPosition(pos);
+                        currentTeacher.setWorkType(workType);
+                        currentTeacher.setStatus(isCheckedActive ? "Active" : "Inactive");
+
+                        Toast.makeText(EditTeacherActivity.this, "Teacher account updated successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(EditTeacherActivity.this, "Failed to update teacher: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (btnUpdateTeacher != null) btnUpdateTeacher.setEnabled(true);
+                    Toast.makeText(EditTeacherActivity.this, "Network error updating teacher: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 }

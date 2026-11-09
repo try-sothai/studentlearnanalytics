@@ -278,11 +278,8 @@ public class AdminMainActivity extends AppCompatActivity {
     }
 
     private void showAboutDialog() {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("About SLAS Admin")
-                .setMessage("Student Learning Analytics System (SLAS)\nVersion 1.0.0\n\nBuilt for data-driven university education management and predictive analytics.")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
+        Intent intent = new Intent(this, AdminAboutSystemActivity.class);
+        startActivity(intent);
     }
 
     protected void onResume() {
