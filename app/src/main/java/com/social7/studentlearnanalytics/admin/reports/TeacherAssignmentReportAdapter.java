@@ -97,7 +97,7 @@ public class TeacherAssignmentReportAdapter extends RecyclerView.Adapter<Teacher
         public void bind(AssignmentReportItem item, OnAssignmentClickListener listener) {
             if (tvClassCode != null) tvClassCode.setText(item.classCode);
             if (tvCourseCodeName != null) tvCourseCodeName.setText(item.courseCodeName);
-            if (tvTeacherName != null) tvTeacherName.setText("Assigned Teacher: " + item.teacherName);
+            if (tvTeacherName != null) tvTeacherName.setText(itemView.getContext().getString(R.string.assigned_teacher_prefix) + item.teacherName);
             if (tvDeptTerm != null) tvDeptTerm.setText(item.deptTerm);
             if (tvAssignmentStatus != null) {
                 tvAssignmentStatus.setText(item.status);

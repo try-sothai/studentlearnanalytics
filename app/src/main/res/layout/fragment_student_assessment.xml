@@ -35,7 +35,7 @@
                 android:background="@drawable/bg_notif_tab_active"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:text="Assignments"
+                android:text="@string/assignments"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:text="Homework"
+                android:text="@string/homework"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:text="Quizzes"
+                android:text="@string/quizzes"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:text="Exams"
+                android:text="@string/exams"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -104,7 +104,7 @@
                     android:id="@+id/edtSearchStudentAssessments"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:hint="Search assessment title or course..."
+                    android:hint="@string/search_assessment_title_or_course"
                     android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +113,19 @@
                 android:id="@+id/rvStudentAssessmentList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/tvEmptyStudentAssessments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="@string/no_assessments_found"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

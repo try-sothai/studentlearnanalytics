@@ -18,7 +18,7 @@
         android:layout_marginEnd="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="Menu"
+        android:contentDescription="@string/menu"
         android:focusable="true"
         android:padding="4dp"
         android:src="@drawable/ic_menu"
@@ -35,19 +35,25 @@
             android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Student Portal"
+            android:text="@string/student_portal"
             android:textColor="@color/admin_text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/tvHeaderSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Student Learning Analytics System"
+            android:layout_marginTop="1dp"
+            android:text="@string/student_learning_analytics_system"
             android:textColor="@color/admin_text_secondary"
-            android:textSize="13sp" />
+            android:textSize="11sp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end" />
     </LinearLayout>
 
     <!-- Right Side: Notification Icon with Badge + Profile Avatar -->
@@ -69,7 +75,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@drawable/bg_circle_soft_blue"
-                android:contentDescription="Notifications"
+                android:contentDescription="@string/nav_notifications"
                 android:padding="8dp"
                 android:src="@drawable/ic_notifications"
                 app:tint="@color/admin_primary_blue" />
@@ -115,7 +121,7 @@
             android:visibility="gone"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Search"
+            android:contentDescription="@string/search"
             android:focusable="true"
             android:padding="6dp"
             android:src="@drawable/ic_search"

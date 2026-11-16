@@ -267,7 +267,7 @@ public class AdminDetailActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(isActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + currentAdmin.getName() + " (" + currentAdmin.getId() + ")?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     String identifier = getAdminIdentifier();
                     JsonObject statusBody = new JsonObject();
                     statusBody.addProperty("status", nextStatus);
@@ -281,7 +281,7 @@ public class AdminDetailActivity extends AppCompatActivity {
                                         boolean newActiveState = !isActive;
                                         currentAdmin.setStatus(newActiveState ? "Active" : "Inactive");
                                         updateStatusDisplay(newActiveState);
-                                        Toast.makeText(AdminDetailActivity.this, "Admin account " + action + "d successfully", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AdminDetailActivity.this, getString(R.string.admin_account) + action + "d successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(AdminDetailActivity.this, "Failed to update account status (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
                                     }
@@ -293,7 +293,7 @@ public class AdminDetailActivity extends AppCompatActivity {
                                 }
                             });
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -307,7 +307,7 @@ public class AdminDetailActivity extends AppCompatActivity {
             setTabActive(tabPermissions);
             if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Module Permissions Overview");
             if (tvOtherTabContent != null) {
-                tvOtherTabContent.setText("• User Management: " + currentAdmin.getAccessLevel() + "\n"
+                tvOtherTabContent.setText(tvOtherTabContent.getContext().getString(R.string.user_management_db77ee) + currentAdmin.getAccessLevel() + "\n"
                         + "• Course Management: " + currentAdmin.getAccessLevel() + "\n"
                         + "• Reports & Analytics: " + currentAdmin.getAccessLevel() + "\n"
                         + "• System Settings: Full Access\n"
@@ -354,16 +354,16 @@ public class AdminDetailActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Admin Administrative Notes")
                 .setView(input)
-                .setPositiveButton("Save", (d, w) -> {
+                .setPositiveButton(R.string.save, (d, w) -> {
                     customNotes = input.getText().toString().trim();
                     displayNotes();
                     Toast.makeText(this, "Notes updated", Toast.LENGTH_SHORT).show();
                 })
-                .setNeutralButton("Clear", (d, w) -> {
+                .setNeutralButton(R.string.clear, (d, w) -> {
                     customNotes = "";
                     displayNotes();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

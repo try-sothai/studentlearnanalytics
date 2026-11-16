@@ -135,12 +135,12 @@ public class AddTeacherActivity extends AppCompatActivity {
         }
 
         if (spAddTeacherDept != null && spAddTeacherDept.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select a department", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_a_department, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 
         if (spAddTeacherPosition != null && spAddTeacherPosition.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select a position", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_a_position, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 
@@ -180,7 +180,7 @@ public class AddTeacherActivity extends AppCompatActivity {
                     if (btnSaveTeacher != null) btnSaveTeacher.setEnabled(true);
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(AddTeacherActivity.this, "Teacher " + name + " created successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddTeacherActivity.this, getString(R.string.teacher_ddc05a) + name + " created successfully!", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         String errorMsg = "Failed to create teacher (HTTP " + response.code() + ")";

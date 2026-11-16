@@ -113,7 +113,7 @@ public class AccountSecurityActivity extends AppCompatActivity {
                     if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(true);
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(AccountSecurityActivity.this, "Password updated successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountSecurityActivity.this, R.string.password_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         String errorMsg = "Failed to update password (HTTP " + response.code() + ")";
@@ -134,7 +134,7 @@ public class AccountSecurityActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                     if (isFinishing() || isDestroyed()) return;
                     if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(true);
-                    Toast.makeText(AccountSecurityActivity.this, "Network error updating password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AccountSecurityActivity.this, R.string.network_error_updating_password, Toast.LENGTH_SHORT).show();
                 }
             });
         }

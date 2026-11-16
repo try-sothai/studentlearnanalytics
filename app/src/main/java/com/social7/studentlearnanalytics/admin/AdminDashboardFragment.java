@@ -1,8 +1,13 @@
 package com.social7.studentlearnanalytics.admin;
 
+
+import com.social7.studentlearnanalytics.localization.ApiLabelLocalizer;
+import com.social7.studentlearnanalytics.localization.AppLanguageManager;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,7 +190,7 @@ public class AdminDashboardFragment extends Fragment {
         if (spAcademicYearFilter == null || getContext() == null) return;
 
         academicYearOptions.clear();
-        academicYearOptions.add(new AcademicYearOption("all", "All Academic Years"));
+        academicYearOptions.add(new AcademicYearOption("all", getString(R.string.all_academic_years)));
 
         ArrayAdapter<AcademicYearOption> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, academicYearOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -206,11 +211,27 @@ public class AdminDashboardFragment extends Fragment {
     }
 
     private void loadUserSessionData() {
-        if (getContext() == null || tvAdminName == null) return;
+        if (getContext() == null) return;
+        TextView tvGreeting = getView() != null ? getView().findViewById(R.id.tvAdminGreeting) : null;
+        if (tvGreeting != null) {
+            tvGreeting.setText(ApiLabelLocalizer.getTimeGreeting(requireContext()) + ",");
+        }
+        if (tvAdminName == null) return;
         SessionManager sessionManager = new SessionManager(requireContext());
         String userName = sessionManager.getUserName();
         if (userName != null && !userName.trim().isEmpty()) {
-            tvAdminName.setText(userName + "! 👋");
+            tvAdminName.setText(ApiLabelLocalizer.localizeSystemDisplayName(requireContext(), userName.trim()));
+        }
+
+        if (AppLanguageManager.isKhmer(requireContext())) {
+            tvAdminName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f);
+            if (tvGreeting != null) {
+                tvGreeting.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f);
+            }
+            TextView tvSubtitle = getView() != null ? getView().findViewById(R.id.tvAdminSubtitle) : null;
+            if (tvSubtitle != null) {
+                tvSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10.5f);
+            }
         }
     }
 
@@ -343,7 +364,7 @@ public class AdminDashboardFragment extends Fragment {
                         bindDashboardData(data);
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing admin dashboard payload", e);
-                        Toast.makeText(getContext(), "Error parsing dashboard data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.error_parsing_dashboard_data), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.d(TAG, "Admin dashboard response error code: " + response.code());
@@ -512,7 +533,7 @@ public class AdminDashboardFragment extends Fragment {
         Log.d(TAG, "Active Learners values: " + activeLearnersList.toString());
         Log.d(TAG, "At-Risk Students values: " + atRiskList.toString());
 
-        LineDataSet set1 = new LineDataSet(totalStudentsList, "Total Students");
+        LineDataSet set1 = new LineDataSet(totalStudentsList, getString(R.string.total_students));
         set1.setColor(Color.parseColor("#10B981"));
         set1.setCircleColor(Color.parseColor("#10B981"));
         set1.setLineWidth(2.5f);
@@ -522,7 +543,7 @@ public class AdminDashboardFragment extends Fragment {
         set1.setDrawValues(false);
         set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
-        LineDataSet set2 = new LineDataSet(activeLearnersList, "Active Learners");
+        LineDataSet set2 = new LineDataSet(activeLearnersList, getString(R.string.active_learners));
         set2.setColor(Color.parseColor("#0EA5E9"));
         set2.setCircleColor(Color.parseColor("#0EA5E9"));
         set2.setLineWidth(2.5f);
@@ -532,7 +553,7 @@ public class AdminDashboardFragment extends Fragment {
         set2.setDrawValues(false);
         set2.setMode(LineDataSet.Mode.CUBIC_BEZIER);
 
-        LineDataSet set3 = new LineDataSet(atRiskList, "At-Risk Students");
+        LineDataSet set3 = new LineDataSet(atRiskList, getString(R.string.at_risk_students));
         set3.setColor(Color.parseColor("#EF4444"));
         set3.setCircleColor(Color.parseColor("#EF4444"));
         set3.setLineWidth(2.5f);
@@ -565,6 +586,7 @@ public class AdminDashboardFragment extends Fragment {
         growthChart.getDescription().setEnabled(false);
         growthChart.getLegend().setEnabled(false);
         growthChart.animateX(600);
+        ChartFontHelper.applyKhmerFont(growthChart.getContext(), growthChart);
         growthChart.invalidate();
     }
 
@@ -603,17 +625,17 @@ public class AdminDashboardFragment extends Fragment {
         // But the layout has BarChart. I will change layout to CombinedChart later if needed, or just plot GPA in a BarChart using a separate axis?
         // Let's use BarChart with separate axis.
 
-        BarDataSet gpaSet = new BarDataSet(gpaList, "Avg GPA");
+        BarDataSet gpaSet = new BarDataSet(gpaList, getString(R.string.avg_gpa));
         gpaSet.setColor(Color.parseColor("#8B5CF6"));
         gpaSet.setAxisDependency(com.github.mikephil.charting.components.YAxis.AxisDependency.RIGHT);
 
-        BarDataSet assignSet = new BarDataSet(assignmentList, "Assignments");
+        BarDataSet assignSet = new BarDataSet(assignmentList, getString(R.string.assignments));
         assignSet.setColor(Color.parseColor("#3B82F6"));
 
-        BarDataSet quizSet = new BarDataSet(quizList, "Quizzes");
+        BarDataSet quizSet = new BarDataSet(quizList, getString(R.string.quizzes));
         quizSet.setColor(Color.parseColor("#F59E0B"));
 
-        BarDataSet examSet = new BarDataSet(examList, "Exams");
+        BarDataSet examSet = new BarDataSet(examList, getString(R.string.exams));
         examSet.setColor(Color.parseColor("#10B981"));
 
         BarData barData = new BarData(gpaSet, assignSet, quizSet, examSet);
@@ -641,6 +663,7 @@ public class AdminDashboardFragment extends Fragment {
 
         performanceChart.getDescription().setEnabled(false);
         performanceChart.animateY(500);
+        ChartFontHelper.applyKhmerFont(performanceChart.getContext(), performanceChart);
         performanceChart.invalidate();
     }
 
@@ -675,15 +698,19 @@ public class AdminDashboardFragment extends Fragment {
         tvAttendanceEmptyState.setVisibility(View.GONE);
         attendanceChart.setVisibility(View.VISIBLE);
 
-        BarDataSet stackedSet = new BarDataSet(stackedList, "Attendance");
+        BarDataSet stackedSet = new BarDataSet(stackedList, getString(R.string.attendance));
         stackedSet.setColors(
             Color.parseColor("#10B981"), // Present
             Color.parseColor("#F59E0B"), // Late
             Color.parseColor("#EF4444")  // Absent
         );
-        stackedSet.setStackLabels(new String[]{"Present", "Late", "Absent"});
+        stackedSet.setStackLabels(new String[]{
+                getString(R.string.status_present),
+                getString(R.string.status_late),
+                getString(R.string.status_absent)
+        });
 
-        BarDataSet rateSet = new BarDataSet(rateList, "Rate (%)");
+        BarDataSet rateSet = new BarDataSet(rateList, getString(R.string.rate));
         rateSet.setColor(Color.parseColor("#3B82F6"));
         rateSet.setAxisDependency(com.github.mikephil.charting.components.YAxis.AxisDependency.RIGHT);
 
@@ -710,6 +737,7 @@ public class AdminDashboardFragment extends Fragment {
 
         attendanceChart.getDescription().setEnabled(false);
         attendanceChart.animateY(500);
+        ChartFontHelper.applyKhmerFont(attendanceChart.getContext(), attendanceChart);
         attendanceChart.invalidate();
     }
 
@@ -732,9 +760,9 @@ public class AdminDashboardFragment extends Fragment {
         riskChart.setVisibility(View.VISIBLE);
 
         List<PieEntry> entries = new ArrayList<>();
-        if (low > 0) entries.add(new PieEntry(low, "Low"));
-        if (medium > 0) entries.add(new PieEntry(medium, "Medium"));
-        if (high > 0) entries.add(new PieEntry(high, "High"));
+        if (low > 0) entries.add(new PieEntry(low, getString(R.string.risk_low)));
+        if (medium > 0) entries.add(new PieEntry(medium, getString(R.string.risk_medium)));
+        if (high > 0) entries.add(new PieEntry(high, getString(R.string.risk_high)));
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(
@@ -753,15 +781,16 @@ public class AdminDashboardFragment extends Fragment {
         riskChart.setDrawHoleEnabled(true);
         riskChart.setHoleColor(Color.WHITE);
         riskChart.setTransparentCircleRadius(50f);
-        riskChart.setCenterText("Total Assessed\n" + total);
+        riskChart.setCenterText(getString(R.string.total_assessed_format, total));
         riskChart.setCenterTextSize(14f);
         riskChart.getDescription().setEnabled(false);
         riskChart.animateY(500);
+        ChartFontHelper.applyKhmerFont(riskChart.getContext(), riskChart);
         riskChart.invalidate();
     }
     private void showYearComparisonDialog() {
         if (!isAdded() || getContext() == null || latestAnnualAnalyticsObj == null) {
-            Toast.makeText(getContext(), "Analytics data loading...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.analytics_data_loading, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -773,7 +802,7 @@ public class AdminDashboardFragment extends Fragment {
         }
 
         if (analyticsArr == null || analyticsArr.size() < 2) {
-            Toast.makeText(getContext(), "At least 2 academic years are required for comparison.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.at_least_2_years_comparison, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -798,37 +827,38 @@ public class AdminDashboardFragment extends Fragment {
         double growthA = (hasDataA && itemA.has("user_growth_percentage")) ? itemA.get("user_growth_percentage").getAsDouble() : 0.0;
         double growthB = (hasDataB && itemB.has("user_growth_percentage")) ? itemB.get("user_growth_percentage").getAsDouble() : 0.0;
 
-        String msg = "Comparing Academic Years:\n" +
-                "• Year A: " + nameA + (hasDataA ? "" : " (No Data Available)") + "\n" +
-                "• Year B: " + nameB + (hasDataB ? "" : " (No Data Available)") + "\n\n" +
-                "📊 METRICS COMPARISON:\n\n" +
-                "1. Registered Users:\n" +
+        String noDataLabel = " " + getString(R.string.no_data_paren);
+        String msg = getString(R.string.comparing_academic_years) + "\n" +
+                "• " + nameA + (hasDataA ? "" : noDataLabel) + "\n" +
+                "• " + nameB + (hasDataB ? "" : noDataLabel) + "\n\n" +
+                "📊 " + getString(R.string.metrics_comparison) + "\n\n" +
+                "1. " + getString(R.string.registered_users) + ":\n" +
                 "   • " + nameA + ": " + regA + "\n" +
                 "   • " + nameB + ": " + regB + "\n" +
-                "   • Diff: " + (regB - regA >= 0 ? "+" : "") + (regB - regA) + "\n\n" +
-                "2. Active System Users:\n" +
+                "   • " + (regB - regA >= 0 ? "+" : "") + (regB - regA) + "\n\n" +
+                "2. " + getString(R.string.active_system_users) + ":\n" +
                 "   • " + nameA + ": " + activeA + "\n" +
                 "   • " + nameB + ": " + activeB + "\n" +
-                "   • Diff: " + (activeB - activeA >= 0 ? "+" : "") + (activeB - activeA) + "\n\n" +
-                "3. Enrolled Students:\n" +
+                "   • " + (activeB - activeA >= 0 ? "+" : "") + (activeB - activeA) + "\n\n" +
+                "3. " + getString(R.string.enrolled_students) + ":\n" +
                 "   • " + nameA + ": " + enrolledA + "\n" +
                 "   • " + nameB + ": " + enrolledB + "\n" +
-                "   • Diff: " + (enrolledB - enrolledA >= 0 ? "+" : "") + (enrolledB - enrolledA) + "\n\n" +
-                "4. User Growth Rate:\n" +
+                "   • " + (enrolledB - enrolledA >= 0 ? "+" : "") + (enrolledB - enrolledA) + "\n\n" +
+                "4. " + getString(R.string.user_growth_rate) + ":\n" +
                 "   • " + nameA + ": " + growthA + "%\n" +
                 "   • " + nameB + ": " + growthB + "%\n\n" +
-                "Historical database records verified.";
+                getString(R.string.historical_db_verified);
 
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Academic Year Comparison")
+                .setTitle(R.string.academic_year_comparison)
                 .setMessage(msg)
-                .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
     private void setTrendColor(TextView textView, String changeText, boolean inverseLogic) {
         if (textView == null || changeText == null) return;
-        textView.setText(changeText);
+        textView.setText(ApiLabelLocalizer.localizeTrendText(textView.getContext(), changeText));
         
         int colorRes = R.color.text_secondary;
         if (changeText.contains("▲") || changeText.contains("+")) {
@@ -939,7 +969,7 @@ public class AdminDashboardFragment extends Fragment {
         if (dotView == null || statusTextView == null) return;
         boolean isOnline = "online".equalsIgnoreCase(status);
         dotView.setTextColor(Color.parseColor(isOnline ? "#10B981" : "#EF4444"));
-        statusTextView.setText(isOnline ? "Online" : "Offline");
+        statusTextView.setText(isOnline ? getString(R.string.status_online) : getString(R.string.status_offline));
         statusTextView.setTextColor(Color.parseColor(isOnline ? "#10B981" : "#EF4444"));
     }
 }

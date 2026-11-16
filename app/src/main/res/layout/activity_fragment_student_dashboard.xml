@@ -34,7 +34,7 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_menu"
                 app:tint="@color/slas_text_primary"
-                android:contentDescription="Menu"
+                android:contentDescription="@string/menu"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome back,"
+                    android:text="@string/welcome_back"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="12sp" />
 
@@ -123,15 +123,17 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_notifications"
                             app:tint="@color/slas_text_primary"
-                            android:contentDescription="Notifications" />
+                            android:contentDescription="@string/nav_notifications" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
+                        android:id="@+id/tvDashboardNotifBadge"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:background="@drawable/bg_notification_badge"
                         android:gravity="center"
-                        android:text="3"
+                        android:text="0"
+                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="9sp"
                         android:textStyle="bold"
@@ -160,7 +162,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:contentDescription="User Profile"
+                            android:contentDescription="@string/user_profile"
                             android:src="@drawable/ic_profile" />
                     </com.google.android.material.card.MaterialCardView>
                 </FrameLayout>
@@ -214,7 +216,7 @@
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
-                            android:contentDescription="Performance Icon"
+                            android:contentDescription="@string/performance_icon"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/white" />
                     </com.google.android.material.card.MaterialCardView>
@@ -224,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="14dp"
-                        android:text="Overall Performance"
+                        android:text="@string/overall_performance"
                         android:textColor="#E0E0E0"
                         android:textSize="13sp"
                         app:layout_constraintTop_toTopOf="@id/iconCard"
@@ -249,6 +251,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvPerfTrend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -264,7 +267,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Keep going! You're doing great."
+                        android:text="@string/keep_going_you_re_doing_great"
                         android:textColor="#E0E0E0"
                         android:textSize="11sp"
                         app:layout_constraintTop_toBottomOf="@id/scoreLayout"
@@ -278,7 +281,7 @@
                         android:layout_height="36dp"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="0dp"
-                        android:text="Details →"
+                        android:text="@string/details_664789"
                         android:textSize="11sp"
                         android:textAllCaps="false"
                         app:cornerRadius="18dp"
@@ -330,14 +333,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_home"
                                 app:tint="@color/slas_success"
-                                android:contentDescription="Attendance" />
+                                android:contentDescription="@string/attendance" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Attendance"
+                                android:text="@string/attendance"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="12sp"
                                 android:ellipsize="end"
@@ -355,6 +358,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvAttendanceSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="▲ +3%"
@@ -399,14 +403,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_assignment"
                                 app:tint="@color/slas_primary_purple"
-                                android:contentDescription="Assignments" />
+                                android:contentDescription="@string/assignments" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Assignments"
+                                android:text="@string/assignments"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="12sp"
                                 android:ellipsize="end"
@@ -424,6 +428,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvAssignmentsSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="▲ +2%"
@@ -475,14 +480,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/slas_warning"
-                                android:contentDescription="Quizzes" />
+                                android:contentDescription="@string/quizzes" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Quizzes"
+                                android:text="@string/quizzes"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="12sp"
                                 android:ellipsize="end"
@@ -500,6 +505,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvQuizzesSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="▼ -2%"
@@ -544,14 +550,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_prediction"
                                 app:tint="@color/slas_blue"
-                                android:contentDescription="GPA" />
+                                android:contentDescription="@string/gpa" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="GPA"
+                                android:text="@string/gpa"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="12sp"
                                 android:ellipsize="end"
@@ -569,6 +575,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvGpaSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="▲ +0.15"
@@ -621,14 +628,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/slas_primary_purple"
-                                android:contentDescription="Predicted Score" />
+                                android:contentDescription="@string/predicted_score" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
-                                android:text="Predicted Score"
+                                android:text="@string/predicted_score"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="11sp"
                                 android:ellipsize="end"
@@ -662,7 +669,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="✓ Model Confidence: 87%"
+                            android:text="@string/model_confidence_87"
                             android:textColor="@color/slas_success"
                             android:textSize="10sp"
                             android:maxLines="1"
@@ -705,14 +712,14 @@
                                 android:padding="6dp"
                                 android:src="@drawable/ic_prediction"
                                 app:tint="@color/slas_warning"
-                                android:contentDescription="Risk Level" />
+                                android:contentDescription="@string/risk_level" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
-                                android:text="Risk Level"
+                                android:text="@string/risk_level"
                                 android:textColor="@color/slas_text_secondary"
                                 android:textSize="11sp"
                                 android:ellipsize="end"
@@ -722,7 +729,7 @@
                                 android:id="@+id/btnRiskDetails"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Details →"
+                                android:text="@string/details_664789"
                                 android:textColor="@color/slas_primary_purple"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
@@ -747,7 +754,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Keep improving performance."
+                            android:text="@string/keep_improving_performance"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="10sp"
                             android:maxLines="1"
@@ -768,7 +775,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="⚡ Quick Actions"
+                    android:text="@string/quick_actions"
                     android:textColor="@color/slas_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -777,7 +784,7 @@
                     android:id="@+id/btnViewAllActions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View All →"
+                    android:text="@string/view_all_9cb4e9"
                     android:textColor="@color/slas_primary_purple"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -817,12 +824,12 @@
                             android:background="@drawable/bg_circle_soft_blue"
                             android:backgroundTint="@color/slas_light_purple"
                             android:padding="6dp"
-                            android:contentDescription="Courses" />
+                            android:contentDescription="@string/nav_courses" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="My Courses"
+                            android:text="@string/my_courses"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -848,12 +855,12 @@
                             android:background="@drawable/bg_stat_card_green"
                             android:backgroundTint="@color/slas_success_bg"
                             android:padding="6dp"
-                            android:contentDescription="Attendance" />
+                            android:contentDescription="@string/attendance" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Attendance"
+                            android:text="@string/attendance"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -879,12 +886,12 @@
                             android:background="@drawable/bg_stat_card_purple"
                             android:backgroundTint="@color/slas_light_purple"
                             android:padding="6dp"
-                            android:contentDescription="Assignments" />
+                            android:contentDescription="@string/assignments" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Assignments"
+                            android:text="@string/assignments"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -910,12 +917,12 @@
                             android:background="@drawable/bg_stat_card_orange"
                             android:backgroundTint="@color/slas_warning_bg"
                             android:padding="6dp"
-                            android:contentDescription="Quizzes" />
+                            android:contentDescription="@string/quizzes" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Quizzes"
+                            android:text="@string/quizzes"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -940,12 +947,12 @@
                             app:tint="@color/slas_danger"
                             android:background="@color/slas_danger_bg"
                             android:padding="6dp"
-                            android:contentDescription="Exams" />
+                            android:contentDescription="@string/exams" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Exams"
+                            android:text="@string/exams"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -969,12 +976,12 @@
                             app:tint="@color/slas_blue"
                             android:background="@color/slas_soft_blue"
                             android:padding="6dp"
-                            android:contentDescription="Analytics" />
+                            android:contentDescription="@string/nav_analytics" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Analytics"
+                            android:text="@string/nav_analytics"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="11sp"
                             android:gravity="center"/>
@@ -994,7 +1001,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="🕒 Recent Activities"
+                    android:text="@string/recent_activities_cc0a4a"
                     android:textColor="@color/slas_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -1003,7 +1010,7 @@
                     android:id="@+id/btnViewAllActivities"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View All →"
+                    android:text="@string/view_all_9cb4e9"
                     android:textColor="@color/slas_primary_purple"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -1023,6 +1030,7 @@
                 app:strokeWidth="1dp">
 
                 <LinearLayout
+                    android:id="@+id/layoutRecentActivitiesContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -1043,7 +1051,7 @@
                             android:padding="7dp"
                             android:src="@drawable/ic_assignment"
                             app:tint="@color/slas_primary_purple"
-                            android:contentDescription="Assignment Icon" />
+                            android:contentDescription="@string/assignment_icon" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -1054,7 +1062,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="New Assignment Added"
+                                android:text="@string/new_assignment_added"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
                                 android:textSize="13sp"/>
@@ -1091,7 +1099,7 @@
                             android:padding="7dp"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/slas_warning"
-                            android:contentDescription="Quiz Icon" />
+                            android:contentDescription="@string/quiz_icon" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -1102,7 +1110,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Quiz Result Released"
+                                android:text="@string/quiz_result_released"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
                                 android:textSize="13sp"/>
@@ -1139,7 +1147,7 @@
                             android:padding="7dp"
                             android:src="@drawable/ic_prediction"
                             app:tint="@color/slas_success"
-                            android:contentDescription="Grade Icon" />
+                            android:contentDescription="@string/grade_icon" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -1150,7 +1158,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Grade Updated"
+                                android:text="@string/grade_updated"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
                                 android:textSize="13sp"/>
@@ -1187,7 +1195,7 @@
                             android:padding="7dp"
                             android:src="@drawable/ic_book"
                             app:tint="@color/slas_primary_purple"
-                            android:contentDescription="Material Icon" />
+                            android:contentDescription="@string/material_icon" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -1198,7 +1206,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="New Course Material"
+                                android:text="@string/new_course_material"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
                                 android:textSize="13sp"/>
@@ -1232,7 +1240,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="📈 My Learning Progress"
+                    android:text="@string/my_learning_progress_98ac06"
                     android:textColor="@color/slas_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -1245,11 +1253,12 @@
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp">
                     <TextView
+                        android:id="@+id/tvDashboardSemesterBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="4dp"
-                        android:text="Semester 1, 2024 ▾"
+                        android:text="@string/current_semester"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="10sp" />
                 </com.google.android.material.card.MaterialCardView>
@@ -1288,17 +1297,17 @@
 
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="12dp">
                             <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_success"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/attendance" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="12dp">
                             <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_primary_purple"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignments" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assignments" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
                             <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_warning"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quizzes" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/quizzes" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

@@ -488,8 +488,8 @@ public class CourseManagementFragment extends Fragment {
         if (tvStatMissingSyllabus != null) tvStatMissingSyllabus.setText(String.valueOf(missingSyllabus));
 
         if (pillFilterAllCourses != null) pillFilterAllCourses.setText("All Statuses (" + total + ")");
-        if (pillFilterActiveCourses != null) pillFilterActiveCourses.setText("Active (" + active + ")");
-        if (pillFilterInactiveCourses != null) pillFilterInactiveCourses.setText("Inactive (" + inactive + ")");
+        if (pillFilterActiveCourses != null) pillFilterActiveCourses.setText(pillFilterActiveCourses.getContext().getString(R.string.active) + active + ")");
+        if (pillFilterInactiveCourses != null) pillFilterInactiveCourses.setText(pillFilterInactiveCourses.getContext().getString(R.string.inactive) + inactive + ")");
     }
 
     private void updatePaginationAndEmptyState() {
@@ -537,13 +537,13 @@ public class CourseManagementFragment extends Fragment {
                 "Status: " + course.getStatus();
 
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Course Detail")
+                .setTitle(R.string.course_detail)
                 .setMessage(details)
-                .setPositiveButton("Edit Course", (dialog, which) -> {
+                .setPositiveButton(R.string.edit_course, (dialog, which) -> {
                     Intent intent = new Intent(requireContext(), AddCourseActivity.class);
                     startActivity(intent);
                 })
-                .setNegativeButton("Close", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -563,14 +563,14 @@ public class CourseManagementFragment extends Fragment {
             curriculumAdapter = new com.social7.studentlearnanalytics.admin.classes.CurriculumAuditAdapter(getContext(), auditList, item -> {
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Curriculum Audit Detail")
-                        .setMessage("Course Code: " + item.code + "\n" +
+                        .setMessage(getString(R.string.course_code) + item.code + "\n" +
                                 "Course Name: " + item.name + "\n" +
                                 "Associated Class: " + item.className + "\n" +
                                 "Assigned Teacher: " + item.teacher + "\n" +
                                 "Credits: " + item.credits + " Units\n" +
                                 "Syllabus Audit Status: " + item.status + "\n\n" +
                                 "Audit Findings & Notes:\n" + item.note)
-                        .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                         .show();
             });
             rvCurriculumAudit.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -592,12 +592,12 @@ public class CourseManagementFragment extends Fragment {
         if (rvCategories != null) {
             categoryAdapter = new com.social7.studentlearnanalytics.admin.courses.CourseCategoryAdapter(getContext(), categoryList, item -> {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Category Detail")
+                        .setTitle(R.string.category_detail)
                         .setMessage("College: " + item.collegeName + "\n" +
                                 "Department: " + item.departmentName + "\n" +
                                 "Total Courses: " + item.courseCount + "\n" +
                                 "Department Head: " + item.head)
-                        .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                         .show();
             });
             rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -619,13 +619,13 @@ public class CourseManagementFragment extends Fragment {
         if (rvAssignments != null) {
             assignmentAdapter = new com.social7.studentlearnanalytics.admin.courses.CourseAssignmentAdapter(getContext(), assignmentList, item -> {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Course Assignment Detail")
-                        .setMessage("Course Code: " + item.courseCode + "\n" +
+                        .setTitle(R.string.course_assignment_detail)
+                        .setMessage(getString(R.string.course_code) + item.courseCode + "\n" +
                                 "Course Name: " + item.courseName + "\n" +
                                 "Assigned Class: " + item.className + "\n" +
                                 "Assigned Teacher: " + item.teacherName + "\n" +
                                 "Status: " + item.status)
-                        .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                         .show();
             });
             rvAssignments.setLayoutManager(new LinearLayoutManager(getContext()));

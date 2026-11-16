@@ -52,8 +52,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         }
 
         public void bind(Report report) {
-            if (text1 != null) text1.setText("Report - " + report.getSemester());
-            if (text2 != null) text2.setText("GPA: " + report.getGpa() + " | Risk: " + report.getRiskLevel());
+            if (text1 != null) text1.setText(text1.getContext().getString(R.string.report) + report.getSemester());
+            if (text2 != null) text2.setText(itemView.getContext().getString(R.string.gpa_prefix) + report.getGpa() + " | Risk: " + report.getRiskLevel());
         }
     }
 }

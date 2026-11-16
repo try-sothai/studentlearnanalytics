@@ -146,7 +146,7 @@ public class AddAdminActivity extends AppCompatActivity {
         }
 
         if (spAddAdminRole != null && spAddAdminRole.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select an admin role", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_an_admin_role, Toast.LENGTH_SHORT).show();
             isValid = false;
         }
 
@@ -192,7 +192,7 @@ public class AddAdminActivity extends AppCompatActivity {
                     if (btnSaveAdmin != null) btnSaveAdmin.setEnabled(true);
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(AddAdminActivity.this, "Admin " + name + " created successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddAdminActivity.this, getString(R.string.admin) + name + " created successfully!", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         String errorMsg = "Failed to create admin (HTTP " + response.code() + ")";

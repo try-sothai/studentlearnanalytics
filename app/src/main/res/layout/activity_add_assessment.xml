@@ -43,7 +43,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select Assessment Type"
+                        android:text="@string/select_assessment_type"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -62,7 +62,7 @@
                             android:layout_height="44dp"
                             android:layout_columnWeight="1"
                             android:layout_margin="4dp"
-                            android:text="Assignment"
+                            android:text="@string/assignment"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_primary_blue"
                             android:textSize="12sp"
@@ -78,7 +78,7 @@
                             android:layout_height="44dp"
                             android:layout_columnWeight="1"
                             android:layout_margin="4dp"
-                            android:text="Homework"
+                            android:text="@string/homework"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
@@ -93,7 +93,7 @@
                             android:layout_height="44dp"
                             android:layout_columnWeight="1"
                             android:layout_margin="4dp"
-                            android:text="Quiz"
+                            android:text="@string/quiz"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
@@ -108,7 +108,7 @@
                             android:layout_height="44dp"
                             android:layout_columnWeight="1"
                             android:layout_margin="4dp"
-                            android:text="Exam"
+                            android:text="@string/exam"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
@@ -140,7 +140,7 @@
                         android:id="@+id/tvFormSectionHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Assessment Details &amp; Configuration"
+                        android:text="@string/assessment_details_configuration"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -163,7 +163,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Exam Category"
+                            android:text="@string/exam_category"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -181,7 +181,7 @@
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="4dp"
                                 android:layout_weight="1"
-                                android:text="Midterm"
+                                android:text="@string/midterm"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="11sp"
@@ -194,7 +194,7 @@
                                 android:layout_height="38dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
-                                android:text="Final Exam"
+                                android:text="@string/final_exam"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="11sp"
@@ -216,7 +216,7 @@
                             android:id="@+id/etTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Title (e.g., Assignment 1 - Linked Lists)"
+                            android:hint="@string/title_e_g_assignment_1_linked_lists"
                             android:inputType="text" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -235,7 +235,7 @@
                             android:id="@+id/etDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Instructions &amp; Description"
+                            android:hint="@string/instructions_description"
                             android:inputType="textMultiLine"
                             android:lines="3" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -255,7 +255,7 @@
                             android:id="@+id/etCourseId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Course (1 for CS101, 2 for IT402, 3 for CS204)"
+                            android:hint="@string/course_1_for_cs101_2_for_it402_3_for_cs204"
                             android:inputType="number"
                             android:text="1" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -277,7 +277,7 @@
                             android:id="@+id/etVenue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Exam Venue / Room (e.g. Lab 402)"
+                            android:hint="@string/exam_venue_room_e_g_lab_402"
                             android:inputType="text"
                             android:text="Lab 402 - Building B" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -304,7 +304,7 @@
                                 android:id="@+id/etTotalScore"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Total Marks"
+                                android:hint="@string/total_marks"
                                 android:inputType="numberDecimal"
                                 android:text="100" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -325,7 +325,7 @@
                                 android:id="@+id/etDuration"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Duration (Mins)"
+                                android:hint="@string/duration_mins"
                                 android:inputType="number"
                                 android:text="30" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -346,7 +346,7 @@
                             android:id="@+id/etDueDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Due Date (YYYY-MM-DD HH:MM:SS)"
+                            android:hint="@string/due_date_yyyy_mm_dd_hh_mm_ss"
                             android:inputType="text"
                             android:text="2026-12-31 23:59:59" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -370,7 +370,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Quiz Question Builder"
+                                android:text="@string/quiz_question_builder"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -380,7 +380,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="36dp"
                                 android:backgroundTint="@color/admin_primary_blue"
-                                android:text="+ Add Question"
+                                android:text="@string/add_question"
                                 android:textAllCaps="false"
                                 android:textColor="@color/white"
                                 android:textSize="11sp"
@@ -437,7 +437,7 @@
                             android:layout_height="48dp"
                             android:layout_marginEnd="6dp"
                             android:layout_weight="1"
-                            android:text="Save Draft"
+                            android:text="@string/save_draft"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_primary_blue"
                             android:textSize="14sp"
@@ -453,7 +453,7 @@
                             android:layout_marginStart="6dp"
                             android:layout_weight="1"
                             android:backgroundTint="@color/admin_primary_blue"
-                            android:text="Publish Assessment"
+                            android:text="@string/publish_assessment"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="14sp"

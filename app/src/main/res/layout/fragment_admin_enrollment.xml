@@ -29,7 +29,7 @@
                 android:layout_marginEnd="12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:focusable="true"
                 android:padding="4dp"
                 android:src="@drawable/ic_back"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:backgroundTint="@color/admin_primary_blue"
-                android:text="+ Enroll"
+                android:text="@string/enroll"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="12dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Enrollments" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_enrollments" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,245" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -109,7 +109,7 @@
                     android:orientation="vertical"
                     android:padding="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Cohorts" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18 Classes" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_classes" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
@@ -150,7 +150,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IT-4A • Information Technology" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enrolled Students: 35 • Semester 1, 2026 • Status: Enrolled" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enrolled_students_35_semester_1_2026_statu" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -168,7 +168,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CS-3A • Computer Science" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enrolled Students: 40 • Semester 1, 2026 • Status: Enrolled" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enrolled_students_40_semester_1_2026_statu" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="In Progress"
+                android:text="@string/in_progress"
                 android:textColor="@color/admin_primary_blue"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginEnd="6dp"
-                android:text="Mark Done"
+                android:text="@string/mark_done"
                 android:textAllCaps="false"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"

@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.admin.reports;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -86,7 +88,7 @@ public class StudentReportActivity extends AppCompatActivity {
         entries.add(new Entry(4, 2780f));
         entries.add(new Entry(5, 2845f));
 
-        LineDataSet dataSet = new LineDataSet(entries, "Enrollment");
+        LineDataSet dataSet = new LineDataSet(entries, getString(R.string.enrollment));
         dataSet.setColor(Color.parseColor("#3155F5"));
         dataSet.setLineWidth(3f);
         dataSet.setCircleColor(Color.parseColor("#3155F5"));
@@ -105,6 +107,7 @@ public class StudentReportActivity extends AppCompatActivity {
 
         chartEnrollmentTrend.getAxisRight().setEnabled(false);
         chartEnrollmentTrend.getDescription().setEnabled(false);
+        ChartFontHelper.applyKhmerFont(chartEnrollmentTrend.getContext(), chartEnrollmentTrend);
         chartEnrollmentTrend.invalidate();
     }
 
@@ -138,6 +141,7 @@ public class StudentReportActivity extends AppCompatActivity {
         chartStudentDistribution.setCenterText("2,845\nStudents");
         chartStudentDistribution.setCenterTextSize(14f);
         chartStudentDistribution.getDescription().setEnabled(false);
+        ChartFontHelper.applyKhmerFont(chartStudentDistribution.getContext(), chartStudentDistribution);
         chartStudentDistribution.invalidate();
     }
 
@@ -152,7 +156,7 @@ public class StudentReportActivity extends AppCompatActivity {
 
         if (btnViewStudentReportDetails != null) {
             btnViewStudentReportDetails.setOnClickListener(v ->
-                    Toast.makeText(this, "Displaying detailed student report metrics", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.displaying_detailed_student_metrics), Toast.LENGTH_SHORT).show()
             );
         }
     }

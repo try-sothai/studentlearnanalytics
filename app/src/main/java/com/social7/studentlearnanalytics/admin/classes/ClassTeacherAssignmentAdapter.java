@@ -97,7 +97,7 @@ public class ClassTeacherAssignmentAdapter extends RecyclerView.Adapter<ClassTea
         public void bind(TeacherAssignItem item, OnTeacherAssignClickListener listener) {
             if (tvClassCode != null) tvClassCode.setText(item.classCode);
             if (tvCourseName != null) tvCourseName.setText(item.courseName);
-            if (tvTeacherName != null) tvTeacherName.setText("Assigned Teacher: " + item.teacherName);
+            if (tvTeacherName != null) tvTeacherName.setText(itemView.getContext().getString(R.string.assigned_teacher_prefix) + item.teacherName);
             if (tvDepartmentTerm != null) tvDepartmentTerm.setText(item.departmentTerm);
             if (tvStaffingStatus != null) {
                 tvStaffingStatus.setText(item.status);

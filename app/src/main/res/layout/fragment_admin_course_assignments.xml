@@ -45,7 +45,7 @@
                     android:id="@+id/etSearchAssignment"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:hint="Search course assignments..."
+                    android:hint="@string/search_course_assignments"
                     android:inputType="text"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="14sp" />
@@ -57,7 +57,7 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/admin_primary_blue"
-                android:text="Assign"
+                android:text="@string/assign"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13sp"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Classes" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_classes" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvTotalClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -128,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Missing Teacher" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/missing_teacher" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvMissingTeacher" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -23,7 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_social_button"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back"
             app:tint="@color/text_primary" />
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
-            android:text="Quiz Assessment"
+            android:text="@string/quiz_assessment"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -159,7 +159,7 @@
                     android:id="@+id/tvQuestionProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Question 1 of 5"
+                    android:text="@string/question_1_of_5"
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -243,7 +243,7 @@
                         android:layout_height="48dp"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="Previous"
+                        android:text="@string/previous"
                         app:cornerRadius="12dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -252,7 +252,7 @@
                         android:layout_height="48dp"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:text="Next"
+                        android:text="@string/next"
                         app:cornerRadius="12dp" />
 
                 </LinearLayout>
@@ -263,7 +263,7 @@
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
                     android:backgroundTint="@color/success_green"
-                    android:text="Submit Quiz"
+                    android:text="@string/submit_quiz"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -294,7 +294,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Quiz Submitted Successfully!"
+                    android:text="@string/quiz_submitted_successfully"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />

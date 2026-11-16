@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="GPA: 3.25"
+                android:text="@string/gpa_3_25"
                 android:textColor="@color/teacher_secondary_text"
                 android:textSize="12sp" />
 
@@ -96,7 +96,7 @@
                 android:layout_height="26dp"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
-                android:text="Good"
+                android:text="@string/status_good"
                 android:textColor="@color/status_good_text"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Computer Science"
+                android:text="@string/computer_science"
                 android:textColor="@color/teacher_secondary_text"
                 android:textSize="11sp"
                 android:gravity="end" />
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="3rd Year"
+                android:text="@string/str_3rd_year"
                 android:textColor="@color/teacher_secondary_text"
                 android:textSize="11sp"
                 android:gravity="end" />
@@ -129,7 +129,7 @@
             android:layout_height="20dp"
             android:src="@drawable/ic_chevron_right"
             app:tint="@color/teacher_secondary_text"
-            android:contentDescription="Details" />
+            android:contentDescription="@string/details" />
 
     </LinearLayout>
 

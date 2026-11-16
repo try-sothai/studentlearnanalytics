@@ -169,15 +169,15 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
             if (tvStatusBadge != null) {
                 String risk = student.getRiskLevel();
                 if ("At Risk".equalsIgnoreCase(risk) || "High".equalsIgnoreCase(risk)) {
-                    tvStatusBadge.setText("At Risk");
+                    tvStatusBadge.setText(R.string.at_risk);
                     tvStatusBadge.setTextColor(Color.parseColor("#FF4055"));
                     tvStatusBadge.setBackgroundResource(R.drawable.bg_status_at_risk);
-                } else if ("Need Attention".equalsIgnoreCase(risk) || "Needs Attention".equalsIgnoreCase(risk) || "Medium".equalsIgnoreCase(risk)) {
-                    tvStatusBadge.setText("Need Attention");
+                } else if (itemView.getContext().getString(R.string.need_attention).equalsIgnoreCase(risk) || "Needs Attention".equalsIgnoreCase(risk) || "Medium".equalsIgnoreCase(risk)) {
+                    tvStatusBadge.setText(itemView.getContext().getString(R.string.need_attention));
                     tvStatusBadge.setTextColor(Color.parseColor("#FF9B16"));
                     tvStatusBadge.setBackgroundResource(R.drawable.bg_status_attention);
                 } else {
-                    tvStatusBadge.setText("Good");
+                    tvStatusBadge.setText(R.string.status_good);
                     tvStatusBadge.setTextColor(Color.parseColor("#16B879"));
                     tvStatusBadge.setBackgroundResource(R.drawable.bg_status_good);
                 }

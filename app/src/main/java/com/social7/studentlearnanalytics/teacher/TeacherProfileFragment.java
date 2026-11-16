@@ -58,9 +58,7 @@ public class TeacherProfileFragment extends Fragment {
     private void initViews(View view) {
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherProfile),
-                    "Teacher Profile",
-                    ""
+                    view.findViewById(R.id.headerTeacherProfile), getString(R.string.teacher_profile), ""
             );
         }
 
@@ -99,7 +97,7 @@ public class TeacherProfileFragment extends Fragment {
         if (tvTeacherAvatar != null) tvTeacherAvatar.setText(initial);
         if (tvTeacherNameSummary != null) tvTeacherNameSummary.setText(name);
         if (tvTeacherRoleDept != null) tvTeacherRoleDept.setText("Senior Lecturer • Computer Science Department");
-        if (tvTeacherAccountStatus != null) tvTeacherAccountStatus.setText("Active");
+        if (tvTeacherAccountStatus != null) tvTeacherAccountStatus.setText(R.string.status_active);
 
         if (etTeacherName != null) etTeacherName.setText(name);
         if (etTeacherEmail != null) etTeacherEmail.setText(email);

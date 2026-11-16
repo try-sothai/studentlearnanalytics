@@ -32,7 +32,7 @@ public class AdminSystemConfigActivity extends AppCompatActivity {
 
         if (btnSaveSysConfig != null) {
             btnSaveSysConfig.setOnClickListener(v -> {
-                Toast.makeText(this, "System configuration saved successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.system_configuration_saved_successfully, Toast.LENGTH_SHORT).show();
                 finish();
             });
         }

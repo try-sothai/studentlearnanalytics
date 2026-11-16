@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -86,9 +88,7 @@ public class RecommendationFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Recommendations Management",
-                    "AI academic guidance & student support plans"
+                    view, getString(R.string.recommendations_management), "AI academic guidance & student support plans"
             );
         }
 
@@ -209,6 +209,7 @@ public class RecommendationFragment extends Fragment {
         chartRecommendationPriorityPie.getDescription().setEnabled(false);
         chartRecommendationPriorityPie.getLegend().setEnabled(false);
         chartRecommendationPriorityPie.animateY(800);
+        ChartFontHelper.applyKhmerFont(chartRecommendationPriorityPie.getContext(), chartRecommendationPriorityPie);
         chartRecommendationPriorityPie.invalidate();
     }
 
@@ -271,13 +272,13 @@ public class RecommendationFragment extends Fragment {
                 "3. Track assignment recovery submission deadline";
 
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Student Recommendation Detail")
+                .setTitle(R.string.student_recommendation_detail)
                 .setMessage(details)
-                .setPositiveButton("Assign Support Plan", (dialog, which) -> {
+                .setPositiveButton(R.string.assign_support_plan, (dialog, which) -> {
                     Toast.makeText(requireContext(), "Assigned support plan for " + item.studentName, Toast.LENGTH_SHORT).show();
                     selectSubTab(3); // Open Intervention Plans
                 })
-                .setNegativeButton("Close", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -326,17 +327,17 @@ public class RecommendationFragment extends Fragment {
 
         interventionAdapter = new InterventionPlanAdapter(requireContext(), interventionList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Intervention Plan Status")
-                    .setMessage("Student Name: " + item.studentName + " (" + item.studentId + ")\n" +
+                    .setTitle(R.string.intervention_plan_status)
+                    .setMessage(getString(R.string.student_name_4f287a) + item.studentName + " (" + item.studentId + ")\n" +
                             item.activityTitle + "\n" +
                             item.timeline + "\n\n" +
                             "Current Status: " + item.statusBadge)
-                    .setPositiveButton("Mark Completed", (dialog, which) -> {
+                    .setPositiveButton(R.string.mark_completed, (dialog, which) -> {
                         item.statusBadge = "Completed";
                         interventionAdapter.notifyDataSetChanged();
                         Toast.makeText(requireContext(), "Intervention plan marked as completed!", Toast.LENGTH_SHORT).show();
                     })
-                    .setNegativeButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
@@ -348,7 +349,7 @@ public class RecommendationFragment extends Fragment {
         View layout = LayoutInflater.from(requireContext()).inflate(R.layout.item_admin_student_recommendation_row, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        builder.setTitle("Create Academic Support Plan");
+        builder.setTitle(R.string.create_academic_support_plan);
 
         android.widget.LinearLayout container = new android.widget.LinearLayout(requireContext());
         container.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -368,7 +369,7 @@ public class RecommendationFragment extends Fragment {
 
         builder.setView(container);
 
-        builder.setPositiveButton("Create Plan", (dialog, which) -> {
+        builder.setPositiveButton(R.string.create_plan_4c7cd7, (dialog, which) -> {
             String name = edtStudent.getText() != null ? edtStudent.getText().toString().trim() : "";
             String act = edtActivity.getText() != null ? edtActivity.getText().toString().trim() : "";
 
@@ -379,10 +380,10 @@ public class RecommendationFragment extends Fragment {
                     "STU23001", name, "Support Plan: " + act, "Target Goal: Score > 75% • Timeline: May - Jun 2026", "In Progress"
             ));
             if (interventionAdapter != null) interventionAdapter.notifyDataSetChanged();
-            Toast.makeText(requireContext(), "Academic support plan created successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.academic_support_plan_created_successfully, Toast.LENGTH_SHORT).show();
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -421,13 +422,13 @@ public class RecommendationFragment extends Fragment {
 
         historyAdapter = new RecommendationHistoryAdapter(requireContext(), historyList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Recommendation History Detail")
-                    .setMessage("Student ID: " + item.studentId + "\n" +
+                    .setTitle(R.string.recommendation_history_detail)
+                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                             "Student Name: " + item.studentName + "\n" +
                             item.recTitle + "\n\n" +
                             item.recDates + "\n\n" +
                             "Academic Impact Result: " + item.impactBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

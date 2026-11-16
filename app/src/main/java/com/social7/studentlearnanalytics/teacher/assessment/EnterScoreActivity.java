@@ -39,7 +39,7 @@ public class EnterScoreActivity extends AppCompatActivity {
         }
 
         if (courseCode != null && !courseCode.isEmpty() && tvCourseClassHeader != null) {
-            tvCourseClassHeader.setText("Course: " + courseCode + " • Max Score: 100 pts");
+            tvCourseClassHeader.setText(tvCourseClassHeader.getContext().getString(R.string.course_2f9b25) + courseCode + " • Max Score: 100 pts");
         }
 
         if (btnSaveScore != null) {

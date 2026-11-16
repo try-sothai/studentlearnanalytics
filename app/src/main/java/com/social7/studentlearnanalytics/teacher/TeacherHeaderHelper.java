@@ -55,6 +55,15 @@ public class TeacherHeaderHelper {
             tvSubtitle.setVisibility(View.GONE);
         }
 
+        if (com.social7.studentlearnanalytics.localization.AppLanguageManager.isKhmer(activity)) {
+            if (tvTitle != null) {
+                tvTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 15f);
+            }
+            if (tvSubtitle != null) {
+                tvSubtitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 10.5f);
+            }
+        }
+
         View notifBtn = root.findViewById(R.id.layoutTeacherNotifBtn);
         if (notifBtn != null) {
             notifBtn.setOnClickListener(v -> {

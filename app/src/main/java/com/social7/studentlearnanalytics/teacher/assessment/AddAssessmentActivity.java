@@ -111,7 +111,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
         if (btnTypeExam != null) btnTypeExam.setTextColor("Exam".equalsIgnoreCase(type) ? activeColor : inactiveColor);
 
         if (tvHeaderTitle != null) {
-            tvHeaderTitle.setText("Create New " + type);
+            tvHeaderTitle.setText(tvHeaderTitle.getContext().getString(R.string.create_new) + type);
         }
 
         if (tvFormSectionHeader != null) {
@@ -153,12 +153,12 @@ public class AddAssessmentActivity extends AppCompatActivity {
         container.addView(tilA);
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Add Quiz Question")
+                .setTitle(R.string.add_quiz_question)
                 .setView(container)
-                .setPositiveButton("Add Question", (dialog, which) -> {
+                .setPositiveButton(R.string.add_question_e3bb2c, (dialog, which) -> {
                     Toast.makeText(this, "Question added to quiz successfully!", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

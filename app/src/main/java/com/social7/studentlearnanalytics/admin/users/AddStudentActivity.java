@@ -379,17 +379,17 @@ public class AddStudentActivity extends AppCompatActivity {
                 ? (IdNameItem) spAddSemester.getSelectedItem() : null;
 
         if (selectedDept == null) {
-            Toast.makeText(this, "Please select a department", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_a_department, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
         if (selectedProg == null) {
-            Toast.makeText(this, "Please select a program", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_a_program, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
         if (selectedYear == null) {
-            Toast.makeText(this, "Please select an academic year", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_select_an_academic_year, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
@@ -445,14 +445,14 @@ public class AddStudentActivity extends AppCompatActivity {
 
                     if (tempPass != null && !tempPass.isEmpty()) {
                         new MaterialAlertDialogBuilder(AddStudentActivity.this)
-                                .setTitle("Student Created Successfully")
+                                .setTitle(R.string.student_created_successfully)
                                 .setMessage("Student ID / Username: " + identifier + "\nTemporary Password: " + tempPass
                                         + "\n\nPlease record this password. It will not be shown again.")
-                                .setPositiveButton("Done", (dialog, which) -> finish())
+                                .setPositiveButton(R.string.done, (dialog, which) -> finish())
                                 .setCancelable(false)
                                 .show();
                     } else {
-                        Toast.makeText(AddStudentActivity.this, "Student created successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddStudentActivity.this, R.string.student_created_successfully_7abfec, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {

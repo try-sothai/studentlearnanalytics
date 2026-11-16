@@ -56,7 +56,7 @@
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
-                android:text="Active"
+                android:text="@string/status_active"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="GPA: 3.85 / 4.0 • 98.5% Attendance Rate"
+            android:text="@string/gpa_3_85_4_0_98_5_attendance_rate"
             android:textColor="@color/admin_text_secondary"
             android:textSize="12sp" />
 

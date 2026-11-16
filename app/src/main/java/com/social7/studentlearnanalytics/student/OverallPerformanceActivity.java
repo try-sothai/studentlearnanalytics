@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.student;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -256,15 +258,15 @@ public class OverallPerformanceActivity extends AppCompatActivity {
             double d = Double.parseDouble(scoreStr.replace("%", "").trim());
             tvStatus.setVisibility(View.VISIBLE);
             if (d >= 85) {
-                tvStatus.setText("Good");
+                tvStatus.setText(R.string.status_good);
                 tvStatus.setTextColor(Color.parseColor("#10B981"));
                 tvStatus.setBackgroundColor(Color.parseColor("#ECFDF5"));
             } else if (d >= 70) {
-                tvStatus.setText("Fair");
+                tvStatus.setText(R.string.fair);
                 tvStatus.setTextColor(Color.parseColor("#F59E0B"));
                 tvStatus.setBackgroundColor(Color.parseColor("#FFFBEB"));
             } else {
-                tvStatus.setText("Needs Attention");
+                tvStatus.setText(R.string.needs_attention);
                 tvStatus.setTextColor(Color.parseColor("#EF4444"));
                 tvStatus.setBackgroundColor(Color.parseColor("#FEF2F2"));
             }
@@ -384,7 +386,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
 
         if (enrollments == null || enrollments.isEmpty()) {
             TextView tvEmpty = new TextView(this);
-            tvEmpty.setText("No subject performance records available");
+            tvEmpty.setText(R.string.no_subject_performance_records_available);
             tvEmpty.setTextColor(Color.parseColor("#64748B"));
             tvEmpty.setTextSize(12f);
             container.addView(tvEmpty);
@@ -468,6 +470,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
             chart.clear();
             chart.setNoDataText("No trend data available");
             chart.setNoDataTextColor(Color.parseColor("#64748B"));
+            ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
             chart.invalidate();
             return;
         }
@@ -478,7 +481,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
             entries.add(new BarEntry(i, val != null ? val : 0f));
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Performance Trend");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.performance_trend));
         dataSet.setColor(Color.parseColor("#5B3DF5"));
         dataSet.setDrawValues(false);
 
@@ -504,6 +507,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         }
 
         chart.animateY(1000);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 }

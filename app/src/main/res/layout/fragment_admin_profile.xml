@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Admin"
+                    android:text="@string/role_admin"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -95,7 +95,7 @@
                     android:background="@drawable/bg_badge_core"
                     android:paddingHorizontal="14dp"
                     android:paddingVertical="4dp"
-                    android:text="System Administrator"
+                    android:text="@string/system_administrator"
                     android:textColor="@color/primary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -169,7 +169,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Account Status"
+                        android:text="@string/account_status"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -177,7 +177,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Active"
+                        android:text="@string/status_active"
                         android:textColor="@color/success_green"
                         android:textSize="22sp"
                         android:textStyle="bold" />
@@ -212,7 +212,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Full Name"
+                        android:text="@string/full_name"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -220,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="System Administrator"
+                        android:text="@string/system_administrator"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -241,7 +241,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Email"
+                        android:text="@string/email_ce8ae9"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -270,7 +270,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Role"
+                        android:text="@string/role_bbbabd"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Administrator"
+                        android:text="@string/administrator"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -299,7 +299,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Last Login"
+                        android:text="@string/last_login"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -324,7 +324,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/primary"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15sp"
@@ -338,7 +338,7 @@
             android:layout_height="50dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="10dp"
-            android:text="Change Password"
+            android:text="@string/change_password"
             android:textAllCaps="false"
             android:textColor="@color/primary"
             android:textSize="15sp"
@@ -355,7 +355,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/danger_red_bg"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textAllCaps="false"
             android:textColor="@color/danger_red"
             android:textSize="15sp"

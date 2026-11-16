@@ -128,13 +128,13 @@ public class IncidentWorkspaceAdapter extends RecyclerView.Adapter<IncidentWorks
             }
             if (tvTitle != null) tvTitle.setText(item.title);
             if (tvStudent != null) {
-                tvStudent.setText("Student: " + item.studentName + " (" + item.studentId + ") [View Dossier]");
+                tvStudent.setText(tvStudent.getContext().getString(R.string.student_d0b71d) + item.studentName + " (" + item.studentId + ") [View Dossier]");
                 tvStudent.setOnClickListener(v -> {
                     if (listener != null) listener.onStudentClick(item);
                 });
             }
             if (tvDetails != null) {
-                tvDetails.setText("Class: " + item.className + " • Logged: " + item.date + " • Staff: " + item.assignedStaff);
+                tvDetails.setText(tvDetails.getContext().getString(R.string.class_4530a9) + item.className + " • Logged: " + item.date + " • Staff: " + item.assignedStaff);
             }
             itemView.setOnClickListener(v -> {
                 if (listener != null) listener.onIncidentClick(item);

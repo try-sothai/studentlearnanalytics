@@ -164,7 +164,7 @@ public class UserManagementFragment extends Fragment implements
         // Header Titles
         TextView tvHeaderTitle = view.findViewById(R.id.tvHeaderTitle);
         TextView tvHeaderSubtitle = view.findViewById(R.id.tvHeaderSubtitle);
-        if (tvHeaderTitle != null) tvHeaderTitle.setText("User Management");
+        if (tvHeaderTitle != null) tvHeaderTitle.setText(R.string.user_management);
         if (tvHeaderSubtitle != null) tvHeaderSubtitle.setText("Manage students, teachers and administrators");
 
         // Primary Tabs
@@ -279,25 +279,25 @@ public class UserManagementFragment extends Fragment implements
                         int activeStudents = data.has("active_students") ? data.get("active_students").getAsInt() : 0;
                         int inactiveStudents = data.has("inactive_students") ? data.get("inactive_students").getAsInt() : 0;
 
-                        if (pillFilterAll != null) pillFilterAll.setText("All Students (" + totalStudents + ")");
-                        if (pillFilterActive != null) pillFilterActive.setText("Active (" + activeStudents + ")");
-                        if (pillFilterInactive != null) pillFilterInactive.setText("Inactive (" + inactiveStudents + ")");
+                        if (pillFilterAll != null) pillFilterAll.setText(pillFilterAll.getContext().getString(R.string.all_students) + totalStudents + ")");
+                        if (pillFilterActive != null) pillFilterActive.setText(pillFilterActive.getContext().getString(R.string.active) + activeStudents + ")");
+                        if (pillFilterInactive != null) pillFilterInactive.setText(pillFilterInactive.getContext().getString(R.string.inactive) + inactiveStudents + ")");
 
                         int totalTeachers = data.has("total_teachers") ? data.get("total_teachers").getAsInt() : 0;
                         int activeTeachers = data.has("active_teachers") ? data.get("active_teachers").getAsInt() : 0;
                         int inactiveTeachers = data.has("inactive_teachers") ? data.get("inactive_teachers").getAsInt() : 0;
 
-                        if (pillFilterAllTeachers != null) pillFilterAllTeachers.setText("All Teachers (" + totalTeachers + ")");
-                        if (pillFilterActiveTeachers != null) pillFilterActiveTeachers.setText("Active (" + activeTeachers + ")");
-                        if (pillFilterInactiveTeachers != null) pillFilterInactiveTeachers.setText("Inactive (" + inactiveTeachers + ")");
+                        if (pillFilterAllTeachers != null) pillFilterAllTeachers.setText(pillFilterAllTeachers.getContext().getString(R.string.all_teachers) + totalTeachers + ")");
+                        if (pillFilterActiveTeachers != null) pillFilterActiveTeachers.setText(pillFilterActiveTeachers.getContext().getString(R.string.active) + activeTeachers + ")");
+                        if (pillFilterInactiveTeachers != null) pillFilterInactiveTeachers.setText(pillFilterInactiveTeachers.getContext().getString(R.string.inactive) + inactiveTeachers + ")");
 
                         int totalAdmins = data.has("total_admins") ? data.get("total_admins").getAsInt() : (data.has("total_administrators") ? data.get("total_administrators").getAsInt() : 0);
                         int activeAdmins = data.has("active_admins") ? data.get("active_admins").getAsInt() : 0;
                         int inactiveAdmins = data.has("inactive_admins") ? data.get("inactive_admins").getAsInt() : 0;
 
-                        if (pillFilterAllAdmins != null) pillFilterAllAdmins.setText("All Admins (" + totalAdmins + ")");
-                        if (pillFilterActiveAdmins != null) pillFilterActiveAdmins.setText("Active (" + activeAdmins + ")");
-                        if (pillFilterInactiveAdmins != null) pillFilterInactiveAdmins.setText("Inactive (" + inactiveAdmins + ")");
+                        if (pillFilterAllAdmins != null) pillFilterAllAdmins.setText(pillFilterAllAdmins.getContext().getString(R.string.all_admins) + totalAdmins + ")");
+                        if (pillFilterActiveAdmins != null) pillFilterActiveAdmins.setText(pillFilterActiveAdmins.getContext().getString(R.string.active) + activeAdmins + ")");
+                        if (pillFilterInactiveAdmins != null) pillFilterInactiveAdmins.setText(pillFilterInactiveAdmins.getContext().getString(R.string.inactive) + inactiveAdmins + ")");
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing statistics API response", e);
                     }
@@ -324,7 +324,7 @@ public class UserManagementFragment extends Fragment implements
         pillFilterInactive = root.findViewById(R.id.pillFilterInactive);
 
         if (etSearchUser != null) {
-            etSearchUser.setHint("Search by name, email or Student Code...");
+            etSearchUser.setHint(R.string.search_by_name_email_or_student_code);
             etSearchUser.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -535,7 +535,7 @@ public class UserManagementFragment extends Fragment implements
         pillFilterInactiveTeachers = root.findViewById(R.id.pillFilterInactiveTeachers);
 
         if (etSearchTeacher != null) {
-            etSearchTeacher.setHint("Search by name, email or Teacher ID...");
+            etSearchTeacher.setHint(R.string.search_by_name_email_or_teacher_id);
             etSearchTeacher.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -581,7 +581,7 @@ public class UserManagementFragment extends Fragment implements
         setupDepartmentSpinner();
 
         if (btnAddTeacher != null) {
-            btnAddTeacher.setText("+ Add Teacher");
+            btnAddTeacher.setText(R.string.add_teacher_1f95de);
             btnAddTeacher.setOnClickListener(v -> {
                 Intent intent = new Intent(requireContext(), AddTeacherActivity.class);
                 startActivity(intent);
@@ -730,7 +730,7 @@ public class UserManagementFragment extends Fragment implements
         pillFilterInactiveAdmins = root.findViewById(R.id.pillFilterInactiveAdmins);
 
         if (etSearchAdmin != null) {
-            etSearchAdmin.setHint("Search by name, email or Admin ID...");
+            etSearchAdmin.setHint(R.string.search_by_name_email_or_admin_id);
             etSearchAdmin.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -774,7 +774,7 @@ public class UserManagementFragment extends Fragment implements
         }
 
         if (btnAddAdmin != null) {
-            btnAddAdmin.setText("+ Add Admin");
+            btnAddAdmin.setText(R.string.add_admin_2f7840);
             btnAddAdmin.setOnClickListener(v -> {
                 Intent intent = new Intent(requireContext(), AddAdminActivity.class);
                 startActivity(intent);
@@ -1051,7 +1051,7 @@ public class UserManagementFragment extends Fragment implements
                         default: showReviewDialog(item); break;
                     }
                 })
-                .setNegativeButton("Close", null)
+                .setNegativeButton(R.string.close, null)
                 .show();
     }
 
@@ -1065,9 +1065,9 @@ public class UserManagementFragment extends Fragment implements
                 "Student Rating: " + item.rating + "\n" +
                 "Review Status: " + item.status;
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Faculty Profile")
+                .setTitle(R.string.faculty_profile)
                 .setMessage(details)
-                .setPositiveButton("Close", null)
+                .setPositiveButton(R.string.close, null)
                 .show();
     }
 
@@ -1091,7 +1091,7 @@ public class UserManagementFragment extends Fragment implements
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(courses ? "Assigned Courses" : "Assigned Classes")
                         .setMessage(sb.length() == 0 ? "Nothing assigned yet." : sb.toString())
-                        .setPositiveButton("Close", null)
+                        .setPositiveButton(R.string.close, null)
                         .show();
             }
 
@@ -1132,7 +1132,7 @@ public class UserManagementFragment extends Fragment implements
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(courses ? "Assign Courses" : "Assign Classes")
                         .setMultiChoiceItems(labels, checked, (d, which, isChecked) -> checked[which] = isChecked)
-                        .setPositiveButton("Assign", (d, w) -> {
+                        .setPositiveButton(R.string.assign, (d, w) -> {
                             JsonArray picked = new JsonArray();
                             for (int i = 0; i < n; i++) if (checked[i]) picked.add(ids[i]);
                             if (picked.size() == 0) {
@@ -1145,7 +1145,7 @@ public class UserManagementFragment extends Fragment implements
                             (courses ? svc.assignFacultyCourses(item.id, body) : svc.assignFacultyClasses(item.id, body))
                                     .enqueue(facultyRefreshCallback);
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
 
@@ -1178,7 +1178,7 @@ public class UserManagementFragment extends Fragment implements
                         JsonArray classArr = extractArray(rk.body());
                         int nc = courseArr.size(), total = nc + classArr.size();
                         if (total == 0) {
-                            Toast.makeText(requireContext(), "No assignments to remove", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), R.string.no_assignments_to_remove, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         final int[] ids = new int[total];
@@ -1191,9 +1191,9 @@ public class UserManagementFragment extends Fragment implements
                             labels[i] = (isCourse ? "Course: " + str(o, "course_code", "") : "Class: " + str(o, "code", ""));
                         }
                         new MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Remove Assignments")
+                                .setTitle(R.string.remove_assignments)
                                 .setMultiChoiceItems(labels, checked, (d, which, ch) -> checked[which] = ch)
-                                .setPositiveButton("Remove", (d, w) -> {
+                                .setPositiveButton(R.string.remove, (d, w) -> {
                                     JsonArray cIds = new JsonArray(), kIds = new JsonArray();
                                     for (int i = 0; i < total; i++) {
                                         if (!checked[i]) continue;
@@ -1205,7 +1205,7 @@ public class UserManagementFragment extends Fragment implements
                                     if (kIds.size() > 0) body.add("class_ids", kIds);
                                     api.removeFacultyAssignments(item.id, body).enqueue(facultyRefreshCallback);
                                 })
-                                .setNegativeButton("Cancel", null)
+                                .setNegativeButton(R.string.cancel, null)
                                 .show();
                     }
 
@@ -1235,7 +1235,7 @@ public class UserManagementFragment extends Fragment implements
         box.addView(etRating);
 
         final EditText etComments = new EditText(requireContext());
-        etComments.setHint("Comments (optional)");
+        etComments.setHint(R.string.comments_optional);
         box.addView(etComments);
 
         final Spinner spStatus = new Spinner(requireContext());
@@ -1244,9 +1244,9 @@ public class UserManagementFragment extends Fragment implements
         box.addView(spStatus);
 
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Submit Faculty Review")
+                .setTitle(R.string.submit_faculty_review)
                 .setView(box)
-                .setPositiveButton("Submit", (d, w) -> {
+                .setPositiveButton(R.string.submit, (d, w) -> {
                     JsonObject body = new JsonObject();
                     body.addProperty("status", (String) spStatus.getSelectedItem());
                     String rating = etRating.getText().toString().trim();
@@ -1256,7 +1256,7 @@ public class UserManagementFragment extends Fragment implements
                     ApiClient.getApiService(requireContext()).submitFacultyReview(item.id, body)
                             .enqueue(facultyRefreshCallback);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -1433,11 +1433,11 @@ public class UserManagementFragment extends Fragment implements
         new AlertDialog.Builder(requireContext())
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + teacher.getName() + " (" + teacher.getId() + ")?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     String targetId = teacher.getUserId() != null ? String.valueOf(teacher.getUserId()) : teacher.getId();
                     updateUserStatusOnBackend(targetId, newStatus, action);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -1450,11 +1450,11 @@ public class UserManagementFragment extends Fragment implements
         new AlertDialog.Builder(requireContext())
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + admin.getName() + " (" + admin.getId() + ")?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     String targetId = admin.getUserId() != null ? String.valueOf(admin.getUserId()) : admin.getId();
                     updateUserStatusOnBackend(targetId, newStatus, action);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -1462,20 +1462,25 @@ public class UserManagementFragment extends Fragment implements
     public void onToggleStatus(User user) {
         boolean currentlyActive = "Active".equalsIgnoreCase(user.getStatus());
         String newStatus = currentlyActive ? "inactive" : "active";
-        String action = currentlyActive ? "deactivate" : "activate";
+        String displayCode = (user.getCode() != null && !user.getCode().isEmpty()) ? user.getCode() : user.getId();
 
         new AlertDialog.Builder(requireContext())
-                .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
-                .setMessage("Are you sure you want to " + action + " account for " + user.getName() + " (" + user.getId() + ")?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setTitle(currentlyActive ? R.string.deactivate_account : R.string.activate_account)
+                .setMessage(getString(currentlyActive ? R.string.confirm_deactivate_account_msg : R.string.confirm_activate_account_msg,
+                        user.getName(), displayCode))
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     String targetId = user.getApiUserId();
-                    updateUserStatusOnBackend(targetId, newStatus, action);
+                    updateUserStatusOnBackend(targetId, newStatus, !currentlyActive);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
     private void updateUserStatusOnBackend(String userId, String newStatus, String actionLabel) {
+        updateUserStatusOnBackend(userId, newStatus, "active".equalsIgnoreCase(newStatus));
+    }
+
+    private void updateUserStatusOnBackend(String userId, String newStatus, boolean activating) {
         JsonObject body = new JsonObject();
         body.addProperty("status", newStatus);
 
@@ -1484,25 +1489,26 @@ public class UserManagementFragment extends Fragment implements
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful()) {
-                    Toast.makeText(requireContext(), "Account " + actionLabel + "d successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), activating ? R.string.account_activated_success : R.string.account_deactivated_success, Toast.LENGTH_SHORT).show();
                     fetchUserStatistics();
                     reloadCurrentTab();
                 } else {
-                    Toast.makeText(requireContext(), "Failed to " + actionLabel + " account (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.status_update_failed, response.code()), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 if (!isAdded()) return;
-                Toast.makeText(requireContext(), "Network error updating status: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.network_error_updating_status_fmt, t.getMessage()), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public void onDeleteUser(User user) {
-        confirmAndDeleteUser(user.getApiUserId(), user.getName());
+        String displayCode = (user.getCode() != null && !user.getCode().isEmpty()) ? user.getCode() : user.getId();
+        confirmAndDeleteUser(user.getApiUserId(), user.getName(), displayCode);
     }
 
     @Override
@@ -1525,10 +1531,14 @@ public class UserManagementFragment extends Fragment implements
     }
 
     private void confirmAndDeleteUser(String userId, String name) {
+        confirmAndDeleteUser(userId, name, userId);
+    }
+
+    private void confirmAndDeleteUser(String userId, String name, String displayCode) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Delete User Account")
-                .setMessage("Are you sure you want to delete user " + name + " (" + userId + ")? This action cannot be undone.")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_user_account)
+                .setMessage(getString(R.string.confirm_delete_user_msg, name, displayCode))
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
                     ApiClient.getApiService(requireContext()).deleteUser(userId).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -1536,22 +1546,22 @@ public class UserManagementFragment extends Fragment implements
                             if (response.code() == 403) {
                                 Toast.makeText(requireContext(), "Self-deletion is prohibited. You cannot delete your own account.", Toast.LENGTH_LONG).show();
                             } else if (response.isSuccessful()) {
-                                Toast.makeText(requireContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), R.string.user_deleted_successfully, Toast.LENGTH_SHORT).show();
                                 fetchUserStatistics();
                                 reloadCurrentTab();
                             } else {
-                                Toast.makeText(requireContext(), "Failed to delete user (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), getString(R.string.delete_user_failed, response.code()), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                             if (!isAdded()) return;
-                            Toast.makeText(requireContext(), "Network error deleting user: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.network_error_deleting_user_fmt, t.getMessage()), Toast.LENGTH_SHORT).show();
                         }
                     });
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

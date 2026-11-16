@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.admin;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -64,7 +66,7 @@ public class SystemStatisticsFragment extends Fragment {
         entries.add(new BarEntry(3, 12f)); // Grade D
         entries.add(new BarEntry(4, 6f));  // Grade F
 
-        BarDataSet dataSet = new BarDataSet(entries, "Grade Distribution (%)");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.grade_distribution));
         dataSet.setColor(Color.parseColor("#4C35E9"));
         dataSet.setValueTextColor(Color.parseColor("#1D1F2A"));
         dataSet.setValueTextSize(12f);
@@ -88,6 +90,7 @@ public class SystemStatisticsFragment extends Fragment {
 
         chart.setFitBars(true);
         chart.animateY(1000);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 
@@ -99,7 +102,7 @@ public class SystemStatisticsFragment extends Fragment {
         entries.add(new PieEntry(25f, "Medium Risk"));
         entries.add(new PieEntry(10f, "High Risk"));
 
-        PieDataSet dataSet = new PieDataSet(entries, "Risk Levels");
+        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.risk_levels));
 
         List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#10B981")); // Low Risk - Green
@@ -124,7 +127,7 @@ public class SystemStatisticsFragment extends Fragment {
         chart.setHoleColor(Color.WHITE);
         chart.setHoleRadius(45f);
         chart.setTransparentCircleRadius(50f);
-        chart.setCenterText("Risk Levels");
+        chart.setCenterText(getString(R.string.risk_levels));
         chart.setCenterTextSize(14f);
         chart.setCenterTextColor(Color.parseColor("#1D1F2A"));
 
@@ -138,6 +141,7 @@ public class SystemStatisticsFragment extends Fragment {
         legend.setTextColor(Color.parseColor("#1D1F2A"));
 
         chart.animateXY(1000, 1000);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 }

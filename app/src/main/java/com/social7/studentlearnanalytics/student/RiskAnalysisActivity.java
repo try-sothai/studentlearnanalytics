@@ -59,12 +59,38 @@ public class RiskAnalysisActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
-                // Retain layout fallbacks on network failure
+                displayUnavailableState();
             }
         });
     }
 
     private void bindRiskData(DashboardResponse.DashboardData data) {
+        // Bind the 4 contributing factor rows from real academic metrics
+        bindFactorRow(
+                findViewById(R.id.tvRiskAttDesc),
+                findViewById(R.id.tvRiskAttBadge),
+                data.getAttendanceRateFormatted(),
+                " attendance recorded"
+        );
+        bindFactorRow(
+                findViewById(R.id.tvRiskAsnDesc),
+                findViewById(R.id.tvRiskAsnBadge),
+                data.getAssignmentScoreFormatted(),
+                " average score"
+        );
+        bindFactorRow(
+                findViewById(R.id.tvRiskQuizDesc),
+                findViewById(R.id.tvRiskQuizBadge),
+                data.getQuizScoreFormatted(),
+                " average score"
+        );
+        bindFactorRow(
+                findViewById(R.id.tvRiskExamDesc),
+                findViewById(R.id.tvRiskExamBadge),
+                data.getExamScoreFormatted(),
+                " average score"
+        );
+
         String risk = data.getRiskLevel();
         if (risk == null || risk.trim().isEmpty() || "Not available yet".equalsIgnoreCase(risk.trim())) {
             displayUnavailableState();
@@ -72,18 +98,24 @@ public class RiskAnalysisActivity extends AppCompatActivity {
         }
 
         Double serverScoreVal = data.getRiskScoreVal();
-        String scoreStr = data.getRiskScoreFormatted();
+        if (serverScoreVal == null) {
+            // Derive from real overall performance if present, never hardcode arbitrary constants
+            String overallStr = data.getOverallPerformanceFormatted();
+            Double parsedOverall = parseNullableDouble(overallStr);
+            if (parsedOverall != null) {
+                serverScoreVal = Math.max(0.0, Math.min(100.0, 100.0 - parsedOverall));
+            }
+        }
+        int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 0;
+        String scoreStr = serverScoreVal != null ? (scoreProgress + " / 100") : "-- / 100";
 
         if ("HIGH".equalsIgnoreCase(risk)) {
-            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 82;
-            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
-
             if (tvRiskLevel != null) {
-                tvRiskLevel.setText("HIGH RISK");
+                tvRiskLevel.setText(R.string.high_risk_b9f53e);
                 tvRiskLevel.setTextColor(Color.parseColor("#EF4444"));
             }
             if (tvRiskBadge != null) {
-                tvRiskBadge.setText("High Risk");
+                tvRiskBadge.setText(R.string.high_risk);
                 tvRiskBadge.setTextColor(Color.parseColor("#EF4444"));
                 tvRiskBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FEF2F2")));
             }
@@ -96,11 +128,8 @@ public class RiskAnalysisActivity extends AppCompatActivity {
                 pbRiskScore.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#EF4444")));
             }
         } else if ("MEDIUM".equalsIgnoreCase(risk)) {
-            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 65;
-            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
-
             if (tvRiskLevel != null) {
-                tvRiskLevel.setText("MEDIUM RISK");
+                tvRiskLevel.setText(R.string.medium_risk_cec4a7);
                 tvRiskLevel.setTextColor(Color.parseColor("#F59E0B"));
             }
             if (tvRiskBadge != null) {
@@ -117,15 +146,12 @@ public class RiskAnalysisActivity extends AppCompatActivity {
                 pbRiskScore.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#F59E0B")));
             }
         } else if ("LOW".equalsIgnoreCase(risk)) {
-            int scoreProgress = serverScoreVal != null ? (int) Math.round(serverScoreVal) : 25;
-            if (scoreStr == null) scoreStr = scoreProgress + " / 100";
-
             if (tvRiskLevel != null) {
-                tvRiskLevel.setText("LOW RISK");
+                tvRiskLevel.setText(R.string.low_risk_e60aca);
                 tvRiskLevel.setTextColor(Color.parseColor("#10B981"));
             }
             if (tvRiskBadge != null) {
-                tvRiskBadge.setText("Low Risk");
+                tvRiskBadge.setText(R.string.low_risk);
                 tvRiskBadge.setTextColor(Color.parseColor("#10B981"));
                 tvRiskBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ECFDF5")));
             }
@@ -142,13 +168,53 @@ public class RiskAnalysisActivity extends AppCompatActivity {
         }
     }
 
+    private void bindFactorRow(TextView tvDesc, TextView tvBadge, String formattedPct, String suffix) {
+        if (tvDesc != null) {
+            if (formattedPct == null || "N/A".equalsIgnoreCase(formattedPct)) {
+                tvDesc.setText("No records yet");
+            } else {
+                tvDesc.setText(formattedPct + suffix);
+            }
+        }
+        if (tvBadge != null) {
+            Double val = parseNullableDouble(formattedPct);
+            if (val == null) {
+                tvBadge.setText(R.string.no_data);
+                tvBadge.setTextColor(Color.parseColor("#64748B"));
+                tvBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F1F5F9")));
+            } else if (val >= 80.0) {
+                tvBadge.setText(R.string.status_good);
+                tvBadge.setTextColor(Color.parseColor("#10B981"));
+                tvBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ECFDF5")));
+            } else if (val >= 60.0) {
+                tvBadge.setText("Moderate");
+                tvBadge.setTextColor(Color.parseColor("#F59E0B"));
+                tvBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFFBEB")));
+            } else {
+                tvBadge.setText("Needs Improvement");
+                tvBadge.setTextColor(Color.parseColor("#EF4444"));
+                tvBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FEF2F2")));
+            }
+        }
+    }
+
+    private Double parseNullableDouble(String formatted) {
+        if (formatted == null) return null;
+        try {
+            String clean = formatted.replace("%", "").trim();
+            return Double.parseDouble(clean);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
     private void displayUnavailableState() {
         if (tvRiskLevel != null) {
-            tvRiskLevel.setText("UNAVAILABLE");
+            tvRiskLevel.setText(R.string.unavailable_084f4c);
             tvRiskLevel.setTextColor(Color.parseColor("#64748B"));
         }
         if (tvRiskBadge != null) {
-            tvRiskBadge.setText("No Data");
+            tvRiskBadge.setText(R.string.no_data);
             tvRiskBadge.setTextColor(Color.parseColor("#64748B"));
             tvRiskBadge.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F1F5F9")));
         }

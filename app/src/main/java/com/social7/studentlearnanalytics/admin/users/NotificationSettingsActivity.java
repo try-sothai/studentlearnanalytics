@@ -166,7 +166,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
 
         editor.apply();
 
-        Toast.makeText(this, "Notification preferences saved successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.notification_preferences_saved_successfull, Toast.LENGTH_SHORT).show();
         finish();
     }
 }

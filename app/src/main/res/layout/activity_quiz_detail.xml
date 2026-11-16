@@ -24,7 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_social_button"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back"
             app:tint="@color/slas_text_primary" />
 
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quizzes"
+                android:text="@string/quizzes"
                 android:textColor="@color/slas_text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Course quizzes, scores, and completion status"
+                android:text="@string/course_quizzes_scores_and_completion_statu"
                 android:textColor="@color/slas_text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -108,7 +108,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.04"
-                        android:text="AVERAGE QUIZ SCORE"
+                        android:text="@string/average_quiz_score"
                         android:textAllCaps="true"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="11sp"
@@ -132,7 +132,7 @@
                         android:backgroundTint="@color/slas_light_purple"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="4dp"
-                        android:text="Graded Quizzes"
+                        android:text="@string/graded_quizzes"
                         android:textColor="@color/slas_primary_purple"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -153,7 +153,7 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="No quizzes"
+                    android:contentDescription="@string/no_quizzes"
                     android:src="@drawable/ic_analytics"
                     app:tint="@color/slas_text_secondary" />
 
@@ -162,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="No quizzes found"
+                    android:text="@string/no_quizzes_found"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="14sp" />
             </LinearLayout>

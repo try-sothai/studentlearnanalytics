@@ -6,8 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".SlasApplication"
         android:allowBackup="true"
-        android:label="LearnAnalytics"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.Studentlearnanalytics">
@@ -22,6 +23,10 @@
 
         <activity
             android:name=".teacher.student.StudentDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".teacher.student.StudentReportActivity"
             android:exported="false" />
 
         <activity
@@ -202,6 +207,34 @@
 
         <activity
             android:name=".student.academic.GpaProgressActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.academic.AcademicJourneyActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.attendance.AttendanceOverviewActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.analytics.LearningAnalyticsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.recommendations.SmartRecommendationsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.grades.GradesOverviewActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.grades.CourseGradeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.attendance.CourseAttendanceActivity"
             android:exported="false" />
 
         <activity

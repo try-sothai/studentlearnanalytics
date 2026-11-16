@@ -80,9 +80,7 @@ public class ManageScoresFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Score Management",
-                    "Manage student grades, assessments, and gradebook"
+                    view, getString(R.string.score_management), "Manage student grades, assessments, and gradebook"
             );
         }
 
@@ -311,13 +309,13 @@ public class ManageScoresFragment extends Fragment {
         gradebookAdapter = new GradebookAdapter(requireContext(), gradebookList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Student Gradebook Breakdown")
-                    .setMessage("Student ID: " + item.studentId + "\n" +
+                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                             "Student Name: " + item.studentName + "\n" +
                             "Course & Class: " + item.courseClass + "\n\n" +
                             "Academic Score Breakdown:\n" +
                             item.gradeBreakdown + "\n\n" +
                             "Composite Final Result: " + item.gradeBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

@@ -29,7 +29,7 @@
                 android:layout_marginEnd="12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:focusable="true"
                 android:padding="4dp"
                 android:src="@drawable/ic_back"
@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Student Risk &amp; Intervention"
+                    android:text="@string/student_risk_intervention"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:backgroundTint="@color/admin_primary_blue"
-                android:text="+ Intervention"
+                android:text="@string/intervention"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="10dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Risk" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/high_risk" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="10dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Medium Risk" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/medium_risk" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="28" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/warning_orange" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -188,7 +188,7 @@
                     android:padding="16dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sokha K. (STD089) • CS-3B" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Level: MEDIUM • Reason: Missing Assignment 3" android:textColor="@color/warning_orange" android:textSize="12sp" android:layout_marginTop="4dp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Intervention Status: Pending Review • Staff: Unassigned" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/intervention_status_pending_review_staff_u" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

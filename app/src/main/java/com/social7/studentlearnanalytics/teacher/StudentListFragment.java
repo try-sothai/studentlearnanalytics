@@ -75,9 +75,7 @@ public class StudentListFragment extends Fragment {
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherStudents),
-                    "Students",
-                    "Students in my class"
+                    view.findViewById(R.id.headerTeacherStudents), getString(R.string.nav_students), "Students in my class"
             );
         }
 
@@ -211,7 +209,7 @@ public class StudentListFragment extends Fragment {
         if (tvSummaryCourseName != null) tvSummaryCourseName.setText(courseTitle);
         if (tvSummaryTeacherName != null) tvSummaryTeacherName.setText("Teacher: Mr. Chan");
         if (tvSummaryDepartmentName != null) tvSummaryDepartmentName.setText("Computer Science Dept.");
-        if (tvSummarySemester != null) tvSummarySemester.setText("Semester 1, 2024");
+        if (tvSummarySemester != null) tvSummarySemester.setText(R.string.semester_1_2024);
 
         if (getContext() != null) {
             com.social7.studentlearnanalytics.network.ApiClient.getApiService(requireContext()).getStudents().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
@@ -276,9 +274,9 @@ public class StudentListFragment extends Fragment {
 
         if (tvSummaryTotalStudents != null) tvSummaryTotalStudents.setText(String.valueOf(totalCount));
 
-        if (btnFilterAll != null) btnFilterAll.setText("All (" + totalCount + ")");
+        if (btnFilterAll != null) btnFilterAll.setText(btnFilterAll.getContext().getString(R.string.all_c49d0d) + totalCount + ")");
         if (btnFilterAtRisk != null) btnFilterAtRisk.setText("At Risk (" + atRiskCount + ")");
-        if (btnFilterGood != null) btnFilterGood.setText("Good (" + goodCount + ")");
+        if (btnFilterGood != null) btnFilterGood.setText(btnFilterGood.getContext().getString(R.string.good) + goodCount + ")");
         if (btnFilterNeedAttention != null) btnFilterNeedAttention.setText("Need Attention (" + attentionCount + ")");
 
         applyFilterAndPagination();

@@ -7,7 +7,7 @@
     android:paddingTop="12dp"
     android:paddingEnd="4dp"
     android:paddingBottom="6dp"
-    android:text="TODAY"
+    android:text="@string/today"
     android:textColor="@color/notif_spec_secondary_text"
     android:textSize="12sp"
     android:textStyle="bold" />

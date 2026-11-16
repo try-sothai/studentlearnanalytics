@@ -227,7 +227,7 @@ public class StudentExportDialog extends BottomSheetDialog {
             } catch (Exception e) {
                 final String errMsg = e.getMessage();
                 new Handler(Looper.getMainLooper()).post(() ->
-                        Toast.makeText(appContext, "Failed to save file: " + errMsg, Toast.LENGTH_LONG).show()
+                        Toast.makeText(appContext, appContext.getString(R.string.failed_to_save_file) + errMsg, Toast.LENGTH_LONG).show()
                 );
                 return;
             }

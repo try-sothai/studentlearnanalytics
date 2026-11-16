@@ -89,14 +89,14 @@ public class CourseCurriculumAuditFragment extends Fragment {
         if (getContext() == null) return;
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Curriculum Audit Detail")
-                .setMessage("Course Code: " + item.code + "\n" +
+                .setMessage(getString(R.string.course_code) + item.code + "\n" +
                         "Course Name: " + item.name + "\n" +
                         "Associated Class: " + item.className + "\n" +
                         "Assigned Teacher: " + item.teacher + "\n" +
                         "Credits: " + item.credits + " Units\n" +
                         "Syllabus Audit Status: " + item.status + "\n\n" +
                         "Audit Findings & Notes:\n" + item.note)
-                .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

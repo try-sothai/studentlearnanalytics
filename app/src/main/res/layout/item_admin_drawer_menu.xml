@@ -18,7 +18,7 @@
         android:id="@+id/imgDrawerItemIcon"
         android:layout_width="22dp"
         android:layout_height="22dp"
-        android:contentDescription="Menu Icon"
+        android:contentDescription="@string/menu_icon"
         android:src="@drawable/ic_home"
         app:tint="@color/drawer_primary_blue" />
 
@@ -34,7 +34,7 @@
             android:id="@+id/tvDrawerItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dashboard"
+            android:text="@string/dashboard"
             android:textColor="@color/drawer_dark_navy"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Overview and statistics"
+            android:text="@string/overview_and_statistics"
             android:textColor="@color/drawer_secondary_text"
             android:textSize="12sp"
             android:visibility="gone" />
@@ -54,7 +54,7 @@
         android:id="@+id/imgDrawerItemChevron"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:contentDescription="Chevron Right"
+        android:contentDescription="@string/chevron_right"
         android:src="@drawable/ic_chevron_right"
         app:tint="@color/drawer_primary_blue" />
 

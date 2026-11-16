@@ -181,7 +181,7 @@ public class NotificationFragment extends Fragment {
     private void showFilterOptionsDialog() {
         String[] options = {"All Categories", "User Notifications", "Course Notifications", "System Notifications", "Unread Only"};
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Filter Notifications")
+                .setTitle(R.string.filter_notifications)
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
                         case 0: selectFilterChip("ALL"); break;
@@ -191,7 +191,7 @@ public class NotificationFragment extends Fragment {
                         case 4: selectFilterChip("UNREAD"); break;
                     }
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -248,9 +248,9 @@ public class NotificationFragment extends Fragment {
 
     private void showDeleteReadConfirmationDialog() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Delete Read Notifications?")
-                .setMessage("Are you sure you want to delete all read notifications?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(R.string.delete_read_notifications)
+                .setMessage(R.string.are_you_sure_you_want_to_delete_all_read_n)
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
                     List<Notification> toRemove = new ArrayList<>();
                     for (Notification n : masterNotificationList) {
                         if (n.isRead()) {
@@ -261,7 +261,7 @@ public class NotificationFragment extends Fragment {
                     filterAndRefreshNotifications();
                     Toast.makeText(getContext(), "Read notifications deleted", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -307,7 +307,7 @@ public class NotificationFragment extends Fragment {
         }
 
         // Update Category Chip Counts
-        if (pillNotifAll != null) pillNotifAll.setText("All (" + masterNotificationList.size() + ")");
+        if (pillNotifAll != null) pillNotifAll.setText(pillNotifAll.getContext().getString(R.string.all_c49d0d) + masterNotificationList.size() + ")");
         if (pillNotifUnread != null) pillNotifUnread.setText("Unread (" + unreadCount + ")");
 
         // Refresh List & Empty State
@@ -320,7 +320,7 @@ public class NotificationFragment extends Fragment {
                 if (tvEmptyStateDesc != null) tvEmptyStateDesc.setText("No notifications found matching your search or filter criteria.");
                 if (btnResetNotifSearch != null) btnResetNotifSearch.setVisibility(View.VISIBLE);
             } else {
-                if (tvEmptyStateTitle != null) tvEmptyStateTitle.setText("No Notifications");
+                if (tvEmptyStateTitle != null) tvEmptyStateTitle.setText(R.string.no_notifications);
                 if (tvEmptyStateDesc != null) tvEmptyStateDesc.setText("You're all caught up! There are no notifications at the moment.");
                 if (btnResetNotifSearch != null) btnResetNotifSearch.setVisibility(View.GONE);
             }

@@ -55,7 +55,7 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/admin_primary_blue"
-                android:text="+ Enroll"
+                android:text="@string/enroll"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13sp"
@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Enrolled" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_enrolled" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvTotalEnrolled" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="215" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Capacity Rate" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/capacity_rate" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvCapacityRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="89.5%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

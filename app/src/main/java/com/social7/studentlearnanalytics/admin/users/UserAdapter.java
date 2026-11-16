@@ -121,24 +121,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             if (imgUserActionMenu != null) {
                 imgUserActionMenu.setOnClickListener(v -> {
                     PopupMenu popup = new PopupMenu(context, imgUserActionMenu);
-                    popup.getMenu().add("View Details");
-                    popup.getMenu().add("Edit Student");
+                    final int MENU_VIEW_DETAILS = 1;
+                    final int MENU_EDIT_STUDENT = 2;
+                    final int MENU_TOGGLE_STATUS = 3;
+                    final int MENU_DELETE_USER = 4;
+
+                    popup.getMenu().add(0, MENU_VIEW_DETAILS, 0, R.string.view_details);
+                    popup.getMenu().add(0, MENU_EDIT_STUDENT, 1, R.string.edit_student);
                     boolean isActive = "Active".equalsIgnoreCase(user.getStatus());
-                    popup.getMenu().add(isActive ? "Deactivate Account" : "Activate Account");
-                    popup.getMenu().add("Delete User");
+                    popup.getMenu().add(0, MENU_TOGGLE_STATUS, 2, isActive ? R.string.deactivate_account : R.string.activate_account);
+                    popup.getMenu().add(0, MENU_DELETE_USER, 3, R.string.delete_user);
 
                     popup.setOnMenuItemClickListener(item -> {
-                        String title = item.getTitle().toString();
-                        if ("View Details".equals(title)) {
+                        int itemId = item.getItemId();
+                        if (itemId == MENU_VIEW_DETAILS) {
                             if (listener != null) listener.onViewDetails(user);
                             return true;
-                        } else if ("Edit Student".equals(title)) {
+                        } else if (itemId == MENU_EDIT_STUDENT) {
                             if (listener != null) listener.onEditUser(user);
                             return true;
-                        } else if ("Deactivate Account".equals(title) || "Activate Account".equals(title)) {
+                        } else if (itemId == MENU_TOGGLE_STATUS) {
                             if (listener != null) listener.onToggleStatus(user);
                             return true;
-                        } else if ("Delete User".equals(title)) {
+                        } else if (itemId == MENU_DELETE_USER) {
                             if (listener != null) listener.onDeleteUser(user);
                             return true;
                         }

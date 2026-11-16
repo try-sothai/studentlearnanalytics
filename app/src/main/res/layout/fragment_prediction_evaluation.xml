@@ -36,7 +36,7 @@
                 android:background="@drawable/bg_notif_tab_active"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Model Comparison"
+                android:text="@string/model_comparison"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="History"
+                android:text="@string/history"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -160,16 +160,16 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Test Samples" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,240 Rows" android:textColor="@color/admin_text_primary" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_1_240_rows" android:textColor="@color/admin_text_primary" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Version" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/model_version" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v2.4 RF" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Optimal" android:textColor="@color/admin_active_green" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
@@ -293,11 +293,11 @@
                         android:id="@+id/edtSearchEvalHistory"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:hint="Search evaluation session or course..."
+                        android:hint="@string/search_evaluation_session_or_course"
                         android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Evaluation History Archives" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/model_evaluation_history_archives" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvEvaluationHistoryList"
@@ -343,7 +343,7 @@
                         <!-- Feature 1 -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Quiz &amp; Assignment Score History" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/quiz_assignment_score_history" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="38% Weight" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="38" android:progressTint="@color/admin_primary_blue"/>
@@ -352,7 +352,7 @@
                         <!-- Feature 2 -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Class Attendance &amp; Participation" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/class_attendance_participation" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="25% Weight" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="25" android:progressTint="@color/admin_active_green"/>
@@ -361,7 +361,7 @@
                         <!-- Feature 3 -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Midterm Exam Performance" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/midterm_exam_performance" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20% Weight" android:textColor="@color/admin_purple_accent" android:textSize="13sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="20" android:progressTint="@color/admin_purple_accent"/>

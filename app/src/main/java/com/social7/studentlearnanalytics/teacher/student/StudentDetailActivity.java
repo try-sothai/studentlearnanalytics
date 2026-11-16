@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher.student;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -141,13 +143,14 @@ public class StudentDetailActivity extends AppCompatActivity {
         entries.add(new Entry(3, 85f));
         entries.add(new Entry(4, 88f));
 
-        LineDataSet dataSet = new LineDataSet(entries, "Performance");
+        LineDataSet dataSet = new LineDataSet(entries, getString(R.string.performance));
         dataSet.setColor(Color.parseColor("#5F34F2"));
         dataSet.setLineWidth(3f);
         dataSet.setCircleColor(Color.parseColor("#5F34F2"));
 
         chart.setData(new LineData(dataSet));
         chart.getDescription().setEnabled(false);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 }

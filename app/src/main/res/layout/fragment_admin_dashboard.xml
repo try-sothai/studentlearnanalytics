@@ -35,7 +35,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/ic_menu"
                     app:tint="@color/text_primary"
-                    android:contentDescription="Menu"
+                    android:contentDescription="@string/menu"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -55,26 +55,38 @@
                         android:id="@+id/tvAdminGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Good Morning,"
+                        android:text="@string/good_morning_comma"
                         android:textColor="@color/text_secondary"
-                        android:textSize="14sp" />
+                        android:textSize="12sp"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end" />
 
                     <TextView
                         android:id="@+id/tvAdminName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Admin! 👋"
+                        android:text="@string/admin_slas"
                         android:textColor="@color/text_primary"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:layout_marginTop="1dp" />
 
                     <TextView
+                        android:id="@+id/tvAdminSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="System Administrator"
+                        android:text="@string/system_administrator"
                         android:textColor="@color/primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:layout_marginTop="1dp" />
                 </LinearLayout>
 
                 <!-- Notification Bell with Red Badge -->
@@ -186,7 +198,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Active Classes"
+                                    android:text="@string/active_classes"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
 
@@ -205,7 +217,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="▲ +12% this month"
+                                    android:text="@string/str_12_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -237,7 +249,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Total Students"
+                                    android:text="@string/total_students"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
 
@@ -256,7 +268,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="▲ +4% this month"
+                                    android:text="@string/str_4_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -288,7 +300,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Avg Performance"
+                                    android:text="@string/avg_performance"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
 
@@ -307,7 +319,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="▲ +5% this month"
+                                    android:text="@string/str_5_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -339,7 +351,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="At-Risk Alerts"
+                                    android:text="@string/at_risk_alerts"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
 
@@ -358,7 +370,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
-                                    android:text="▲ +10% this month"
+                                    android:text="@string/str_10_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -395,7 +407,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Annual Student Enrollment &amp; Engagement"
+                                    android:text="@string/annual_student_enrollment_engagement"
                                     android:textColor="@color/text_primary"
                                     android:textSize="15sp"
                                     android:textStyle="bold" />
@@ -419,7 +431,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="● Total Students"
+                                    android:text="@string/total_students_31adec"
                                     android:textColor="#10B981"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -428,7 +440,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="12dp"
-                                    android:text="● Active Learners"
+                                    android:text="@string/dot_active_learners"
                                     android:textColor="#0EA5E9"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -437,7 +449,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="12dp"
-                                    android:text="● At-Risk Students"
+                                    android:text="@string/at_risk_students_dfb3f5"
                                     android:textColor="#EF4444"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
@@ -461,7 +473,7 @@
                                     android:background="@drawable/bg_badge_credit"
                                     android:paddingHorizontal="16dp"
                                     android:paddingVertical="8dp"
-                                    android:text="No Data Available for Selected Year"
+                                    android:text="@string/no_data_available_selected_year"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="13sp"
                                     android:textStyle="bold"
@@ -482,7 +494,7 @@
                                     android:layout_height="38dp"
                                     android:layout_marginEnd="6dp"
                                     android:layout_weight="1"
-                                    android:text="Compare Years"
+                                    android:text="@string/compare_years"
                                     android:textAllCaps="false"
                                     android:textColor="@color/primary"
                                     android:textSize="11sp"
@@ -498,7 +510,7 @@
                                     android:layout_height="38dp"
                                     android:layout_marginStart="6dp"
                                     android:layout_weight="1"
-                                    android:text="Historical Reports"
+                                    android:text="@string/historical_reports"
                                     android:textAllCaps="false"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="11sp"
@@ -531,7 +543,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Student Academic Performance Overview"
+                                android:text="@string/student_academic_performance_overview"
                                 android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -551,7 +563,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="No academic data available."
+                                    android:text="@string/no_academic_data_available"
                                     android:textColor="@color/text_secondary"
                                     android:visibility="gone" />
                             </FrameLayout>
@@ -579,7 +591,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Student Attendance Analytics"
+                                android:text="@string/student_attendance_analytics"
                                 android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -599,7 +611,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="No academic data available."
+                                    android:text="@string/no_academic_data_available"
                                     android:textColor="@color/text_secondary"
                                     android:visibility="gone" />
                             </FrameLayout>
@@ -627,7 +639,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Student Academic Risk Distribution"
+                                android:text="@string/student_academic_risk_distribution"
                                 android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -647,7 +659,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="No academic data available."
+                                    android:text="@string/no_academic_data_available"
                                     android:textColor="@color/text_secondary"
                                     android:visibility="gone" />
                             </FrameLayout>
@@ -686,7 +698,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="System Status"
+                                    android:text="@string/system_status"
                                     android:textColor="@color/text_primary"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
@@ -695,7 +707,7 @@
                                     android:id="@+id/btnViewStats"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="View Stats >"
+                                    android:text="@string/view_stats_arrow"
                                     android:textColor="@color/primary"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
@@ -734,7 +746,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="API Server"
+                                            android:text="@string/api_server"
                                             android:textColor="@color/text_primary"
                                             android:textSize="12sp"
                                             android:textStyle="bold" />
@@ -743,7 +755,7 @@
                                             android:id="@+id/tvApiServerText"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Online"
+                                            android:text="@string/status_online"
                                             android:textColor="@color/success_green"
                                             android:textSize="11sp" />
                                     </LinearLayout>
@@ -773,7 +785,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Database"
+                                            android:text="@string/database"
                                             android:textColor="@color/text_primary"
                                             android:textSize="12sp"
                                             android:textStyle="bold" />
@@ -782,7 +794,7 @@
                                             android:id="@+id/tvDbText"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Online"
+                                            android:text="@string/status_online"
                                             android:textColor="@color/success_green"
                                             android:textSize="11sp" />
                                     </LinearLayout>
@@ -812,7 +824,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="ML Service"
+                                            android:text="@string/ml_service"
                                             android:textColor="@color/text_primary"
                                             android:textSize="12sp"
                                             android:textStyle="bold" />
@@ -821,7 +833,7 @@
                                             android:id="@+id/tvMlText"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Online"
+                                            android:text="@string/status_online"
                                             android:textColor="@color/success_green"
                                             android:textSize="11sp" />
                                     </LinearLayout>

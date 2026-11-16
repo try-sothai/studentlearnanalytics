@@ -35,7 +35,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_book"
                 app:tint="@color/white"
-                android:contentDescription="Course" />
+                android:contentDescription="@string/course" />
         </FrameLayout>
 
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="Computer Science Department"
+                android:text="@string/computer_science_department"
                 android:textColor="@color/teacher_secondary_text"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -70,7 +70,7 @@
             android:layout_height="24dp"
             android:gravity="center"
             android:paddingHorizontal="10dp"
-            android:text="5 Pending Scores"
+            android:text="@string/str_5_pending_scores"
             android:textColor="@color/primary_purple"
             android:textSize="11sp"
             android:textStyle="bold"

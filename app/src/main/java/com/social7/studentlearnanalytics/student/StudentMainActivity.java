@@ -18,10 +18,16 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.auth.LoginActivity;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.storage.SessionManager;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StudentMainActivity extends AppCompatActivity {
 
@@ -89,8 +95,7 @@ public class StudentMainActivity extends AppCompatActivity {
 
         if (bottomNavigation != null) {
             com.google.android.material.badge.BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.nav_notifications);
-            badge.setVisible(true);
-            badge.setNumber(3);
+            badge.setVisible(false);
             badge.setBackgroundColor(androidx.core.content.ContextCompat.getColor(this, R.color.danger_red));
 
             bottomNavigation.setOnItemSelectedListener(item -> {
@@ -178,47 +183,76 @@ public class StudentMainActivity extends AppCompatActivity {
 
         if (tvName != null) {
             String userName = sessionManager.getStudentName();
-            tvName.setText(userName != null && !userName.trim().isEmpty() ? userName : "Sophea");
+            tvName.setText(userName != null && !userName.trim().isEmpty() ? userName : "Student");
         }
 
         if (tvId != null) {
             String studentId = sessionManager.getUserId();
-            tvId.setText("Student ID: " + (studentId != null && !studentId.trim().isEmpty() ? studentId : "ST2024001"));
+            tvId.setText(tvId.getContext().getString(R.string.student_id_a8dd9e) + (studentId != null && !studentId.trim().isEmpty() ? studentId : "N/A"));
         }
 
         if (tvAcademic != null) {
-            tvAcademic.setText("Year 2 · Semester 2");
+            tvAcademic.setText(R.string.enrolled_student);
         }
 
         // Fetch Real Profile
-        com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).getProfile().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+        ApiClient.getApiService(this).getProfile().enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        com.google.gson.JsonObject root = response.body();
-                        com.google.gson.JsonObject data = root.has("data") && root.get("data").isJsonObject()
-                                ? root.getAsJsonObject("data") : root;
+                        JsonObject root = response.body();
+                        JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                ? root.getAsJsonObject("data")
+                                : (root.has("user") && root.get("user").isJsonObject() ? root.getAsJsonObject("user") : root);
 
                         if (data.has("name") && !data.get("name").isJsonNull() && tvName != null) {
                             tvName.setText(data.get("name").getAsString());
                         }
 
+                        JsonObject studentObj = null;
                         if (data.has("student") && data.get("student").isJsonObject()) {
-                            com.google.gson.JsonObject studentObj = data.getAsJsonObject("student");
-                            
+                            studentObj = data.getAsJsonObject("student");
+                        } else if (root.has("profile") && root.get("profile").isJsonObject()) {
+                            JsonObject profWrapper = root.getAsJsonObject("profile");
+                            if (profWrapper.has("profile") && profWrapper.get("profile").isJsonObject()) {
+                                studentObj = profWrapper.getAsJsonObject("profile");
+                            }
+                        }
+
+                        if (studentObj != null) {
                             if (tvId != null) {
                                 if (studentObj.has("student_code") && !studentObj.get("student_code").isJsonNull()) {
-                                    tvId.setText(studentObj.get("student_code").getAsString());
+                                    tvId.setText(tvId.getContext().getString(R.string.student_id_a8dd9e) + studentObj.get("student_code").getAsString());
                                 } else if (studentObj.has("student_id") && !studentObj.get("student_id").isJsonNull()) {
-                                    tvId.setText(studentObj.get("student_id").getAsString());
+                                    tvId.setText(tvId.getContext().getString(R.string.student_id_a8dd9e) + studentObj.get("student_id").getAsString());
                                 }
                             }
-                            
-                            if (tvAcademic != null && studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
-                                String year = studentObj.get("year_level").getAsString();
-                                if (!year.toLowerCase().contains("year")) year = year + " Year";
-                                tvAcademic.setText(year);
+
+                            if (tvAcademic != null) {
+                                String deptName = "";
+                                if (studentObj.has("department") && studentObj.get("department").isJsonObject()) {
+                                    JsonObject deptObj = studentObj.getAsJsonObject("department");
+                                    if (deptObj.has("name") && !deptObj.get("name").isJsonNull()) {
+                                        deptName = deptObj.get("name").getAsString();
+                                    }
+                                } else if (studentObj.has("major") && !studentObj.get("major").isJsonNull()) {
+                                    deptName = studentObj.get("major").getAsString();
+                                }
+
+                                String yearStr = "";
+                                if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
+                                    String rawYr = studentObj.get("year_level").getAsString();
+                                    yearStr = rawYr.toLowerCase().contains("year") ? rawYr : "Year " + rawYr;
+                                }
+
+                                if (!deptName.isEmpty() && !yearStr.isEmpty()) {
+                                    tvAcademic.setText(deptName + " · " + yearStr);
+                                } else if (!deptName.isEmpty()) {
+                                    tvAcademic.setText(deptName);
+                                } else if (!yearStr.isEmpty()) {
+                                    tvAcademic.setText(yearStr);
+                                }
                             }
                         }
                     } catch (Exception e) {
@@ -228,17 +262,21 @@ public class StudentMainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
             }
         });
 
         // Fetch Real Notifications
-        com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).getNotifications().enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+        ApiClient.getApiService(this).getNotifications().enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        com.google.gson.JsonObject body = response.body();
+                        JsonObject body = response.body();
+                        if (body.has("unread_count") && !body.get("unread_count").isJsonNull()) {
+                            updateGlobalNotificationBadge(body.get("unread_count").getAsInt());
+                            return;
+                        }
                         com.google.gson.JsonArray array = null;
                         if (body.has("data") && body.get("data").isJsonArray()) {
                             array = body.getAsJsonArray("data");
@@ -249,14 +287,13 @@ public class StudentMainActivity extends AppCompatActivity {
                         if (array != null) {
                             int unreadCount = 0;
                             for (int i = 0; i < array.size(); i++) {
-                                com.google.gson.JsonObject notif = array.get(i).getAsJsonObject();
-                                if (notif.has("read_at") && notif.get("read_at").isJsonNull()) {
-                                    unreadCount++;
-                                } else if (notif.has("is_read") && !notif.get("is_read").getAsBoolean()) {
+                                JsonObject notif = array.get(i).getAsJsonObject();
+                                if (notif.has("is_read") && !notif.get("is_read").isJsonNull()) {
+                                    if (!notif.get("is_read").getAsBoolean()) unreadCount++;
+                                } else if (notif.has("read_at") && notif.get("read_at").isJsonNull()) {
                                     unreadCount++;
                                 }
                             }
-                            
                             updateGlobalNotificationBadge(unreadCount);
                         }
                     } catch (Exception e) {
@@ -266,11 +303,11 @@ public class StudentMainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
             }
         });
     }
-    
+
     public void updateGlobalNotificationBadge(int unreadCount) {
         TextView tvNotifBadge = findViewById(R.id.tvStudentNotifBadge);
         if (tvNotifBadge == null) tvNotifBadge = findViewById(R.id.tvTeacherNotifBadge);
@@ -282,7 +319,7 @@ public class StudentMainActivity extends AppCompatActivity {
                 tvNotifBadge.setVisibility(View.GONE);
             }
         }
-        
+
         if (bottomNavigation != null) {
             com.google.android.material.badge.BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.nav_notifications);
             if (unreadCount > 0) {
@@ -327,12 +364,33 @@ public class StudentMainActivity extends AppCompatActivity {
                 openFragment(new StudentSettingsFragment());
                 break;
             case 10:
-                // Help Support handling
+                showHelpAndSupportDialog();
                 break;
             case 11:
-                // About handling
+                showAboutDialog();
                 break;
         }
+    }
+
+    private void showHelpAndSupportDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.help_support)
+                .setMessage("Need assistance with your Student Learning Analytics account?\n\n" +
+                        "• Academic Office: registrar@university.edu.kh\n" +
+                        "• IT Helpdesk: support@slas.edu.kh\n" +
+                        "• Office Hours: Mon–Fri, 8:00 AM – 5:00 PM\n\n" +
+                        "For course-specific inquiries, please contact your course instructor directly via your enrolled course page.")
+                .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void showAboutDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.about_slas)
+                .setMessage("Student Learning Analytics System (SLAS)\nVersion 1.0.0\n\n" +
+                        "SLAS empowers university students to track real-time attendance, assignments, quizzes, exams, GPA progression, AI performance predictions, and personalized study recommendations.")
+                .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     public void updateDrawerActiveItem(int activeIndex) {
@@ -399,11 +457,9 @@ public class StudentMainActivity extends AppCompatActivity {
 
     public void selectBottomNav(int itemId) {
         if (bottomNavigation != null && bottomNavigation.getSelectedItemId() != itemId) {
-            // Unregister listener to prevent infinite loop during programmatic selection
             bottomNavigation.setOnItemSelectedListener(null);
             bottomNavigation.setSelectedItemId(itemId);
-            
-            // Re-register listener
+
             bottomNavigation.setOnItemSelectedListener(item -> {
                 int id = item.getItemId();
                 if (id == R.id.nav_home) openFragment(new StudentDashboardFragment());
@@ -419,19 +475,39 @@ public class StudentMainActivity extends AppCompatActivity {
 
     public void showLogoutConfirmationDialog() {
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Log Out?")
+                .setTitle(R.string.log_out_6a80a6)
                 .setMessage("Are you sure you want to log out of your student account?")
-                .setPositiveButton("Log Out", (dialog, which) -> {
-                    if (sessionManager != null) {
-                        sessionManager.clearSession();
-                    }
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.log_out, (dialog, which) -> performLogout())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    private void performLogout() {
+        try {
+            ApiClient.getApiService(this).logout().enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    clearSessionAndRedirect();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    clearSessionAndRedirect();
+                }
+            });
+        } catch (Exception e) {
+            clearSessionAndRedirect();
+        }
+    }
+
+    private void clearSessionAndRedirect() {
+        if (sessionManager != null) {
+            sessionManager.clearSession();
+        }
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -461,10 +537,10 @@ public class StudentMainActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container, fragment);
 
-        if (!(fragment instanceof StudentDashboardFragment || 
-              fragment instanceof StudentCoursesFragment || 
-              fragment instanceof LearningAnalyticsFragment || 
-              fragment instanceof NotificationFragment || 
+        if (!(fragment instanceof StudentDashboardFragment ||
+              fragment instanceof StudentCoursesFragment ||
+              fragment instanceof LearningAnalyticsFragment ||
+              fragment instanceof NotificationFragment ||
               fragment instanceof ProfileFragment)) {
             transaction.addToBackStack(null);
         }
@@ -516,6 +592,15 @@ public class StudentMainActivity extends AppCompatActivity {
         TextView tvSubtitle = root.findViewById(R.id.tvHeaderSubtitle);
         if (tvSubtitle != null && subtitle != null) {
             tvSubtitle.setText(subtitle);
+        }
+
+        if (com.social7.studentlearnanalytics.localization.AppLanguageManager.isKhmer(this)) {
+            if (tvTitle != null) {
+                tvTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 15f);
+            }
+            if (tvSubtitle != null) {
+                tvSubtitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 10.5f);
+            }
         }
 
         View notifBtn = root.findViewById(R.id.layoutStudentNotifBtn);

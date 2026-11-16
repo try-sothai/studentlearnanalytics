@@ -101,7 +101,7 @@ public class ClassScheduleAdapter extends RecyclerView.Adapter<ClassScheduleAdap
             if (tvCourseName != null) tvCourseName.setText(item.courseName);
             if (tvScheduleTime != null) tvScheduleTime.setText(item.dayAndTime);
             if (tvScheduleDetails != null) {
-                tvScheduleDetails.setText("Room: " + item.roomName + " • Teacher: " + item.teacherName);
+                tvScheduleDetails.setText(tvScheduleDetails.getContext().getString(R.string.room_ad427d) + item.roomName + " • Teacher: " + item.teacherName);
             }
             if (tvConflictStatus != null) {
                 tvConflictStatus.setText(item.status);

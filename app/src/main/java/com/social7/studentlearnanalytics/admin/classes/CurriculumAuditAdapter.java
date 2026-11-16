@@ -112,12 +112,12 @@ public class CurriculumAuditAdapter extends RecyclerView.Adapter<CurriculumAudit
                 }
             }
             if (tvDetails != null) {
-                tvDetails.setText("Class: " + item.className + " • Teacher: " + item.teacher + " • " + item.credits + " Credits");
+                tvDetails.setText(tvDetails.getContext().getString(R.string.class_4530a9) + item.className + " • Teacher: " + item.teacher + " • " + item.credits + " Credits");
             }
             if (tvFinding != null) {
                 if (item.note != null && !item.note.isEmpty()) {
                     tvFinding.setVisibility(View.VISIBLE);
-                    tvFinding.setText("Audit Note: " + item.note);
+                    tvFinding.setText(itemView.getContext().getString(R.string.audit_note_prefix) + item.note);
                 } else {
                     tvFinding.setVisibility(View.GONE);
                 }

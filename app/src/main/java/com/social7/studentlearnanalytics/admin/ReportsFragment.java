@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.admin;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -121,8 +123,8 @@ public class ReportsFragment extends Fragment {
         // Header Titles
         TextView tvTitle = view.findViewById(R.id.tvHeaderTitle);
         TextView tvSubtitle = view.findViewById(R.id.tvHeaderSubtitle);
-        if (tvTitle != null) tvTitle.setText("Reports & Analytics");
-        if (tvSubtitle != null) tvSubtitle.setText("View, analyze and export university reports");
+        if (tvTitle != null) tvTitle.setText(R.string.reports_analytics);
+        if (tvSubtitle != null) tvSubtitle.setText(getString(R.string.view_analyze_export_reports));
 
         // Primary Tab Buttons
         btnTabOverview = view.findViewById(R.id.btnTabOverview);
@@ -207,13 +209,13 @@ public class ReportsFragment extends Fragment {
         if (rowAcademic != null) {
             rowAcademic.setOnClickListener(v ->
                     new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Academic Performance Report")
+                            .setTitle(R.string.academic_performance_report)
                             .setMessage("Summary Statistics for AY 2024-2025:\n\n" +
                                     "• Total Enrolled Students: 2,845\n" +
                                     "• Average University GPA: 3.42 / 4.0\n" +
                                     "• Course Completion Rate: 94.8%\n" +
                                     "• Academic Honor Roll: 412 Students")
-                            .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                            .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                             .show()
             );
         }
@@ -297,7 +299,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new Entry(4, 2780f));
             entries.add(new Entry(5, 2845f));
 
-            LineDataSet dataSet = new LineDataSet(entries, "Enrollment");
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.enrollment));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setLineWidth(3f);
             dataSet.setCircleColor(Color.parseColor("#3155F5"));
@@ -312,6 +314,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartEnrollmentTrend.getAxisRight().setEnabled(false);
             chartEnrollmentTrend.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartEnrollmentTrend.getContext(), chartEnrollmentTrend);
             chartEnrollmentTrend.invalidate();
         }
 
@@ -336,6 +339,7 @@ public class ReportsFragment extends Fragment {
             chartStudentDistribution.setCenterText("2,845\nStudents");
             chartStudentDistribution.setCenterTextSize(14f);
             chartStudentDistribution.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartStudentDistribution.getContext(), chartStudentDistribution);
             chartStudentDistribution.invalidate();
         }
     }
@@ -349,7 +353,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 610f));
             entries.add(new BarEntry(4, 645f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Enrollments");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.enrollments));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -363,6 +367,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartStudentEnrollmentBar.getAxisRight().setEnabled(false);
             chartStudentEnrollmentBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartStudentEnrollmentBar.getContext(), chartStudentEnrollmentBar);
             chartStudentEnrollmentBar.invalidate();
         }
 
@@ -389,7 +394,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 158f));  // 2.25 - 2.74
             entries.add(new BarEntry(4, 45f));   // Below 2.25
 
-            BarDataSet dataSet = new BarDataSet(entries, "Students");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.nav_students));
             dataSet.setColors(new int[]{
                     Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
             });
@@ -405,6 +410,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartStudentPerformanceGpaBar.getAxisRight().setEnabled(false);
             chartStudentPerformanceGpaBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartStudentPerformanceGpaBar.getContext(), chartStudentPerformanceGpaBar);
             chartStudentPerformanceGpaBar.invalidate();
         }
 
@@ -431,7 +437,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new Entry(3, 92.5f));
             entries.add(new Entry(4, 94.0f));
 
-            LineDataSet dataSet = new LineDataSet(entries, "Attendance %");
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.attendance_7266c9));
             dataSet.setColor(Color.parseColor("#10B981"));
             dataSet.setLineWidth(3f);
             dataSet.setCircleColor(Color.parseColor("#10B981"));
@@ -446,6 +452,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartStudentAttendanceTrendLine.getAxisRight().setEnabled(false);
             chartStudentAttendanceTrendLine.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartStudentAttendanceTrendLine.getContext(), chartStudentAttendanceTrendLine);
             chartStudentAttendanceTrendLine.invalidate();
         }
 
@@ -539,7 +546,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 24f));
             entries.add(new BarEntry(4, 19f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Teaching Hours/Wk");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.teaching_hours_wk));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -553,6 +560,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartTeacherWorkloadBar.getAxisRight().setEnabled(false);
             chartTeacherWorkloadBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartTeacherWorkloadBar.getContext(), chartTeacherWorkloadBar);
             chartTeacherWorkloadBar.invalidate();
         }
 
@@ -579,7 +587,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 150f));
             entries.add(new BarEntry(4, 90f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Hours");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.hours));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -593,6 +601,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartTeacherWorkloadBarChart.getAxisRight().setEnabled(false);
             chartTeacherWorkloadBarChart.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartTeacherWorkloadBarChart.getContext(), chartTeacherWorkloadBarChart);
             chartTeacherWorkloadBarChart.invalidate();
         }
 
@@ -634,7 +643,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 91.5f));
             entries.add(new BarEntry(4, 96.0f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Pass Rate %");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.pass_rate_2646b3));
             dataSet.setColor(Color.parseColor("#10B981"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -648,6 +657,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartTeacherPerformanceBar.getAxisRight().setEnabled(false);
             chartTeacherPerformanceBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartTeacherPerformanceBar.getContext(), chartTeacherPerformanceBar);
             chartTeacherPerformanceBar.invalidate();
         }
 
@@ -741,7 +751,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(4, 1220f));
             entries.add(new BarEntry(5, 1245f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Enrollments");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.enrollments));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -755,6 +765,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartCourseTrendBar.getAxisRight().setEnabled(false);
             chartCourseTrendBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartCourseTrendBar.getContext(), chartCourseTrendBar);
             chartCourseTrendBar.invalidate();
         }
     }
@@ -768,7 +779,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new Entry(3, 6100f));
             entries.add(new Entry(4, 6245f));
 
-            LineDataSet dataSet = new LineDataSet(entries, "Enrollments");
+            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.enrollments));
             dataSet.setColor(Color.parseColor("#3155F5"));
             dataSet.setLineWidth(3f);
             dataSet.setCircleColor(Color.parseColor("#3155F5"));
@@ -783,6 +794,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartCourseEnrollmentLine.getAxisRight().setEnabled(false);
             chartCourseEnrollmentLine.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartCourseEnrollmentLine.getContext(), chartCourseEnrollmentLine);
             chartCourseEnrollmentLine.invalidate();
         }
 
@@ -824,7 +836,7 @@ public class ReportsFragment extends Fragment {
             entries.add(new BarEntry(3, 88f));
             entries.add(new BarEntry(4, 94f));
 
-            BarDataSet dataSet = new BarDataSet(entries, "Pass Rate %");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.pass_rate_2646b3));
             dataSet.setColor(Color.parseColor("#10B981"));
             dataSet.setDrawValues(false);
             BarData barData = new BarData(dataSet);
@@ -838,6 +850,7 @@ public class ReportsFragment extends Fragment {
             xAxis.setDrawGridLines(false);
             chartCoursePerformanceBar.getAxisRight().setEnabled(false);
             chartCoursePerformanceBar.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartCoursePerformanceBar.getContext(), chartCoursePerformanceBar);
             chartCoursePerformanceBar.invalidate();
         }
 

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,7 +53,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     private TextView emptyStateText;
 
     private TextView tabAssignments, tabQuizzes, tabHomework;
-    private String currentTab = "ASSIGNMENTS"; // ASSIGNMENTS, QUIZZES, HOMEWORK
+    private String currentTab = "ASSIGNMENTS";
 
     private final List<String> semesterFilterList = new ArrayList<>();
     private ArrayAdapter<String> spinnerAdapter;
@@ -68,6 +67,16 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         setupSemesterSpinner();
         setupRecyclerView();
         selectTab("ASSIGNMENTS");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if ("QUIZZES".equals(currentTab)) {
+            fetchQuizzes();
+        } else {
+            fetchAssignments();
+        }
     }
 
     private void initViews() {
@@ -167,7 +176,11 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         allAssessmentList.clear();
-                        JsonArray dataArray = response.body().getAsJsonArray("data");
+                        JsonObject body = response.body();
+                        JsonArray dataArray = body.has("data") && body.get("data").isJsonArray()
+                                ? body.getAsJsonArray("data")
+                                : (body.has("assignments") && body.get("assignments").isJsonArray()
+                                ? body.getAsJsonArray("assignments") : new JsonArray());
                         Set<String> uniqueSemesters = new LinkedHashSet<>();
 
                         if (dataArray != null && dataArray.size() > 0) {
@@ -200,12 +213,17 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
                                 String type = obj.has("assignment_type") && !obj.get("assignment_type").isJsonNull()
                                         ? obj.get("assignment_type").getAsString() : "assignment";
+                                if (title.toLowerCase(Locale.US).contains("homework")) {
+                                    type = "homework";
+                                }
 
                                 String semesterName = null;
                                 if (obj.has("semester") && !obj.get("semester").isJsonNull()) {
                                     JsonObject semObj = obj.getAsJsonObject("semester");
                                     if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
                                         semesterName = semObj.get("name").getAsString();
+                                    } else if (semObj.has("semester_name") && !semObj.get("semester_name").isJsonNull()) {
+                                        semesterName = semObj.get("semester_name").getAsString();
                                     }
                                 }
 
@@ -218,6 +236,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     JsonObject courseObj = obj.getAsJsonObject("course");
                                     if (courseObj.has("course_name") && !courseObj.get("course_name").isJsonNull()) {
                                         courseName = courseObj.get("course_name").getAsString();
+                                    } else if (courseObj.has("name") && !courseObj.get("name").isJsonNull()) {
+                                        courseName = courseObj.get("name").getAsString();
                                     }
                                 }
 
@@ -234,10 +254,10 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing assignment data", e);
-                        showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
+                        showEmptyState("No " + currentTab.toLowerCase(Locale.US) + " available yet.");
                     }
                 } else {
-                    showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
+                    showEmptyState("No " + currentTab.toLowerCase(Locale.US) + " available yet.");
                 }
             }
 
@@ -265,7 +285,11 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         allAssessmentList.clear();
-                        JsonArray dataArray = response.body().getAsJsonArray("data");
+                        JsonObject body = response.body();
+                        JsonArray dataArray = body.has("data") && body.get("data").isJsonArray()
+                                ? body.getAsJsonArray("data")
+                                : (body.has("quizzes") && body.get("quizzes").isJsonArray()
+                                ? body.getAsJsonArray("quizzes") : new JsonArray());
                         Set<String> uniqueSemesters = new LinkedHashSet<>();
 
                         if (dataArray != null && dataArray.size() > 0) {
@@ -276,7 +300,16 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                 String id = obj.has("id") && !obj.get("id").isJsonNull() ? obj.get("id").getAsString() : "";
                                 String title = obj.has("title") && !obj.get("title").isJsonNull() ? obj.get("title").getAsString() : "Untitled Quiz";
 
-                                String rawDate = obj.has("start_at") && !obj.get("start_at").isJsonNull() ? obj.get("start_at").getAsString() : "";
+                                String rawDate = "";
+                                for (String k : new String[]{"start_at", "quiz_date", "end_at", "created_at"}) {
+                                    if (obj.has(k) && !obj.get(k).isJsonNull()) {
+                                        String v = obj.get(k).getAsString();
+                                        if (v != null && !v.trim().isEmpty()) {
+                                            rawDate = v;
+                                            break;
+                                        }
+                                    }
+                                }
                                 String displayDate = formatDueDate(rawDate);
 
                                 int totalScore = obj.has("total_score") && !obj.get("total_score").isJsonNull() ? obj.get("total_score").getAsInt() : 100;
@@ -301,6 +334,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     JsonObject semObj = obj.getAsJsonObject("semester");
                                     if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
                                         semesterName = semObj.get("name").getAsString();
+                                    } else if (semObj.has("semester_name") && !semObj.get("semester_name").isJsonNull()) {
+                                        semesterName = semObj.get("semester_name").getAsString();
                                     }
                                 }
 
@@ -313,6 +348,8 @@ public class AssessmentDetailActivity extends AppCompatActivity {
                                     JsonObject courseObj = obj.getAsJsonObject("course");
                                     if (courseObj.has("course_name") && !courseObj.get("course_name").isJsonNull()) {
                                         courseName = courseObj.get("course_name").getAsString();
+                                    } else if (courseObj.has("name") && !courseObj.get("name").isJsonNull()) {
+                                        courseName = courseObj.get("name").getAsString();
                                     }
                                 }
 
@@ -387,7 +424,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         }
 
         if (assessmentList.isEmpty()) {
-            showEmptyState("No " + currentTab.toLowerCase() + " available yet.");
+            showEmptyState("No " + currentTab.toLowerCase(Locale.US) + " available yet.");
         } else {
             if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
             if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
@@ -430,7 +467,7 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
     private String formatDueDate(String rawDate) {
         if (rawDate == null || rawDate.trim().isEmpty()) {
-            return "No deadline";
+            return "Scheduled";
         }
         String[] patterns = {
                 "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",

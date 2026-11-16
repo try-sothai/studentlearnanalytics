@@ -199,9 +199,17 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
 
         String status = sub.has("status") && !sub.get("status").isJsonNull()
                 ? sub.get("status").getAsString() : "draft";
+        boolean hasScore = sub.has("score") && !sub.get("score").isJsonNull();
+        String scorePart = "";
+        if (hasScore) {
+            scorePart = " • Score: " + Math.round(sub.get("score").getAsFloat());
+            if (sub.has("feedback") && !sub.get("feedback").isJsonNull() && !sub.get("feedback").getAsString().trim().isEmpty()) {
+                scorePart += " (" + sub.get("feedback").getAsString().trim() + ")";
+            }
+        }
 
-        if ("submitted".equalsIgnoreCase(status) || "graded".equalsIgnoreCase(status)) {
-            tvStatusMessage.setText("Status: Submitted (" + status + ")");
+        if ("submitted".equalsIgnoreCase(status) || "graded".equalsIgnoreCase(status) || hasScore) {
+            tvStatusMessage.setText(tvStatusMessage.getContext().getString(R.string.status_b61406) + (hasScore ? "Graded" : "Submitted") + scorePart);
             tvStatusMessage.setTextColor(getResources().getColor(R.color.success_green, null));
             btnSubmitWork.setText("Resubmit Work");
         } else {
@@ -264,7 +272,7 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (isFinalSubmission) {
                         Toast.makeText(SubmitAssignmentActivity.this, "Work submitted successfully!", Toast.LENGTH_SHORT).show();
-                        tvStatusMessage.setText("Status: Submitted");
+                        tvStatusMessage.setText(R.string.status_submitted_3754b0);
                         tvStatusMessage.setTextColor(getResources().getColor(R.color.success_green, null));
                         finish();
                     } else {
@@ -293,10 +301,10 @@ public class SubmitAssignmentActivity extends AppCompatActivity {
 
     private void confirmAndSubmitWork() {
         new AlertDialog.Builder(this)
-                .setTitle("Submit Work")
-                .setMessage("Are you sure you want to submit your assignment?")
-                .setPositiveButton("Submit", (dialog, which) -> saveDraft(true))
-                .setNegativeButton("Cancel", null)
+                .setTitle(R.string.submit_work)
+                .setMessage(R.string.are_you_sure_you_want_to_submit_your_assig)
+                .setPositiveButton(R.string.submit, (dialog, which) -> saveDraft(true))
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 }

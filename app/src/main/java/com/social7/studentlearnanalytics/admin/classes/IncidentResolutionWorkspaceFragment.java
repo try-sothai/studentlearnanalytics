@@ -116,7 +116,7 @@ public class IncidentResolutionWorkspaceFragment extends Fragment {
         if (getContext() == null) return;
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Incident Workspace Detail")
-                .setMessage("Incident ID: " + item.id + "\n" +
+                .setMessage(getString(R.string.incident_id) + item.id + "\n" +
                         "Summary: " + item.title + "\n" +
                         "Student: " + item.studentName + " (" + item.studentId + ")\n" +
                         "Class: " + item.className + "\n" +
@@ -126,7 +126,7 @@ public class IncidentResolutionWorkspaceFragment extends Fragment {
                         "Logged Date: " + item.date + "\n" +
                         "Assigned Staff: " + item.assignedStaff)
                 .setPositiveButton("Open Student Dossier", (dialog, which) -> openStudentDossier(item))
-                .setNegativeButton("Close", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 

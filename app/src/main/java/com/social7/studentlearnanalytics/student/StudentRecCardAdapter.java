@@ -20,7 +20,9 @@ public class StudentRecCardAdapter extends RecyclerView.Adapter<StudentRecCardAd
 
     public static class StudentRecItem {
         public String id;
+        public String courseId;
         public String courseCode;
+        public String courseName;
         public String title;
         public String description;
         public String priorityBadge;
@@ -45,12 +47,18 @@ public class StudentRecCardAdapter extends RecyclerView.Adapter<StudentRecCardAd
     private final List<StudentRecItem> originalList;
     private final List<StudentRecItem> filteredList;
     private final OnRecCardClickListener listener;
+    private String currentQuery = "";
+    private String currentCategory = "All";
 
     public StudentRecCardAdapter(Context context, List<StudentRecItem> list, OnRecCardClickListener listener) {
         this.context = context;
         this.originalList = list != null ? list : new ArrayList<>();
         this.filteredList = new ArrayList<>(this.originalList);
         this.listener = listener;
+    }
+
+    public void refresh() {
+        filter(currentQuery, currentCategory);
     }
 
     @NonNull
@@ -72,17 +80,20 @@ public class StudentRecCardAdapter extends RecyclerView.Adapter<StudentRecCardAd
     }
 
     public void filter(String query, String category) {
+        this.currentQuery = query != null ? query : "";
+        this.currentCategory = category != null ? category : "All";
         filteredList.clear();
-        String text = query != null ? query.trim().toLowerCase() : "";
+        String text = this.currentQuery.trim().toLowerCase();
         for (StudentRecItem item : originalList) {
             boolean matchesQuery = text.isEmpty() ||
                     (item.courseCode != null && item.courseCode.toLowerCase().contains(text)) ||
+                    (item.courseName != null && item.courseName.toLowerCase().contains(text)) ||
                     (item.title != null && item.title.toLowerCase().contains(text)) ||
                     (item.description != null && item.description.toLowerCase().contains(text));
 
-            boolean matchesCat = category == null || category.trim().isEmpty() || "All".equalsIgnoreCase(category) ||
-                    (item.priorityBadge != null && item.priorityBadge.equalsIgnoreCase(category)) ||
-                    (item.statusBadge != null && item.statusBadge.equalsIgnoreCase(category));
+            boolean matchesCat = this.currentCategory.trim().isEmpty() || "All".equalsIgnoreCase(this.currentCategory) ||
+                    (item.priorityBadge != null && item.priorityBadge.equalsIgnoreCase(this.currentCategory)) ||
+                    (item.statusBadge != null && item.statusBadge.equalsIgnoreCase(this.currentCategory));
 
             if (matchesQuery && matchesCat) {
                 filteredList.add(item);
@@ -114,9 +125,9 @@ public class StudentRecCardAdapter extends RecyclerView.Adapter<StudentRecCardAd
 
             if (tvPriorityBadge != null) {
                 tvPriorityBadge.setText(item.priorityBadge);
-                if (item.priorityBadge.contains("High")) {
+                if (item.priorityBadge != null && item.priorityBadge.contains("High")) {
                     tvPriorityBadge.setTextColor(Color.parseColor("#EF4444"));
-                } else if (item.priorityBadge.contains("Medium")) {
+                } else if (item.priorityBadge != null && item.priorityBadge.contains("Medium")) {
                     tvPriorityBadge.setTextColor(Color.parseColor("#F59E0B"));
                 } else {
                     tvPriorityBadge.setTextColor(Color.parseColor("#10B981"));
@@ -125,7 +136,7 @@ public class StudentRecCardAdapter extends RecyclerView.Adapter<StudentRecCardAd
 
             if (tvStatusBadge != null) {
                 tvStatusBadge.setText(item.statusBadge);
-                if ("Completed".equalsIgnoreCase(item.statusBadge)) {
+                if ("Completed".equalsIgnoreCase(item.statusBadge) || "Read".equalsIgnoreCase(item.statusBadge)) {
                     tvStatusBadge.setTextColor(Color.parseColor("#10B981"));
                 } else {
                     tvStatusBadge.setTextColor(Color.parseColor("#2563EB"));

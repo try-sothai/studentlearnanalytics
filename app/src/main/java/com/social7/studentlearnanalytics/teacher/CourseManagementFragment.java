@@ -58,9 +58,7 @@ public class CourseManagementFragment extends Fragment {
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherCourseManagement),
-                    "Courses",
-                    "Manage assigned courses"
+                    view.findViewById(R.id.headerTeacherCourseManagement), getString(R.string.nav_courses), "Manage assigned courses"
             );
         }
 
@@ -219,7 +217,7 @@ public class CourseManagementFragment extends Fragment {
             else if (item.getItemId() == 2) selectedSort = "Name";
             else if (item.getItemId() == 3) selectedSort = "Students";
 
-            if (tvSelectedSort != null) tvSelectedSort.setText("Sort: " + selectedSort);
+            if (tvSelectedSort != null) tvSelectedSort.setText(tvSelectedSort.getContext().getString(R.string.sort_3ee99c) + selectedSort);
             applyFilter();
             return true;
         });

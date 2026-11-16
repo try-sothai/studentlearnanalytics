@@ -41,6 +41,13 @@ public interface ApiService {
     );
 
     @Headers({"Accept: application/json"})
+    @GET("dashboard/student")
+    Call<DashboardResponse> getStudentDashboardBySemester(
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("course_id") Integer courseId
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("gpa-records")
     Call<GpaRecordsResponse> getGpaRecords();
 
@@ -53,8 +60,11 @@ public interface ApiService {
     Call<List<Course>> getCourses();
 
     @Headers({"Accept: application/json"})
-    @GET("learning-analytics")
-    Call<JsonObject> getLearningAnalytics();
+    @GET("student/my-analytics")
+    Call<LearningAnalyticsResponse> getLearningAnalyticsTrend(
+            @retrofit2.http.Query("period_type") String periodType,
+            @retrofit2.http.Query("semester_id") Long semesterId
+    );
 
     @Headers({"Accept: application/json"})
     @GET("predictions")
@@ -109,20 +119,126 @@ public interface ApiService {
     Call<JsonObject> getStudentAttendance(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
+    @GET("student/attendance")
+    Call<JsonObject> getStudentAttendanceByCourse(
+            @retrofit2.http.Query("semester_id") Long semesterId,
+            @retrofit2.http.Query("course_id") Long courseId
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("student/assignments")
     Call<JsonObject> getStudentAssignments(@retrofit2.http.Query("semester_id") Long semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/assignments")
+    Call<JsonObject> getStudentAssignmentsByCourse(
+            @retrofit2.http.Query("semester_id") Long semesterId,
+            @retrofit2.http.Query("course_id") Long courseId
+    );
 
     @Headers({"Accept: application/json"})
     @GET("student/quizzes")
     Call<JsonObject> getStudentQuizzes(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
+    @GET("student/quizzes")
+    Call<JsonObject> getStudentQuizzesByCourse(
+            @retrofit2.http.Query("semester_id") Long semesterId,
+            @retrofit2.http.Query("course_id") Long courseId
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("student/exams")
     Call<JsonObject> getStudentExams(@retrofit2.http.Query("semester_id") Long semesterId);
 
     @Headers({"Accept: application/json"})
+    @GET("student/exams")
+    Call<JsonObject> getStudentExamsByCourse(
+            @retrofit2.http.Query("semester_id") Long semesterId,
+            @retrofit2.http.Query("course_id") Long courseId
+    );
+
+    // ---- Student Module APIs (Phase 2-9) ----
+    @Headers({"Accept: application/json"})
+    @GET("student/module/dashboard")
+    Call<JsonObject> getStudentModuleDashboard();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/academic-journey")
+    Call<JsonObject> getStudentAcademicJourney();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/courses")
+    Call<JsonObject> getStudentModuleCourses(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("study_year") Integer studyYear
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/courses/{id}")
+    Call<JsonObject> getStudentModuleCourseDetail(@retrofit2.http.Path("id") Integer id);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/attendance")
+    Call<JsonObject> getStudentModuleAttendanceOverview(@retrofit2.http.Query("semester_id") Integer semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/attendance/courses/{id}")
+    Call<JsonObject> getStudentModuleAttendanceCourse(@retrofit2.http.Path("id") Integer id);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/grades")
+    Call<JsonObject> getStudentModuleGradesOverview(@retrofit2.http.Query("semester_id") Integer semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/grades/courses/{id}")
+    Call<JsonObject> getStudentModuleGradesCourse(@retrofit2.http.Path("id") Integer id);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/analytics")
+    Call<JsonObject> getStudentModuleAnalytics(@retrofit2.http.Query("semester_id") Integer semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/recommendations")
+    Call<JsonObject> getStudentModuleRecommendations();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/predictions-risk")
+    Call<JsonObject> getStudentModulePredictionsAndRisk();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/comparisons")
+    Call<JsonObject> getStudentModuleComparisons();
+
+    @Headers({"Accept: application/json"})
     @GET("dashboard/teacher")
     Call<JsonObject> getTeacherDashboard();
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/dashboard")
+    Call<com.social7.studentlearnanalytics.model.TeacherDashboardSummaryResponse> getTeacherDashboardSummary(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/filters")
+    Call<com.social7.studentlearnanalytics.model.TeacherFiltersResponse> getTeacherFilters(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/analytics")
+    Call<com.social7.studentlearnanalytics.model.TeacherAnalyticsResponse> getTeacherAnalytics(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("course_id") Integer courseId,
+            @retrofit2.http.Query("class_id") Integer classId,
+            @retrofit2.http.Query("program_id") Integer programId,
+            @retrofit2.http.Query("study_year") Integer studyYear
+    );
 
     @Headers({"Accept: application/json"})
     @GET("dashboard/admin")
@@ -322,6 +438,22 @@ public interface ApiService {
     @Headers({"Accept: application/json"})
     @retrofit2.http.DELETE("admin/users/{id}")
     Call<JsonObject> deleteUser(@retrofit2.http.Path("id") String userId);
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/users/{id}/notes")
+    Call<JsonObject> getStudentNotes(@retrofit2.http.Path("id") String userId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("admin/users/{id}/notes")
+    Call<JsonObject> createStudentNote(@retrofit2.http.Path("id") String userId, @Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("admin/users/{id}/notes/{noteId}")
+    Call<JsonObject> updateStudentNote(@retrofit2.http.Path("id") String userId, @retrofit2.http.Path("noteId") long noteId, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("admin/users/{id}/notes/{noteId}")
+    Call<JsonObject> deleteStudentNote(@retrofit2.http.Path("id") String userId, @retrofit2.http.Path("noteId") long noteId);
 
     @Headers({"Accept: application/json"})
     @GET("students")

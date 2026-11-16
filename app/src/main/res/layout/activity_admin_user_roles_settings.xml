@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="User Roles &amp; Permissions"
+            android:text="@string/user_roles_permissions"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -78,7 +78,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="System Access Roles"
+                            android:text="@string/system_access_roles"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -88,7 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:backgroundTint="@color/admin_primary_blue"
-                            android:text="+ Add Role"
+                            android:text="@string/add_role"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="12sp"
@@ -103,26 +103,26 @@
 
                     <!-- Role Item 1: Super Admin -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:gravity="center_vertical" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Super Administrator" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="All Permissions" android:textColor="@color/admin_primary_blue" android:textSize="11sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/super_administrator" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="@string/all_permissions" android:textColor="@color/admin_primary_blue" android:textSize="11sp"/>
                     </LinearLayout>
 
                     <!-- Role Item 2: Admin -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:gravity="center_vertical" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Administrator" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="28 Permissions" android:textColor="@color/admin_primary_blue" android:textSize="11sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/administrator" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="@string/str_28_permissions" android:textColor="@color/admin_primary_blue" android:textSize="11sp"/>
                     </LinearLayout>
 
                     <!-- Role Item 3: Teacher -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:gravity="center_vertical" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Teacher / Faculty" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="14 Permissions" android:textColor="@color/admin_purple_accent" android:textSize="11sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/teacher_faculty" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="@string/str_14_permissions" android:textColor="@color/admin_purple_accent" android:textSize="11sp"/>
                     </LinearLayout>
 
                     <!-- Role Item 4: Student -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Student" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="6 Permissions" android:textColor="@color/admin_active_green" android:textSize="11sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/role_student" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:text="@string/str_6_permissions" android:textColor="@color/admin_active_green" android:textSize="11sp"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -148,7 +148,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Module Permissions Matrix"
+                        android:text="@string/module_permissions_matrix"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -159,13 +159,13 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="Dashboard Access &amp; Metrics" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="User Management (Students, Teachers, Admins)" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="Course Management &amp; Assignments" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="Class Management &amp; Schedules" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="Reports &amp; Analytics Exporting" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="Notifications Dispatch" android:textColor="@color/admin_text_primary"/>
-                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="System Settings &amp; Backup Operations" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/dashboard_access_metrics" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/user_management_students_teachers_admins" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/course_management_assignments" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/class_management_schedules" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/reports_analytics_exporting" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/notifications_dispatch" android:textColor="@color/admin_text_primary"/>
+                    <CheckBox android:layout_width="match_parent" android:layout_height="wrap_content" android:checked="true" android:text="@string/system_settings_backup_operations" android:textColor="@color/admin_text_primary"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -202,7 +202,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Account Approval Requirement"
+                                android:text="@string/account_approval_requirement"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -211,7 +211,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Require admin approval for new accounts"
+                                android:text="@string/require_admin_approval_for_new_accounts"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -241,7 +241,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Save Role &amp; Permission Settings"
+            android:text="@string/save_role_permission_settings"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"

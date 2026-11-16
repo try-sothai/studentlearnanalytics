@@ -27,7 +27,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:src="@drawable/ic_back"
                 app:tint="@color/slas_text_primary" />
 
@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All Features"
+                    android:text="@string/all_features"
                     android:textColor="@color/slas_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Explore all learning analytics and student tools"
+                    android:text="@string/explore_all_learning_analytics_and_student"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -95,14 +95,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="My Courses"
+                            android:text="@string/my_courses"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View your enrolled courses"
+                            android:text="@string/view_your_enrolled_courses"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -149,14 +149,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Attendance"
+                            android:text="@string/attendance"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Check your attendance records"
+                            android:text="@string/check_your_attendance_records"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -203,14 +203,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Assignments"
+                            android:text="@string/assignments"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View and submit assignments"
+                            android:text="@string/view_and_submit_assignments"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -257,14 +257,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quizzes"
+                            android:text="@string/quizzes"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Take quizzes and view results"
+                            android:text="@string/take_quizzes_and_view_results"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -311,14 +311,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Exams"
+                            android:text="@string/exams"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View exam schedule and results"
+                            android:text="@string/view_exam_schedule_and_results"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -365,14 +365,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Learning Analytics"
+                            android:text="@string/learning_analytics"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Detailed performance analysis"
+                            android:text="@string/detailed_performance_analysis"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -419,14 +419,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Recommendations"
+                            android:text="@string/recommendations"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Personalized study suggestions"
+                            android:text="@string/personalized_study_suggestions"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -473,14 +473,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Notifications"
+                            android:text="@string/nav_notifications"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View all notifications"
+                            android:text="@string/view_all_notifications"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -527,14 +527,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Reports"
+                            android:text="@string/nav_reports"
                             android:textColor="@color/slas_text_primary"
                             android:textStyle="bold"
                             android:textSize="16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View your learning reports"
+                            android:text="@string/view_your_learning_reports"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>

@@ -71,22 +71,23 @@
                                     android:padding="8dp"
                                     android:src="@drawable/ic_profile"
                                     app:tint="@color/primary"
-                                    android:contentDescription="Students" />
+                                    android:contentDescription="@string/nav_students" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Total Students"
+                                    android:text="@string/total_students"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvTotalStudentsCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:text="156"
+                                android:text="--"
                                 android:textColor="@color/text_primary"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -128,22 +129,23 @@
                                     android:padding="8dp"
                                     android:src="@drawable/ic_book"
                                     app:tint="@color/success_green"
-                                    android:contentDescription="Courses" />
+                                    android:contentDescription="@string/nav_courses" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="My Courses"
+                                    android:text="@string/my_courses"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvMyCoursesCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:text="5"
+                                android:text="--"
                                 android:textColor="@color/text_primary"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -194,22 +196,23 @@
                                     android:padding="8dp"
                                     android:src="@drawable/ic_prediction"
                                     app:tint="@color/white"
-                                    android:contentDescription="Risk" />
+                                    android:contentDescription="@string/risk" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="At-Risk Students"
+                                    android:text="@string/at_risk_students"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvAtRiskCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:text="18"
+                                android:text="--"
                                 android:textColor="@color/danger_red"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -251,22 +254,23 @@
                                     android:padding="8dp"
                                     android:src="@drawable/ic_assignment"
                                     app:tint="@color/secondary_blue"
-                                    android:contentDescription="Pending" />
+                                    android:contentDescription="@string/status_pending" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Pending Scores"
+                                    android:text="@string/pending_scores"
                                     android:textColor="@color/text_secondary"
                                     android:textSize="12sp" />
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvPendingScoresCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:text="12"
+                                android:text="--"
                                 android:textColor="@color/primary"
                                 android:textSize="26sp"
                                 android:textStyle="bold" />
@@ -278,7 +282,7 @@
 
             </LinearLayout>
 
-            <!-- Performance Overview Card -->
+            <!-- Student Learning Engagement Overview Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -293,48 +297,265 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="16dp">
 
+                    <!-- Title & Header -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Performance Overview"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp"
-                            app:strokeColor="@color/divider_color"
-                            app:strokeWidth="1dp">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="4dp"
-                                android:text="This Semester ▾"
+                                android:text="@string/learning_engagement_overview"
+                                android:textColor="@color/text_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvEngagementSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/attendance_assignment_homework_quiz"
                                 android:textColor="@color/text_secondary"
                                 android:textSize="11sp" />
-                        </com.google.android.material.card.MaterialCardView>
+                        </LinearLayout>
+
+                        <!-- Refresh Action Button -->
+                        <ImageView
+                            android:id="@+id/btnRefreshChart"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/refresh_analytics"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_refresh"
+                            app:tint="@color/text_secondary" />
 
                     </LinearLayout>
 
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/lineChartPerformance"
+                    <!-- Dynamic Horizontal Filters Scroll -->
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:layout_marginTop="16dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <!-- Year Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerAcademicYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Semester Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerSemester"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Course Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerCourse"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Class Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerClass"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Program / Major Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerProgram"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Study Year Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerStudyYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                            <!-- Generation Selector -->
+                            <Spinner
+                                android:id="@+id/spinnerGeneration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_spinner"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="28dp" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <!-- Chart Legend Indicators -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <!-- Completed Legend -->
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:backgroundTint="#10B981" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/status_completed"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11sp" />
+
+                        <!-- Late Legend -->
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:backgroundTint="#F59E0B" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/status_late"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11sp" />
+
+                        <!-- Missed Legend -->
+                        <View
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:backgroundTint="#EF4444" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/missed"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                    <!-- Chart Container with Loading, Empty & Error States -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginTop="10dp">
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/barChartEngagement"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <ProgressBar
+                            android:id="@+id/pbChartLoading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutChartEmpty"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_activity_data"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/no_learning_events_recorded"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layoutChartError"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvChartErrorMessage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/failed_load_engagement_analytics"
+                                android:textColor="@color/danger_red"
+                                android:textSize="13sp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnRetryChart"
+                                style="@style/Widget.MaterialComponents.Button.TextButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/retry"
+                                android:textColor="@color/primary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                    </FrameLayout>
 
                 </LinearLayout>
 
@@ -345,7 +566,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="🕒 Recent Activities"
+                android:text="@string/recent_activities_cc0a4a"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -380,7 +601,7 @@
                             android:padding="8dp"
                             android:src="@drawable/ic_assignment"
                             app:tint="@color/primary"
-                            android:contentDescription="Activity" />
+                            android:contentDescription="@string/activity" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -427,7 +648,7 @@
                             android:padding="8dp"
                             android:src="@drawable/ic_calendar"
                             app:tint="@color/success_green"
-                            android:contentDescription="Activity" />
+                            android:contentDescription="@string/activity" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -474,7 +695,7 @@
                             android:padding="8dp"
                             android:src="@drawable/ic_profile"
                             app:tint="@color/primary"
-                            android:contentDescription="Activity" />
+                            android:contentDescription="@string/activity" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -486,7 +707,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="New student enrolled - CS101"
+                                android:text="@string/new_student_enrolled_cs101"
                                 android:textColor="@color/text_primary"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />

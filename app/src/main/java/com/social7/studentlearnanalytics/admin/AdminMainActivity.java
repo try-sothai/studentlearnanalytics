@@ -126,16 +126,16 @@ public class AdminMainActivity extends AppCompatActivity {
         View tvRole = findViewById(R.id.tvAdminDrawerRole);
         if (tvRole != null) tvRole.setOnClickListener(profileClickListener);
 
-        bindDrawerItem(0, R.id.itemDrawerDashboard, R.drawable.ic_home, "Dashboard", null);
-        bindDrawerItem(1, R.id.itemDrawerUserManagement, R.drawable.ic_users, "User Management", "Students, Teachers, Admins");
-        bindDrawerItem(2, R.id.itemDrawerCourseManagement, R.drawable.ic_open_book, "Course Management", "Manage courses and curriculum");
-        bindDrawerItem(3, R.id.itemDrawerClassManagement, R.drawable.ic_group, "Class Management", "Manage classes, schedules and classrooms");
-        bindDrawerItem(4, R.id.itemDrawerReports, R.drawable.ic_chart_bar, "Reports & Analytics", "View system reports and statistics");
-        bindDrawerItem(5, R.id.itemDrawerNotifications, R.drawable.ic_notifications, "Notifications", "View and manage notifications");
-        bindDrawerItem(6, R.id.itemDrawerSettings, R.drawable.ic_nav_settings, "Settings", "Account and system settings");
+        bindDrawerItem(0, R.id.itemDrawerDashboard, R.drawable.ic_home, R.string.dashboard, 0);
+        bindDrawerItem(1, R.id.itemDrawerUserManagement, R.drawable.ic_users, R.string.user_management, R.string.students_teachers_admins);
+        bindDrawerItem(2, R.id.itemDrawerCourseManagement, R.drawable.ic_open_book, R.string.course_management, R.string.manage_courses_and_curriculum);
+        bindDrawerItem(3, R.id.itemDrawerClassManagement, R.drawable.ic_group, R.string.class_management, R.string.manage_classes_schedules_and_classrooms);
+        bindDrawerItem(4, R.id.itemDrawerReports, R.drawable.ic_chart_bar, R.string.reports_analytics, R.string.view_system_reports_and_statistics);
+        bindDrawerItem(5, R.id.itemDrawerNotifications, R.drawable.ic_notifications, R.string.nav_notifications, R.string.view_and_manage_notifications);
+        bindDrawerItem(6, R.id.itemDrawerSettings, R.drawable.ic_nav_settings, R.string.nav_settings, R.string.account_and_system_settings);
 
-        bindDrawerItem(7, R.id.itemDrawerHelp, R.drawable.ic_circle_help, "Help & Support", "Get help and contact support");
-        bindDrawerItem(8, R.id.itemDrawerAbout, R.drawable.ic_circle_info, "About", "App version and system information");
+        bindDrawerItem(7, R.id.itemDrawerHelp, R.drawable.ic_circle_help, R.string.help_support, R.string.get_help_and_contact_support);
+        bindDrawerItem(8, R.id.itemDrawerAbout, R.drawable.ic_circle_info, R.string.about, R.string.app_version_and_system_information);
 
         View btnLogout = findViewById(R.id.btnAdminDrawerLogout);
         if (btnLogout != null) {
@@ -146,7 +146,7 @@ public class AdminMainActivity extends AppCompatActivity {
         }
     }
 
-    private void bindDrawerItem(int index, int includeId, int iconRes, String title, String subtitle) {
+    private void bindDrawerItem(int index, int includeId, int iconRes, int titleRes, int subtitleRes) {
         View itemView = findViewById(includeId);
         if (itemView == null) return;
         drawerItems[index] = itemView;
@@ -156,10 +156,10 @@ public class AdminMainActivity extends AppCompatActivity {
         TextView tvSubtitle = itemView.findViewById(R.id.tvDrawerItemSubtitle);
 
         if (imgIcon != null) imgIcon.setImageResource(iconRes);
-        if (tvTitle != null) tvTitle.setText(title);
+        if (tvTitle != null && titleRes != 0) tvTitle.setText(titleRes);
         if (tvSubtitle != null) {
-            if (subtitle != null && !subtitle.isEmpty()) {
-                tvSubtitle.setText(subtitle);
+            if (subtitleRes != 0) {
+                tvSubtitle.setText(subtitleRes);
                 tvSubtitle.setVisibility(View.VISIBLE);
             } else {
                 tvSubtitle.setVisibility(View.GONE);
@@ -257,23 +257,23 @@ public class AdminMainActivity extends AppCompatActivity {
 
     public void showLogoutConfirmationDialog() {
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Log Out?")
-                .setMessage("Are you sure you want to log out of your account?")
-                .setPositiveButton("Log Out", (dialog, which) -> {
+                .setTitle(R.string.log_out_6a80a6)
+                .setMessage(R.string.are_you_sure_you_want_to_log_out_of_your_a_4f0898)
+                .setPositiveButton(R.string.log_out, (dialog, which) -> {
                     if (sessionManager != null) {
                         sessionManager.clearSession();
                     }
                     redirectToLogin();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
     private void showHelpDialog() {
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Help & Support")
-                .setMessage("For system assistance or technical support, please contact support@slas.edu or reach out to your system administrator.")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setTitle(R.string.help_support)
+                .setMessage(R.string.for_system_assistance_or_technical_support)
+                .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 

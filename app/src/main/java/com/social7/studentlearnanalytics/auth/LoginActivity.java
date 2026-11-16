@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     String token = loginResponse.getToken();
 
                     if (token == null || token.isEmpty()) {
-                        Toast.makeText(LoginActivity.this, "Authentication failed: No token returned from server.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, R.string.authentication_failed_no_token_returned_fr, Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setEnabled(true);
 
                 Log.e(TAG, "Login network failure: " + t.getMessage(), t);
-                Toast.makeText(LoginActivity.this, "Cannot connect to server. Please check your network or backend server.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.cannot_connect_to_server_please_check_your, Toast.LENGTH_LONG).show();
             }
         });
     }

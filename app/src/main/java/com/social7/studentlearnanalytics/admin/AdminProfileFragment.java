@@ -66,9 +66,9 @@ public class AdminProfileFragment extends Fragment {
 
     private void showLogoutConfirmationDialog() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Logout")
+                .setTitle(R.string.logout)
                 .setMessage("Are you sure you want to logout from the admin panel?")
-                .setPositiveButton("Logout", (dialog, which) -> {
+                .setPositiveButton(R.string.logout, (dialog, which) -> {
                     if (sessionManager != null) {
                         sessionManager.clearSession();
                     }
@@ -77,7 +77,7 @@ public class AdminProfileFragment extends Fragment {
                     startActivity(intent);
                     requireActivity().finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

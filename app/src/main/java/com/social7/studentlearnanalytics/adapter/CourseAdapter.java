@@ -137,7 +137,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         public void bind(final Course course, final OnCourseClickListener listener) {
             if (tvCourseCodeName != null) tvCourseCodeName.setText(course.getCode() + " - " + course.getName());
-            if (tvTeacherName != null) tvTeacherName.setText("Teacher: " + course.getTeacher());
+            if (tvTeacherName != null) tvTeacherName.setText(tvTeacherName.getContext().getString(R.string.teacher) + course.getTeacher());
             if (tvDepartment != null) tvDepartment.setText(course.getDepartment());
 
             if (tvCourseMetadata != null) {
@@ -149,7 +149,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             }
 
             if (tvQuickStudentsLabel != null) {
-                tvQuickStudentsLabel.setText("Students (" + course.getStudentCount() + ")");
+                tvQuickStudentsLabel.setText(tvQuickStudentsLabel.getContext().getString(R.string.students) + course.getStudentCount() + ")");
             }
 
             if (iconContainer != null && course.getIconBgRes() != 0) {

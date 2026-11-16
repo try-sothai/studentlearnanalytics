@@ -101,7 +101,7 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.View
             if (tvRoomName != null) tvRoomName.setText(item.roomName);
             if (tvBuildingFloor != null) tvBuildingFloor.setText(item.buildingFloor);
             if (tvCapacityEquipment != null) {
-                tvCapacityEquipment.setText("Capacity: " + item.capacity + " seats/PCs • " + item.equipment);
+                tvCapacityEquipment.setText(tvCapacityEquipment.getContext().getString(R.string.capacity) + item.capacity + " seats/PCs • " + item.equipment);
             }
             if (tvAvailabilityStatus != null) {
                 tvAvailabilityStatus.setText(item.status);

@@ -89,7 +89,7 @@
             android:background="@drawable/bg_badge_core"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
-            android:text="Active"
+            android:text="@string/status_active"
             android:textColor="@color/admin_active_green"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -101,7 +101,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Teacher options"
+            android:contentDescription="@string/teacher_options"
             android:focusable="true"
             android:padding="6dp"
             android:src="@drawable/ic_more_vert"

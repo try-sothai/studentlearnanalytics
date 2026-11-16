@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.admin;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -125,7 +127,7 @@ public class MlModelEvaluationFragment extends Fragment {
             actualEntries.add(new Entry(5, 78f));
         }
 
-        LineDataSet actualDataSet = new LineDataSet(actualEntries, "Actual Score");
+        LineDataSet actualDataSet = new LineDataSet(actualEntries, getString(R.string.actual_score));
         actualDataSet.setColor(Color.parseColor("#4C35E9"));
         actualDataSet.setCircleColor(Color.parseColor("#4C35E9"));
         actualDataSet.setLineWidth(2.5f);
@@ -147,7 +149,7 @@ public class MlModelEvaluationFragment extends Fragment {
             predictedEntries.add(new Entry(5, 81f));
         }
 
-        LineDataSet predictedDataSet = new LineDataSet(predictedEntries, "Predicted Score");
+        LineDataSet predictedDataSet = new LineDataSet(predictedEntries, getString(R.string.predicted_score));
         predictedDataSet.setColor(Color.parseColor("#10B981"));
         predictedDataSet.setCircleColor(Color.parseColor("#10B981"));
         predictedDataSet.setLineWidth(2.5f);
@@ -178,6 +180,7 @@ public class MlModelEvaluationFragment extends Fragment {
         legend.setDrawInside(false);
 
         chart.animateX(1000);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 }

@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher.attendance;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -87,9 +89,7 @@ public class AttendanceFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Attendance Management",
-                    "Manage daily attendance, roster, and attendance analytics"
+                    view, getString(R.string.attendance_management), "Manage daily attendance, roster, and attendance analytics"
             );
         }
 
@@ -201,6 +201,7 @@ public class AttendanceFragment extends Fragment {
         pieChartAttendance.getDescription().setEnabled(false);
         pieChartAttendance.getLegend().setEnabled(false);
         pieChartAttendance.animateY(800);
+        ChartFontHelper.applyKhmerFont(pieChartAttendance.getContext(), pieChartAttendance);
         pieChartAttendance.invalidate();
     }
 
@@ -253,14 +254,14 @@ public class AttendanceFragment extends Fragment {
         if (btnSaveAttendance != null) {
             btnSaveAttendance.setOnClickListener(v -> {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Confirm Attendance Submission")
+                        .setTitle(R.string.confirm_attendance_submission)
                         .setMessage("Submit attendance record for CS101 (BSIT 4-A) on " +
                                 (btnTakeAttDatePicker != null ? btnTakeAttDatePicker.getText() : "May 12, 2026") + "?")
-                        .setPositiveButton("Submit Attendance", (dialog, which) -> {
-                            Toast.makeText(requireContext(), "Class attendance saved successfully!", Toast.LENGTH_LONG).show();
+                        .setPositiveButton(R.string.submit_attendance, (dialog, which) -> {
+                            Toast.makeText(requireContext(), R.string.class_attendance_saved_successfully, Toast.LENGTH_LONG).show();
                             selectSubTab(2); // Navigate to Attendance Records
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             });
         }
@@ -346,14 +347,14 @@ public class AttendanceFragment extends Fragment {
         recordList = getSampleAttendance();
         recordsAdapter = new AttendanceAdapter(requireContext(), recordList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Attendance Session Detail")
-                    .setMessage("Date: " + item.date + "\n" +
+                    .setTitle(R.string.attendance_session_detail)
+                    .setMessage(getString(R.string.date_7ae482) + item.date + "\n" +
                             "Course: CS101 - Intro to CS\n" +
                             "Class: BSIT 4-A\n" +
                             "Session Status: " + item.status + "\n" +
                             "Enrolled Roster: 35 Students\n" +
                             "Present: 32 • Absent: 2 • Late: 1")
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
         rvAttendanceRecords.setAdapter(recordsAdapter);
@@ -361,7 +362,7 @@ public class AttendanceFragment extends Fragment {
 
     private void showAddAttendanceDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Add Attendance Session");
+        builder.setTitle(R.string.add_attendance_session);
 
         LinearLayout layout = new LinearLayout(requireContext());
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -372,12 +373,12 @@ public class AttendanceFragment extends Fragment {
         layout.addView(edtDate);
 
         final EditText edtStatus = new EditText(requireContext());
-        edtStatus.setHint("Status (Present / Absent)");
+        edtStatus.setHint(R.string.status_present_absent);
         layout.addView(edtStatus);
 
         builder.setView(layout);
 
-        builder.setPositiveButton("Record Session", (dialog, which) -> {
+        builder.setPositiveButton(R.string.record_session, (dialog, which) -> {
             String date = edtDate.getText().toString().trim();
             String status = edtStatus.getText().toString().trim();
 
@@ -391,7 +392,7 @@ public class AttendanceFragment extends Fragment {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -442,14 +443,14 @@ public class AttendanceFragment extends Fragment {
 
         studentAttendanceAdapter = new StudentAttendanceAdapter(requireContext(), studentAttendanceList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Student Attendance Breakdown")
-                    .setMessage("Student ID: " + item.studentId + "\n" +
+                    .setTitle(R.string.student_attendance_breakdown)
+                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                             "Student Name: " + item.studentName + "\n" +
                             "Course & Class: " + item.courseClass + "\n\n" +
                             "Attendance Log:\n" +
                             item.counts + "\n\n" +
                             "Overall Attendance Rate: " + item.rateBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

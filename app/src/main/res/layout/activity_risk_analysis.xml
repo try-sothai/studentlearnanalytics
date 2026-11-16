@@ -27,7 +27,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:src="@drawable/ic_back"
                 app:tint="@color/slas_text_primary" />
 
@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Academic Risk Analysis"
+                    android:text="@string/academic_risk_analysis"
                     android:textColor="@color/slas_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -84,7 +84,7 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:layout_gravity="center"
-                        android:contentDescription="Risk Level Icon"
+                        android:contentDescription="@string/risk_level_icon"
                         android:src="@drawable/ic_prediction"
                         app:tint="@color/slas_warning" />
                 </FrameLayout>
@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.04"
-                        android:text="CURRENT RISK STATUS"
+                        android:text="@string/current_risk_status"
                         android:textAllCaps="true"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="11sp"
@@ -116,7 +116,7 @@
                             android:id="@+id/tvRiskLevel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="MEDIUM RISK"
+                            android:text="@string/loading"
                             android:textColor="@color/slas_warning"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -130,7 +130,7 @@
                             android:backgroundTint="@color/slas_warning_bg"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="3dp"
-                            android:text="Moderate Risk"
+                            android:text="--"
                             android:textColor="@color/slas_warning"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -142,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:lineSpacingExtra="2dp"
-                        android:text="You are at medium risk. Keep improving your attendance and quiz performance to lower academic risk."
+                        android:text="@string/loading_academic_risk_assessment"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -184,7 +184,7 @@
                         android:id="@+id/tvRiskScore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="65 / 100"
+                        android:text="-- / 100"
                         android:textColor="@color/slas_text_primary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -196,7 +196,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:layout_marginTop="12dp"
-                    android:progress="65"
+                    android:progress="0"
                     android:progressBackgroundTint="@color/slas_border"
                     android:progressTint="@color/slas_warning" />
 
@@ -210,7 +210,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="0 - Low Risk"
+                        android:text="@string/str_0_low_risk"
                         android:textColor="@color/slas_success"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -218,7 +218,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="50 - Medium Risk"
+                        android:text="@string/str_50_medium_risk"
                         android:textColor="@color/slas_warning"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -228,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="75+ - High Risk"
+                        android:text="@string/str_75_high_risk"
                         android:textColor="@color/slas_danger"
                         android:textSize="10sp"
                         android:textStyle="bold" />
@@ -276,7 +276,7 @@
                         android:layout_height="36dp"
                         android:background="@drawable/bg_stat_card_green"
                         android:backgroundTint="@color/slas_success_bg"
-                        android:contentDescription="Attendance Factor"
+                        android:contentDescription="@string/attendance_factor"
                         android:padding="8dp"
                         android:src="@drawable/ic_home"
                         app:tint="@color/slas_success" />
@@ -291,28 +291,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Attendance Rate"
+                            android:text="@string/attendance_rate"
                             android:textColor="@color/slas_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvRiskAttDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="88% attendance recorded"
+                            android:text="-- attendance recorded"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvRiskAttBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_score_label"
                         android:backgroundTint="@color/slas_success_bg"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="Good"
+                        android:text="--"
                         android:textColor="@color/slas_success"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -336,7 +338,7 @@
                         android:layout_height="36dp"
                         android:background="@drawable/bg_stat_card_purple"
                         android:backgroundTint="@color/slas_light_purple"
-                        android:contentDescription="Assignments Factor"
+                        android:contentDescription="@string/assignments_factor"
                         android:padding="8dp"
                         android:src="@drawable/ic_assignment"
                         app:tint="@color/slas_primary_purple" />
@@ -351,28 +353,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Assignment Completion"
+                            android:text="@string/assignment_completion"
                             android:textColor="@color/slas_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvRiskAsnDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="80% average score"
+                            android:text="@string/average_score_4ade80"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvRiskAsnBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_score_label"
                         android:backgroundTint="@color/slas_success_bg"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="Good"
+                        android:text="--"
                         android:textColor="@color/slas_success"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -396,7 +400,7 @@
                         android:layout_height="36dp"
                         android:background="@drawable/bg_stat_card_orange"
                         android:backgroundTint="@color/slas_warning_bg"
-                        android:contentDescription="Quizzes Factor"
+                        android:contentDescription="@string/quizzes_factor"
                         android:padding="8dp"
                         android:src="@drawable/ic_analytics"
                         app:tint="@color/slas_warning" />
@@ -411,28 +415,30 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quiz Performance"
+                            android:text="@string/quiz_performance"
                             android:textColor="@color/slas_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvRiskQuizDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="65% average score"
+                            android:text="@string/average_score_4ade80"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvRiskQuizBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_score_label"
                         android:backgroundTint="@color/slas_danger_bg"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="Needs Improvement"
+                        android:text="--"
                         android:textColor="@color/slas_danger"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -477,22 +483,24 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvRiskExamDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="76% average score"
+                            android:text="@string/average_score_4ade80"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvRiskExamBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_score_label"
                         android:backgroundTint="@color/slas_warning_bg"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="Moderate"
+                        android:text="--"
                         android:textColor="@color/slas_warning"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -540,7 +548,7 @@
                         android:layout_height="40dp"
                         android:background="@drawable/bg_stat_card_purple"
                         android:backgroundTint="@color/slas_light_purple"
-                        android:contentDescription="Recommendation 1 Icon"
+                        android:contentDescription="@string/recommendation_1_icon"
                         android:padding="9dp"
                         android:src="@drawable/ic_assignment"
                         app:tint="@color/slas_primary_purple" />
@@ -555,7 +563,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Improve Quiz Performance"
+                            android:text="@string/improve_quiz_performance"
                             android:textColor="@color/slas_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -601,7 +609,7 @@
                         android:layout_height="40dp"
                         android:background="@drawable/bg_stat_card_green"
                         android:backgroundTint="@color/slas_success_bg"
-                        android:contentDescription="Recommendation 2 Icon"
+                        android:contentDescription="@string/recommendation_2_icon"
                         android:padding="9dp"
                         android:src="@drawable/ic_home"
                         app:tint="@color/slas_success" />
@@ -662,7 +670,7 @@
                         android:layout_height="40dp"
                         android:background="@drawable/bg_stat_card_blue"
                         android:backgroundTint="@color/slas_soft_blue"
-                        android:contentDescription="Recommendation 3 Icon"
+                        android:contentDescription="@string/recommendation_3_icon"
                         android:padding="9dp"
                         android:src="@drawable/ic_analytics"
                         app:tint="@color/slas_blue" />

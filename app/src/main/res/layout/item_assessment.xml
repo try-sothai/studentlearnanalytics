@@ -35,7 +35,7 @@
             android:backgroundTint="@color/slas_light_purple"
             android:src="@drawable/ic_assignment"
             app:tint="@color/slas_primary_purple"
-            android:contentDescription="Assessment Icon" />
+            android:contentDescription="@string/assessment_icon" />
 
         <LinearLayout
             android:layout_width="0dp"

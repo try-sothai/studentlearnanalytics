@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -87,9 +89,7 @@ public class PredictionRiskFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Prediction & Risk",
-                    "Machine learning academic risk & exam score analytics"
+                    view, getString(R.string.prediction_risk), "Machine learning academic risk & exam score analytics"
             );
         }
 
@@ -178,7 +178,7 @@ public class PredictionRiskFragment extends Fragment {
             entries.add(new BarEntry(3, 85f));  // 60-69
             entries.add(new BarEntry(4, 40f));  // <60
 
-            BarDataSet dataSet = new BarDataSet(entries, "Predicted Scores");
+            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.predicted_scores));
             dataSet.setColors(new int[]{
                     Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
             });
@@ -196,6 +196,7 @@ public class PredictionRiskFragment extends Fragment {
 
             chartOverviewScoreDist.getAxisRight().setEnabled(false);
             chartOverviewScoreDist.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartOverviewScoreDist.getContext(), chartOverviewScoreDist);
             chartOverviewScoreDist.invalidate();
         }
 
@@ -219,6 +220,7 @@ public class PredictionRiskFragment extends Fragment {
             chartOverviewRiskPie.setCenterText("840\nStudents");
             chartOverviewRiskPie.setCenterTextSize(14f);
             chartOverviewRiskPie.getDescription().setEnabled(false);
+            ChartFontHelper.applyKhmerFont(chartOverviewRiskPie.getContext(), chartOverviewRiskPie);
             chartOverviewRiskPie.invalidate();
         }
     }
@@ -293,7 +295,7 @@ public class PredictionRiskFragment extends Fragment {
                     intent.putExtra("student", s);
                     startActivity(intent);
                 })
-                .setNegativeButton("Close", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -316,14 +318,14 @@ public class PredictionRiskFragment extends Fragment {
 
         examPredictionAdapter = new ExamPredictionAdapter(requireContext(), examPredictionList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Exam Score Prediction Breakdown")
-                    .setMessage("Student ID: " + item.studentId + "\n" +
+                    .setTitle(R.string.exam_score_prediction_breakdown)
+                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                             "Student Name: " + item.studentName + "\n" +
                             "Course & Class: " + item.courseClass + "\n\n" +
                             "ML Model Prediction Details:\n" +
                             item.metrics + "\n" +
                             "Expected Final Grade: " + item.gradeBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
@@ -349,14 +351,14 @@ public class PredictionRiskFragment extends Fragment {
 
         riskAnalysisAdapter = new RiskAnalysisAdapter(requireContext(), riskAnalysisList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Course Risk Analysis Summary")
-                    .setMessage("Course Code: " + item.courseCode + "\n" +
+                    .setTitle(R.string.course_risk_analysis_summary)
+                    .setMessage(getString(R.string.course_code) + item.courseCode + "\n" +
                             "Course Name: " + item.courseName + "\n" +
                             "Department Cohort: " + item.departmentCohort + "\n\n" +
                             "Root Cause Risk Diagnosis:\n" +
                             item.primaryRiskReason + "\n\n" +
                             "Current Risk Level: " + item.riskBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

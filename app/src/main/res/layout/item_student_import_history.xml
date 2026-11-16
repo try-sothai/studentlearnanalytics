@@ -47,7 +47,7 @@
                 android:id="@+id/tvHistoryStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="COMPLETED"
+                android:text="@string/completed"
                 android:textColor="@color/admin_active_green"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Total: 120 • Success: 118 • Failed: 2"
+            android:text="@string/total_120_success_118_failed_2"
             android:textColor="@color/admin_text_primary"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -84,7 +84,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:text="Download Errors"
+                android:text="@string/download_errors"
                 android:textAllCaps="false"
                 android:textColor="@color/admin_inactive_red"
                 android:textSize="11sp"

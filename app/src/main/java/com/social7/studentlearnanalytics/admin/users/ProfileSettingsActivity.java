@@ -95,7 +95,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         if (tvProfileAvatar != null) tvProfileAvatar.setText(initial);
         if (tvProfileName != null) tvProfileName.setText(name);
         if (tvProfileRole != null) tvProfileRole.setText(role);
-        if (tvAccountStatusBadge != null) tvAccountStatusBadge.setText("Active");
+        if (tvAccountStatusBadge != null) tvAccountStatusBadge.setText(R.string.status_active);
 
         if (etProfileName != null) etProfileName.setText(name);
         if (etProfileEmail != null) etProfileEmail.setText(email);
@@ -235,7 +235,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                                     email
                             );
                         }
-                        Toast.makeText(ProfileSettingsActivity.this, "Profile updated successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProfileSettingsActivity.this, R.string.profile_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         String errorMsg = "Failed to update profile (HTTP " + response.code() + ")";
@@ -256,7 +256,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                     if (isFinishing() || isDestroyed()) return;
                     if (btnSaveProfileSettings != null) btnSaveProfileSettings.setEnabled(true);
-                    Toast.makeText(ProfileSettingsActivity.this, "Network error updating profile", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileSettingsActivity.this, R.string.network_error_updating_profile, Toast.LENGTH_SHORT).show();
                 }
             });
         }

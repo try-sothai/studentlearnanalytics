@@ -106,10 +106,10 @@ public class TeacherReportAdapter extends RecyclerView.Adapter<TeacherReportAdap
                 tvPerformanceScore.setTextColor(Color.parseColor("#10B981"));
             }
             if (tvTeacherDetails != null) {
-                tvTeacherDetails.setText("Dept: " + item.department + " • " + item.teachingHours);
+                tvTeacherDetails.setText(itemView.getContext().getString(R.string.dept_prefix) + item.department + " • " + item.teachingHours);
             }
             if (tvAssignedCoursesClasses != null) {
-                tvAssignedCoursesClasses.setText("Courses: " + item.courses + " • Classes: " + item.classes);
+                tvAssignedCoursesClasses.setText(tvAssignedCoursesClasses.getContext().getString(R.string.courses) + item.courses + " • Classes: " + item.classes);
             }
 
             itemView.setOnClickListener(v -> {

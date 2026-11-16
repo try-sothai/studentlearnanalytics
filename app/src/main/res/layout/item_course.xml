@@ -42,7 +42,7 @@
                     android:layout_gravity="center"
                     android:src="@drawable/ic_book"
                     app:tint="@color/white"
-                    android:contentDescription="Course Icon" />
+                    android:contentDescription="@string/course_icon" />
             </FrameLayout>
 
             <!-- Middle: Code, Name, Instructor, Department & Metadata -->
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="Computer Science Department"
+                    android:text="@string/computer_science_department"
                     android:textColor="@color/teacher_secondary_text"
                     android:textSize="11sp" />
 
@@ -106,7 +106,7 @@
                     android:layout_height="22dp"
                     android:gravity="center"
                     android:paddingHorizontal="10dp"
-                    android:text="Active"
+                    android:text="@string/status_active"
                     android:textColor="@color/status_good_text"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -118,7 +118,7 @@
                     android:layout_marginTop="10dp"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/teacher_secondary_text"
-                    android:contentDescription="Details" />
+                    android:contentDescription="@string/details" />
 
             </LinearLayout>
 
@@ -157,14 +157,14 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_group"
                     app:tint="@color/teacher_primary_blue"
-                    android:contentDescription="Students" />
+                    android:contentDescription="@string/nav_students" />
 
                 <TextView
                     android:id="@+id/tvQuickStudentsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="Students (35)"
+                    android:text="@string/students_35"
                     android:textColor="@color/teacher_primary_blue"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -189,13 +189,13 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_clock"
                     app:tint="@color/teacher_primary_blue"
-                    android:contentDescription="Schedule" />
+                    android:contentDescription="@string/schedule" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="Schedule"
+                    android:text="@string/schedule"
                     android:textColor="@color/teacher_primary_blue"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -220,13 +220,13 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_chart_bar"
                     app:tint="@color/teacher_primary_blue"
-                    android:contentDescription="Analytics" />
+                    android:contentDescription="@string/nav_analytics" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="Analytics"
+                    android:text="@string/nav_analytics"
                     android:textColor="@color/teacher_primary_blue"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -250,7 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
-                    android:text="More"
+                    android:text="@string/more"
                     android:textColor="@color/teacher_primary_blue"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -260,7 +260,7 @@
                     android:layout_height="10dp"
                     android:src="@drawable/ic_chevron_down"
                     app:tint="@color/teacher_primary_blue"
-                    android:contentDescription="More" />
+                    android:contentDescription="@string/more" />
             </LinearLayout>
 
         </LinearLayout>

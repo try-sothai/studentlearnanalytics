@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Add Teacher"
+            android:text="@string/add_teacher"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Personal Information"
+                        android:text="@string/personal_information"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -86,7 +86,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Full Name *"
+                        android:text="@string/full_name_d9bc75"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -109,7 +109,7 @@
                             android:id="@+id/etAddTeacherName"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter full name"
+                            android:hint="@string/enter_full_name"
                             android:inputType="textPersonName"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Teacher ID *"
+                        android:text="@string/teacher_id_994fee"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -144,7 +144,7 @@
                             android:id="@+id/etAddTeacherId"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter teacher ID"
+                            android:hint="@string/enter_teacher_id"
                             android:inputType="text"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Email Address *"
+                        android:text="@string/email_address"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -179,7 +179,7 @@
                             android:id="@+id/etAddTeacherEmail"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter email address"
+                            android:hint="@string/enter_email_address"
                             android:inputType="textEmailAddress"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -191,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Phone Number"
+                        android:text="@string/phone_number"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -214,7 +214,7 @@
                             android:id="@+id/etAddTeacherPhone"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter phone number"
+                            android:hint="@string/enter_phone_number"
                             android:inputType="phone"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -226,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Date of Birth"
+                        android:text="@string/date_of_birth"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -249,7 +249,7 @@
                             android:id="@+id/etAddTeacherDob"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Select date of birth"
+                            android:hint="@string/select_date_of_birth"
                             android:inputType="date"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -279,7 +279,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Professional Information"
+                        android:text="@string/professional_information"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -294,7 +294,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Department *"
+                        android:text="@string/department_0e3338"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -311,7 +311,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Position *"
+                        android:text="@string/position"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -328,7 +328,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Work Type *"
+                        android:text="@string/work_type"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -345,7 +345,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Office Location"
+                        android:text="@string/office_location"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -380,7 +380,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Bio"
+                        android:text="@string/bio"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -403,7 +403,7 @@
                             android:id="@+id/etAddTeacherBio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Short biography..."
+                            android:hint="@string/short_biography"
                             android:inputType="textMultiLine"
                             android:minLines="2"
                             android:paddingVertical="8dp"
@@ -434,7 +434,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Account Settings"
+                        android:text="@string/account_settings"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -448,7 +448,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Account Status"
+                        android:text="@string/account_status"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -465,7 +465,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="Active — Teacher can log in and access the system."
+                            android:text="@string/active_teacher_can_log_in_and_access_the_s"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="13sp" />
 
@@ -474,7 +474,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Inactive — Teacher cannot log in to the system."
+                            android:text="@string/inactive_teacher_cannot_log_in_to_the_syst"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="13sp" />
                     </RadioGroup>
@@ -501,7 +501,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/admin_text_secondary"
             android:textSize="14sp"
@@ -517,7 +517,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Save Teacher"
+            android:text="@string/save_teacher"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"

@@ -62,23 +62,23 @@
                         android:rowCount="2">
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Suggestions" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6 Active" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/active_suggestions" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvRecActiveCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_0_active" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2 Urgent" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvRecHighPriorityCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Urgent" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Predicted Score Boost" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+14.2%" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_recommendations" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvRecTotalCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_0_total" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Plans" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Done" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvRecCompletedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_0_done" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
                     </GridLayout>
                 </LinearLayout>
@@ -102,11 +102,22 @@
                     android:id="@+id/edtSearchStudentRecommendations"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:hint="Search recommendations by title or course..."
+                    android:hint="@string/search_recommendations_by_title_or_course"
                     android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Personalized AI Study Recommendations" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/tvEmptyRecommendations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="28dp"
+                android:text="No recommendations available yet."
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <!-- Recommendations Roster -->
             <androidx.recyclerview.widget.RecyclerView

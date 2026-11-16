@@ -55,7 +55,7 @@ public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportR
         }
 
         public void bind(StudentImportItem.RowItem item) {
-            tvRowNumber.setText("Row " + item.rowNumber);
+            tvRowNumber.setText(itemView.getContext().getString(R.string.row_prefix) + item.rowNumber);
             tvStudentIdentifier.setText(item.studentIdentifier != null && !item.studentIdentifier.isEmpty()
                     ? item.studentIdentifier : "(No ID)");
 

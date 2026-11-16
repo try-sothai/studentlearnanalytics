@@ -5,70 +5,70 @@
         <item
             android:id="@+id/nav_drawer_dashboard"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/nav_home" />
 
         <item
             android:id="@+id/nav_drawer_students"
             android:icon="@drawable/ic_profile"
-            android:title="Students" />
+            android:title="@string/nav_students" />
 
         <item
             android:id="@+id/nav_drawer_courses"
             android:icon="@drawable/ic_book"
-            android:title="Courses" />
+            android:title="@string/nav_courses" />
 
         <item
             android:id="@+id/nav_drawer_analytics"
             android:icon="@drawable/ic_analytics"
-            android:title="Class Analytics" />
+            android:title="@string/class_analytics" />
 
         <item
             android:id="@+id/nav_drawer_prediction_risk"
             android:icon="@drawable/ic_prediction"
-            android:title="Prediction &amp; Risk" />
+            android:title="@string/prediction_risk" />
 
         <item
             android:id="@+id/nav_drawer_scores"
             android:icon="@drawable/ic_assignment"
-            android:title="Manage Scores" />
+            android:title="@string/manage_scores" />
 
         <item
             android:id="@+id/nav_drawer_attendance"
             android:icon="@drawable/ic_calendar"
-            android:title="Attendance" />
+            android:title="@string/attendance" />
 
         <item
             android:id="@+id/nav_drawer_recommendation"
             android:icon="@drawable/ic_prediction"
-            android:title="Recommendations" />
+            android:title="@string/recommendations" />
 
         <item
             android:id="@+id/nav_drawer_reports"
             android:icon="@drawable/ic_analytics"
-            android:title="Reports" />
+            android:title="@string/nav_reports" />
 
         <item
             android:id="@+id/nav_drawer_evaluation"
             android:icon="@drawable/ic_analytics"
-            android:title="Prediction Evaluation" />
+            android:title="@string/prediction_evaluation" />
 
         <item
             android:id="@+id/nav_drawer_notifications"
             android:icon="@drawable/ic_notifications"
-            android:title="Notifications" />
+            android:title="@string/nav_notifications" />
 
         <item
             android:id="@+id/nav_drawer_profile"
             android:icon="@drawable/ic_profile"
-            android:title="Profile" />
+            android:title="@string/nav_profile" />
     </group>
 
-    <item android:title="Account">
+    <item android:title="@string/account">
         <menu>
             <item
                 android:id="@+id/nav_drawer_logout"
                 android:icon="@drawable/ic_back"
-                android:title="Logout" />
+                android:title="@string/logout" />
         </menu>
     </item>
 

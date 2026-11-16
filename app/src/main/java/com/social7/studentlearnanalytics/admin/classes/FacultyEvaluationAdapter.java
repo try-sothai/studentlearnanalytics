@@ -130,10 +130,10 @@ public class FacultyEvaluationAdapter extends RecyclerView.Adapter<FacultyEvalua
                 }
             }
             if (tvAssignments != null) {
-                tvAssignments.setText("Courses: " + item.courses + " • Classes: " + item.classes);
+                tvAssignments.setText(tvAssignments.getContext().getString(R.string.courses) + item.courses + " • Classes: " + item.classes);
             }
             if (tvPerformance != null) {
-                tvPerformance.setText("Class Pass Rate: " + item.passRate + " • Student Rating: " + item.rating);
+                tvPerformance.setText(tvPerformance.getContext().getString(R.string.class_pass_rate) + item.passRate + " • Student Rating: " + item.rating);
             }
             itemView.setOnClickListener(v -> {
                 if (listener != null) listener.onFacultyClick(item);

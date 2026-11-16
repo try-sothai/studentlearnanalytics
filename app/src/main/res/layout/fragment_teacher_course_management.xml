@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Active (5)"
+                    android:text="@string/active_5"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
@@ -80,7 +80,7 @@
                 android:layout_height="18dp"
                 android:src="@drawable/ic_search"
                 app:tint="@color/teacher_secondary_text"
-                android:contentDescription="Search" />
+                android:contentDescription="@string/search" />
 
             <EditText
                 android:id="@+id/edtSearchCourses"
@@ -88,7 +88,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:background="@null"
-                android:hint="Search courses by code, name, or department..."
+                android:hint="@string/search_courses_by_code_name_or_department_38300b"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textColor="@color/teacher_dark_navy"
@@ -122,7 +122,7 @@
                     android:layout_height="14dp"
                     android:src="@drawable/ic_calendar"
                     app:tint="@color/teacher_primary_blue"
-                    android:contentDescription="Calendar" />
+                    android:contentDescription="@string/calendar" />
 
                 <TextView
                     android:id="@+id/tvSelectedSemester"
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="Semester 1, 2024"
+                    android:text="@string/semester_1_2024"
                     android:textColor="@color/teacher_dark_navy"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -142,7 +142,7 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_chevron_down"
                     app:tint="@color/teacher_dark_navy"
-                    android:contentDescription="Dropdown" />
+                    android:contentDescription="@string/dropdown" />
             </LinearLayout>
 
             <!-- Department Dropdown -->
@@ -176,7 +176,7 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_chevron_down"
                     app:tint="@color/teacher_dark_navy"
-                    android:contentDescription="Dropdown" />
+                    android:contentDescription="@string/dropdown" />
             </LinearLayout>
 
             <!-- Sort Dropdown -->
@@ -198,7 +198,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sort: Code"
+                    android:text="@string/sort_code"
                     android:textColor="@color/teacher_dark_navy"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -210,7 +210,7 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_chevron_down"
                     app:tint="@color/teacher_dark_navy"
-                    android:contentDescription="Dropdown" />
+                    android:contentDescription="@string/dropdown" />
             </LinearLayout>
 
         </LinearLayout>

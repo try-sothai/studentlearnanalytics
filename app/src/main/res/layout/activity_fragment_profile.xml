@@ -68,7 +68,7 @@
                         android:id="@+id/ivStudentAvatar"
                         android:layout_width="96dp"
                         android:layout_height="96dp"
-                        android:contentDescription="Student Avatar"
+                        android:contentDescription="@string/student_avatar"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_student_avatar" />
 
@@ -104,7 +104,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Computer Science"
+                            android:text="@string/computer_science"
                             android:textColor="@color/profile_dark_navy"
                             android:textSize="14sp" />
 
@@ -113,7 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="3rd Year"
+                            android:text="@string/str_3rd_year"
                             android:textColor="@color/profile_dark_navy"
                             android:textSize="14sp" />
 
@@ -159,7 +159,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
-                                    android:contentDescription="Personal Information"
+                                    android:contentDescription="@string/personal_information"
                                     android:src="@drawable/ic_person_purple" />
 
                             </FrameLayout>
@@ -170,7 +170,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Personal Information"
+                                android:text="@string/personal_information"
                                 android:textColor="@color/profile_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -178,7 +178,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:contentDescription="Next"
+                                android:contentDescription="@string/next"
                                 android:src="@drawable/ic_chevron_right_purple" />
 
                         </LinearLayout>
@@ -217,7 +217,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
-                                    android:contentDescription="Academic Information"
+                                    android:contentDescription="@string/academic_information"
                                     android:src="@drawable/ic_graduation_cap_purple" />
 
                             </FrameLayout>
@@ -228,7 +228,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Academic Information"
+                                android:text="@string/academic_information"
                                 android:textColor="@color/profile_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -236,7 +236,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:contentDescription="Next"
+                                android:contentDescription="@string/next"
                                 android:src="@drawable/ic_chevron_right_purple" />
 
                         </LinearLayout>
@@ -275,7 +275,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
-                                    android:contentDescription="Change Password"
+                                    android:contentDescription="@string/change_password"
                                     android:src="@drawable/ic_lock_purple" />
 
                             </FrameLayout>
@@ -286,7 +286,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Change Password"
+                                android:text="@string/change_password"
                                 android:textColor="@color/profile_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -294,7 +294,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:contentDescription="Next"
+                                android:contentDescription="@string/next"
                                 android:src="@drawable/ic_chevron_right_purple" />
 
                         </LinearLayout>
@@ -333,7 +333,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
-                                    android:contentDescription="App Settings"
+                                    android:contentDescription="@string/app_settings"
                                     android:src="@drawable/ic_settings_purple" />
 
                             </FrameLayout>
@@ -344,7 +344,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="App Settings"
+                                android:text="@string/app_settings"
                                 android:textColor="@color/profile_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -352,7 +352,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:contentDescription="Next"
+                                android:contentDescription="@string/next"
                                 android:src="@drawable/ic_chevron_right_purple" />
 
                         </LinearLayout>
@@ -391,7 +391,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
-                                    android:contentDescription="Help &amp; Support"
+                                    android:contentDescription="@string/help_support"
                                     android:src="@drawable/ic_help_purple" />
 
                             </FrameLayout>
@@ -402,7 +402,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Help &amp; Support"
+                                android:text="@string/help_support"
                                 android:textColor="@color/profile_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -410,7 +410,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:contentDescription="Next"
+                                android:contentDescription="@string/next"
                                 android:src="@drawable/ic_chevron_right_purple" />
 
                         </LinearLayout>
@@ -438,7 +438,7 @@
                             <ImageView
                                 android:layout_width="22dp"
                                 android:layout_height="22dp"
-                                android:contentDescription="Logout"
+                                android:contentDescription="@string/logout"
                                 android:src="@drawable/ic_logout_red" />
 
                             <TextView
@@ -446,7 +446,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:fontFamily="sans-serif-medium"
-                                android:text="Logout"
+                                android:text="@string/logout"
                                 android:textColor="@color/profile_logout_red"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />

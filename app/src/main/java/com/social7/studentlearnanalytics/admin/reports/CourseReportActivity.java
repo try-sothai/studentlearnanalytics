@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.admin.reports;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -79,7 +81,7 @@ public class CourseReportActivity extends AppCompatActivity {
         entries.add(new BarEntry(4, 1220f));
         entries.add(new BarEntry(5, 1245f));
 
-        BarDataSet dataSet = new BarDataSet(entries, "Enrollments");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.enrollments));
         dataSet.setColor(Color.parseColor("#3155F5"));
         dataSet.setDrawValues(false);
 
@@ -96,6 +98,7 @@ public class CourseReportActivity extends AppCompatActivity {
 
         chartCourseTrendBar.getAxisRight().setEnabled(false);
         chartCourseTrendBar.getDescription().setEnabled(false);
+        ChartFontHelper.applyKhmerFont(chartCourseTrendBar.getContext(), chartCourseTrendBar);
         chartCourseTrendBar.invalidate();
     }
 
@@ -110,7 +113,7 @@ public class CourseReportActivity extends AppCompatActivity {
 
         if (btnViewCourseReportDetails != null) {
             btnViewCourseReportDetails.setOnClickListener(v ->
-                    Toast.makeText(this, "Displaying detailed course report metrics", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.displaying_detailed_course_metrics), Toast.LENGTH_SHORT).show()
             );
         }
     }

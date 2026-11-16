@@ -16,7 +16,7 @@
         android:layout_height="32dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="Close Navigation Drawer"
+        android:contentDescription="@string/close_navigation_drawer"
         android:focusable="true"
         android:padding="6dp"
         android:src="@drawable/ic_close"
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Teacher • CS Dept"
+            android:text="@string/teacher_cs_dept"
             android:textColor="@color/drawer_secondary_text"
             android:textSize="12sp" />
 
@@ -110,14 +110,14 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:contentDescription="Active Star Icon"
+                android:contentDescription="@string/active_star_icon"
                 android:src="@drawable/ic_star_active" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Active"
+                android:text="@string/status_active"
                 android:textColor="@color/drawer_success_green"
                 android:textSize="11sp"
                 android:textStyle="bold" />

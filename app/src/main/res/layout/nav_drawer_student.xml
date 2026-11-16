@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="6dp"
-                android:text="Main Menu"
+                android:text="@string/main_menu"
                 android:textColor="@color/drawer_secondary_text"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -59,7 +59,7 @@
                     android:id="@+id/imgDrawerItemIconHome"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_home"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -75,7 +75,7 @@
                         android:id="@+id/tvDrawerItemTitleHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Home"
+                        android:text="@string/nav_home"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Student dashboard and academic overview"
+                        android:text="@string/student_dashboard_and_academic_overview"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -94,7 +94,7 @@
                     android:id="@+id/imgDrawerItemChevronHome"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -118,7 +118,7 @@
                     android:id="@+id/imgDrawerItemIconCourses"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_book"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -134,7 +134,7 @@
                         android:id="@+id/tvDrawerItemTitleCourses"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="My Courses"
+                        android:text="@string/my_courses"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -144,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="View enrolled courses and course progress"
+                        android:text="@string/view_enrolled_courses_and_course_progress"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -153,7 +153,7 @@
                     android:id="@+id/imgDrawerItemChevronCourses"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -177,7 +177,7 @@
                     android:id="@+id/imgDrawerItemIconAnalytics"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_analytics"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -193,7 +193,7 @@
                         android:id="@+id/tvDrawerItemTitleAnalytics"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Learning Analytics"
+                        android:text="@string/learning_analytics"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -203,7 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Track academic performance and learning progress"
+                        android:text="@string/track_academic_performance_and_learning_pr"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -212,7 +212,7 @@
                     android:id="@+id/imgDrawerItemChevronAnalytics"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -236,7 +236,7 @@
                     android:id="@+id/imgDrawerItemIconPrediction"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_prediction"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -252,7 +252,7 @@
                         android:id="@+id/tvDrawerItemTitlePrediction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Prediction &amp; Risk"
+                        android:text="@string/prediction_risk"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -262,7 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="View predicted scores and academic risk"
+                        android:text="@string/view_predicted_scores_and_academic_risk"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -271,7 +271,7 @@
                     android:id="@+id/imgDrawerItemChevronPrediction"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -295,7 +295,7 @@
                     android:id="@+id/imgDrawerItemIconRecommendations"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_circle_info"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -311,7 +311,7 @@
                         android:id="@+id/tvDrawerItemTitleRecommendations"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Recommendations"
+                        android:text="@string/recommendations"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -330,7 +330,7 @@
                     android:id="@+id/imgDrawerItemChevronRecommendations"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -354,7 +354,7 @@
                     android:id="@+id/imgDrawerItemIconAssessments"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_assignment"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -370,7 +370,7 @@
                         android:id="@+id/tvDrawerItemTitleAssessments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Assessments"
+                        android:text="@string/assessments"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -380,7 +380,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Assignments, homework, quizzes and exams"
+                        android:text="@string/assignments_homework_quizzes_and_exams"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -389,7 +389,7 @@
                     android:id="@+id/imgDrawerItemChevronAssessments"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -408,7 +408,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="6dp"
-                android:text="Account"
+                android:text="@string/account"
                 android:textColor="@color/drawer_secondary_text"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -432,7 +432,7 @@
                     android:id="@+id/imgDrawerItemIconNotifications"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_notifications"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -448,7 +448,7 @@
                         android:id="@+id/tvDrawerItemTitleNotifications"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notifications"
+                        android:text="@string/nav_notifications"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -458,7 +458,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Academic notifications and announcements"
+                        android:text="@string/academic_notifications_and_announcements"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -467,7 +467,7 @@
                     android:id="@+id/imgDrawerItemChevronNotifications"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -491,7 +491,7 @@
                     android:id="@+id/imgDrawerItemIconReports"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_reports"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -507,7 +507,7 @@
                         android:id="@+id/tvDrawerItemTitleReports"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reports"
+                        android:text="@string/nav_reports"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -526,7 +526,7 @@
                     android:id="@+id/imgDrawerItemChevronReports"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -550,7 +550,7 @@
                     android:id="@+id/imgDrawerItemIconProfile"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_profile"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -566,7 +566,7 @@
                         android:id="@+id/tvDrawerItemTitleProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Profile"
+                        android:text="@string/nav_profile"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -576,7 +576,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Manage personal and academic information"
+                        android:text="@string/manage_personal_and_academic_information"
                         android:textColor="@color/drawer_secondary_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -585,7 +585,7 @@
                     android:id="@+id/imgDrawerItemChevronProfile"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -609,7 +609,7 @@
                     android:id="@+id/imgDrawerItemIconSettings"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_settings"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -625,7 +625,7 @@
                         android:id="@+id/tvDrawerItemTitleSettings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Settings"
+                        android:text="@string/nav_settings"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -644,7 +644,7 @@
                     android:id="@+id/imgDrawerItemChevronSettings"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -663,7 +663,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="6dp"
-                android:text="Other"
+                android:text="@string/other"
                 android:textColor="@color/drawer_secondary_text"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -687,7 +687,7 @@
                     android:id="@+id/imgDrawerItemIconHelp"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_circle_info"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -703,7 +703,7 @@
                         android:id="@+id/tvDrawerItemTitleHelp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Help &amp; Support"
+                        android:text="@string/help_support"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -722,7 +722,7 @@
                     android:id="@+id/imgDrawerItemChevronHelp"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -746,7 +746,7 @@
                     android:id="@+id/imgDrawerItemIconAbout"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Menu Icon"
+                    android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_info"
                     app:tint="@color/drawer_primary_blue" />
 
@@ -762,7 +762,7 @@
                         android:id="@+id/tvDrawerItemTitleAbout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="About"
+                        android:text="@string/about"
                         android:textColor="@color/drawer_dark_navy"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -781,7 +781,7 @@
                     android:id="@+id/imgDrawerItemChevronAbout"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:contentDescription="Chevron Right"
+                    android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
             </LinearLayout>
@@ -809,7 +809,7 @@
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:contentDescription="Log Out Icon"
+                android:contentDescription="@string/log_out_icon"
                 android:src="@drawable/ic_nav_logout"
                 app:tint="@color/drawer_logout_red" />
 
@@ -817,7 +817,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Log Out"
+                android:text="@string/log_out"
                 android:textColor="@color/drawer_logout_red"
                 android:textSize="15sp"
                 android:textStyle="bold" />

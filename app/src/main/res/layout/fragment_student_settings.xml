@@ -52,7 +52,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_profile"
                         app:tint="@color/admin_primary_blue"
-                        android:contentDescription="Password" />
+                        android:contentDescription="@string/password" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -64,7 +64,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Change Password &amp; Security"
+                            android:text="@string/change_password_security"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -83,7 +83,7 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
                         app:tint="@color/admin_text_secondary"
-                        android:contentDescription="Chevron" />
+                        android:contentDescription="@string/chevron" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -114,7 +114,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_notifications"
                         app:tint="@color/admin_primary_blue"
-                        android:contentDescription="Notifications" />
+                        android:contentDescription="@string/nav_notifications" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -126,7 +126,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Notification Preferences"
+                            android:text="@string/notification_preferences"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -145,7 +145,69 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
                         app:tint="@color/admin_text_secondary"
-                        android:contentDescription="Chevron" />
+                        android:contentDescription="@string/chevron" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Appearance & Language Settings -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardStudentAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_nav_settings"
+                        app:tint="@color/admin_primary_blue"
+                        android:contentDescription="@string/appearance_settings" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/appearance_settings"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/appearance_settings_desc"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/admin_text_secondary"
+                        android:contentDescription="@string/chevron" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -176,7 +238,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_circle_info"
                         app:tint="@color/admin_primary_blue"
-                        android:contentDescription="About" />
+                        android:contentDescription="@string/about" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -197,7 +259,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="System version 2.4 • Student Learning Analytics System"
+                            android:text="@string/system_version_2_4_student_learning_analyt"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -207,7 +269,7 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
                         app:tint="@color/admin_text_secondary"
-                        android:contentDescription="Chevron" />
+                        android:contentDescription="@string/chevron" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

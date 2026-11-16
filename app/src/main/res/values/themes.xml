@@ -11,8 +11,8 @@
         <item name="android:windowLightStatusBar">true</item>
         
         <!-- Typography -->
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/notosanskhmer</item>
+        <item name="fontFamily">@font/notosanskhmer</item>
     </style>
 
 </resources>

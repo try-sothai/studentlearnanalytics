@@ -121,7 +121,7 @@ public class CourseAnalyticsAdapter extends RecyclerView.Adapter<CourseAnalytics
 
         public void bind(final CourseAnalyticsItem item, final OnCourseAnalyticsClickListener listener) {
             if (tvCardCourseCodeName != null) tvCardCourseCodeName.setText(item.code + " - " + item.name);
-            if (tvCardInstructor != null) tvCardInstructor.setText("Instructor: " + item.instructor);
+            if (tvCardInstructor != null) tvCardInstructor.setText(tvCardInstructor.getContext().getString(R.string.instructor) + item.instructor);
             if (tvCardMetadata != null) tvCardMetadata.setText(item.studentsCount + " • " + item.semester);
             if (tvCardAvgScore != null) tvCardAvgScore.setText(item.avgScore + "%");
 

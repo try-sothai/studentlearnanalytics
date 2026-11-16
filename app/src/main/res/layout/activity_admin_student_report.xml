@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Student Report"
+            android:text="@string/student_report"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -72,7 +72,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/bg_notif_tab_active"
                         android:gravity="center"
-                        android:text="Overview"
+                        android:text="@string/overview"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -83,7 +83,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Enrollment"
+                        android:text="@string/enrollment"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -94,7 +94,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Performance"
+                        android:text="@string/performance"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -105,7 +105,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Attendance"
+                        android:text="@string/attendance"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -156,7 +156,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Student Statistics"
+                        android:text="@string/student_statistics"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -184,7 +184,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Students"
+                                android:text="@string/total_students"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -210,7 +210,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Active Students"
+                                android:text="@string/active_students"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -235,7 +235,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="New Enrollments"
+                                android:text="@string/new_enrollments"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -260,7 +260,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Graduated"
+                                android:text="@string/status_graduated"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -299,7 +299,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enrollment Trend"
+                        android:text="@string/enrollment_trend"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -333,7 +333,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Student Distribution"
+                        android:text="@string/student_distribution"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -366,7 +366,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Export Report"
+            android:text="@string/export_report"
             android:textAllCaps="false"
             android:textColor="@color/admin_primary_blue"
             android:textSize="14sp"
@@ -382,7 +382,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="View Details"
+            android:text="@string/view_details"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"

@@ -128,9 +128,9 @@ public class SystemSettingsFragment extends Fragment {
 
     private void showLogoutConfirmationDialog() {
         new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Confirm Logout")
-                .setMessage("Are you sure you want to log out of your administrator account?")
-                .setPositiveButton("Log Out", (dialog, which) -> {
+                .setTitle(R.string.confirm_logout)
+                .setMessage(R.string.are_you_sure_you_want_to_log_out_of_your_a)
+                .setPositiveButton(R.string.log_out, (dialog, which) -> {
                     if (sessionManager != null) {
                         sessionManager.clearSession();
                     }
@@ -139,7 +139,7 @@ public class SystemSettingsFragment extends Fragment {
                     startActivity(intent);
                     requireActivity().finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

@@ -82,7 +82,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Users ID"
+                android:text="@string/users_id"
                 android:textColor="@color/brand_deep_navy"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -94,7 +94,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_rounded_input_v2"
                 android:text="STD001"
-                android:hint="Enter your student ID"
+                android:hint="@string/enter_your_student_id"
                 android:paddingHorizontal="16dp"
                 android:drawableStart="@drawable/ic_profile"
                 android:drawablePadding="12dp"
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="Password"
+                android:text="@string/password"
                 android:textColor="@color/brand_deep_navy"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -120,7 +120,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_rounded_input_v2"
                 android:text="12345678"
-                android:hint="Enter your password"
+                android:hint="@string/enter_your_password"
                 android:paddingHorizontal="16dp"
                 android:drawableStart="@drawable/ic_assignment"
                 android:drawablePadding="12dp"
@@ -143,7 +143,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:checked="true"
-                    android:text="Remember me"
+                    android:text="@string/remember_me"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
@@ -168,7 +168,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/bg_button_primary_v2"
-                android:text="Sign In"
+                android:text="@string/sign_in"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -197,7 +197,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&quot;Learn Today,"
+                    android:text="@string/learn_today"
                     android:textColor="@color/primary_light"
                     android:textSize="16sp"
                     android:textStyle="italic" />

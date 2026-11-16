@@ -56,7 +56,7 @@
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
-                android:text="High Risk (5)"
+                android:text="@string/high_risk_5"
                 android:textColor="@color/admin_inactive_red"
                 android:textSize="12sp"
                 android:textStyle="bold" />

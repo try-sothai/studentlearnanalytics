@@ -53,7 +53,7 @@
                         android:layout_height="16dp"
                         android:src="@drawable/ic_graduation_cap"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Course" />
+                        android:contentDescription="@string/course" />
 
                     <TextView
                         android:id="@+id/tvSelectedCourseName"
@@ -74,7 +74,7 @@
                         android:layout_height="14dp"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Dropdown" />
+                        android:contentDescription="@string/dropdown" />
                 </LinearLayout>
 
                 <!-- Semester Selector -->
@@ -97,7 +97,7 @@
                         android:layout_height="16dp"
                         android:src="@drawable/ic_calendar"
                         app:tint="@color/teacher_primary_blue"
-                        android:contentDescription="Calendar" />
+                        android:contentDescription="@string/calendar" />
 
                     <TextView
                         android:id="@+id/tvSelectedSemester"
@@ -106,7 +106,7 @@
                         android:layout_weight="1"
                         android:layout_marginStart="6dp"
                         android:layout_marginEnd="4dp"
-                        android:text="Semester 1, 2024"
+                        android:text="@string/semester_1_2024"
                         android:textColor="@color/teacher_dark_navy"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -118,7 +118,7 @@
                         android:layout_height="14dp"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Dropdown" />
+                        android:contentDescription="@string/dropdown" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -166,7 +166,7 @@
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_chart_bar"
                                     app:tint="@color/status_good_text"
-                                    android:contentDescription="Average" />
+                                    android:contentDescription="@string/average" />
                             </FrameLayout>
 
                             <TextView
@@ -174,7 +174,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:text="Class Average"
+                                android:text="@string/class_average"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -241,7 +241,7 @@
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_star"
                                     app:tint="@color/teacher_primary_blue"
-                                    android:contentDescription="Pass Rate" />
+                                    android:contentDescription="@string/pass_rate" />
                             </FrameLayout>
 
                             <TextView
@@ -249,7 +249,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:text="Pass Rate"
+                                android:text="@string/pass_rate"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -320,7 +320,7 @@
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_warning_triangle"
                                     app:tint="@color/status_at_risk_text"
-                                    android:contentDescription="Warning" />
+                                    android:contentDescription="@string/warning" />
                             </FrameLayout>
 
                             <TextView
@@ -328,7 +328,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:text="At-Risk Students"
+                                android:text="@string/at_risk_students"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -469,13 +469,13 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_chart_bar"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Chart Icon" />
+                            android:contentDescription="@string/chart_icon" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Score Distribution"
+                            android:text="@string/score_distribution"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -519,13 +519,13 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Trend Icon" />
+                            android:contentDescription="@string/trend_icon" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Performance Trend"
+                            android:text="@string/performance_trend"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -576,7 +576,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Learning Insights"
+                            android:text="@string/learning_insights"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -605,7 +605,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_calendar"
                                 app:tint="@color/status_attention_text"
-                                android:contentDescription="Calendar" />
+                                android:contentDescription="@string/calendar" />
                         </FrameLayout>
 
                         <LinearLayout
@@ -618,7 +618,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Attendance needs attention"
+                                android:text="@string/attendance_needs_attention"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -637,7 +637,7 @@
                             android:layout_height="18dp"
                             android:src="@drawable/ic_chevron_right"
                             app:tint="@color/teacher_secondary_text"
-                            android:contentDescription="Details" />
+                            android:contentDescription="@string/details" />
                     </LinearLayout>
 
                     <View
@@ -668,7 +668,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_chart_bar"
                                 app:tint="@color/status_good_text"
-                                android:contentDescription="Trend" />
+                                android:contentDescription="@string/trend" />
                         </FrameLayout>
 
                         <LinearLayout
@@ -681,7 +681,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Assignment performance improving"
+                                android:text="@string/assignment_performance_improving"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -700,7 +700,7 @@
                             android:layout_height="18dp"
                             android:src="@drawable/ic_chevron_right"
                             app:tint="@color/teacher_secondary_text"
-                            android:contentDescription="Details" />
+                            android:contentDescription="@string/details" />
                     </LinearLayout>
 
                     <View
@@ -731,7 +731,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_warning_triangle"
                                 app:tint="@color/status_at_risk_text"
-                                android:contentDescription="Warning" />
+                                android:contentDescription="@string/warning" />
                         </FrameLayout>
 
                         <LinearLayout
@@ -744,7 +744,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5 students at risk"
+                                android:text="@string/str_5_students_at_risk"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -763,7 +763,7 @@
                             android:layout_height="18dp"
                             android:src="@drawable/ic_chevron_right"
                             app:tint="@color/teacher_secondary_text"
-                            android:contentDescription="Details" />
+                            android:contentDescription="@string/details" />
                     </LinearLayout>
 
                 </LinearLayout>

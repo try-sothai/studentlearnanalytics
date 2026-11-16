@@ -96,8 +96,8 @@ public class TeacherWorkloadAdapter extends RecyclerView.Adapter<TeacherWorkload
         public void bind(WorkloadItem item, OnWorkloadClickListener listener) {
             if (tvTeacherId != null) tvTeacherId.setText(item.teacherId);
             if (tvTeacherName != null) tvTeacherName.setText(item.teacherName);
-            if (tvTeacherDept != null) tvTeacherDept.setText("Department: " + item.department);
-            if (tvTeachingHours != null) tvTeachingHours.setText("Weekly Teaching Load: " + item.teachingHours);
+            if (tvTeacherDept != null) tvTeacherDept.setText(tvTeacherDept.getContext().getString(R.string.department_dedb12) + item.department);
+            if (tvTeachingHours != null) tvTeachingHours.setText(itemView.getContext().getString(R.string.weekly_teaching_load_prefix) + item.teachingHours);
             if (tvWorkloadStatus != null) {
                 tvWorkloadStatus.setText(item.status);
                 if ("Normal Workload".equalsIgnoreCase(item.status) || "Normal".equalsIgnoreCase(item.status)) {

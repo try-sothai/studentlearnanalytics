@@ -1,149 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/slas_background"
-    android:fitsSystemWindows="true">
+    android:background="#F5F5F5">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="24dp">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <!-- Top Header Bar -->
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
             <ImageButton
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_back"
-                app:tint="@color/slas_text_primary" />
-
-            <LinearLayout
-                android:layout_width="0dp"
+                app:tint="#FFFFFF" />
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="@string/gpa_academic_progress"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp" />
+        </androidx.appcompat.widget.Toolbar>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="GPA / Academic Progress"
-                    android:textColor="@color/slas_text_primary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cumulative GPA tracking and semester performance history"
-                    android:textColor="@color/slas_text_secondary"
-                    android:textSize="12sp" />
-            </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </LinearLayout>
-
-        <!-- Status / Notice Banner -->
-        <TextView
-            android:id="@+id/gpaScreenState"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_score_label"
-            android:backgroundTint="@color/slas_light_purple"
-            android:padding="12dp"
-            android:text="Loading GPA data…"
-            android:textColor="@color/slas_primary_purple"
-            android:textSize="12sp"
-            android:visibility="visible" />
-
-        <!-- Current GPA Hero Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/slas_border"
-            app:strokeWidth="1dp">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:letterSpacing="0.04"
-                    android:text="CUMULATIVE GPA"
-                    android:textAllCaps="true"
-                    android:textColor="@color/slas_text_secondary"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:text="@string/cumulative_gpa"
+                    android:textColor="#757575"
+                    android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/currentGpaValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Loading..."
-                    android:textColor="@color/slas_primary_purple"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
-
-                <TextView
+                    android:id="@+id/tvCumulativeGpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_score_label"
-                    android:backgroundTint="@color/slas_light_purple"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="4.00 Max Scale"
-                    android:textColor="@color/slas_primary_purple"
-                    android:textSize="11sp"
+                    android:text="--"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="32sp"
                     android:textStyle="bold" />
-
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- GPA Progress Trend Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="GPA Progress Trend"
-            android:textColor="@color/slas_text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <!-- Chart Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/slas_border"
-            app:strokeWidth="1dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,97 +88,59 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/lineChartGpa"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="220dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Academic Summary Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Academic History"
-            android:textColor="@color/slas_text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <!-- Table Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/slas_border"
-            app:strokeWidth="1dp">
-
-            <TableLayout
-                android:id="@+id/gpaHistoryTable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <TableRow
-                    android:paddingVertical="8dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="Semester"
-                        android:textColor="@color/slas_text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="GPA"
-                        android:textColor="@color/slas_text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:text="@string/semester_gpa"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvSemesterGpa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="Academic Standing"
-                        android:textColor="@color/slas_text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </TableRow>
+                        android:layout_weight="1"
+                        android:text="@string/completed_credits"
+                        android:textSize="16sp" />
 
-                <View
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="6dp"
-                    android:background="@color/slas_border" />
+                    <TextView
+                        android:id="@+id/tvCompletedCredits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+                </LinearLayout>
 
-            </TableLayout>
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Semester Results & Academic Transcript Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Semester Results &amp; Academic Transcript"
-            android:textColor="@color/slas_text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/containerSemesterCards"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:orientation="vertical" />
-
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

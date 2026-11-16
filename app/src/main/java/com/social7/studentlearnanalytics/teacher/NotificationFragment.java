@@ -49,9 +49,7 @@ public class NotificationFragment extends Fragment {
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherNotifications),
-                    "Notifications",
-                    "Academic alerts & updates"
+                    view.findViewById(R.id.headerTeacherNotifications), getString(R.string.nav_notifications), "Academic alerts & updates"
             );
         }
 

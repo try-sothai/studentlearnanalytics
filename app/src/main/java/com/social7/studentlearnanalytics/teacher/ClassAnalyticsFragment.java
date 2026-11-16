@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -77,9 +79,7 @@ public class ClassAnalyticsFragment extends Fragment {
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherClassAnalytics),
-                    "Class Analytics",
-                    "Detailed performance metrics"
+                    view.findViewById(R.id.headerTeacherClassAnalytics), getString(R.string.class_analytics), "Detailed performance metrics"
             );
         }
 
@@ -269,7 +269,7 @@ public class ClassAnalyticsFragment extends Fragment {
             entries.add(new BarEntry(4, 6f));
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Grade Distribution");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.grade_distribution_5b81da));
         dataSet.setColors(new int[]{
                 Color.parseColor("#2563FF"),
                 Color.parseColor("#16C784"),
@@ -313,6 +313,7 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.animateY(800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 
@@ -343,7 +344,7 @@ public class ClassAnalyticsFragment extends Fragment {
             targetEntries.add(new Entry(3, 77f));
         }
 
-        LineDataSet classSet = new LineDataSet(classEntries, "Class Average");
+        LineDataSet classSet = new LineDataSet(classEntries, getString(R.string.class_average));
         classSet.setColor(Color.parseColor("#2563FF"));
         classSet.setLineWidth(2.5f);
         classSet.setCircleColor(Color.parseColor("#2563FF"));
@@ -382,6 +383,7 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.getDescription().setEnabled(false);
         chart.getLegend().setTextColor(Color.parseColor("#10165C"));
         chart.animateX(800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 }

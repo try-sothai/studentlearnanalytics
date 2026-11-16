@@ -32,9 +32,7 @@ public class StudentSettingsFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof StudentMainActivity) {
             ((StudentMainActivity) getActivity()).setupStudentHeader(
-                    view,
-                    "Settings",
-                    "Manage your account and application preferences"
+                    view, getString(R.string.nav_settings), "Manage your account and application preferences"
             );
         }
 
@@ -50,10 +48,18 @@ public class StudentSettingsFragment extends Fragment {
         if (cardNotif != null) {
             cardNotif.setOnClickListener(v -> {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Notification Preferences")
+                        .setTitle(R.string.notification_preferences)
                         .setMessage("All notification alerts (Assignments, Quizzes, Grades, and System Announcements) are active for your student account.")
-                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                         .show();
+            });
+        }
+
+        View cardAppearance = view.findViewById(R.id.cardStudentAppearance);
+        if (cardAppearance != null) {
+            cardAppearance.setOnClickListener(v -> {
+                Intent intent = new Intent(requireActivity(), com.social7.studentlearnanalytics.admin.AdminAppearanceActivity.class);
+                startActivity(intent);
             });
         }
 
@@ -66,7 +72,7 @@ public class StudentSettingsFragment extends Fragment {
                                 "Version: 2.4.0\n" +
                                 "Build: Production\n\n" +
                                 "Provides students with learning analytics, performance predictions, personalized recommendations, and course management.")
-                        .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                         .show();
             });
         }

@@ -37,7 +37,7 @@
                 android:layout_height="16dp"
                 android:src="@drawable/ic_graduation_cap"
                 app:tint="@color/teacher_dark_navy"
-                android:contentDescription="Course" />
+                android:contentDescription="@string/course" />
 
             <TextView
                 android:id="@+id/tvSelectedCourseName"
@@ -55,7 +55,7 @@
                 android:layout_height="14dp"
                 android:src="@drawable/ic_chevron_down"
                 app:tint="@color/teacher_dark_navy"
-                android:contentDescription="Dropdown" />
+                android:contentDescription="@string/dropdown" />
         </LinearLayout>
     </LinearLayout>
 
@@ -108,7 +108,7 @@
                             android:src="@drawable/ic_book"
                             app:tint="@color/white"
                             android:background="@drawable/bg_course_icon_blue"
-                            android:contentDescription="Course Icon" />
+                            android:contentDescription="@string/course_icon" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Semester"
+                            android:text="@string/period_semester"
                             android:textColor="@color/teacher_secondary_text"
                             android:textSize="10sp" />
 
@@ -174,7 +174,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Semester 1, 2024"
+                            android:text="@string/semester_1_2024"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -199,7 +199,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Students"
+                            android:text="@string/total_students"
                             android:textColor="@color/teacher_secondary_text"
                             android:textSize="10sp" />
 
@@ -232,7 +232,7 @@
                     android:layout_height="18dp"
                     android:src="@drawable/ic_search"
                     app:tint="@color/teacher_secondary_text"
-                    android:contentDescription="Search" />
+                    android:contentDescription="@string/search" />
 
                 <EditText
                     android:id="@+id/edtSearchStudents"
@@ -240,7 +240,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:background="@null"
-                    android:hint="Search students by name, student ID, or program..."
+                    android:hint="@string/search_students_by_name_student_id_or_prog"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:textColor="@color/teacher_dark_navy"
@@ -266,7 +266,7 @@
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
-                        android:text="All (35)"
+                        android:text="@string/all_35"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/white"
@@ -282,7 +282,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="At Risk (5)"
+                        android:text="@string/at_risk_5"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/status_at_risk_text"
@@ -298,7 +298,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Good (24)"
+                        android:text="@string/good_24"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/status_good_text"
@@ -341,14 +341,14 @@
                             android:layout_height="14dp"
                             android:src="@drawable/ic_filter_sliders"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Filter" />
+                            android:contentDescription="@string/filter" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:layout_marginEnd="4dp"
-                            android:text="Filter"
+                            android:text="@string/filter"
                             android:textColor="@color/teacher_primary_blue"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -358,7 +358,7 @@
                             android:layout_height="12dp"
                             android:src="@drawable/ic_chevron_down"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Chevron" />
+                            android:contentDescription="@string/chevron" />
                     </LinearLayout>
 
                 </LinearLayout>

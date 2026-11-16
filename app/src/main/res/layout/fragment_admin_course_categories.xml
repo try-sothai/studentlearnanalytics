@@ -44,7 +44,7 @@
                     android:id="@+id/etSearchCategory"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:hint="Search categories..."
+                    android:hint="@string/search_categories"
                     android:inputType="text"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="14sp" />
@@ -56,7 +56,7 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:backgroundTint="@color/admin_primary_blue"
-                android:text="Add Category"
+                android:text="@string/add_category"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13sp"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Departments" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/departments" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvTotalDepartments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

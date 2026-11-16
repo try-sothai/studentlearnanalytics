@@ -36,7 +36,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_notif_tab_active"
                 android:gravity="center"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="At-Risk"
+                android:text="@string/at_risk_6176e3"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Exam Prediction"
+                android:text="@string/exam_prediction"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Risk Analysis"
+                android:text="@string/risk_analysis"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -115,7 +115,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Prediction Summary Overview"
+                            android:text="@string/prediction_summary_overview"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -133,8 +133,8 @@
                             android:rowCount="2">
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Students Predicted" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="840 Students" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/students_predicted" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_840_students" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
@@ -144,11 +144,11 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="At-Risk Cohorts" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18 Students" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Accuracy" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/model_accuracy" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.2% ML" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
@@ -208,7 +208,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Student Risk Level Distribution"
+                            android:text="@string/student_risk_level_distribution"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -268,7 +268,7 @@
                             <ImageView
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:contentDescription="Warning"
+                                android:contentDescription="@string/warning"
                                 android:src="@drawable/ic_warning_triangle"
                                 app:tint="@color/status_at_risk_text" />
 
@@ -282,7 +282,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Total At-Risk Students"
+                                    android:text="@string/total_at_risk_students"
                                     android:textColor="@color/status_at_risk_text"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
@@ -322,12 +322,12 @@
                             android:rowCount="2">
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low GPA (&lt; 2.50)" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/low_gpa_2_50" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
                                 <TextView android:id="@+id/tvCountLowGpa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low Assignment Scores" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/low_assignment_scores" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
                                 <TextView android:id="@+id/tvCountLowScores" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
@@ -361,7 +361,7 @@
                         android:id="@+id/edtSearchAtRisk"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:hint="Search at-risk student name, ID..."
+                        android:hint="@string/search_at_risk_student_name_id"
                         android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -404,16 +404,16 @@
                         android:orientation="vertical"
                         android:padding="16dp">
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Exam Score Prediction Metrics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/exam_score_prediction_metrics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
 
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Academic Average" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/academic_average" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84.2%" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Predicted Exam" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/predicted_exam" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.8%" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
@@ -421,7 +421,7 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Grade: B+" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Confidence" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/confidence" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="91.5% ML" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
@@ -478,12 +478,12 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absence &gt; 15%" android:textColor="@color/admin_inactive_red" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Risk Count" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3 Students" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/high_risk_count" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_3_students" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Risk Index" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12.4% Avg" android:textColor="@color/warning_orange" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/course_risk_index" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_12_4_avg" android:textColor="@color/warning_orange" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Improvement" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>

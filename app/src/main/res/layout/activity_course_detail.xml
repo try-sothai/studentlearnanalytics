@@ -28,7 +28,7 @@
             android:padding="4dp"
             android:src="@drawable/ic_back"
             app:tint="@color/teacher_dark_navy"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless" />
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Course Detail"
+            android:text="@string/course_detail"
             android:textColor="@color/teacher_dark_navy"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -51,7 +51,7 @@
             android:padding="4dp"
             android:src="@drawable/ic_chevron_down"
             app:tint="@color/teacher_dark_navy"
-            android:contentDescription="Options"
+            android:contentDescription="@string/options"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless" />
@@ -106,7 +106,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_book"
                                 app:tint="@color/white"
-                                android:contentDescription="Course" />
+                                android:contentDescription="@string/course" />
                         </FrameLayout>
 
                         <LinearLayout
@@ -130,7 +130,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Computer Science Department"
+                                android:text="@string/computer_science_department"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="12sp" />
 
@@ -150,7 +150,7 @@
                             android:layout_height="22dp"
                             android:gravity="center"
                             android:paddingHorizontal="10dp"
-                            android:text="Active"
+                            android:text="@string/status_active"
                             android:textColor="@color/status_good_text"
                             android:textSize="11sp"
                             android:textStyle="bold"
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <!-- Chip 1: Student Count -->
+                        <!-- Chip 1: Student Count / Credits -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="32dp"
@@ -183,18 +183,19 @@
                             android:paddingHorizontal="6dp">
 
                             <ImageView
+                                android:id="@+id/ivChipStudentIcon"
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
                                 android:src="@drawable/ic_group"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Users" />
+                                android:contentDescription="@string/nav_users" />
 
                             <TextView
                                 android:id="@+id/tvChipStudentCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
-                                android:text="35 Students"
+                                android:text="@string/str_35_students"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -216,14 +217,14 @@
                                 android:layout_height="14dp"
                                 android:src="@drawable/ic_calendar"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Calendar" />
+                                android:contentDescription="@string/calendar" />
 
                             <TextView
                                 android:id="@+id/tvChipSemester"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
-                                android:text="Semester 1, 2024"
+                                android:text="@string/semester_1_2024"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -245,14 +246,14 @@
                                 android:layout_height="14dp"
                                 android:src="@drawable/ic_location"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Location" />
+                                android:contentDescription="@string/location" />
 
                             <TextView
                                 android:id="@+id/tvChipRoom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
-                                android:text="Room A101"
+                                android:text="@string/room_a101"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -281,7 +282,7 @@
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
-                        android:text="Overview"
+                        android:text="@string/overview"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/white"
@@ -300,7 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Students"
+                        android:text="@string/nav_students"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/teacher_primary_blue"
@@ -319,7 +320,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Assignments"
+                        android:text="@string/assignments"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/teacher_primary_blue"
@@ -338,7 +339,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Quizzes"
+                        android:text="@string/quizzes"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/teacher_primary_blue"
@@ -357,7 +358,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Exams"
+                        android:text="@string/exams"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/teacher_primary_blue"
@@ -409,13 +410,13 @@
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_calendar"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Calendar" />
+                                android:contentDescription="@string/calendar" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Course Schedule"
+                                android:text="@string/course_schedule"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -434,7 +435,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Day"
+                                android:text="@string/day"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -443,7 +444,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.2"
-                                android:text="Time"
+                                android:text="@string/time"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -452,128 +453,102 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.8"
-                                android:text="Room"
+                                android:text="@string/room"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Row 1: Monday -->
                         <LinearLayout
+                            android:id="@+id/layoutScheduleRowsContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="8dp"
-                            android:gravity="center_vertical">
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="22dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="Monday"
-                                android:textColor="@color/teacher_primary_blue"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_circle_soft_blue" />
-
-                            <TextView
-                                android:layout_width="0dp"
+                            <!-- Row 1: Monday -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.2"
-                                android:layout_marginStart="8dp"
-                                android:text="08:00 – 09:30"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
+                                android:orientation="horizontal"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:gravity="center_vertical">
 
-                            <TextView
-                                android:layout_width="0dp"
+                                <TextView
+                                    android:id="@+id/tvSchedDay1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="22dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="@string/monday"
+                                    android:textColor="@color/teacher_primary_blue"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/bg_circle_soft_blue" />
+
+                                <TextView
+                                    android:id="@+id/tvSchedTime1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.2"
+                                    android:layout_marginStart="8dp"
+                                    android:text="08:00 – 09:30"
+                                    android:textColor="@color/teacher_dark_navy"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvSchedRoom1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.8"
+                                    android:text="A101"
+                                    android:textColor="@color/teacher_dark_navy"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/teacher_border"/>
+
+                            <!-- Row 2: Wednesday -->
+                            <LinearLayout
+                                android:id="@+id/rowSchedule2"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:text="A101"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
-                        </LinearLayout>
+                                android:orientation="horizontal"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:gravity="center_vertical">
 
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/teacher_border"/>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="22dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="@string/wednesday"
+                                    android:textColor="@color/teacher_primary_blue"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/bg_circle_soft_blue" />
 
-                        <!-- Row 2: Wednesday -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="8dp"
-                            android:gravity="center_vertical">
+                                <TextView
+                                    android:id="@+id/tvSchedTime2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.2"
+                                    android:layout_marginStart="8dp"
+                                    android:text="08:00 – 09:30"
+                                    android:textColor="@color/teacher_dark_navy"
+                                    android:textSize="12sp" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="22dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="Wednesday"
-                                android:textColor="@color/teacher_primary_blue"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_circle_soft_blue" />
+                                <TextView
+                                    android:id="@+id/tvSchedRoom2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.8"
+                                    android:text="A101"
+                                    android:textColor="@color/teacher_dark_navy"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.2"
-                                android:layout_marginStart="8dp"
-                                android:text="08:00 – 09:30"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:text="A101"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/teacher_border"/>
-
-                        <!-- Row 3: Friday -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingVertical="8dp"
-                            android:paddingHorizontal="8dp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="22dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="Friday"
-                                android:textColor="@color/teacher_primary_blue"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/bg_circle_soft_blue" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.2"
-                                android:layout_marginStart="8dp"
-                                android:text="08:00 – 09:30"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:text="A101"
-                                android:textColor="@color/teacher_dark_navy"
-                                android:textSize="12sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -609,13 +584,13 @@
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Analytics" />
+                                android:contentDescription="@string/nav_analytics" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Performance Summary"
+                                android:text="@string/performance_summary"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -650,9 +625,10 @@
                                 android:paddingStart="4dp">
 
                                 <TextView
+                                    android:id="@+id/tvPassRateLabel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Pass Rate"
+                                    android:text="@string/pass_rate"
                                     android:textColor="@color/teacher_secondary_text"
                                     android:textSize="11sp" />
 
@@ -673,12 +649,13 @@
                                         android:textStyle="bold" />
 
                                     <TextView
+                                        android:id="@+id/tvPassRateBadge"
                                         android:layout_width="wrap_content"
                                         android:layout_height="18dp"
                                         android:layout_marginStart="6dp"
                                         android:gravity="center"
                                         android:paddingHorizontal="6dp"
-                                        android:text="+5%"
+                                        android:text="@string/status_good"
                                         android:textColor="@color/status_good_text"
                                         android:textSize="10sp"
                                         android:textStyle="bold"
@@ -686,9 +663,10 @@
                                 </LinearLayout>
 
                                 <TextView
+                                    android:id="@+id/tvClassAvgLabel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Class Average"
+                                    android:text="@string/class_average"
                                     android:textColor="@color/teacher_secondary_text"
                                     android:textSize="11sp" />
 
@@ -708,12 +686,13 @@
                                         android:textStyle="bold" />
 
                                     <TextView
+                                        android:id="@+id/tvClassAvgBadge"
                                         android:layout_width="wrap_content"
                                         android:layout_height="18dp"
                                         android:layout_marginStart="6dp"
                                         android:gravity="center"
                                         android:paddingHorizontal="6dp"
-                                        android:text="+3%"
+                                        android:text="@string/status_active"
                                         android:textColor="@color/status_good_text"
                                         android:textSize="10sp"
                                         android:textStyle="bold"
@@ -730,6 +709,7 @@
 
                 <!-- Students in This Course Card -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardStudentsInCourse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -756,14 +736,14 @@
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_group"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Users" />
+                                android:contentDescription="@string/nav_users" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:text="Students in This Course"
+                                android:text="@string/students_in_this_course"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -772,7 +752,7 @@
                                 android:id="@+id/btnViewAllStudents"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="View all →"
+                                android:text="@string/view_all"
                                 android:textColor="@color/teacher_primary_blue"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
@@ -859,7 +839,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Total: 35 Students"
+                            android:text="@string/total_35_students"
                             android:textColor="@color/teacher_secondary_text"
                             android:textSize="12sp" />
 
@@ -889,7 +869,7 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_info"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Insight" />
+                            android:contentDescription="@string/insight" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -901,16 +881,17 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Learning Insights"
+                                android:text="@string/learning_insights"
                                 android:textColor="@color/teacher_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvLearningInsightsText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
-                                android:text="Overall performance is good. Keep up the great work!"
+                                android:text="@string/overall_performance_is_good_keep_up_the_gr"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -932,7 +913,7 @@
                     android:id="@+id/tvSubTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enrolled Students"
+                    android:text="@string/enrolled_students"
                     android:textColor="@color/teacher_dark_navy"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -941,7 +922,19 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerCourseDetails"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+                <TextView
+                    android:id="@+id/tvEmptySubContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:text="@string/no_records_found_for_this_course"
+                    android:textColor="@color/teacher_secondary_text"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>

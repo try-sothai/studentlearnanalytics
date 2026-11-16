@@ -24,7 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_social_button"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back"
             app:tint="@color/slas_text_primary" />
 
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Attendance"
+                android:text="@string/attendance"
                 android:textColor="@color/slas_text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track class participation, attendance rate, and monthly trends"
+                android:text="@string/track_class_participation_attendance_rate"
                 android:textColor="@color/slas_text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -93,7 +93,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Semester 1, 2024"
+                        android:text="@string/all_semesters"
                         android:textColor="@color/slas_text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -101,7 +101,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:contentDescription="Dropdown"
+                        android:contentDescription="@string/dropdown"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/slas_text_primary" />
                 </LinearLayout>
@@ -156,7 +156,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Classes"
+                            android:text="@string/total_classes"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -165,7 +165,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="25"
+                            android:text="0"
                             android:textColor="@color/slas_primary_purple"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -195,7 +195,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Present"
+                            android:text="@string/status_present"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -204,7 +204,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="22"
+                            android:text="0"
                             android:textColor="@color/slas_success"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -234,7 +234,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Absent"
+                            android:text="@string/status_absent"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -243,7 +243,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="3"
+                            android:text="0"
                             android:textColor="@color/slas_danger"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -272,7 +272,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Attendance Rate"
+                        android:text="@string/attendance_rate"
                         android:textColor="@color/slas_text_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -315,7 +315,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Present"
+                                    android:text="@string/status_present"
                                     android:textColor="@color/slas_text_secondary"
                                     android:textSize="13sp" />
 
@@ -324,7 +324,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
-                                    android:text="22 (88%)"
+                                    android:text="0 (0%)"
                                     android:textColor="@color/slas_success"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
@@ -348,7 +348,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Late"
+                                    android:text="@string/status_late"
                                     android:textColor="@color/slas_text_secondary"
                                     android:textSize="13sp" />
 
@@ -381,7 +381,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Excused"
+                                    android:text="@string/status_excused"
                                     android:textColor="@color/slas_text_secondary"
                                     android:textSize="13sp" />
 
@@ -414,7 +414,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Absent"
+                                    android:text="@string/status_absent"
                                     android:textColor="@color/slas_text_secondary"
                                     android:textSize="13sp" />
 
@@ -423,7 +423,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="20dp"
-                                    android:text="3 (12%)"
+                                    android:text="0 (0%)"
                                     android:textColor="@color/slas_danger"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
@@ -449,7 +449,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Other"
+                                    android:text="@string/other"
                                     android:textColor="@color/slas_text_secondary"
                                     android:textSize="13sp" />
 
@@ -489,7 +489,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Monthly Attendance Trend"
+                        android:text="@string/monthly_attendance_trend"
                         android:textColor="@color/slas_text_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -520,7 +520,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:text="Present"
+                            android:text="@string/status_present"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -535,7 +535,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:text="Late"
+                            android:text="@string/status_late"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -550,7 +550,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:text="Excused"
+                            android:text="@string/status_excused"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
 
@@ -565,7 +565,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:text="Absent"
+                            android:text="@string/status_absent"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -573,10 +573,46 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Course Breakdown & Recent Sessions Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAttendanceRecords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/slas_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/slas_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/course_breakdown_session_history"
+                        android:textColor="@color/slas_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutAttendanceRecordsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Matched to 5-tab Student Bottom Nav) -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -605,7 +641,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Home"
+                    android:contentDescription="@string/nav_home"
                     android:src="@drawable/ic_home"
                     app:tint="@color/slas_text_secondary" />
 
@@ -613,12 +649,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Home"
+                    android:text="@string/nav_home"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="10sp" />
             </LinearLayout>
 
-            <!-- 2. Analytics -->
+            <!-- 2. My Courses -->
+            <LinearLayout
+                android:id="@+id/nav_courses"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@string/my_courses"
+                    android:src="@drawable/ic_book"
+                    app:tint="@color/slas_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/my_courses"
+                    android:textColor="@color/slas_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- 3. Analytics -->
             <LinearLayout
                 android:id="@+id/nav_analytics"
                 android:layout_width="0dp"
@@ -632,7 +695,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Analytics"
+                    android:contentDescription="@string/nav_analytics"
                     android:src="@drawable/ic_analytics"
                     app:tint="@color/slas_text_secondary" />
 
@@ -640,39 +703,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Analytics"
+                    android:text="@string/nav_analytics"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="10sp" />
             </LinearLayout>
 
-            <!-- 3. Prediction -->
-            <LinearLayout
-                android:id="@+id/nav_prediction"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:contentDescription="Prediction"
-                    android:src="@drawable/ic_prediction"
-                    app:tint="@color/slas_text_secondary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Prediction"
-                    android:textColor="@color/slas_text_secondary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <!-- 4. Notifications (with Red Badge 3) -->
+            <!-- 4. Notifications -->
             <FrameLayout
                 android:id="@+id/nav_notifications"
                 android:layout_width="0dp"
@@ -691,7 +727,7 @@
                     <ImageView
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:contentDescription="Notifications"
+                        android:contentDescription="@string/nav_notifications"
                         android:src="@drawable/ic_notifications"
                         app:tint="@color/slas_text_secondary" />
 
@@ -699,12 +735,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Notifications"
+                        android:text="@string/nav_notifications"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="10sp" />
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvBottomNotifBadge"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="top|center_horizontal"
@@ -712,10 +749,11 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_nav_badge_red"
                     android:gravity="center"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="9sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </FrameLayout>
 
             <!-- 5. Profile -->
@@ -732,7 +770,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:contentDescription="Profile"
+                    android:contentDescription="@string/nav_profile"
                     android:src="@drawable/ic_profile"
                     app:tint="@color/slas_text_secondary" />
 
@@ -740,7 +778,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Profile"
+                    android:text="@string/nav_profile"
                     android:textColor="@color/slas_text_secondary"
                     android:textSize="10sp" />
             </LinearLayout>

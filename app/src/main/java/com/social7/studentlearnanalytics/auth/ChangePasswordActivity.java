@@ -151,7 +151,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@androidx.annotation.NonNull retrofit2.Call<com.google.gson.JsonObject> call, @androidx.annotation.NonNull Throwable t) {
                     if (isFinishing() || isDestroyed()) return;
-                    Toast.makeText(ChangePasswordActivity.this, "Network error updating password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, R.string.network_error_updating_password, Toast.LENGTH_SHORT).show();
                 }
             });
         }

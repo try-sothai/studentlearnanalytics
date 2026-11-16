@@ -98,9 +98,9 @@ public class NotificationDetailActivity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Approve Registration?")
                 .setMessage("Are you sure you want to approve Ms. Dany's teacher registration?")
-                .setPositiveButton("Approve", (dialog, which) -> {
+                .setPositiveButton(R.string.approve, (dialog, which) -> {
                     if (tvValUserStatusBadge != null) {
-                        tvValUserStatusBadge.setText("Approved");
+                        tvValUserStatusBadge.setText(R.string.status_approved);
                         tvValUserStatusBadge.setBackgroundResource(R.drawable.bg_notif_badge_approved);
                         tvValUserStatusBadge.setTextColor(Color.parseColor("#08C985"));
                     }
@@ -108,7 +108,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
                     if (btnNotifReject != null) btnNotifReject.setEnabled(false);
                     Toast.makeText(this, "Ms. Dany's teacher registration approved successfully!", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -116,9 +116,9 @@ public class NotificationDetailActivity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Reject Registration?")
                 .setMessage("Are you sure you want to reject Ms. Dany's teacher registration?")
-                .setPositiveButton("Reject", (dialog, which) -> {
+                .setPositiveButton(R.string.reject, (dialog, which) -> {
                     if (tvValUserStatusBadge != null) {
-                        tvValUserStatusBadge.setText("Rejected");
+                        tvValUserStatusBadge.setText(R.string.status_rejected);
                         tvValUserStatusBadge.setBackgroundResource(R.drawable.bg_notif_badge_rejected);
                         tvValUserStatusBadge.setTextColor(Color.parseColor("#F04444"));
                     }
@@ -126,7 +126,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
                     if (btnNotifReject != null) btnNotifReject.setEnabled(false);
                     Toast.makeText(this, "Ms. Dany's teacher registration rejected.", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

@@ -66,6 +66,12 @@ public class QuizDetailActivity extends AppCompatActivity {
         fetchQuizzes();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchQuizzes();
+    }
+
     private void initViews() {
         View btnBack = findViewById(R.id.btnBack);
         if (btnBack != null) {
@@ -128,7 +134,7 @@ public class QuizDetailActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (loadingProgressBar != null) {
                     loadingProgressBar.setVisibility(View.GONE);
                 }
@@ -136,7 +142,11 @@ public class QuizDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         allQuizList.clear();
-                        JsonArray dataArray = response.body().getAsJsonArray("data");
+                        JsonObject body = response.body();
+                        JsonArray dataArray = body.has("data") && body.get("data").isJsonArray()
+                                ? body.getAsJsonArray("data")
+                                : (body.has("quizzes") && body.get("quizzes").isJsonArray()
+                                ? body.getAsJsonArray("quizzes") : new JsonArray());
                         Set<String> uniqueSemesters = new LinkedHashSet<>();
 
                         if (dataArray != null && dataArray.size() > 0) {
@@ -149,8 +159,16 @@ public class QuizDetailActivity extends AppCompatActivity {
                                 String title = obj.has("title") && !obj.get("title").isJsonNull()
                                         ? obj.get("title").getAsString() : "Untitled Quiz";
 
-                                String rawDate = obj.has("start_at") && !obj.get("start_at").isJsonNull()
-                                        ? obj.get("start_at").getAsString() : "";
+                                String rawDate = "";
+                                for (String k : new String[]{"start_at", "quiz_date", "end_at", "created_at"}) {
+                                    if (obj.has(k) && !obj.get(k).isJsonNull()) {
+                                        String v = obj.get(k).getAsString();
+                                        if (v != null && !v.trim().isEmpty()) {
+                                            rawDate = v;
+                                            break;
+                                        }
+                                    }
+                                }
                                 String displayDate = formatDate(rawDate);
 
                                 int totalScore = obj.has("total_score") && !obj.get("total_score").isJsonNull()
@@ -165,10 +183,11 @@ public class QuizDetailActivity extends AppCompatActivity {
                                         JsonObject latestAttempt = attempts.get(0).getAsJsonObject();
                                         String status = latestAttempt.has("status") && !latestAttempt.get("status").isJsonNull()
                                                 ? latestAttempt.get("status").getAsString() : "";
-                                        isSubmitted = "completed".equals(status) || "timed_out".equals(status);
-                                        if (latestAttempt.has("score") && !latestAttempt.get("score").isJsonNull()) {
+                                        boolean hasScore = latestAttempt.has("score") && !latestAttempt.get("score").isJsonNull();
+                                        isSubmitted = "completed".equalsIgnoreCase(status) || "timed_out".equalsIgnoreCase(status) || hasScore;
+                                        if (hasScore) {
                                             score = (int) Math.round(latestAttempt.get("score").getAsDouble());
-                                            isGraded = isSubmitted;
+                                            isGraded = true;
                                         }
                                     }
                                 }
@@ -178,6 +197,8 @@ public class QuizDetailActivity extends AppCompatActivity {
                                     JsonObject semObj = obj.getAsJsonObject("semester");
                                     if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
                                         semesterName = semObj.get("name").getAsString();
+                                    } else if (semObj.has("semester_name") && !semObj.get("semester_name").isJsonNull()) {
+                                        semesterName = semObj.get("semester_name").getAsString();
                                     }
                                 } else if (obj.has("semester_id") && !obj.get("semester_id").isJsonNull()) {
                                     semesterName = "Semester " + obj.get("semester_id").getAsString();
@@ -235,7 +256,7 @@ public class QuizDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 if (loadingProgressBar != null) {
                     loadingProgressBar.setVisibility(View.GONE);
                 }
@@ -337,7 +358,7 @@ public class QuizDetailActivity extends AppCompatActivity {
 
     private String formatDate(String rawDate) {
         if (rawDate == null || rawDate.trim().isEmpty()) {
-            return "No date";
+            return "Scheduled";
         }
         String[] patterns = {
                 "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",

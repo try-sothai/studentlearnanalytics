@@ -70,7 +70,7 @@
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
-                android:text="Completed"
+                android:text="@string/status_completed"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"
                 android:textStyle="bold" />

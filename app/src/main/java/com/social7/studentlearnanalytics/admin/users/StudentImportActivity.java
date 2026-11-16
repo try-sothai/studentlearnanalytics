@@ -123,7 +123,7 @@ public class StudentImportActivity extends AppCompatActivity {
     }
 
     private void downloadTemplate(boolean isXlsx) {
-        Toast.makeText(this, "Downloading template...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.downloading_template, Toast.LENGTH_SHORT).show();
         Call<ResponseBody> call = isXlsx
                 ? ApiClient.getApiService(this).downloadImportTemplateXlsx()
                 : ApiClient.getApiService(this).downloadImportTemplateCsv();
@@ -140,7 +140,7 @@ public class StudentImportActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                Toast.makeText(StudentImportActivity.this, "Network error downloading template", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StudentImportActivity.this, R.string.network_error_downloading_template, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -163,7 +163,7 @@ public class StudentImportActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> Toast.makeText(StudentImportActivity.this, "Template saved to: " + outFile.getName(), Toast.LENGTH_LONG).show());
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(StudentImportActivity.this, "Failed to save file: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(StudentImportActivity.this, getString(R.string.failed_to_save_file) + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }

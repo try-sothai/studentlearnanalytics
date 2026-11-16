@@ -56,7 +56,7 @@
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
-                android:text="Grade: A (86.2%)"
+                android:text="@string/grade_a_86_2"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Assignments: 88% • Quizzes: 84% • Midterm: 82% • Final: 88%"
+            android:text="@string/assignments_88_quizzes_84_midterm_82_final"
             android:textColor="@color/admin_text_secondary"
             android:textSize="12sp" />
 

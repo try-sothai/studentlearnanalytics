@@ -314,7 +314,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(isActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + currentTeacher.getName() + " (" + currentTeacher.getId() + ")?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
                     String identifier = getTeacherIdentifier();
                     JsonObject statusBody = new JsonObject();
                     statusBody.addProperty("status", nextStatus);
@@ -328,7 +328,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
                                         boolean newActiveState = !isActive;
                                         currentTeacher.setStatus(newActiveState ? "Active" : "Inactive");
                                         updateStatusDisplay(newActiveState);
-                                        Toast.makeText(AdminTeacherDetailActivity.this, "Teacher account " + action + "d successfully", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AdminTeacherDetailActivity.this, getString(R.string.teacher_account) + action + "d successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(AdminTeacherDetailActivity.this, "Failed to update account status (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
                                     }
@@ -340,7 +340,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
                                 }
                             });
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -352,7 +352,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         } else if (index == 1) {
             if (containerOtherTabs != null) containerOtherTabs.setVisibility(View.VISIBLE);
             setTabActive(tabCourses);
-            if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Assigned Courses");
+            if (tvOtherTabTitle != null) tvOtherTabTitle.setText(R.string.assigned_courses);
             String courses = currentTeacher.getCoursesSummary();
             if (courses == null || courses.trim().isEmpty()) {
                 courses = "No active courses assigned yet to " + currentTeacher.getName() + ".";
@@ -361,7 +361,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         } else if (index == 2) {
             if (containerOtherTabs != null) containerOtherTabs.setVisibility(View.VISIBLE);
             setTabActive(tabClasses);
-            if (tvOtherTabTitle != null) tvOtherTabTitle.setText("Assigned Classes");
+            if (tvOtherTabTitle != null) tvOtherTabTitle.setText(R.string.assigned_classes);
             String classes = currentTeacher.getClassesSummary();
             if (classes == null || classes.trim().isEmpty()) {
                 classes = "No active classes assigned yet to " + currentTeacher.getName() + ".";
@@ -399,16 +399,16 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Teacher Administrative Notes")
                 .setView(input)
-                .setPositiveButton("Save", (d, w) -> {
+                .setPositiveButton(R.string.save, (d, w) -> {
                     customNotes = input.getText().toString().trim();
                     displayNotes();
                     Toast.makeText(this, "Notes updated", Toast.LENGTH_SHORT).show();
                 })
-                .setNeutralButton("Clear", (d, w) -> {
+                .setNeutralButton(R.string.clear, (d, w) -> {
                     customNotes = "";
                     displayNotes();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

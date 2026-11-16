@@ -85,9 +85,9 @@ public class StudentImportHistoryAdapter extends RecyclerView.Adapter<StudentImp
 
             String by = item.importedBy != null ? item.importedBy : "System";
             String date = item.createdAt != null && item.createdAt.length() >= 10 ? item.createdAt.substring(0, 10) : "";
-            tvHistoryMeta.setText("By: " + by + " • " + date);
+            tvHistoryMeta.setText(tvHistoryMeta.getContext().getString(R.string.by) + by + " • " + date);
 
-            tvHistoryCounts.setText("Total: " + item.totalRows + " • Success: " + item.successRows + " • Failed: " + item.failedRows);
+            tvHistoryCounts.setText(tvHistoryCounts.getContext().getString(R.string.total_1fd328) + item.totalRows + " • Success: " + item.successRows + " • Failed: " + item.failedRows);
 
             if (item.failedRows > 0 || item.invalidRows > 0 || item.duplicateRows > 0) {
                 btnDownloadHistoryErrors.setVisibility(View.VISIBLE);

@@ -82,9 +82,7 @@ public class TeacherAssessmentFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Assessment Management",
-                    "Manage assignments, quizzes, student submissions, and grading"
+                    view, getString(R.string.assessment_management), "Manage assignments, quizzes, student submissions, and grading"
             );
         }
 
@@ -219,14 +217,14 @@ public class TeacherAssessmentFragment extends Fragment {
             @Override
             public void onDeleteClick(AssignmentAdapter.AssignmentCardItem item) {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Confirm Delete Assignment")
+                        .setTitle(R.string.confirm_delete_assignment)
                         .setMessage("Are you sure you want to delete '" + item.title + "'?")
-                        .setPositiveButton("Delete", (dialog, which) -> {
+                        .setPositiveButton(R.string.delete, (dialog, which) -> {
                             assignmentList.remove(item);
                             if (assignmentAdapter != null) assignmentAdapter.filter("");
                             Toast.makeText(requireContext(), "Assignment deleted", Toast.LENGTH_SHORT).show();
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }
         });
@@ -277,7 +275,7 @@ public class TeacherAssessmentFragment extends Fragment {
             public void onPublishClick(QuizAdapter.QuizCardItem item) {
                 item.status = "Published";
                 if (quizAdapter != null) quizAdapter.notifyDataSetChanged();
-                Toast.makeText(requireContext(), "Quiz published to students!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.quiz_published_to_students, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -305,10 +303,10 @@ public class TeacherAssessmentFragment extends Fragment {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Quiz Question Builder — " + quiz.title)
                 .setView(container)
-                .setPositiveButton("Add Question", (dialog, which) -> {
+                .setPositiveButton(R.string.add_question_e3bb2c, (dialog, which) -> {
                     Toast.makeText(requireContext(), "Question added to quiz successfully!", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -349,19 +347,19 @@ public class TeacherAssessmentFragment extends Fragment {
             @Override
             public void onViewFileClick(SubmissionAdapter.SubmissionCardItem item) {
                 new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Student Submission File Detail")
-                        .setMessage("Student: " + item.studentName + " (" + item.studentId + ")\n" +
+                        .setTitle(R.string.student_submission_file_detail)
+                        .setMessage(getString(R.string.student_d0b71d) + item.studentName + " (" + item.studentId + ")\n" +
                                 item.assessmentTitle + "\n\n" +
                                 item.details + "\n\n" +
                                 "Student Text Submission:\n" +
                                 "\"Implemented double-linked list with tail pointer insertion and O(1) delete operations.\"")
-                        .setPositiveButton("Grade Answer", (dialog, which) -> {
+                        .setPositiveButton(R.string.grade_answer, (dialog, which) -> {
                             Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
                             intent.putExtra("assessment_id", item.id);
                             intent.putExtra("assessment_title", item.assessmentTitle);
                             startActivity(intent);
                         })
-                        .setNegativeButton("Close", null)
+                        .setNegativeButton(R.string.close, null)
                         .show();
             }
 
@@ -433,7 +431,7 @@ public class TeacherAssessmentFragment extends Fragment {
         container.addView(tilScore);
 
         TextInputLayout tilFeedback = new TextInputLayout(requireContext());
-        tilFeedback.setHint("Teacher Feedback & Comments");
+        tilFeedback.setHint(R.string.teacher_feedback_comments);
         TextInputEditText edtFeedback = new TextInputEditText(tilFeedback.getContext());
         edtFeedback.setText("Great effort! Clean code structure.");
         tilFeedback.addView(edtFeedback);
@@ -442,7 +440,7 @@ public class TeacherAssessmentFragment extends Fragment {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Grade Student Submission — " + item.studentName)
                 .setView(container)
-                .setPositiveButton("Publish Grade", (dialog, which) -> {
+                .setPositiveButton(R.string.publish_grade, (dialog, which) -> {
                     String scoreStr = edtScore.getText() != null ? edtScore.getText().toString().trim() : "0";
                     int score = Integer.parseInt(scoreStr.isEmpty() ? "0" : scoreStr);
                     if (score > item.maxMarks) {
@@ -454,7 +452,7 @@ public class TeacherAssessmentFragment extends Fragment {
                     if (gradingAdapter != null) gradingAdapter.notifyDataSetChanged();
                     Toast.makeText(requireContext(), "Grade published successfully for " + item.studentName + "!", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 }

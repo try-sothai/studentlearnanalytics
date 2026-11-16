@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="Back" />
+            android:contentDescription="@string/back" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exams"
+                android:text="@string/exams"
                 android:textColor="@color/slas_text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exam schedule, locations, and exam scores"
+                android:text="@string/exam_schedule_locations_and_exam_scores"
                 android:textColor="@color/slas_text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -78,7 +78,7 @@
             android:background="@drawable/bg_notif_tab_active"
             android:paddingVertical="10dp"
             android:gravity="center"
-            android:text="Upcoming"
+            android:text="@string/upcoming"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -94,7 +94,7 @@
             android:background="@drawable/bg_notif_tab_inactive"
             android:paddingVertical="10dp"
             android:gravity="center"
-            android:text="Completed"
+            android:text="@string/status_completed"
             android:textColor="@color/slas_text_secondary"
             android:textSize="14sp"
             android:clickable="true"

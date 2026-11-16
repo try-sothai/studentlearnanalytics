@@ -152,7 +152,8 @@ public class ExamDetailActivity extends AppCompatActivity {
             String examType = getString(obj, "exam_type", null);
             String status = getString(obj, "status", "scheduled");
             String rawDate = getString(obj, "exam_date", "");
-            // exam_date is a DATE column; take the yyyy-MM-dd part to avoid timezone shifts.
+            String startTime = getString(obj, "start_time", getString(obj, "exam_time", null));
+            String room = getString(obj, "room", getString(obj, "location", null));
             String isoDate = rawDate.length() >= 10 ? rawDate.substring(0, 10) : rawDate;
 
             String month = "--";
@@ -170,6 +171,9 @@ public class ExamDetailActivity extends AppCompatActivity {
             if (obj.has("course") && obj.get("course").isJsonObject()) {
                 JsonObject course = obj.getAsJsonObject("course");
                 courseName = getString(course, "course_name", getString(course, "name", null));
+                if (room == null) {
+                    room = getString(course, "room", null);
+                }
             }
             if (courseName == null) courseName = title;
 
@@ -177,7 +181,6 @@ public class ExamDetailActivity extends AppCompatActivity {
             Integer duration = obj.has("duration_minutes") && !obj.get("duration_minutes").isJsonNull()
                     ? obj.get("duration_minutes").getAsInt() : null;
 
-            // Student's own result (backend already filters results by authenticated student)
             String scoreText = null;
             String grade = null;
             if (obj.has("results") && obj.get("results").isJsonArray()) {
@@ -200,6 +203,8 @@ public class ExamDetailActivity extends AppCompatActivity {
             StringBuilder details = new StringBuilder();
             details.append(examType != null ? capitalize(examType) : "Exam");
             if (!title.equals(courseName)) details.append(" • ").append(title);
+            if (startTime != null && !startTime.isEmpty()) details.append(" • ").append(startTime);
+            if (room != null && !room.isEmpty()) details.append(" • Room ").append(room);
             if (completed) {
                 if (scoreText == null) {
                     details.append(" • Result pending");
@@ -213,9 +218,9 @@ public class ExamDetailActivity extends AppCompatActivity {
 
             Exam exam = new Exam(id, month, day, courseName, details.toString(), completed, scoreText);
             if (completed) {
-                completedExams.add(0, exam); // most recent first
+                completedExams.add(0, exam);
             } else {
-                upcomingExams.add(exam);     // soonest first (API orders by exam_date)
+                upcomingExams.add(exam);
             }
         }
     }

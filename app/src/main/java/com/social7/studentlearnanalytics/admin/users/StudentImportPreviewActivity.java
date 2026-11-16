@@ -51,7 +51,7 @@ public class StudentImportPreviewActivity extends AppCompatActivity {
         }
 
         if (importItem == null) {
-            Toast.makeText(this, "Missing import data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.missing_import_data, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -113,7 +113,7 @@ public class StudentImportPreviewActivity extends AppCompatActivity {
     }
 
     private void downloadErrorReport() {
-        Toast.makeText(this, "Downloading error report...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.downloading_error_report, Toast.LENGTH_SHORT).show();
         ApiClient.getApiService(this).downloadImportErrorReport(importItem.id)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -121,13 +121,13 @@ public class StudentImportPreviewActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             saveReportFile(response.body(), "import_" + importItem.id + "_error_report.csv");
                         } else {
-                            Toast.makeText(StudentImportPreviewActivity.this, "Failed to download error report", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentImportPreviewActivity.this, R.string.failed_to_download_error_report, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                        Toast.makeText(StudentImportPreviewActivity.this, "Network error downloading report", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentImportPreviewActivity.this, R.string.network_error_downloading_report, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

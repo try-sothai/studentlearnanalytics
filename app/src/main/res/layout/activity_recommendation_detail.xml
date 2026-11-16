@@ -29,7 +29,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:src="@drawable/ic_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recommendations"
+                    android:text="@string/recommendations"
                     android:textColor="@color/slas_text_dark_navy"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -84,7 +84,7 @@
                         android:id="@+id/tvSemesterText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Semester 1, 2024 ▾"
+                        android:text="@string/all_semesters_6fcbe0"
                         android:textColor="@color/slas_indigo"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -94,7 +94,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Scroll Content (Starts cleanly at TOP = 0, No Header Clipping) -->
+    <!-- Scroll Content -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollViewRec"
         android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="📊 Your Current Performance"
+                    android:text="@string/your_current_performance"
                     android:textColor="@color/slas_text_dark_navy"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -204,7 +204,7 @@
                     android:id="@+id/btnViewPerformanceDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Details →"
+                    android:text="@string/view_details_60f525"
                     android:textColor="@color/slas_primary_purple"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -240,10 +240,10 @@
                             android:orientation="vertical"
                             android:padding="12dp"
                             android:gravity="center">
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_home" android:contentDescription="Attendance Icon" app:tint="@color/slas_success" android:background="@drawable/bg_stat_card_green" android:padding="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_home" android:contentDescription="@string/attendance_icon" app:tint="@color/slas_success" android:background="@drawable/bg_stat_card_green" android:padding="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/attendance" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
+                            <TextView android:id="@+id/tvRecDetailAttVal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
+                            <TextView android:id="@+id/tvRecDetailAttBadge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -263,10 +263,10 @@
                             android:orientation="vertical"
                             android:padding="12dp"
                             android:gravity="center">
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_assignment" android:contentDescription="Assignment Icon" app:tint="@color/slas_primary_purple" android:background="@drawable/bg_stat_card_purple" android:padding="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignments" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="80%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_assignment" android:contentDescription="@string/assignment_icon" app:tint="@color/slas_primary_purple" android:background="@drawable/bg_stat_card_purple" android:padding="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assignments" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
+                            <TextView android:id="@+id/tvRecDetailAsnVal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
+                            <TextView android:id="@+id/tvRecDetailAsnBadge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/success_green" android:background="@color/success_green_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -285,10 +285,10 @@
                             android:orientation="vertical"
                             android:padding="12dp"
                             android:gravity="center">
-                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_analytics" android:contentDescription="Quiz Icon" app:tint="@color/slas_warning" android:background="@drawable/bg_stat_card_orange" android:padding="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quizzes" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Improve" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/warning_orange" android:background="@color/warning_orange_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
+                            <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_analytics" android:contentDescription="@string/quiz_icon" app:tint="@color/slas_warning" android:background="@drawable/bg_stat_card_orange" android:padding="6dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/quizzes" android:textSize="11sp" android:textColor="@color/slas_text_secondary" android:layout_marginTop="6dp"/>
+                            <TextView android:id="@+id/tvRecDetailQuizVal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy"/>
+                            <TextView android:id="@+id/tvRecDetailQuizBadge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/warning_orange" android:background="@color/warning_orange_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:layout_marginTop="4dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -300,15 +300,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="💡 Personalized Recommendations"
+                android:text="@string/personalized_recommendations"
                 android:textColor="@color/slas_text_dark_navy"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
+            <!-- Dynamic API Recommendations Container -->
             <LinearLayout
+                android:id="@+id/layoutRecDetailDynamicContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/layoutRecDetailStaticContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:orientation="vertical">
 
                 <!-- Rec 1: Improve Quiz Performance -->
@@ -341,10 +350,10 @@
                             android:layout_marginStart="14dp"
                             android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Improve Quiz Performance" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
+                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/improve_quiz_performance" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/danger_red" android:background="@color/danger_red_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Your quiz performance has decreased by 2%. Review weak topics." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Review upcoming quizzes and practice topic questions regularly." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
                                 <com.google.android.material.button.MaterialButton
@@ -352,7 +361,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="38dp"
                                     style="@style/Widget.Material3.Button.OutlinedButton"
-                                    android:text="View Quiz Details"
+                                    android:text="@string/view_quiz_details"
                                     android:textSize="11sp"
                                     android:textColor="@color/slas_primary_purple"
                                     app:strokeColor="@color/slas_primary_purple"
@@ -404,7 +413,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="38dp"
                                     style="@style/Widget.Material3.Button.OutlinedButton"
-                                    android:text="View Attendance"
+                                    android:text="@string/view_attendance"
                                     android:textSize="11sp"
                                     android:textColor="@color/slas_primary_purple"
                                     app:strokeColor="@color/slas_primary_purple"
@@ -448,7 +457,7 @@
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Focus on Weak Topics" android:textStyle="bold" android:textColor="@color/slas_text_dark_navy" android:textSize="14sp" />
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textSize="10sp" android:textStyle="bold" android:textColor="@color/danger_red" android:background="@color/danger_red_bg" android:paddingHorizontal="8dp" android:paddingVertical="2dp" />
                             </LinearLayout>
-                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Spend more time reviewing topics in Data Structures where your performance is lower." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
+                            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Spend more time reviewing course modules where your performance is lower." android:textColor="@color/slas_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp" />
 
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
                                 <com.google.android.material.button.MaterialButton
@@ -456,7 +465,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="38dp"
                                     style="@style/Widget.Material3.Button.OutlinedButton"
-                                    android:text="View Analytics →"
+                                    android:text="@string/view_analytics"
                                     android:textSize="11sp"
                                     android:textColor="@color/slas_primary_purple"
                                     app:strokeColor="@color/slas_primary_purple"
@@ -508,7 +517,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="38dp"
                                     style="@style/Widget.Material3.Button.OutlinedButton"
-                                    android:text="View Schedule →"
+                                    android:text="@string/view_schedule"
                                     android:textSize="11sp"
                                     android:textColor="@color/slas_primary_purple"
                                     app:strokeColor="@color/slas_primary_purple"
@@ -597,7 +606,7 @@
                         android:id="@+id/btnTrackProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:text="Track My Progress →"
+                        android:text="@string/track_my_progress"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/slas_primary_purple"
@@ -611,4 +620,3 @@
     </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
-

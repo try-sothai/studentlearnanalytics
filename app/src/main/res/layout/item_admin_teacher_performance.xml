@@ -56,7 +56,7 @@
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
-                android:text="95.2% Overall"
+                android:text="@string/str_95_2_overall"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"
                 android:textStyle="bold" />

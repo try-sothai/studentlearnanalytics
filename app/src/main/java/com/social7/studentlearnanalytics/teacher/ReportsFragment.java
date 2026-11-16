@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -72,9 +74,7 @@ public class ReportsFragment extends Fragment {
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherReports),
-                    "Reports",
-                    "Export class performance reports"
+                    view.findViewById(R.id.headerTeacherReports), getString(R.string.nav_reports), getString(R.string.export_class_performance_reports)
             );
         }
 
@@ -172,10 +172,10 @@ public class ReportsFragment extends Fragment {
         popup.getMenu().add(0, 4, 3, "Sort by Risk Level");
 
         popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == 1 && tvSelectedSort != null) tvSelectedSort.setText("Sort: Code");
-            else if (item.getItemId() == 2 && tvSelectedSort != null) tvSelectedSort.setText("Sort: Name");
-            else if (item.getItemId() == 3 && tvSelectedSort != null) tvSelectedSort.setText("Sort: Score");
-            else if (item.getItemId() == 4 && tvSelectedSort != null) tvSelectedSort.setText("Sort: Risk");
+            if (item.getItemId() == 1 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_code);
+            else if (item.getItemId() == 2 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_name);
+            else if (item.getItemId() == 3 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_score);
+            else if (item.getItemId() == 4 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_risk);
             return true;
         });
         popup.show();
@@ -241,7 +241,7 @@ public class ReportsFragment extends Fragment {
         entries.add(new BarEntry(2, 88f));
         entries.add(new BarEntry(3, 71f));
 
-        BarDataSet dataSet = new BarDataSet(entries, "Average Score");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.average_score));
         dataSet.setColors(new int[]{
                 Color.parseColor("#2563FF"), // CS101 - Blue
                 Color.parseColor("#16C784"), // CS102 - Green
@@ -279,6 +279,7 @@ public class ReportsFragment extends Fragment {
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.animateY(800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 
@@ -321,6 +322,7 @@ public class ReportsFragment extends Fragment {
 
         chart.setData(pieData);
         chart.animateXY(800, 800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 

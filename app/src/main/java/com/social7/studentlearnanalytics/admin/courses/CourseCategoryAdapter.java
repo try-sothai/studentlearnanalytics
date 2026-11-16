@@ -92,7 +92,7 @@ public class CourseCategoryAdapter extends RecyclerView.Adapter<CourseCategoryAd
             if (tvCollegeName != null) tvCollegeName.setText(item.collegeName);
             if (tvDepartmentName != null) tvDepartmentName.setText(item.departmentName);
             if (tvCourseCount != null) tvCourseCount.setText(item.courseCount + " Courses");
-            if (tvHead != null) tvHead.setText("Head: " + item.head);
+            if (tvHead != null) tvHead.setText(itemView.getContext().getString(R.string.head_prefix) + item.head);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) listener.onCategoryClick(item);

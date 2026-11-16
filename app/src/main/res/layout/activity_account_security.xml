@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Account Security"
+            android:text="@string/account_security"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -92,7 +92,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Change Password"
+                                android:text="@string/change_password"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -101,7 +101,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Update your password regularly to keep your account secure."
+                                android:text="@string/update_your_password_regularly_to_keep_you"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -117,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current Password *"
+                        android:text="@string/current_password"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -143,7 +143,7 @@
                             android:id="@+id/etCurrentPassword"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter current password"
+                            android:hint="@string/enter_current_password"
                             android:inputType="textPassword"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="New Password *"
+                        android:text="@string/new_password"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -181,7 +181,7 @@
                             android:id="@+id/etNewPassword"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Enter new password"
+                            android:hint="@string/enter_new_password"
                             android:inputType="textPassword"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -193,7 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Confirm New Password *"
+                        android:text="@string/confirm_new_password"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -219,7 +219,7 @@
                             android:id="@+id/etConfirmNewPassword"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Confirm new password"
+                            android:hint="@string/confirm_new_password_6ab96a"
                             android:inputType="textPassword"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -246,7 +246,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Password Requirements"
+                                android:text="@string/password_requirements"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -256,7 +256,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="✓ At least 8 characters"
+                                android:text="@string/at_least_8_characters"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="11sp" />
 
@@ -265,7 +265,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="✓ Include uppercase and lowercase letters"
+                                android:text="@string/include_uppercase_and_lowercase_letters"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="11sp" />
 
@@ -274,7 +274,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="✓ Include at least one number"
+                                android:text="@string/include_at_least_one_number"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="11sp" />
 
@@ -283,7 +283,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="✓ Include at least one special character"
+                                android:text="@string/include_at_least_one_special_character"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="11sp" />
                         </LinearLayout>
@@ -296,7 +296,7 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="16dp"
                         android:backgroundTint="@color/admin_primary_blue"
-                        android:text="Update Password"
+                        android:text="@string/update_password"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="14sp"
@@ -348,7 +348,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Two-Factor Authentication (2FA)"
+                                android:text="@string/two_factor_authentication_2fa"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -357,7 +357,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Add an extra layer of security to your account."
+                                android:text="@string/add_an_extra_layer_of_security_to_your_acc"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -369,7 +369,7 @@
                             android:background="@drawable/bg_badge_credit"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="Disabled"
+                            android:text="@string/disabled"
                             android:textColor="@color/admin_inactive_red"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -379,7 +379,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="You will receive a verification code via email or an authenticator app upon logging in."
+                        android:text="@string/you_will_receive_a_verification_code_via_e"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp" />
 
@@ -389,7 +389,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         android:layout_marginTop="12dp"
-                        android:text="Enable 2FA"
+                        android:text="@string/enable_2fa"
                         android:textAllCaps="false"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="13sp"

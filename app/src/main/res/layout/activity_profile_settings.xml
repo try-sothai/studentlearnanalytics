@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Admin Profile Management"
+            android:text="@string/admin_profile_management"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -117,7 +117,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="System Administrator"
+                            android:text="@string/system_administrator"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -129,7 +129,7 @@
                         android:background="@drawable/bg_badge_core"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="4dp"
-                        android:text="Active"
+                        android:text="@string/status_active"
                         android:textColor="@color/admin_active_green"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -156,7 +156,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Personal Information"
+                        android:text="@string/personal_information"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -171,7 +171,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Full Name *"
+                        android:text="@string/full_name_d9bc75"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -196,7 +196,7 @@
                             android:id="@+id/etProfileName"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Full Name"
+                            android:hint="@string/full_name"
                             android:inputType="textPersonName"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -208,7 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Email Address *"
+                        android:text="@string/email_address"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -233,7 +233,7 @@
                             android:id="@+id/etProfileEmail"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Email Address"
+                            android:hint="@string/email_address_643a86"
                             android:inputType="textEmailAddress"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -245,7 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Phone Number"
+                        android:text="@string/phone_number"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -270,7 +270,7 @@
                             android:id="@+id/etProfilePhone"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Phone Number"
+                            android:hint="@string/phone_number"
                             android:inputType="phone"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -282,7 +282,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Gender"
+                        android:text="@string/gender_019ec3"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -299,7 +299,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="Male"
+                            android:text="@string/gender_male"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="13sp" />
 
@@ -308,7 +308,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:text="Female"
+                            android:text="@string/gender_female"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="13sp" />
                     </RadioGroup>
@@ -318,7 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Date of Birth"
+                        android:text="@string/date_of_birth"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -343,7 +343,7 @@
                             android:id="@+id/etProfileDob"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="Date of Birth"
+                            android:hint="@string/date_of_birth"
                             android:inputType="date"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -388,7 +388,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Admin ID"
+                        android:text="@string/admin_id"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -418,7 +418,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Department"
+                        android:text="@string/department"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -496,7 +496,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Security &amp; Password"
+                        android:text="@string/security_password"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -522,7 +522,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Last Active Session"
+                                android:text="@string/last_active_session"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -542,7 +542,7 @@
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="38dp"
-                            android:text="Change Password"
+                            android:text="@string/change_password"
                             android:textAllCaps="false"
                             android:textColor="@color/admin_primary_blue"
                             android:textSize="12sp"
@@ -573,7 +573,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/admin_text_secondary"
             android:textSize="14sp"
@@ -589,7 +589,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Save Changes"
+            android:text="@string/save_changes"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"

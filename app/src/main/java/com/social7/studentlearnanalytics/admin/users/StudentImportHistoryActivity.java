@@ -113,7 +113,7 @@ public class StudentImportHistoryActivity extends AppCompatActivity {
     }
 
     private void downloadErrors(StudentImportItem item) {
-        Toast.makeText(this, "Downloading error report...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.downloading_error_report, Toast.LENGTH_SHORT).show();
         ApiClient.getApiService(this).downloadImportErrorReport(item.id)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -121,13 +121,13 @@ public class StudentImportHistoryActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             saveReportFile(response.body(), "import_" + item.id + "_error_report.csv");
                         } else {
-                            Toast.makeText(StudentImportHistoryActivity.this, "Failed to download error report", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentImportHistoryActivity.this, R.string.failed_to_download_error_report, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                        Toast.makeText(StudentImportHistoryActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentImportHistoryActivity.this, R.string.network_error_42cd08, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

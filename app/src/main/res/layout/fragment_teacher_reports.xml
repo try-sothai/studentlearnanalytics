@@ -63,14 +63,14 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_group"
                                 app:tint="@color/teacher_primary_blue"
-                                android:contentDescription="Courses" />
+                                android:contentDescription="@string/nav_courses" />
                         </FrameLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Total Courses"
+                            android:text="@string/total_courses"
                             android:textColor="@color/teacher_secondary_text"
                             android:textSize="8sp" />
 
@@ -116,7 +116,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_chart_bar"
                                 app:tint="@color/status_good_text"
-                                android:contentDescription="Good" />
+                                android:contentDescription="@string/status_good" />
                         </FrameLayout>
 
                         <TextView
@@ -169,14 +169,14 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_warning_triangle"
                                 app:tint="@color/status_attention_text"
-                                android:contentDescription="Attention" />
+                                android:contentDescription="@string/status_attention" />
                         </FrameLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Needs Attention"
+                            android:text="@string/needs_attention"
                             android:textColor="@color/teacher_secondary_text"
                             android:textSize="8sp" />
 
@@ -222,7 +222,7 @@
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/primary_purple"
-                                android:contentDescription="Average" />
+                                android:contentDescription="@string/average" />
                         </FrameLayout>
 
                         <TextView
@@ -262,7 +262,7 @@
                     android:layout_height="18dp"
                     android:src="@drawable/ic_search"
                     app:tint="@color/teacher_secondary_text"
-                    android:contentDescription="Search" />
+                    android:contentDescription="@string/search" />
 
                 <EditText
                     android:id="@+id/edtSearchAnalytics"
@@ -270,7 +270,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:background="@null"
-                    android:hint="Search courses by code, name, or instructor..."
+                    android:hint="@string/search_courses_by_code_name_or_instructor"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:textColor="@color/teacher_dark_navy"
@@ -296,7 +296,7 @@
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
-                        android:text="All (4)"
+                        android:text="@string/all_4"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/white"
@@ -312,7 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Good (2)"
+                        android:text="@string/good_2"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/status_good_text"
@@ -328,7 +328,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="Medium (1)"
+                        android:text="@string/medium_1"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/status_attention_text"
@@ -344,7 +344,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginStart="8dp"
-                        android:text="At Risk (1)"
+                        android:text="@string/at_risk_1"
                         android:textAllCaps="false"
                         android:textSize="12sp"
                         android:textColor="@color/status_at_risk_text"
@@ -371,14 +371,14 @@
                             android:layout_height="14dp"
                             android:src="@drawable/ic_filter_sliders"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Filter" />
+                            android:contentDescription="@string/filter" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:layout_marginEnd="4dp"
-                            android:text="Filter"
+                            android:text="@string/filter"
                             android:textColor="@color/teacher_primary_blue"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -388,7 +388,7 @@
                             android:layout_height="12dp"
                             android:src="@drawable/ic_chevron_down"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Chevron" />
+                            android:contentDescription="@string/chevron" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -422,13 +422,13 @@
                             android:layout_height="20dp"
                             android:src="@drawable/ic_chart_bar"
                             app:tint="@color/teacher_primary_blue"
-                            android:contentDescription="Chart Icon" />
+                            android:contentDescription="@string/chart_icon" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Average Score by Course"
+                            android:text="@string/average_score_by_course"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -478,7 +478,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Course Performance Status"
+                            android:text="@string/course_performance_status"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -519,7 +519,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Course Analytics"
+                        android:text="@string/course_analytics"
                         android:textColor="@color/teacher_dark_navy"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -549,7 +549,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
-                        android:text="Sort: Code"
+                        android:text="@string/sort_code"
                         android:textColor="@color/teacher_dark_navy"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -559,7 +559,7 @@
                         android:layout_height="12dp"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Sort" />
+                        android:contentDescription="@string/sort" />
                 </LinearLayout>
 
             </LinearLayout>

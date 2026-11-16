@@ -36,7 +36,7 @@
                 android:background="@drawable/bg_notif_tab_active"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Pending Scores"
+                android:text="@string/pending_scores"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Assignments"
+                android:text="@string/assignments"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Quizzes"
+                android:text="@string/quizzes"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -80,7 +80,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Exams"
+                android:text="@string/exams"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -91,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingHorizontal="14dp"
-                android:text="Gradebook"
+                android:text="@string/gradebook"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -137,7 +137,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Score Management Overview"
+                            android:text="@string/score_management_overview"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -155,22 +155,22 @@
                             android:rowCount="2">
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Assessments" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Active" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_assessments" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_24_active" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending Scores" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pending_scores" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Needing Grading" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Graded" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="16 Graded" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/completed_graded" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_16_graded" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Average Class Score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/average_class_score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84.2%" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
@@ -197,7 +197,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Score Submission &amp; Grading Progress"
+                            android:text="@string/score_submission_grading_progress"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -212,7 +212,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="CS101 — Intro to Computer Science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="85% Graded" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_85_graded" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="85" android:progressTint="@color/admin_primary_blue"/>
                         </LinearLayout>
@@ -221,7 +221,7 @@
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
                                 <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="IT402 — Web Development Systems" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="70% Graded" android:textColor="@color/warning_orange" android:textSize="13sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_70_graded" android:textColor="@color/warning_orange" android:textSize="13sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="70" android:progressTint="@color/warning_orange"/>
                         </LinearLayout>
@@ -267,7 +267,7 @@
                         android:layout_height="16dp"
                         android:src="@drawable/ic_graduation_cap"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Course" />
+                        android:contentDescription="@string/course" />
 
                     <TextView
                         android:id="@+id/tvSelectedCourseName"
@@ -285,7 +285,7 @@
                         android:layout_height="14dp"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/teacher_dark_navy"
-                        android:contentDescription="Dropdown" />
+                        android:contentDescription="@string/dropdown" />
                 </LinearLayout>
 
                 <!-- Pending Summary Card -->
@@ -318,7 +318,7 @@
                                 android:layout_height="32dp"
                                 android:src="@drawable/ic_star_active"
                                 app:tint="@color/status_at_risk_text"
-                                android:contentDescription="Pending" />
+                                android:contentDescription="@string/status_pending" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -330,7 +330,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Total Pending Assessments"
+                                    android:text="@string/total_pending_assessments"
                                     android:textColor="@color/status_at_risk_text"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
@@ -370,17 +370,17 @@
                             android:rowCount="1">
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignments" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assignments" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
                                 <TextView android:id="@+id/tvCountAssignments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quizzes" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/quizzes" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
                                 <TextView android:id="@+id/tvCountQuizzes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Exams" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/exams" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
                                 <TextView android:id="@+id/tvCountExams" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
@@ -404,7 +404,7 @@
                         android:id="@+id/edtSearchPending"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
-                        android:hint="Search pending assessment title..."
+                        android:hint="@string/search_pending_assessment_title"
                         android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -482,7 +482,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Midterm &amp; Final Exam Scores" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/midterm_final_exam_scores" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExamScoresList"

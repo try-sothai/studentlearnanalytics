@@ -37,7 +37,7 @@
         android:layout_marginEnd="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="Close Menu"
+        android:contentDescription="@string/close_menu"
         android:focusable="true"
         android:padding="8dp"
         android:src="@drawable/ic_close_white"
@@ -62,7 +62,7 @@
             android:id="@+id/imgUserProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="User Profile Picture"
+            android:contentDescription="@string/user_profile_picture"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_student_avatar" />
     </com.google.android.material.card.MaterialCardView>
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Computer Science"
+            android:text="@string/computer_science"
             android:textColor="#D0D6FF"
             android:textSize="13sp" />
 
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:text="3rd Year"
+            android:text="@string/str_3rd_year"
             android:textColor="#D0D6FF"
             android:textSize="13sp" />
     </LinearLayout>
@@ -152,7 +152,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Home Icon"
+                    android:contentDescription="@string/home_icon"
                     android:src="@drawable/ic_nav_home" />
 
                 <TextView
@@ -160,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Home"
+                    android:text="@string/nav_home"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -181,7 +181,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Courses Icon"
+                    android:contentDescription="@string/courses_icon"
                     android:src="@drawable/ic_book" />
 
                 <TextView
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Courses"
+                    android:text="@string/nav_courses"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -210,7 +210,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Learning Analytics Icon"
+                    android:contentDescription="@string/learning_analytics_icon"
                     android:src="@drawable/ic_nav_analytics" />
 
                 <TextView
@@ -218,7 +218,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Learning Analytics"
+                    android:text="@string/learning_analytics"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -239,7 +239,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Prediction &amp; Risk Icon"
+                    android:contentDescription="@string/prediction_risk_icon"
                     android:src="@drawable/ic_nav_prediction" />
 
                 <TextView
@@ -247,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Prediction &amp; Risk"
+                    android:text="@string/prediction_risk"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -268,7 +268,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Recommendations Icon"
+                    android:contentDescription="@string/recommendations_icon"
                     android:src="@drawable/ic_nav_recommendation" />
 
                 <TextView
@@ -276,7 +276,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Recommendations"
+                    android:text="@string/recommendations"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -297,7 +297,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Assessments Icon"
+                    android:contentDescription="@string/assessments_icon"
                     android:src="@drawable/ic_assignment" />
 
                 <TextView
@@ -305,7 +305,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Assessments"
+                    android:text="@string/assessments"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -326,7 +326,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Notifications Icon"
+                    android:contentDescription="@string/notifications_icon"
                     android:src="@drawable/ic_nav_notifications" />
 
                 <TextView
@@ -334,7 +334,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Notifications"
+                    android:text="@string/nav_notifications"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
 
@@ -368,7 +368,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Reports Icon"
+                    android:contentDescription="@string/reports_icon"
                     android:src="@drawable/ic_nav_reports" />
 
                 <TextView
@@ -376,7 +376,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Reports"
+                    android:text="@string/nav_reports"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -397,7 +397,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Profile Icon"
+                    android:contentDescription="@string/profile_icon"
                     android:src="@drawable/ic_nav_profile" />
 
                 <TextView
@@ -405,7 +405,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Profile"
+                    android:text="@string/nav_profile"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -426,7 +426,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Settings Icon"
+                    android:contentDescription="@string/settings_icon"
                     android:src="@drawable/ic_nav_settings" />
 
                 <TextView
@@ -434,7 +434,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Settings"
+                    android:text="@string/nav_settings"
                     android:textColor="#EFEFFF"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -455,7 +455,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="Logout Icon"
+                    android:contentDescription="@string/logout_icon"
                     android:src="@drawable/ic_nav_logout" />
 
                 <TextView
@@ -463,7 +463,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:text="Logout"
+                    android:text="@string/logout"
                     android:textColor="#FF5252"
                     android:textSize="15sp"
                     android:textStyle="bold" />

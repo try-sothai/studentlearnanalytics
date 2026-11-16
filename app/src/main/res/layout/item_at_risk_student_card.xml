@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:text="2nd Year"
+                    android:text="@string/str_2nd_year"
                     android:textColor="@color/teacher_secondary_text"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -105,7 +105,7 @@
                 android:layout_height="22dp"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
-                android:text="High Risk"
+                android:text="@string/high_risk"
                 android:textColor="@color/status_at_risk_text"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -141,7 +141,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="GPA"
+                        android:text="@string/gpa"
                         android:textColor="@color/status_at_risk_text"
                         android:textSize="8sp" />
                 </LinearLayout>
@@ -169,7 +169,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Avg Score"
+                        android:text="@string/avg_score"
                         android:textColor="@color/status_attention_text"
                         android:textSize="8sp" />
                 </LinearLayout>
@@ -232,7 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="• Low GPA"
+                android:text="@string/low_gpa"
                 android:textColor="@color/status_at_risk_text"
                 android:textSize="10sp"
                 android:singleLine="true"
@@ -243,7 +243,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="• Low assignment scores"
+                android:text="@string/low_assignment_scores_c7a88b"
                 android:textColor="@color/teacher_secondary_text"
                 android:textSize="10sp"
                 android:singleLine="true"
@@ -268,7 +268,7 @@
             android:layout_marginStart="4dp"
             android:src="@drawable/ic_chevron_right"
             app:tint="@color/teacher_secondary_text"
-            android:contentDescription="Details" />
+            android:contentDescription="@string/details" />
 
     </LinearLayout>
 

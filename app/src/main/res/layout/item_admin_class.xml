@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="3 Credits"
+                android:text="@string/str_3_credits"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -74,7 +74,7 @@
             android:background="@drawable/bg_badge_core"
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp"
-            android:text="Active"
+            android:text="@string/status_active"
             android:textColor="@color/success_green"
             android:textSize="12sp"
             android:textStyle="bold" />

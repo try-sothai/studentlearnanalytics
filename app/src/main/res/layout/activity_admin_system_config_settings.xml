@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="System Configuration"
+            android:text="@string/system_configuration"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Institution &amp; General Defaults"
+                        android:text="@string/institution_general_defaults"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -85,7 +85,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="System Name"
+                        android:text="@string/system_name"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -116,7 +116,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Institution Name"
+                        android:text="@string/institution_name"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -138,7 +138,7 @@
                             android:id="@+id/etInstName"
                             android:layout_width="match_parent"
                             android:layout_height="44dp"
-                            android:text="National University of Management"
+                            android:text="@string/national_university_of_management"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -165,7 +165,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Academic Period Configuration"
+                        android:text="@string/academic_period_configuration"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -174,7 +174,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Default Academic Year"
+                        android:text="@string/default_academic_year"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -190,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Default Semester"
+                        android:text="@string/default_semester"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -236,7 +236,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Maintenance Mode"
+                                android:text="@string/maintenance_mode"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -245,7 +245,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Restrict access during system upgrades"
+                                android:text="@string/restrict_access_during_system_upgrades"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -274,7 +274,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Save System Configuration"
+            android:text="@string/save_system_configuration"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"

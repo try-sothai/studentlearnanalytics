@@ -75,7 +75,7 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         if (isValid) {
-            Toast.makeText(this, "Course " + code + " - " + name + " added successfully!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.course_08702b) + code + " - " + name + " added successfully!", Toast.LENGTH_LONG).show();
             finish();
         }
     }

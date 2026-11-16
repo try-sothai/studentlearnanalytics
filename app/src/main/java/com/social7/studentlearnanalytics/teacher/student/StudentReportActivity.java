@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher.student;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -48,7 +50,7 @@ public class StudentReportActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        com.social7.studentlearnanalytics.teacher.TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerTeacherDetail), "Student Report", "", true);
+        com.social7.studentlearnanalytics.teacher.TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerTeacherDetail), getString(R.string.student_reports), "", true);
 
         ImageView btnMoreOptions = findViewById(R.id.btnMoreOptions);
         if (btnMoreOptions != null) btnMoreOptions.setOnClickListener(this::showMoreOptionsPopup);
@@ -79,7 +81,7 @@ public class StudentReportActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please write a note before saving", Toast.LENGTH_SHORT).show();
                 } else {
                     edtComposerContent.setText("");
-                    Toast.makeText(this, "Note saved successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.note_saved_successfully, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -103,7 +105,7 @@ public class StudentReportActivity extends AppCompatActivity {
 
     private void showAddNoteModal() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Student Note");
+        builder.setTitle(R.string.add_student_note);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -120,7 +122,7 @@ public class StudentReportActivity extends AppCompatActivity {
 
         builder.setView(layout);
 
-        builder.setPositiveButton("Save Note", (dialog, which) -> {
+        builder.setPositiveButton(R.string.save_note, (dialog, which) -> {
             String title = edtTitle.getText().toString().trim();
             String content = edtContent.getText().toString().trim();
 
@@ -131,7 +133,7 @@ public class StudentReportActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -153,14 +155,14 @@ public class StudentReportActivity extends AppCompatActivity {
             if (tvReportPerformanceBadge != null) {
                 tvReportPerformanceBadge.setText(student.getRiskLevel() + " Performance");
             }
-            if (tvReportAvatar != null && !student.getName().isEmpty()) {
+            if (tvReportAvatar != null && student.getName() != null && !student.getName().isEmpty()) {
                 tvReportAvatar.setText(String.valueOf(student.getName().charAt(0)).toUpperCase());
             }
         } else {
             if (tvReportStudentName != null) tvReportStudentName.setText("Sophea");
             if (tvReportStudentId != null) tvReportStudentId.setText("STU023001");
             if (tvReportCourseSemester != null) tvReportCourseSemester.setText("CS101 - Data Structures • Sem 1, 2024");
-            if (tvReportPerformanceBadge != null) tvReportPerformanceBadge.setText("Good Performance");
+            if (tvReportPerformanceBadge != null) tvReportPerformanceBadge.setText(R.string.good_performance);
             if (tvReportAvatar != null) tvReportAvatar.setText("S");
         }
 
@@ -183,7 +185,7 @@ public class StudentReportActivity extends AppCompatActivity {
         entries.add(new BarEntry(4, 92f));
         entries.add(new BarEntry(5, 96f));
 
-        BarDataSet dataSet = new BarDataSet(entries, "Attendance %");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.attendance_7266c9));
         dataSet.setColor(Color.parseColor("#10B981"));
         dataSet.setValueTextSize(10f);
         dataSet.setValueTextColor(Color.parseColor("#111B64"));
@@ -208,6 +210,7 @@ public class StudentReportActivity extends AppCompatActivity {
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.animateY(800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 
@@ -242,21 +245,21 @@ public class StudentReportActivity extends AppCompatActivity {
         examEntries.add(new Entry(6, 78f));
         examEntries.add(new Entry(7, 80f));
 
-        LineDataSet setAssignment = new LineDataSet(assignmentEntries, "Assignment");
+        LineDataSet setAssignment = new LineDataSet(assignmentEntries, getString(R.string.assignment));
         setAssignment.setColor(Color.parseColor("#2463F5"));
         setAssignment.setLineWidth(2.5f);
         setAssignment.setCircleColor(Color.parseColor("#2463F5"));
         setAssignment.setCircleRadius(3.5f);
         setAssignment.setDrawValues(false);
 
-        LineDataSet setQuiz = new LineDataSet(quizEntries, "Quiz");
+        LineDataSet setQuiz = new LineDataSet(quizEntries, getString(R.string.quiz));
         setQuiz.setColor(Color.parseColor("#F59E0B"));
         setQuiz.setLineWidth(2.5f);
         setQuiz.setCircleColor(Color.parseColor("#F59E0B"));
         setQuiz.setCircleRadius(3.5f);
         setQuiz.setDrawValues(false);
 
-        LineDataSet setExam = new LineDataSet(examEntries, "Exam");
+        LineDataSet setExam = new LineDataSet(examEntries, getString(R.string.exam));
         setExam.setColor(Color.parseColor("#7C3AED"));
         setExam.setLineWidth(2.5f);
         setExam.setCircleColor(Color.parseColor("#7C3AED"));
@@ -287,6 +290,7 @@ public class StudentReportActivity extends AppCompatActivity {
         legend.setTextSize(10f);
 
         chart.animateX(800);
+        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 

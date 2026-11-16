@@ -73,7 +73,7 @@
                 android:background="#F4F7FF"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:text="11 Courses"
+                android:text="@string/str_11_courses"
                 android:textColor="@color/admin_primary_blue"
                 android:textSize="12sp"
                 android:textStyle="bold" />

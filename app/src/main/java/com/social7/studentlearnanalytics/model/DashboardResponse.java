@@ -81,10 +81,71 @@ public class DashboardResponse {
         private List<PredictionInfo> predictions;
 
         @SerializedName("semesters")
-        private List<SemesterInfo> semesters;
+        public List<SemesterInfo> semesters;
+
+        @SerializedName("unread_notifications_count")
+        public Integer unreadNotificationsCount;
+
+        @SerializedName("attendance_summary")
+        public AttendanceSummaryInfo attendanceSummary;
+
+        @SerializedName("assignments_summary")
+        public AssignmentsSummaryInfo assignmentsSummary;
+
+        @SerializedName("quizzes_summary")
+        public QuizzesSummaryInfo quizzesSummary;
+
+        @SerializedName("exams_summary")
+        public ExamsSummaryInfo examsSummary;
+
+        @SerializedName("gpa_summary")
+        public GpaSummaryInfo gpaSummary;
+
+        @SerializedName("recent_activities")
+        public List<RecentActivityInfo> recentActivities;
 
         public List<SemesterInfo> getSemesters() {
             return semesters;
+        }
+
+        public int getUnreadNotificationsCount() {
+            return unreadNotificationsCount != null ? unreadNotificationsCount : 0;
+        }
+
+        public AttendanceSummaryInfo getAttendanceSummary() {
+            return attendanceSummary;
+        }
+
+        public AssignmentsSummaryInfo getAssignmentsSummary() {
+            return assignmentsSummary;
+        }
+
+        public QuizzesSummaryInfo getQuizzesSummary() {
+            return quizzesSummary;
+        }
+
+        public ExamsSummaryInfo getExamsSummary() {
+            return examsSummary;
+        }
+
+        public GpaSummaryInfo getGpaSummary() {
+            return gpaSummary;
+        }
+
+        public List<RecentActivityInfo> getRecentActivities() {
+            return recentActivities;
+        }
+
+        public AnalyticsInfo getAnalytics() {
+            return analytics;
+        }
+
+        public RiskAssessmentInfo getRiskAssessment() {
+            return riskAssessment;
+        }
+
+        public List<PredictionInfo> getPredictions() {
+            return predictions;
         }
 
         public Double getPredictionConfidence() {
@@ -105,6 +166,8 @@ public class DashboardResponse {
 
         public Object getGpaValue() {
             if (gpa != null) return gpa;
+            if (gpaSummary != null && gpaSummary.semesterGpa != null) return gpaSummary.semesterGpa;
+            if (gpaSummary != null && gpaSummary.cumulativeGpa != null) return gpaSummary.cumulativeGpa;
             return gpaRecord != null ? gpaRecord.gpa : null;
         }
 
@@ -157,21 +220,33 @@ public class DashboardResponse {
 
         public String getAttendanceRateFormatted() {
             Object obj = (analytics != null && analytics.attendanceRate != null) ? analytics.attendanceRate : attendanceRate;
+            if (obj == null && attendanceSummary != null && attendanceSummary.percentage != null) {
+                obj = attendanceSummary.percentage;
+            }
             return formatPercentage(obj);
         }
 
         public String getAssignmentScoreFormatted() {
             Object obj = (analytics != null && analytics.assignmentAvg != null) ? analytics.assignmentAvg : assignmentScore;
+            if (obj == null && assignmentsSummary != null && assignmentsSummary.average != null) {
+                obj = assignmentsSummary.average;
+            }
             return formatPercentage(obj);
         }
 
         public String getQuizScoreFormatted() {
             Object obj = (analytics != null && analytics.quizAvg != null) ? analytics.quizAvg : quizScore;
+            if (obj == null && quizzesSummary != null && quizzesSummary.average != null) {
+                obj = quizzesSummary.average;
+            }
             return formatPercentage(obj);
         }
 
         public String getExamScoreFormatted() {
             Object obj = (analytics != null && analytics.examAvg != null) ? analytics.examAvg : null;
+            if (obj == null && examsSummary != null && examsSummary.average != null) {
+                obj = examsSummary.average;
+            }
             return formatPercentage(obj);
         }
 
@@ -309,6 +384,15 @@ public class DashboardResponse {
     public static class GpaRecordInfo {
         @SerializedName("gpa")
         public Object gpa;
+
+        @SerializedName("total_credits")
+        public Float totalCredits;
+
+        @SerializedName("earned_credits")
+        public Float earnedCredits;
+
+        @SerializedName("academic_standing")
+        public String academicStanding;
     }
 
     public static class StudentInfo {
@@ -418,6 +502,12 @@ public class DashboardResponse {
 
         @SerializedName("predicted_score")
         public Object predictedScore;
+
+        @SerializedName("learning_trend")
+        public String learningTrend;
+
+        @SerializedName("performance_change")
+        public Float performanceChange;
     }
 
     public static class RiskAssessmentInfo {
@@ -426,6 +516,135 @@ public class DashboardResponse {
 
         @SerializedName("risk_score")
         public Object riskScore;
+
+        @SerializedName("risk_factors")
+        public List<String> riskFactors;
+
+        @SerializedName("status")
+        public String status;
+
+        @SerializedName("assessment_date")
+        public String assessmentDate;
+    }
+
+    public static class AttendanceSummaryInfo {
+        @SerializedName("total")
+        public Integer total;
+
+        @SerializedName("present")
+        public Integer present;
+
+        @SerializedName("absent")
+        public Integer absent;
+
+        @SerializedName("late")
+        public Integer late;
+
+        @SerializedName("excused")
+        public Integer excused;
+
+        @SerializedName("percentage")
+        public Float percentage;
+    }
+
+    public static class AssignmentsSummaryInfo {
+        @SerializedName("total")
+        public Integer total;
+
+        @SerializedName("completed")
+        public Integer completed;
+
+        @SerializedName("graded")
+        public Integer graded;
+
+        @SerializedName("pending")
+        public Integer pending;
+
+        @SerializedName("average")
+        public Float average;
+    }
+
+    public static class QuizzesSummaryInfo {
+        @SerializedName("total")
+        public Integer total;
+
+        @SerializedName("completed")
+        public Integer completed;
+
+        @SerializedName("upcoming")
+        public Integer upcoming;
+
+        @SerializedName("average")
+        public Float average;
+    }
+
+    public static class ExamsSummaryInfo {
+        @SerializedName("total")
+        public Integer total;
+
+        @SerializedName("completed")
+        public Integer completed;
+
+        @SerializedName("upcoming")
+        public Integer upcoming;
+
+        @SerializedName("average")
+        public Float average;
+    }
+
+    public static class GpaSummaryInfo {
+        @SerializedName("semester_gpa")
+        public Float semesterGpa;
+
+        @SerializedName("cumulative_gpa")
+        public Float cumulativeGpa;
+
+        @SerializedName("completed_credits")
+        public Float completedCredits;
+
+        @SerializedName("semester_credits")
+        public Float semesterCredits;
+
+        @SerializedName("academic_standing")
+        public String academicStanding;
+    }
+
+    public static class RecentActivityInfo {
+        @SerializedName("id")
+        public String id;
+
+        @SerializedName("type")
+        public String type;
+
+        @SerializedName("category")
+        public String category;
+
+        @SerializedName("title")
+        public String title;
+
+        @SerializedName("description")
+        public String description;
+
+        @SerializedName("course_name")
+        public String courseName;
+
+        @SerializedName("course_code")
+        public String courseCode;
+
+        @SerializedName("reference_id")
+        public Integer referenceId;
+
+        @SerializedName("status_badge")
+        public String statusBadge;
+
+        @SerializedName("timestamp")
+        public String timestamp;
+
+        @SerializedName("time_ago")
+        public String timeAgo;
+
+        @SerializedName("date_group")
+        public String dateGroup;
     }
 
     public static class EnrollmentInfo {
@@ -479,6 +698,26 @@ public class DashboardResponse {
 
         @SerializedName("academic_year_id")
         public Object academicYearId;
+
+        public String getDisplayName() {
+            if (name != null && !name.trim().isEmpty()) {
+                return name.trim();
+            }
+            Long idVal = getIdAsLong();
+            return idVal != null ? ("Semester " + idVal) : "Semester";
+        }
+
+        public Long getIdAsLong() {
+            if (id instanceof Number) {
+                return ((Number) id).longValue();
+            }
+            if (id != null) {
+                try {
+                    return (long) Double.parseDouble(String.valueOf(id).trim());
+                } catch (Exception ignored) {}
+            }
+            return null;
+        }
     }
 
     public static class PredictionInfo {
@@ -490,5 +729,14 @@ public class DashboardResponse {
 
         @SerializedName("model_version")
         public String modelVersion;
+
+        @SerializedName("prediction_type")
+        public String predictionType;
+
+        @SerializedName("prediction_date")
+        public String predictionDate;
+
+        @SerializedName("notes")
+        public String notes;
     }
 }

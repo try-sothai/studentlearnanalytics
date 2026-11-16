@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="System Statistics"
+            android:text="@string/system_statistics"
             android:textColor="@color/text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -58,7 +58,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Students"
+                        android:text="@string/total_students"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -93,7 +93,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Teachers"
+                        android:text="@string/total_teachers"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -128,7 +128,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Courses"
+                        android:text="@string/total_courses"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -163,7 +163,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Predictions"
+                        android:text="@string/total_predictions"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -185,7 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Student Performance Distribution"
+            android:text="@string/student_performance_distribution"
             android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -210,7 +210,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Risk Level Distribution"
+            android:text="@string/risk_level_distribution"
             android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />

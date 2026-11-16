@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,10 +44,10 @@ public class NotificationFragment extends Fragment {
     private ProgressBar progressBar;
     private View layoutEmptyState;
     private TextView tvEmptyState, tvEmptyStateDesc;
-    private TextView tabAll, tabUnread, tabImportant;
+    private TextView tabAll, tabUnread, tabImportant, btnMarkAllNotificationsRead;
 
-    private List<Notification> allNotifications = new ArrayList<>();
-    private List<Notification> displayedNotifications = new ArrayList<>();
+    private final List<Notification> allNotifications = new ArrayList<>();
+    private final List<Notification> displayedNotifications = new ArrayList<>();
 
     private String currentFilter = "ALL"; // ALL, UNREAD, IMPORTANT
 
@@ -71,9 +72,7 @@ public class NotificationFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof StudentMainActivity) {
             ((StudentMainActivity) getActivity()).setupStudentHeader(
-                    view,
-                    "Notifications",
-                    "Stay updated with your academic activities"
+                    view, getString(R.string.nav_notifications), "Stay updated with your academic activities"
             );
         }
 
@@ -85,27 +84,12 @@ public class NotificationFragment extends Fragment {
         tabAll = view.findViewById(R.id.tabAll);
         tabUnread = view.findViewById(R.id.tabUnread);
         tabImportant = view.findViewById(R.id.tabImportant);
+        btnMarkAllNotificationsRead = view.findViewById(R.id.btnMarkAllNotificationsRead);
 
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new NotificationAdapter(getContext(), displayedNotifications, notification -> {
-                if ("Security".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), RiskAnalysisActivity.class));
-                } else if ("Report".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), LearningReportActivity.class));
-                } else if ("Course".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), CourseDetailActivity.class));
-                } else if ("Assignment".equalsIgnoreCase(notification.getCategory()) || "Homework".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), AssessmentDetailActivity.class));
-                } else if ("Quiz".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), QuizDetailActivity.class));
-                } else if ("Exam".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), ExamDetailActivity.class));
-                } else if ("Attendance".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), AttendanceDetailActivity.class));
-                } else if ("Grade".equalsIgnoreCase(notification.getCategory())) {
-                    startActivity(new Intent(requireContext(), AssessmentDetailActivity.class));
-                }
+                navigateForNotification(notification);
 
                 if (!notification.isRead()) {
                     notification.setRead(true);
@@ -127,7 +111,58 @@ public class NotificationFragment extends Fragment {
         if (tabUnread != null) tabUnread.setOnClickListener(v -> setFilter("UNREAD"));
         if (tabImportant != null) tabImportant.setOnClickListener(v -> setFilter("IMPORTANT"));
 
+        if (btnMarkAllNotificationsRead != null) {
+            btnMarkAllNotificationsRead.setOnClickListener(v -> markAllRead());
+        }
+
         fetchNotifications();
+    }
+
+    private void navigateForNotification(Notification notification) {
+        if (getContext() == null || notification == null) return;
+        String cat = notification.getCategory() != null ? notification.getCategory() : "";
+        String title = notification.getTitle() != null ? notification.getTitle().toLowerCase() : "";
+        String msg = notification.getMessage() != null ? notification.getMessage().toLowerCase() : "";
+
+        if ("Recommendations".equalsIgnoreCase(cat) || title.contains("recommendation")) {
+            startActivity(new Intent(requireContext(), RecommendationDetailActivity.class));
+        } else if ("Security".equalsIgnoreCase(cat) || title.contains("risk") || title.contains("alert")) {
+            startActivity(new Intent(requireContext(), RiskAnalysisActivity.class));
+        } else if ("Report".equalsIgnoreCase(cat) || title.contains("report")) {
+            startActivity(new Intent(requireContext(), LearningReportActivity.class));
+        } else if ("Quiz".equalsIgnoreCase(cat) || title.contains("quiz") || msg.contains("quiz")) {
+            startActivity(new Intent(requireContext(), QuizDetailActivity.class));
+        } else if ("Exam".equalsIgnoreCase(cat) || title.contains("exam") || msg.contains("exam")) {
+            startActivity(new Intent(requireContext(), ExamDetailActivity.class));
+        } else if ("Attendance".equalsIgnoreCase(cat) || title.contains("attendance") || msg.contains("attendance")) {
+            startActivity(new Intent(requireContext(), AttendanceDetailActivity.class));
+        } else if ("Assignment".equalsIgnoreCase(cat) || "Homework".equalsIgnoreCase(cat)
+                || "Grade".equalsIgnoreCase(cat) || "Academic".equalsIgnoreCase(cat)
+                || title.contains("assignment") || title.contains("grade")) {
+            startActivity(new Intent(requireContext(), AssessmentDetailActivity.class));
+        } else if ("Course".equalsIgnoreCase(cat) || title.contains("course")) {
+            startActivity(new Intent(requireContext(), CourseDetailActivity.class));
+        }
+    }
+
+    private void markAllRead() {
+        if (getContext() == null) return;
+        for (Notification n : allNotifications) {
+            n.setRead(true);
+        }
+        updateTabsAndFilter();
+
+        ApiClient.getApiService(requireContext()).markAllNotificationsRead().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
     }
 
     private void setFilter(String filter) {
@@ -165,9 +200,14 @@ public class NotificationFragment extends Fragment {
 
         for (Notification n : allNotifications) {
             boolean isUnread = !n.isRead();
-            boolean isImportant = "Security".equalsIgnoreCase(n.getCategory()) || 
-                                  (n.getTitle() != null && n.getTitle().toLowerCase().contains("alert")) ||
-                                  (n.getCategory() != null && n.getCategory().toLowerCase().contains("exam"));
+            String titleLower = n.getTitle() != null ? n.getTitle().toLowerCase() : "";
+            String catLower = n.getCategory() != null ? n.getCategory().toLowerCase() : "";
+            boolean isImportant = "security".equalsIgnoreCase(catLower)
+                    || "recommendations".equalsIgnoreCase(catLower)
+                    || titleLower.contains("alert")
+                    || titleLower.contains("risk")
+                    || titleLower.contains("exam")
+                    || catLower.contains("exam");
 
             if (isUnread) unreadCount++;
             if (isImportant) importantCount++;
@@ -178,9 +218,13 @@ public class NotificationFragment extends Fragment {
             displayedNotifications.add(n);
         }
 
-        tabAll.setText("All (" + totalCount + ")");
+        tabAll.setText(tabAll.getContext().getString(R.string.all_c49d0d) + totalCount + ")");
         tabUnread.setText("Unread (" + unreadCount + ")");
         tabImportant.setText("Important (" + importantCount + ")");
+
+        if (btnMarkAllNotificationsRead != null) {
+            btnMarkAllNotificationsRead.setVisibility(unreadCount > 0 ? View.VISIBLE : View.GONE);
+        }
 
         if (getActivity() instanceof StudentMainActivity) {
             ((StudentMainActivity) getActivity()).updateGlobalNotificationBadge(unreadCount);
@@ -219,9 +263,9 @@ public class NotificationFragment extends Fragment {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (!isAdded() || getView() == null) return;
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
-                
+
                 allNotifications.clear();
-                
+
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         JsonObject body = response.body();
@@ -241,11 +285,11 @@ public class NotificationFragment extends Fragment {
                                 String category = obj.has("category") && !obj.get("category").isJsonNull() ? obj.get("category").getAsString() : "System";
                                 String dateGroup = obj.has("date_group") && !obj.get("date_group").isJsonNull() ? obj.get("date_group").getAsString() : "RECENT";
                                 String timeAgo = obj.has("time_ago") && !obj.get("time_ago").isJsonNull() ? obj.get("time_ago").getAsString() : "just now";
-                                
+
                                 boolean isRead = false;
                                 if (obj.has("read_at") && !obj.get("read_at").isJsonNull()) isRead = true;
                                 else if (obj.has("is_read") && !obj.get("is_read").isJsonNull()) isRead = obj.get("is_read").getAsBoolean();
-                                
+
                                 allNotifications.add(new Notification(id, title, message, timeAgo, category, dateGroup, isRead));
                             }
                         }
@@ -255,7 +299,7 @@ public class NotificationFragment extends Fragment {
                 } else {
                     Log.d(TAG, "Notifications HTTP code: " + response.code());
                 }
-                
+
                 updateTabsAndFilter();
             }
 

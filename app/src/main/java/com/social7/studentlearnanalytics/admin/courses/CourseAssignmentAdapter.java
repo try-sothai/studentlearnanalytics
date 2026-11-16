@@ -97,7 +97,7 @@ public class CourseAssignmentAdapter extends RecyclerView.Adapter<CourseAssignme
             if (tvCourseCode != null) tvCourseCode.setText(item.courseCode);
             if (tvCourseName != null) tvCourseName.setText(item.courseName);
             if (tvAssignmentDetails != null) {
-                tvAssignmentDetails.setText("Class: " + item.className + " • Teacher: " + item.teacherName);
+                tvAssignmentDetails.setText(tvAssignmentDetails.getContext().getString(R.string.class_4530a9) + item.className + " • Teacher: " + item.teacherName);
             }
             if (tvAssignmentStatus != null) {
                 tvAssignmentStatus.setText(item.status);

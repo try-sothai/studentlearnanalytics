@@ -35,7 +35,7 @@ public class AdminUserRolesSettingsActivity extends AppCompatActivity {
 
         if (btnSaveUserRoles != null) {
             btnSaveUserRoles.setOnClickListener(v -> {
-                Toast.makeText(this, "Role & permission settings saved successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.role_permission_settings_saved_successfull, Toast.LENGTH_SHORT).show();
                 finish();
             });
         }
@@ -55,15 +55,15 @@ public class AdminUserRolesSettingsActivity extends AppCompatActivity {
         layout.addView(til);
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Create Custom Role")
+                .setTitle(R.string.create_custom_role)
                 .setView(layout)
-                .setPositiveButton("Create Role", (dialog, which) -> {
+                .setPositiveButton(R.string.create_role, (dialog, which) -> {
                     String roleName = etRoleName.getText() != null ? etRoleName.getText().toString().trim() : "";
                     if (!roleName.isEmpty()) {
-                        Toast.makeText(this, "Role " + roleName + " created successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.role_d450b7) + roleName + " created successfully!", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 }

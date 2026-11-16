@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Report Type"
+                        android:text="@string/report_type"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -98,7 +98,7 @@
                                 android:layout_height="40dp"
                                 android:layout_marginEnd="6dp"
                                 android:backgroundTint="@color/admin_primary_blue"
-                                android:text="Students"
+                                android:text="@string/nav_students"
                                 android:textAllCaps="false"
                                 android:textColor="@color/white"
                                 android:textSize="12sp"
@@ -112,7 +112,7 @@
                                 android:layout_height="40dp"
                                 android:layout_marginHorizontal="4dp"
                                 android:backgroundTint="#F4F7FF"
-                                android:text="Teachers"
+                                android:text="@string/teachers"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
@@ -126,7 +126,7 @@
                                 android:layout_height="40dp"
                                 android:layout_marginHorizontal="4dp"
                                 android:backgroundTint="#F4F7FF"
-                                android:text="Courses"
+                                android:text="@string/nav_courses"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
@@ -140,7 +140,7 @@
                                 android:layout_height="40dp"
                                 android:layout_marginHorizontal="4dp"
                                 android:backgroundTint="#F4F7FF"
-                                android:text="Academic"
+                                android:text="@string/academic"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
@@ -154,7 +154,7 @@
                                 android:layout_height="40dp"
                                 android:layout_marginStart="4dp"
                                 android:backgroundTint="#F4F7FF"
-                                android:text="Activity"
+                                android:text="@string/activity"
                                 android:textAllCaps="false"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
@@ -201,7 +201,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Academic Year"
+                        android:text="@string/academic_year_cecc30"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Semester"
+                        android:text="@string/period_semester"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -253,7 +253,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Report Filters"
+                        android:text="@string/report_filters"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -268,7 +268,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Department"
+                        android:text="@string/department"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -285,7 +285,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Program"
+                        android:text="@string/program_95c50c"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Status"
+                        android:text="@string/status"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -337,7 +337,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Report Metrics"
+                        android:text="@string/report_metrics"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -353,16 +353,16 @@
                         android:layout_height="wrap_content"
                         android:columnCount="2">
 
-                        <CheckBox android:id="@+id/cbMetric1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Total Students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
-                        <CheckBox android:id="@+id/cbMetric2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="New Enrollments" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
-                        <CheckBox android:id="@+id/cbMetric3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Active Students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
-                        <CheckBox android:id="@+id/cbMetric4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Graduated" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
-                        <CheckBox android:id="@+id/cbMetric5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Enrollment Trend" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="@string/total_students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="@string/new_enrollments" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="@string/active_students" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="@string/status_graduated" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="@string/enrollment_trend" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:checked="true" android:text="Student Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Academic Perf." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Attendance Sum." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric9" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="GPA Stats" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
-                        <CheckBox android:id="@+id/cbMetric10" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Course Enroll." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
+                        <CheckBox android:id="@+id/cbMetric10" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="@string/course_enroll" android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric11" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Gender Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                         <CheckBox android:id="@+id/cbMetric12" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:text="Nationality Dist." android:textColor="@color/admin_text_primary" android:textSize="12sp" />
                     </GridLayout>
@@ -458,7 +458,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/admin_text_secondary"
             android:textSize="14sp"

@@ -39,6 +39,7 @@ public class TakeQuizActivity extends AppCompatActivity {
     private String quizId = "1";
     private String attemptId = null;
     private int quizDurationMinutes = 30;
+    private int quizTotalScore = 100;
     private SessionManager sessionManager;
 
     private TextView tvHeaderTitle, tvTimer;
@@ -182,6 +183,7 @@ public class TakeQuizActivity extends AppCompatActivity {
 
         int totalScore = quizData.has("total_score") && !quizData.get("total_score").isJsonNull()
                 ? quizData.get("total_score").getAsInt() : 100;
+        quizTotalScore = totalScore > 0 ? totalScore : 100;
         int duration = quizData.has("duration_minutes") && !quizData.get("duration_minutes").isJsonNull()
                 ? quizData.get("duration_minutes").getAsInt() : 30;
         quizDurationMinutes = duration > 0 ? duration : 30;
@@ -281,7 +283,7 @@ public class TakeQuizActivity extends AppCompatActivity {
 
     private void displayQuestion(int index) {
         if (questions.isEmpty()) {
-            tvQuestionText.setText("No questions available for this quiz.");
+            tvQuestionText.setText(R.string.no_questions_available_for_this_quiz);
             return;
         }
 
@@ -346,10 +348,10 @@ public class TakeQuizActivity extends AppCompatActivity {
 
     private void confirmAndSubmitQuiz() {
         new AlertDialog.Builder(this)
-                .setTitle("Submit Quiz")
-                .setMessage("Are you sure you want to submit your quiz?")
-                .setPositiveButton("Submit", (dialog, which) -> submitQuizFinal())
-                .setNegativeButton("Cancel", null)
+                .setTitle(R.string.submit_quiz)
+                .setMessage(R.string.are_you_sure_you_want_to_submit_your_quiz)
+                .setPositiveButton(R.string.submit, (dialog, which) -> submitQuizFinal())
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -367,21 +369,39 @@ public class TakeQuizActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 pbLoading.setVisibility(View.GONE);
-                showResultScreen();
+                Float earnedScore = null;
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject root = response.body();
+                    JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                            ? root.getAsJsonObject("data") : root;
+                    if (data.has("score") && !data.get("score").isJsonNull()) {
+                        earnedScore = data.get("score").getAsFloat();
+                    }
+                }
+                showResultScreen(earnedScore);
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 pbLoading.setVisibility(View.GONE);
-                showResultScreen();
+                showResultScreen(null);
             }
         });
     }
 
-    private void showResultScreen() {
+    private void showResultScreen(Float earnedScore) {
         layoutTaking.setVisibility(View.GONE);
         tvTimer.setVisibility(View.GONE);
         layoutResult.setVisibility(View.VISIBLE);
+        if (earnedScore != null) {
+            int pct = quizTotalScore > 0 ? Math.round((earnedScore / quizTotalScore) * 100f) : 0;
+            if (tvResultTitle != null) {
+                tvResultTitle.setText(String.format(Locale.US, "Quiz Completed! Score: %.0f / %d (%d%%)", earnedScore, quizTotalScore, pct));
+            }
+            if (tvResultSubtitle != null) {
+                tvResultSubtitle.setText("Your answers have been recorded and automatically graded.");
+            }
+        }
     }
 
     private void startTimer(long millis) {

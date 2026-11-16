@@ -245,7 +245,7 @@ public class EditTeacherActivity extends AppCompatActivity {
                         currentTeacher.setWorkType(workType);
                         currentTeacher.setStatus(isCheckedActive ? "Active" : "Inactive");
 
-                        Toast.makeText(EditTeacherActivity.this, "Teacher account updated successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditTeacherActivity.this, R.string.teacher_account_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         Toast.makeText(EditTeacherActivity.this, "Failed to update teacher: HTTP " + response.code(), Toast.LENGTH_LONG).show();

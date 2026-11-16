@@ -521,7 +521,7 @@ public class EditStudentActivity extends AppCompatActivity {
                         currentUser.setStatus(currentStudent.getStatus());
                     }
 
-                    Toast.makeText(EditStudentActivity.this, "Student account updated successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStudentActivity.this, R.string.student_account_updated_successfully, Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     String msg = "Failed to update student (HTTP " + response.code() + ")";

@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="Student Detail"
+            android:text="@string/student_detail"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Menu"
+            android:contentDescription="@string/menu"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_more_vert"
@@ -95,9 +95,12 @@
 
                     <TextView
                         android:id="@+id/tvDetailStudentName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:maxLines="3"
+                        android:paddingHorizontal="8dp"
                         android:text="Sophea"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="20sp"
@@ -127,7 +130,7 @@
                             android:background="@drawable/bg_badge_core"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="Active"
+                            android:text="@string/status_active"
                             android:textColor="@color/admin_active_green"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -155,8 +158,11 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/bg_notif_tab_active"
+                        android:ellipsize="end"
                         android:gravity="center"
-                        android:text="Overview"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:text="@string/overview"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -166,8 +172,11 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:ellipsize="end"
                         android:gravity="center"
-                        android:text="Academic"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:text="@string/tab_study"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -177,8 +186,11 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:ellipsize="end"
                         android:gravity="center"
-                        android:text="Attendance"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:text="@string/attendance"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -188,8 +200,11 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:ellipsize="end"
                         android:gravity="center"
-                        android:text="Notes"
+                        android:maxLines="1"
+                        android:paddingHorizontal="4dp"
+                        android:text="@string/notes"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -230,7 +245,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Basic Information"
+                                android:text="@string/basic_information"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -243,7 +258,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:padding="4dp"
-                                android:text="Edit"
+                                android:text="@string/edit"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -257,37 +272,37 @@
 
                         <!-- Row: Full Name -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Full Name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/full_name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValFullName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Sophea" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Student ID -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Student ID" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/student_id" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValStudentId" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="STU23001" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Email Address -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Email Address" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/email_address_643a86" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValEmail" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="sophea@univ.edu" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Phone Number -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Phone Number" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/phone_number" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValPhone" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="+855 12 345 678" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Gender -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Gender" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValGender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Female" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/gender_019ec3" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValGender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/gender_female" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Date of Birth -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Date of Birth" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/date_of_birth" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValDob" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Jan 15, 2003" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
@@ -314,7 +329,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Academic Information"
+                            android:text="@string/academic_information"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -327,32 +342,32 @@
 
                         <!-- Row: Department -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Department" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValDept" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Computer Science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/department" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValDept" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/computer_science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Program -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Program" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/program_95c50c" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValProgram" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Bachelor of Computer Science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Year Level -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Year Level" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValYear" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Year 3" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/year_level_6a4901" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValYear" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/year_3" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Academic Year -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Academic Year" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/academic_year_cecc30" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValAcademicYear" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="2024–2025" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Enrolled Courses -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Enrolled Courses" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValEnrolledCourses" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="6 Courses" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/enrolled_courses" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValEnrolledCourses" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/str_6_courses" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -378,7 +393,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Account Information"
+                            android:text="@string/account_information"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -391,19 +406,19 @@
 
                         <!-- Row: Account Status -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Status" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValAccountStatus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Active" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/account_status" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValAccountStatus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/status_active" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Created At -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Created At" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/created_at" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValCreatedAt" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Sep 01, 2023" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Last Login -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Last Login" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/last_login" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValLastLogin" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="May 29, 2024, 10:30 AM" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
@@ -412,9 +427,541 @@
 
             </LinearLayout>
 
-            <!-- Container Other Tabs -->
+            <!-- Container Study Tab -->
             <LinearLayout
-                android:id="@+id/containerOtherTabs"
+                android:id="@+id/containerStudy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Card A: Academic Information -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/academic_information"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/department" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyDept" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/program_95c50c" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyProgram" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/year_level_6a4901" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyYearLevel" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/academic_year_cecc30" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyAcademicYear" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/assigned_class" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyAssignedClass" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/cumulative_gpa" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyGpa" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/enrolled_courses" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyEnrolledCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layoutStudyCoursesList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@color/admin_border" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/enrolled_courses_list"
+                                android:textColor="@color/admin_text_secondary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStudyCoursesList"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:lineSpacingExtra="4dp"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card B: Address Information -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/address_information"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/place_of_birth" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyPlaceOfBirth" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:lineSpacingExtra="2dp" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/current_address" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyCurrentAddress" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:lineSpacingExtra="2dp" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card C: Family & Emergency Contact -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/family_emergency_contact"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/father_name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyFatherName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/father_phone" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyFatherPhone" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/mother_name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyMotherName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/mother_phone" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyMotherPhone" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/emergency_contact" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyEmergencyName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView android:layout_width="135dp" android:layout_height="wrap_content" android:text="@string/emergency_phone" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvStudyEmergencyPhone" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Container Attendance Tab -->
+            <LinearLayout
+                android:id="@+id/containerAttendance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Section A: Attendance Summary -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/attendance_summary"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/overall_attendance_rate" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttOverallRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="@color/admin_primary_blue" android:textSize="14sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/total_classes_recorded" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttTotalClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/attendance_present" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttPresentRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="#16A34A" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/attendance_late" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttLateRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="#EA580C" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/attendance_excused" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttExcusedRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="#2563EB" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/attendance_absent" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvAttAbsentRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" android:textColor="#DC2626" android:textSize="13sp" android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Section B: Attendance Statistics Grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#ECFDF5"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#A7F3D0"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/attendance_present"
+                                android:textColor="#15803D"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatPresentCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="0"
+                                android:textColor="#166534"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatPresentPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#15803D"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#FFF7ED"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#FED7AA"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/attendance_late"
+                                android:textColor="#C2410C"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatLateCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="0"
+                                android:textColor="#9A3412"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatLatePct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#C2410C"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#EFF6FF"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#BFDBFE"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/attendance_excused"
+                                android:textColor="#1D4ED8"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatExcusedCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="0"
+                                android:textColor="#1E40AF"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatExcusedPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#1D4ED8"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="#FEF2F2"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="#FECACA"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/attendance_absent"
+                                android:textColor="#B91C1C"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatAbsentCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="0"
+                                android:textColor="#991B1B"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvStatAbsentPct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:textColor="#B91C1C"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- Section C: Attendance History -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/attendance_history"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/admin_border" />
+
+                        <TextView
+                            android:id="@+id/tvAttendanceEmptyState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingVertical="20dp"
+                            android:text="@string/attendance_no_records"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="13sp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvAttendanceHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Container Notes Tab -->
+            <LinearLayout
+                android:id="@+id/containerNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -433,28 +980,109 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
                         <TextView
-                            android:id="@+id/tvOtherTabTitle"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Academic Records"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="16sp"
+                            android:layout_weight="1"
+                            android:paddingEnd="8dp"
+                            android:text="@string/admin_advisor_notes"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tvOtherTabContent"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddNote"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="• GPA: 3.25 / 4.0\n• Enrolled Courses: 6 Courses\n• Current Semester: Fall 2024"
-                            android:textColor="@color/admin_text_secondary"
-                            android:textSize="13sp" />
+                            android:layout_height="38dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minWidth="0dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/add_note"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:id="@+id/layoutNotesLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="24dp"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:indeterminate="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/loading_notes"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/layoutNotesEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/no_notes_yet"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddNoteEmpty"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/add_note"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_primary_blue" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvStudentNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
@@ -476,7 +1104,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Deactivate Account"
+            android:text="@string/deactivate_account"
             android:textAllCaps="false"
             android:textColor="@color/admin_inactive_red"
             android:textSize="13sp"
@@ -492,7 +1120,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Edit Student"
+            android:text="@string/edit_student"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="13sp"

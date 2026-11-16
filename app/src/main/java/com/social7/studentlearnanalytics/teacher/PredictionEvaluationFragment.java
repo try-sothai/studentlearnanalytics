@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -73,9 +75,7 @@ public class PredictionEvaluationFragment extends Fragment {
         // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view,
-                    "Prediction Evaluation",
-                    "ML model accuracy, MAE, RMSE & R² metrics monitoring"
+                    view, getString(R.string.prediction_evaluation), "ML model accuracy, MAE, RMSE & R² metrics monitoring"
             );
         }
 
@@ -175,12 +175,12 @@ public class PredictionEvaluationFragment extends Fragment {
         predEntries.add(new Entry(3, 80f));
         predEntries.add(new Entry(4, 86f));
 
-        LineDataSet actualSet = new LineDataSet(actualEntries, "Actual Score");
+        LineDataSet actualSet = new LineDataSet(actualEntries, getString(R.string.actual_score));
         actualSet.setColor(Color.parseColor("#3155F5"));
         actualSet.setLineWidth(2.5f);
         actualSet.setCircleColor(Color.parseColor("#3155F5"));
 
-        LineDataSet predSet = new LineDataSet(predEntries, "Predicted Score");
+        LineDataSet predSet = new LineDataSet(predEntries, getString(R.string.predicted_score));
         predSet.setColor(Color.parseColor("#10B981"));
         predSet.setLineWidth(2f);
         predSet.enableDashedLine(10f, 5f, 0f);
@@ -196,6 +196,7 @@ public class PredictionEvaluationFragment extends Fragment {
         lineChartEval.getAxisRight().setEnabled(false);
         lineChartEval.getDescription().setEnabled(false);
         lineChartEval.animateX(800);
+        ChartFontHelper.applyKhmerFont(lineChartEval.getContext(), lineChartEval);
         lineChartEval.invalidate();
     }
 
@@ -218,12 +219,12 @@ public class PredictionEvaluationFragment extends Fragment {
         predVsActualAdapter = new PredVsActualAdapter(requireContext(), predVsActualList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Prediction vs Actual Residual Detail")
-                    .setMessage("Student ID: " + item.studentId + "\n" +
+                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                             "Student Name: " + item.studentName + "\n" +
                             "Course & Class: " + item.courseClass + "\n\n" +
                             item.comparisonDetail + "\n\n" +
                             "Model Error Residual: " + item.errorStatusBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
@@ -255,7 +256,7 @@ public class PredictionEvaluationFragment extends Fragment {
                             "Trained Performance Metrics:\n" +
                             item.modelMetrics + "\n\n" +
                             "Evaluation Rating: " + item.bestModelBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
@@ -298,14 +299,14 @@ public class PredictionEvaluationFragment extends Fragment {
 
         evaluationHistoryAdapter = new EvaluationHistoryAdapter(requireContext(), evaluationHistoryList, item -> {
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Model Evaluation Session Report")
-                    .setMessage("Evaluation Date: " + item.date + "\n" +
+                    .setTitle(R.string.model_evaluation_session_report)
+                    .setMessage(getString(R.string.evaluation_date) + item.date + "\n" +
                             "Model Version: " + item.modelVersion + "\n" +
                             "Dataset: " + item.courseDataset + "\n\n" +
                             "ML Model Evaluation Metrics:\n" +
                             item.metricsDetail + "\n\n" +
                             "Evaluation Status: " + item.statusBadge)
-                    .setPositiveButton("Close", (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

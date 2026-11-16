@@ -25,8 +25,20 @@ public class StudentCourseCardAdapter extends RecyclerView.Adapter<StudentCourse
         public String credits;
         public String category;
         public int progressPct;
+        public String room;
+        public String schedule;
+        public String department;
+        public String semester;
+        public String status;
+        public String grade;
 
         public StudentCourseItem(String id, String code, String name, String instructor, String credits, String category, int progressPct) {
+            this(id, code, name, instructor, credits, category, progressPct, "", "", "", "", "Active", "");
+        }
+
+        public StudentCourseItem(String id, String code, String name, String instructor, String credits,
+                                 String category, int progressPct, String room, String schedule,
+                                 String department, String semester, String status, String grade) {
             this.id = id;
             this.code = code;
             this.name = name;
@@ -34,6 +46,12 @@ public class StudentCourseCardAdapter extends RecyclerView.Adapter<StudentCourse
             this.credits = credits;
             this.category = category;
             this.progressPct = progressPct;
+            this.room = room != null ? room : "";
+            this.schedule = schedule != null ? schedule : "";
+            this.department = department != null ? department : "";
+            this.semester = semester != null ? semester : "";
+            this.status = status != null ? status : "Active";
+            this.grade = grade != null ? grade : "";
         }
     }
 
@@ -45,6 +63,7 @@ public class StudentCourseCardAdapter extends RecyclerView.Adapter<StudentCourse
     private final List<StudentCourseItem> originalList;
     private final List<StudentCourseItem> filteredList;
     private final OnCourseClickListener listener;
+    private String currentQuery = "";
 
     public StudentCourseCardAdapter(Context context, List<StudentCourseItem> list, OnCourseClickListener listener) {
         this.context = context;
@@ -71,14 +90,18 @@ public class StudentCourseCardAdapter extends RecyclerView.Adapter<StudentCourse
         return filteredList.size();
     }
 
+    public void refresh() {
+        filter(currentQuery);
+    }
+
     public void filter(String query) {
+        currentQuery = query != null ? query.trim().toLowerCase() : "";
         filteredList.clear();
-        String text = query != null ? query.trim().toLowerCase() : "";
         for (StudentCourseItem item : originalList) {
-            if (text.isEmpty() ||
-                (item.code != null && item.code.toLowerCase().contains(text)) ||
-                (item.name != null && item.name.toLowerCase().contains(text)) ||
-                (item.instructor != null && item.instructor.toLowerCase().contains(text))) {
+            if (currentQuery.isEmpty() ||
+                (item.code != null && item.code.toLowerCase().contains(currentQuery)) ||
+                (item.name != null && item.name.toLowerCase().contains(currentQuery)) ||
+                (item.instructor != null && item.instructor.toLowerCase().contains(currentQuery))) {
                 filteredList.add(item);
             }
         }
@@ -105,11 +128,17 @@ public class StudentCourseCardAdapter extends RecyclerView.Adapter<StudentCourse
             if (tvCategoryBadge != null) tvCategoryBadge.setText(item.category);
             if (tvCredits != null) tvCredits.setText(item.credits);
             if (tvCourseName != null) tvCourseName.setText(item.name);
-            if (tvInstructorName != null) tvInstructorName.setText("Instructor: " + item.instructor);
-            if (tvProgressPct != null) tvProgressPct.setText(item.progressPct + "%");
+            if (tvInstructorName != null) tvInstructorName.setText(tvInstructorName.getContext().getString(R.string.instructor) + item.instructor);
+            if (tvProgressPct != null) {
+                if (item.grade != null && !item.grade.isEmpty()) {
+                    tvProgressPct.setText(item.progressPct + "% (" + item.grade + ")");
+                } else {
+                    tvProgressPct.setText(item.progressPct + "%");
+                }
+            }
 
             if (progressBarCourse != null) {
-                progressBarCourse.setProgress(item.progressPct);
+                progressBarCourse.setProgress(Math.max(0, Math.min(100, item.progressPct)));
             }
 
             itemView.setOnClickListener(v -> {

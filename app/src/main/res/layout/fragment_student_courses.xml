@@ -45,7 +45,7 @@
                     android:id="@+id/edtSearchCourses"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:hint="Search course code, name or instructor..."
+                    android:hint="@string/search_course_code_name_or_instructor"
                     android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +74,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:contentDescription="Calendar"
+                        android:contentDescription="@string/calendar"
                         android:src="@drawable/ic_calendar"
                         app:tint="@color/admin_primary_blue" />
 
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        android:text="Semester 1, 2024-2025 (Year 2)"
+                        android:text="@string/all_semesters"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -92,7 +92,7 @@
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:contentDescription="Dropdown"
+                        android:contentDescription="@string/dropdown"
                         android:src="@drawable/ic_chevron_down"
                         app:tint="@color/admin_text_primary" />
                 </LinearLayout>
@@ -118,7 +118,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enrolled Courses Academic Overview"
+                        android:text="@string/enrolled_courses_academic_overview"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -136,23 +136,23 @@
                         android:rowCount="2">
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enrolled Courses" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvStatCourseCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5 Courses" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enrolled_courses" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvStatCourseCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_0_courses" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current GPA" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvStatGpa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3.68" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/current_gpa" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvStatGpa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="N/A" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Average Score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvStatAverage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88.4%" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/average_score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvStatAverage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="N/A" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Credits" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvStatCompleted" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18 / 21 Credits" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/completed_credits" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvStatCompleted" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_0_0_credits" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
                     </GridLayout>
                 </LinearLayout>
@@ -173,6 +173,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false" />
+
+            <TextView
+                android:id="@+id/tvEmptyCourses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="@string/no_enrolled_courses_found_for_this_semeste"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

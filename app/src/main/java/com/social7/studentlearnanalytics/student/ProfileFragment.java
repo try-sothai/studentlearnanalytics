@@ -31,6 +31,16 @@ public class ProfileFragment extends Fragment {
     private SessionManager sessionManager;
     private TextView tvStudentName;
     private TextView tvStudentId;
+    private TextView tvDepartment;
+    private TextView tvAcademicYear;
+
+    private String profileEmail = "";
+    private String profilePhone = "";
+    private String profileDepartment = "";
+    private String profileMajor = "";
+    private String profileClassName = "";
+    private String profileYearLevel = "";
+    private String profileEnrollmentStatus = "Active Student";
 
     @Nullable
     @Override
@@ -54,20 +64,20 @@ public class ProfileFragment extends Fragment {
 
         tvStudentName = view.findViewById(R.id.tvStudentName);
         tvStudentId = view.findViewById(R.id.tvStudentId);
+        tvDepartment = view.findViewById(R.id.tvDepartment);
+        tvAcademicYear = view.findViewById(R.id.tvAcademicYear);
 
         if (tvStudentName != null && sessionManager.getStudentName() != null) {
             tvStudentName.setText(sessionManager.getStudentName());
         }
 
         if (tvStudentId != null && sessionManager.getUserId() != null) {
-            tvStudentId.setText("ID: " + sessionManager.getUserId());
+            tvStudentId.setText(tvStudentId.getContext().getString(R.string.id) + sessionManager.getUserId());
         }
 
         if (getActivity() instanceof StudentMainActivity) {
             ((StudentMainActivity) getActivity()).setupStudentHeader(
-                    view,
-                    "My Profile",
-                    "Manage your personal and academic information"
+                    view, getString(R.string.my_profile), getString(R.string.manage_your_personal_and_academic_informat)
             );
         }
         View cardPersonalInfo = view.findViewById(R.id.cardPersonalInfo);
@@ -80,15 +90,15 @@ public class ProfileFragment extends Fragment {
         if (cardPersonalInfo != null) {
             cardPersonalInfo.setOnClickListener(v -> {
                 String name = (tvStudentName != null && tvStudentName.getText() != null) ? tvStudentName.getText().toString() : sessionManager.getStudentName();
-                String id = sessionManager.getUserId();
-                String email = !profileEmail.isEmpty() ? profileEmail : "Authenticated Student";
+                String id = (tvStudentId != null && tvStudentId.getText() != null) ? tvStudentId.getText().toString().replace("ID: ", "") : sessionManager.getUserId();
+                String email = !profileEmail.isEmpty() ? profileEmail : "Not provided";
                 String phone = !profilePhone.isEmpty() ? profilePhone : "Not provided";
-                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Computer Science";
-                String year = !profileYearLevel.isEmpty() ? profileYearLevel + " Year" : "3rd Year";
+                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Not assigned";
+                String year = !profileYearLevel.isEmpty() ? profileYearLevel : "Year 1";
 
                 showInfoDialog("Personal Information",
                         "• Full Name: " + name + "\n" +
-                        "• Student ID: " + id + "\n" +
+                        "• Student ID / Username: " + id + "\n" +
                         "• Email: " + email + "\n" +
                         "• Phone: " + phone + "\n" +
                         "• Department: " + dept + "\n" +
@@ -98,10 +108,16 @@ public class ProfileFragment extends Fragment {
 
         if (cardAcademicInfo != null) {
             cardAcademicInfo.setOnClickListener(v -> {
-                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Computer Science";
+                String dept = !profileDepartment.isEmpty() ? profileDepartment : "Not assigned";
+                String major = !profileMajor.isEmpty() ? profileMajor : dept;
+                String cls = !profileClassName.isEmpty() ? profileClassName : "Standard Section";
+                String year = !profileYearLevel.isEmpty() ? profileYearLevel : "Year 1";
                 showInfoDialog("Academic Information",
                         "• Department: " + dept + "\n" +
-                        "• Enrollment Status: Active Student");
+                        "• Program / Major: " + major + "\n" +
+                        "• Class / Section: " + cls + "\n" +
+                        "• Year Level: " + year + "\n" +
+                        "• Enrollment Status: " + profileEnrollmentStatus);
             });
         }
 
@@ -113,11 +129,10 @@ public class ProfileFragment extends Fragment {
         }
 
         if (cardAppSettings != null) {
-            cardAppSettings.setOnClickListener(v -> showInfoDialog("App Settings",
-                    "• Language: English (Default)\n" +
-                    "• Theme: SLAS Purple Modern\n" +
-                    "• Push Notifications: Enabled\n" +
-                    "• Version: 1.0.0 (SLAS Build 2026)"));
+            cardAppSettings.setOnClickListener(v -> {
+                Intent intent = new Intent(requireContext(), com.social7.studentlearnanalytics.admin.AdminAppearanceActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (cardHelpSupport != null) {
@@ -135,11 +150,6 @@ public class ProfileFragment extends Fragment {
         fetchProfile();
     }
 
-    private String profileEmail = "";
-    private String profilePhone = "";
-    private String profileDepartment = "";
-    private String profileYearLevel = "";
-
     private void fetchProfile() {
         if (getContext() == null) return;
 
@@ -156,15 +166,31 @@ public class ProfileFragment extends Fragment {
                         String name = "";
                         String code = "";
 
-                        if (data.has("name") && !data.get("name").isJsonNull()) {
+                        if (root.has("user") && root.get("user").isJsonObject()) {
+                            JsonObject u = root.getAsJsonObject("user");
+                            if (u.has("name") && !u.get("name").isJsonNull()) name = u.get("name").getAsString();
+                            if (u.has("email") && !u.get("email").isJsonNull()) profileEmail = u.get("email").getAsString();
+                            if (u.has("username") && !u.get("username").isJsonNull()) code = u.get("username").getAsString();
+                        }
+
+                        if (name.isEmpty() && data.has("name") && !data.get("name").isJsonNull()) {
                             name = data.get("name").getAsString();
                         }
-                        if (data.has("email") && !data.get("email").isJsonNull()) {
+                        if (profileEmail.isEmpty() && data.has("email") && !data.get("email").isJsonNull()) {
                             profileEmail = data.get("email").getAsString();
                         }
 
+                        JsonObject studentObj = null;
                         if (data.has("student") && data.get("student").isJsonObject()) {
-                            JsonObject studentObj = data.getAsJsonObject("student");
+                            studentObj = data.getAsJsonObject("student");
+                        } else if (root.has("profile") && root.get("profile").isJsonObject()) {
+                            JsonObject profWrapper = root.getAsJsonObject("profile");
+                            if (profWrapper.has("profile") && profWrapper.get("profile").isJsonObject()) {
+                                studentObj = profWrapper.getAsJsonObject("profile");
+                            }
+                        }
+
+                        if (studentObj != null) {
                             if (studentObj.has("student_code") && !studentObj.get("student_code").isJsonNull()) {
                                 code = studentObj.get("student_code").getAsString();
                             } else if (studentObj.has("student_id") && !studentObj.get("student_id").isJsonNull()) {
@@ -173,8 +199,15 @@ public class ProfileFragment extends Fragment {
                             if (studentObj.has("phone") && !studentObj.get("phone").isJsonNull()) {
                                 profilePhone = studentObj.get("phone").getAsString();
                             }
+                            if (studentObj.has("major") && !studentObj.get("major").isJsonNull()) {
+                                profileMajor = studentObj.get("major").getAsString();
+                            }
+                            if (studentObj.has("status") && !studentObj.get("status").isJsonNull()) {
+                                profileEnrollmentStatus = studentObj.get("status").getAsString();
+                            }
                             if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
-                                profileYearLevel = studentObj.get("year_level").getAsString();
+                                String rawYr = studentObj.get("year_level").getAsString();
+                                profileYearLevel = rawYr.toLowerCase().contains("year") ? rawYr : ("Year " + rawYr);
                             }
                             if (studentObj.has("department") && studentObj.get("department").isJsonObject()) {
                                 JsonObject dept = studentObj.getAsJsonObject("department");
@@ -182,6 +215,22 @@ public class ProfileFragment extends Fragment {
                                     profileDepartment = dept.get("name").getAsString();
                                 }
                             }
+                            if (studentObj.has("program") && studentObj.get("program").isJsonObject()) {
+                                JsonObject prog = studentObj.getAsJsonObject("program");
+                                if (prog.has("name") && !prog.get("name").isJsonNull()) {
+                                    profileMajor = prog.get("name").getAsString();
+                                }
+                            }
+                            if (studentObj.has("class_room") && studentObj.get("class_room").isJsonObject()) {
+                                JsonObject cls = studentObj.getAsJsonObject("class_room");
+                                if (cls.has("name") && !cls.get("name").isJsonNull()) {
+                                    profileClassName = cls.get("name").getAsString();
+                                }
+                            }
+                        }
+
+                        if (profileDepartment.isEmpty() && !profileMajor.isEmpty()) {
+                            profileDepartment = profileMajor;
                         }
 
                         if (name.isEmpty() && sessionManager != null) {
@@ -195,7 +244,13 @@ public class ProfileFragment extends Fragment {
                             tvStudentName.setText(name);
                         }
                         if (tvStudentId != null && !code.isEmpty()) {
-                            tvStudentId.setText("ID: " + code);
+                            tvStudentId.setText(tvStudentId.getContext().getString(R.string.id) + code);
+                        }
+                        if (tvDepartment != null && !profileDepartment.isEmpty()) {
+                            tvDepartment.setText(profileDepartment);
+                        }
+                        if (tvAcademicYear != null && !profileYearLevel.isEmpty()) {
+                            tvAcademicYear.setText(profileYearLevel);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing profile data", e);
@@ -216,21 +271,43 @@ public class ProfileFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("OK", null)
+                .setPositiveButton(R.string.ok, null)
                 .show();
     }
 
     private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Logout Confirmation")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Logout", (dialog, which) -> {
-                    sessionManager.clearSession();
-                    Intent intent = new Intent(requireContext(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                .setMessage(R.string.are_you_sure_you_want_to_logout)
+                .setPositiveButton(R.string.logout, (dialog, which) -> {
+                    if (getContext() != null) {
+                        ApiClient.getApiService(requireContext()).logout().enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                performLocalLogout();
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                performLocalLogout();
+                            }
+                        });
+                    } else {
+                        performLocalLogout();
+                    }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    private void performLocalLogout() {
+        if (sessionManager != null) {
+            sessionManager.clearSession();
+        }
+        if (isAdded() && getContext() != null) {
+            Intent intent = new Intent(requireContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 }

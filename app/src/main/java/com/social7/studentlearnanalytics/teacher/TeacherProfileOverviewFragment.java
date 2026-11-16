@@ -50,9 +50,7 @@ public class TeacherProfileOverviewFragment extends Fragment {
     private void initViews(View view) {
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view.findViewById(R.id.headerTeacherProfileOverview),
-                    "Teacher Profile",
-                    ""
+                    view.findViewById(R.id.headerTeacherProfileOverview), getString(R.string.teacher_profile), ""
             );
         }
 
@@ -83,7 +81,7 @@ public class TeacherProfileOverviewFragment extends Fragment {
         if (tvOverviewFullName != null) tvOverviewFullName.setText(name);
         if (tvOverviewEmail != null) tvOverviewEmail.setText(email);
         if (tvOverviewPhone != null) tvOverviewPhone.setText("+855 12 345 678");
-        if (tvOverviewGender != null) tvOverviewGender.setText("Male");
+        if (tvOverviewGender != null) tvOverviewGender.setText(R.string.gender_male);
         if (tvOverviewDob != null) tvOverviewDob.setText("Mar 10, 1990");
 
         if (tvOverviewTeacherId != null) tvOverviewTeacherId.setText("ID: TCH-001");
@@ -104,6 +102,14 @@ public class TeacherProfileOverviewFragment extends Fragment {
         if (btnChangePassword != null) {
             btnChangePassword.setOnClickListener(v -> {
                 Intent intent = new Intent(requireActivity(), ChangePasswordActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        View cardTeacherAppearance = view.findViewById(R.id.cardTeacherAppearance);
+        if (cardTeacherAppearance != null) {
+            cardTeacherAppearance.setOnClickListener(v -> {
+                Intent intent = new Intent(requireActivity(), com.social7.studentlearnanalytics.admin.AdminAppearanceActivity.class);
                 startActivity(intent);
             });
         }

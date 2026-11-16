@@ -1,15 +1,23 @@
 package com.social7.studentlearnanalytics.student.attendance;
 
+
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -41,26 +49,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Attendance Detail screen backed by GET /api/student/attendance.
- *
- * Attendance-counting policy (applies to summary cards, donut, legend and monthly chart):
- * - Each attendance_details row is counted once, under its raw status:
- *   present, late, excused, absent. No status is merged into another
- *   (late is NOT folded into present, excused is NOT folded into absent).
- * - Any other/unknown status is counted separately as "Other" and never hidden inside a category.
- * - All per-status percentages use the same denominator: summary.total (all rows).
- * - The single headline rate is the backend's summary.percentage = present / total * 100
- *   (on-time presence rate). It is shown as "X% Present"; it is not an "attended" rate,
- *   because late and excused are in the denominator but not the numerator.
- * - The monthly chart stacks the same four statuses per month (by attendance.attendance_date),
- *   so summing a status across months equals its summary count, except rows without a date.
- */
 public class AttendanceDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "AttendanceDetail";
 
-    // Shared SLAS colors (donut, legend and monthly bars use the same palette)
     private static final int COLOR_PRESENT = Color.parseColor("#10B981");
     private static final int COLOR_LATE = Color.parseColor("#F59E0B");
     private static final int COLOR_EXCUSED = Color.parseColor("#6366F1");
@@ -68,14 +60,27 @@ public class AttendanceDetailActivity extends AppCompatActivity {
     private static final int COLOR_OTHER = Color.parseColor("#94A3B8");
     private static final int COLOR_EMPTY = Color.parseColor("#E2E8F0");
 
-    // Index order of the per-status count arrays
     private static final int PRESENT = 0, LATE = 1, EXCUSED = 2, ABSENT = 3, OTHER = 4;
 
     private ProgressBar loadingProgressBar;
     private TextView emptyStateText;
     private TextView tvTotalClasses, tvPresentCount, tvAbsentCount;
     private TextView tvPresentLegend, tvLateLegend, tvExcusedLegend, tvAbsentLegend, tvOtherLegend;
-    private View rowOtherLegend;
+    private TextView tvSemesterLabel, tvBottomNotifBadge;
+    private View rowOtherLegend, cardSemesterSelector;
+    private LinearLayout layoutAttendanceRecordsContainer;
+
+    private final List<SemesterItem> semesters = new ArrayList<>();
+    private Long selectedSemesterId = null;
+
+    private static class SemesterItem {
+        int id;
+        String name;
+        SemesterItem(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,35 +100,100 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         tvAbsentLegend = findViewById(R.id.tvAbsentLegend);
         tvOtherLegend = findViewById(R.id.tvOtherLegend);
         rowOtherLegend = findViewById(R.id.rowOtherLegend);
-        TextView tvSemesterLabel = findViewById(R.id.tvSemesterLabel);
-        // The endpoint returns all of the student's attendance (no semester filter).
-        if (tvSemesterLabel != null) tvSemesterLabel.setText("All Semesters");
+        tvSemesterLabel = findViewById(R.id.tvSemesterLabel);
+        tvBottomNotifBadge = findViewById(R.id.tvBottomNotifBadge);
+        cardSemesterSelector = findViewById(R.id.cardSemesterSelector);
+        layoutAttendanceRecordsContainer = findViewById(R.id.layoutAttendanceRecordsContainer);
 
-        // Clear the static placeholder values until real data arrives
+        if (tvSemesterLabel != null) tvSemesterLabel.setText(R.string.all_semesters);
+        if (cardSemesterSelector != null) {
+            cardSemesterSelector.setOnClickListener(this::showSemesterMenu);
+        }
+
         bindSummary(0, new int[5]);
-
-        // Setup Charts with empty data initially
         setupDonutChart(new int[5], "Loading...");
         setupMonthlyBarChart(new ArrayList<>(), new ArrayList<>());
 
-        // Fetch Real API Data
+        loadSemestersAndBadge();
         fetchAttendanceData();
 
-        // Bottom Navigation Listeners
-        findViewById(R.id.nav_home).setOnClickListener(v -> openTab(R.id.nav_home));
-        findViewById(R.id.nav_analytics).setOnClickListener(v -> openTab(R.id.nav_analytics));
-        findViewById(R.id.nav_prediction).setOnClickListener(v -> openTab(R.id.nav_prediction));
-        findViewById(R.id.nav_notifications).setOnClickListener(v -> openTab(R.id.nav_notifications));
-        findViewById(R.id.nav_profile).setOnClickListener(v -> openTab(R.id.nav_profile));
+        View navHome = findViewById(R.id.nav_home);
+        View navCourses = findViewById(R.id.nav_courses);
+        View navAnalytics = findViewById(R.id.nav_analytics);
+        View navNotifications = findViewById(R.id.nav_notifications);
+        View navProfile = findViewById(R.id.nav_profile);
+
+        if (navHome != null) navHome.setOnClickListener(v -> openTab(R.id.nav_home));
+        if (navCourses != null) navCourses.setOnClickListener(v -> openTab(R.id.nav_courses));
+        if (navAnalytics != null) navAnalytics.setOnClickListener(v -> openTab(R.id.nav_analytics));
+        if (navNotifications != null) navNotifications.setOnClickListener(v -> openTab(R.id.nav_notifications));
+        if (navProfile != null) navProfile.setOnClickListener(v -> openTab(R.id.nav_profile));
+    }
+
+    private void loadSemestersAndBadge() {
+        ApiClient.getApiService(this).getStudentDashboard(null, null).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject body = response.body();
+                    if (body.has("semesters") && body.get("semesters").isJsonArray()) {
+                        semesters.clear();
+                        JsonArray arr = body.getAsJsonArray("semesters");
+                        for (JsonElement el : arr) {
+                            if (el.isJsonObject()) {
+                                JsonObject so = el.getAsJsonObject();
+                                int id = so.has("id") ? so.get("id").getAsInt() : 0;
+                                String name = so.has("name") && !so.get("name").isJsonNull()
+                                        ? so.get("name").getAsString()
+                                        : (so.has("semester_name") && !so.get("semester_name").isJsonNull()
+                                        ? so.get("semester_name").getAsString() : "Semester " + id);
+                                if (id > 0) semesters.add(new SemesterItem(id, name));
+                            }
+                        }
+                    }
+                    if (tvBottomNotifBadge != null && body.has("unread_notifications_count") && !body.get("unread_notifications_count").isJsonNull()) {
+                        int unread = body.get("unread_notifications_count").getAsInt();
+                        if (unread > 0) {
+                            tvBottomNotifBadge.setText(unread > 99 ? "99+" : String.valueOf(unread));
+                            tvBottomNotifBadge.setVisibility(View.VISIBLE);
+                        } else {
+                            tvBottomNotifBadge.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+        });
+    }
+
+    private void showSemesterMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenu().add(0, 0, 0, "All Semesters");
+        for (int i = 0; i < semesters.size(); i++) {
+            SemesterItem s = semesters.get(i);
+            popup.getMenu().add(0, s.id, i + 1, s.name);
+        }
+        popup.setOnMenuItemClickListener(item -> {
+            if (tvSemesterLabel != null) {
+                tvSemesterLabel.setText(item.getTitle());
+            }
+            selectedSemesterId = item.getItemId() == 0 ? null : (long) item.getItemId();
+            fetchAttendanceData();
+            return true;
+        });
+        popup.show();
     }
 
     private void fetchAttendanceData() {
         if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.VISIBLE);
         if (emptyStateText != null) emptyStateText.setVisibility(View.GONE);
 
-        ApiClient.getApiService(this).getStudentAttendance(null).enqueue(new Callback<JsonObject>() {
+        ApiClient.getApiService(this).getStudentAttendance(selectedSemesterId).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;
                 if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
 
@@ -131,11 +201,15 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                     try {
                         JsonObject body = response.body();
                         JsonObject data = body.has("data") && body.get("data").isJsonObject()
-                                ? body.getAsJsonObject("data") : new JsonObject();
+                                ? body.getAsJsonObject("data") : body;
                         JsonObject summary = data.has("summary") && data.get("summary").isJsonObject()
-                                ? data.getAsJsonObject("summary") : new JsonObject();
+                                ? data.getAsJsonObject("summary") : data;
                         JsonArray details = data.has("details") && data.get("details").isJsonArray()
                                 ? data.getAsJsonArray("details") : new JsonArray();
+                        JsonArray courseBreakdown = data.has("course_breakdown") && data.get("course_breakdown").isJsonArray()
+                                ? data.getAsJsonArray("course_breakdown")
+                                : (body.has("course_breakdown") && body.get("course_breakdown").isJsonArray()
+                                ? body.getAsJsonArray("course_breakdown") : new JsonArray());
 
                         int[] counts = new int[5];
                         if (details.size() > 0) {
@@ -156,6 +230,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                         if (total <= 0) total = counts[PRESENT] + counts[LATE] + counts[EXCUSED] + counts[ABSENT] + counts[OTHER];
 
                         bindSummary(total, counts);
+                        populateRecordsSection(courseBreakdown, details);
 
                         if (total <= 0) {
                             setupDonutChart(new int[5], "0%");
@@ -166,19 +241,21 @@ public class AttendanceDetailActivity extends AppCompatActivity {
 
                         float rate = summary.has("percentage") && !summary.get("percentage").isJsonNull()
                                 ? summary.get("percentage").getAsFloat()
-                                : counts[PRESENT] * 100f / total;
+                                : (summary.has("attendance_rate") && !summary.get("attendance_rate").isJsonNull()
+                                ? summary.get("attendance_rate").getAsFloat()
+                                : counts[PRESENT] * 100f / total);
                         setupDonutChart(counts, formatPercent(rate) + "\nPresent");
 
                         processMonthlyData(details);
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing attendance data", e);
-                        Toast.makeText(AttendanceDetailActivity.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AttendanceDetailActivity.this, getString(R.string.error_parsing_data), Toast.LENGTH_SHORT).show();
                         setupDonutChart(new int[5], "--");
                         showEmptyState("Error loading attendance");
                     }
                 } else if (response.code() == 401) {
-                    Toast.makeText(AttendanceDetailActivity.this, "Session expired, please login again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AttendanceDetailActivity.this, getString(R.string.session_expired_login_again), Toast.LENGTH_LONG).show();
                     setupDonutChart(new int[5], "--");
                     showEmptyState("Session expired. Please log in again.");
                 } else if (response.code() == 404) {
@@ -186,22 +263,171 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                     showEmptyState("Student profile not found.");
                 } else {
                     Log.w(TAG, "Non-success response: HTTP " + response.code());
-                    Toast.makeText(AttendanceDetailActivity.this, "Failed to load attendance", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AttendanceDetailActivity.this, getString(R.string.failed_load_attendance), Toast.LENGTH_SHORT).show();
                     setupDonutChart(new int[5], "--");
                     showEmptyState("Failed to load attendance (HTTP " + response.code() + ")");
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 if (isFinishing() || isDestroyed()) return;
                 if (loadingProgressBar != null) loadingProgressBar.setVisibility(View.GONE);
                 Log.e(TAG, "API failure", t);
-                Toast.makeText(AttendanceDetailActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AttendanceDetailActivity.this, R.string.network_error_42cd08, Toast.LENGTH_SHORT).show();
                 setupDonutChart(new int[5], "--");
                 showEmptyState("Network error. Please check connection.");
             }
         });
+    }
+
+    private void populateRecordsSection(JsonArray courseBreakdown, JsonArray details) {
+        if (layoutAttendanceRecordsContainer == null) return;
+        layoutAttendanceRecordsContainer.removeAllViews();
+
+        if (courseBreakdown != null && courseBreakdown.size() > 0) {
+            TextView tvSubHeader = new TextView(this);
+            tvSubHeader.setText(R.string.by_course);
+            tvSubHeader.setTextColor(Color.parseColor("#64748B"));
+            tvSubHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            tvSubHeader.setTypeface(null, Typeface.BOLD);
+            tvSubHeader.setPadding(0, 0, 0, dp(8));
+            layoutAttendanceRecordsContainer.addView(tvSubHeader);
+
+            for (JsonElement el : courseBreakdown) {
+                if (!el.isJsonObject()) continue;
+                JsonObject co = el.getAsJsonObject();
+                String code = co.has("course_code") && !co.get("course_code").isJsonNull()
+                        ? co.get("course_code").getAsString() : "";
+                String name = co.has("course_name") && !co.get("course_name").isJsonNull()
+                        ? co.get("course_name").getAsString() : "Course";
+                int total = getInt(co, "total");
+                int present = getInt(co, "present");
+                float pct = co.has("percentage") && !co.get("percentage").isJsonNull()
+                        ? co.get("percentage").getAsFloat() : 0f;
+
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.CENTER_VERTICAL);
+                row.setPadding(0, dp(8), 0, dp(8));
+
+                LinearLayout left = new LinearLayout(this);
+                left.setOrientation(LinearLayout.VERTICAL);
+                left.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+                TextView tvTitle = new TextView(this);
+                tvTitle.setText(!code.isEmpty() ? (code + " – " + name) : name);
+                tvTitle.setTextColor(Color.parseColor("#1E1B4B"));
+                tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                tvTitle.setTypeface(null, Typeface.BOLD);
+                left.addView(tvTitle);
+
+                TextView tvSub = new TextView(this);
+                tvSub.setText(present + " / " + total + " classes present");
+                tvSub.setTextColor(Color.parseColor("#64748B"));
+                tvSub.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                left.addView(tvSub);
+
+                TextView tvBadge = new TextView(this);
+                tvBadge.setText(formatPercent(pct));
+                tvBadge.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                tvBadge.setTypeface(null, Typeface.BOLD);
+                tvBadge.setTextColor(pct >= 80f ? COLOR_PRESENT : (pct >= 65f ? COLOR_LATE : COLOR_ABSENT));
+
+                row.addView(left);
+                row.addView(tvBadge);
+                layoutAttendanceRecordsContainer.addView(row);
+            }
+        }
+
+        if (details != null && details.size() > 0) {
+            TextView tvHistoryHeader = new TextView(this);
+            tvHistoryHeader.setText(R.string.recent_sessions);
+            tvHistoryHeader.setTextColor(Color.parseColor("#64748B"));
+            tvHistoryHeader.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            tvHistoryHeader.setTypeface(null, Typeface.BOLD);
+            tvHistoryHeader.setPadding(0, dp(14), 0, dp(8));
+            layoutAttendanceRecordsContainer.addView(tvHistoryHeader);
+
+            int maxRows = Math.min(details.size(), 15);
+            for (int i = 0; i < maxRows; i++) {
+                JsonElement el = details.get(i);
+                if (!el.isJsonObject()) continue;
+                JsonObject det = el.getAsJsonObject();
+                String status = det.has("status") && !det.get("status").isJsonNull()
+                        ? det.get("status").getAsString() : "present";
+
+                String dateStr = "Session";
+                String courseName = "Class Session";
+                String topic = "";
+                if (det.has("attendance") && det.get("attendance").isJsonObject()) {
+                    JsonObject att = det.getAsJsonObject("attendance");
+                    if (att.has("attendance_date") && !att.get("attendance_date").isJsonNull()) {
+                        dateStr = att.get("attendance_date").getAsString();
+                        if (dateStr.length() >= 10) dateStr = dateStr.substring(0, 10);
+                    }
+                    if (att.has("topic") && !att.get("topic").isJsonNull()) {
+                        topic = att.get("topic").getAsString();
+                    }
+                    if (att.has("course") && att.get("course").isJsonObject()) {
+                        JsonObject cObj = att.getAsJsonObject("course");
+                        if (cObj.has("course_name") && !cObj.get("course_name").isJsonNull()) {
+                            courseName = cObj.get("course_name").getAsString();
+                        } else if (cObj.has("name") && !cObj.get("name").isJsonNull()) {
+                            courseName = cObj.get("name").getAsString();
+                        }
+                    }
+                }
+
+                LinearLayout row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setGravity(Gravity.CENTER_VERTICAL);
+                row.setPadding(0, dp(6), 0, dp(6));
+
+                LinearLayout left = new LinearLayout(this);
+                left.setOrientation(LinearLayout.VERTICAL);
+                left.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+                TextView tvCourse = new TextView(this);
+                tvCourse.setText(!topic.isEmpty() ? (courseName + " • " + topic) : courseName);
+                tvCourse.setTextColor(Color.parseColor("#1E1B4B"));
+                tvCourse.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                tvCourse.setTypeface(null, Typeface.BOLD);
+                left.addView(tvCourse);
+
+                TextView tvDate = new TextView(this);
+                tvDate.setText(dateStr);
+                tvDate.setTextColor(Color.parseColor("#64748B"));
+                tvDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                left.addView(tvDate);
+
+                TextView tvStatus = new TextView(this);
+                String capStatus = status.substring(0, 1).toUpperCase(Locale.US) + status.substring(1).toLowerCase(Locale.US);
+                tvStatus.setText(capStatus);
+                tvStatus.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+                tvStatus.setTypeface(null, Typeface.BOLD);
+                int idx = statusIndex(status);
+                int color = idx == PRESENT ? COLOR_PRESENT : (idx == LATE ? COLOR_LATE : (idx == EXCUSED ? COLOR_EXCUSED : COLOR_ABSENT));
+                tvStatus.setTextColor(color);
+
+                row.addView(left);
+                row.addView(tvStatus);
+                layoutAttendanceRecordsContainer.addView(row);
+            }
+        }
+
+        if (layoutAttendanceRecordsContainer.getChildCount() == 0) {
+            TextView tvEmpty = new TextView(this);
+            tvEmpty.setText(getString(R.string.no_session_history_yet));
+            tvEmpty.setTextColor(Color.parseColor("#64748B"));
+            tvEmpty.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+            layoutAttendanceRecordsContainer.addView(tvEmpty);
+        }
+    }
+
+    private int dp(int value) {
+        return Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics()));
     }
 
     private static int getInt(JsonObject obj, String key) {
@@ -258,7 +484,6 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         SimpleDateFormat sdfIn = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         SimpleDateFormat sdfOut = new SimpleDateFormat("MMM", Locale.US);
         SimpleDateFormat keyFormat = new SimpleDateFormat("yyyy-MM", Locale.US);
-        int undated = 0;
 
         for (JsonElement element : details) {
             if (!element.isJsonObject()) continue;
@@ -273,28 +498,19 @@ public class AttendanceDetailActivity extends AppCompatActivity {
                     dateStr = attendance.get("attendance_date").getAsString();
                 }
             }
-            if (dateStr == null) {
-                undated++;
-                continue;
-            }
+            if (dateStr == null) continue;
             try {
+                if (dateStr.length() >= 10) dateStr = dateStr.substring(0, 10);
                 Date date = sdfIn.parse(dateStr);
-                if (date == null) {
-                    undated++;
-                    continue;
-                }
+                if (date == null) continue;
                 String sortKey = keyFormat.format(date);
                 float[] stats = monthlyStats.get(sortKey);
                 if (stats == null) stats = new float[5];
                 stats[statusIndex(status)] += 1f;
                 monthlyStats.put(sortKey, stats);
             } catch (Exception e) {
-                undated++;
                 Log.e(TAG, "Date parse error", e);
             }
-        }
-        if (undated > 0) {
-            Log.w(TAG, undated + " attendance record(s) without a usable date excluded from monthly chart");
         }
 
         List<BarEntry> barEntries = new ArrayList<>();
@@ -351,6 +567,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         donutChart.getDescription().setEnabled(false);
         donutChart.getLegend().setEnabled(false);
         donutChart.animateY(800);
+        ChartFontHelper.applyKhmerFont(donutChart.getContext(), donutChart);
         donutChart.invalidate();
     }
 
@@ -403,6 +620,7 @@ public class AttendanceDetailActivity extends AppCompatActivity {
         barChart.getLegend().setEnabled(false);
         barChart.setTouchEnabled(false);
         barChart.animateY(1000);
+        ChartFontHelper.applyKhmerFont(barChart.getContext(), barChart);
         barChart.invalidate();
     }
 

@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Export Students"
+        android:text="@string/export_students"
         android:textColor="@color/admin_text_primary"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:text="Department"
+        android:text="@string/department"
         android:textColor="@color/admin_text_secondary"
         android:textSize="12sp"
         android:textStyle="bold" />
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Program"
+        android:text="@string/program_95c50c"
         android:textColor="@color/admin_text_secondary"
         android:textSize="12sp"
         android:textStyle="bold" />
@@ -100,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Year Level"
+        android:text="@string/year_level_6a4901"
         android:textColor="@color/admin_text_secondary"
         android:textSize="12sp"
         android:textStyle="bold" />
@@ -115,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Academic Year"
+        android:text="@string/academic_year_cecc30"
         android:textColor="@color/admin_text_secondary"
         android:textSize="12sp"
         android:textStyle="bold" />
@@ -132,7 +132,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/admin_active_green"
-        android:text="Export Students"
+        android:text="@string/export_students"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="13sp"

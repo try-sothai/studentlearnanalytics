@@ -239,7 +239,7 @@ public class EditAdminActivity extends AppCompatActivity {
                         currentAdmin.setManagedModules(modules);
                         currentAdmin.setStatus(isCheckedActive ? "Active" : "Inactive");
 
-                        Toast.makeText(EditAdminActivity.this, "Admin account updated successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditAdminActivity.this, R.string.admin_account_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         Toast.makeText(EditAdminActivity.this, "Failed to update admin: HTTP " + response.code(), Toast.LENGTH_LONG).show();

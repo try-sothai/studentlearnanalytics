@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="3 Credits"
+                android:text="@string/str_3_credits"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -106,7 +106,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Course Progress"
+                        android:text="@string/course_progress"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="11sp" />
 
@@ -135,7 +135,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="12dp"
-                android:contentDescription="Chevron"
+                android:contentDescription="@string/chevron"
                 android:src="@drawable/ic_chevron_right"
                 app:tint="@color/admin_text_secondary" />
         </LinearLayout>

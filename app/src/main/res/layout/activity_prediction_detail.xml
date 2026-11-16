@@ -31,7 +31,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_social_button"
-                android:contentDescription="Back"
+                android:contentDescription="@string/back"
                 android:src="@drawable/ic_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -50,7 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Exam Score Prediction"
+                    android:text="@string/exam_score_prediction"
                     android:textColor="@color/prediction_text_main"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -83,9 +83,10 @@
                     android:paddingHorizontal="12dp">
 
                     <TextView
+                        android:id="@+id/tvPredDetailSemester"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Semester 1, 2024 ▾"
+                        android:text="@string/current_semester"
                         android:textColor="@color/prediction_text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -125,7 +126,7 @@
                         android:id="@+id/tvSummaryTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Predicted Exam Score"
+                        android:text="@string/predicted_exam_score"
                         android:textColor="@color/prediction_text_secondary"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -152,7 +153,7 @@
                         android:backgroundTint="@color/prediction_success_bg"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="4dp"
-                        android:text="Confidence: 87%"
+                        android:text="@string/model_v1_0_0"
                         android:textColor="@color/prediction_success"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -197,7 +198,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_analytics"
                         app:tint="@color/prediction_purple"
-                        android:contentDescription="Info"/>
+                        android:contentDescription="@string/info"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -214,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Score Breakdown"
+                android:text="@string/score_breakdown"
                 android:textColor="@color/prediction_text_main"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -250,14 +251,14 @@
                             android:background="@drawable/bg_stat_card_green"
                             android:backgroundTint="@color/prediction_success_bg"
                             android:padding="6dp"
-                            android:contentDescription="Attendance"/>
+                            android:contentDescription="@string/attendance"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Attendance (20%)"
+                            android:text="@string/attendance_20"
                             android:textColor="@color/prediction_text_main"
                             android:textSize="13sp"/>
 
@@ -266,7 +267,7 @@
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="90dp"
                             android:layout_height="6dp"
-                            android:progress="88"
+                            android:progress="0"
                             android:progressTint="@color/prediction_success"
                             android:progressBackgroundTint="@color/prediction_border"
                             android:layout_marginEnd="12dp"/>
@@ -296,14 +297,14 @@
                             android:background="@drawable/bg_stat_card_purple"
                             android:backgroundTint="@color/prediction_purple_light"
                             android:padding="6dp"
-                            android:contentDescription="Assignment"/>
+                            android:contentDescription="@string/assignment"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Assignment (20%)"
+                            android:text="@string/assignment_20"
                             android:textColor="@color/prediction_text_main"
                             android:textSize="13sp"/>
 
@@ -312,7 +313,7 @@
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="90dp"
                             android:layout_height="6dp"
-                            android:progress="80"
+                            android:progress="0"
                             android:progressTint="@color/prediction_purple"
                             android:progressBackgroundTint="@color/prediction_border"
                             android:layout_marginEnd="12dp"/>
@@ -342,14 +343,14 @@
                             android:background="@drawable/bg_stat_card_orange"
                             android:backgroundTint="@color/prediction_warning_bg"
                             android:padding="6dp"
-                            android:contentDescription="Quiz"/>
+                            android:contentDescription="@string/quiz"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Quiz (30%)"
+                            android:text="@string/quiz_30"
                             android:textColor="@color/prediction_text_main"
                             android:textSize="13sp"/>
 
@@ -358,7 +359,7 @@
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="90dp"
                             android:layout_height="6dp"
-                            android:progress="78"
+                            android:progress="0"
                             android:progressTint="@color/prediction_warning"
                             android:progressBackgroundTint="@color/prediction_border"
                             android:layout_marginEnd="12dp"/>
@@ -387,14 +388,14 @@
                             app:tint="@color/prediction_danger"
                             android:background="@color/prediction_danger_bg"
                             android:padding="6dp"
-                            android:contentDescription="Exam"/>
+                            android:contentDescription="@string/exam"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Previous Exam (30%)"
+                            android:text="@string/previous_exam_30"
                             android:textColor="@color/prediction_text_main"
                             android:textSize="13sp"/>
 
@@ -403,7 +404,7 @@
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="90dp"
                             android:layout_height="6dp"
-                            android:progress="76"
+                            android:progress="0"
                             android:progressTint="@color/prediction_danger"
                             android:progressBackgroundTint="@color/prediction_border"
                             android:layout_marginEnd="12dp"/>
@@ -433,14 +434,14 @@
                             android:background="@drawable/bg_stat_card_blue"
                             android:backgroundTint="@color/prediction_blue_light"
                             android:padding="6dp"
-                            android:contentDescription="GPA"/>
+                            android:contentDescription="@string/gpa"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Current GPA"
+                            android:text="@string/current_gpa"
                             android:textColor="@color/prediction_text_main"
                             android:textSize="13sp"/>
 
@@ -450,7 +451,7 @@
                             android:layout_width="90dp"
                             android:layout_height="6dp"
                             android:max="400"
-                            android:progress="325"
+                            android:progress="0"
                             android:progressTint="@color/prediction_blue"
                             android:progressBackgroundTint="@color/prediction_border"
                             android:layout_marginEnd="12dp"/>
@@ -480,7 +481,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Risk Analysis"
+                    android:text="@string/risk_analysis"
                     android:textColor="@color/prediction_text_main"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -522,10 +523,11 @@
                             android:backgroundTint="@color/prediction_warning_bg">
 
                             <ProgressBar
+                                android:id="@+id/pbRiskDetailBar"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:progress="65"
+                                android:progress="0"
                                 android:progressTint="@color/prediction_warning"
                                 android:progressBackgroundTint="@color/prediction_border"/>
 
@@ -575,7 +577,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Risk Factors"
+                        android:text="@string/risk_factors"
                         android:textStyle="bold"
                         android:textColor="@color/prediction_text_main"
                         android:textSize="13sp"/>
@@ -597,21 +599,23 @@
                                 android:layout_height="16dp"
                                 android:src="@drawable/bg_notification_risk"
                                 app:tint="@color/prediction_danger"
-                                android:contentDescription="Risk Factor"/>
+                                android:contentDescription="@string/risk_factor"/>
 
                             <TextView
+                                android:id="@+id/tvRiskFactorItemText"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-                                android:text="Quiz performance is below 80%"
+                                android:text="Evaluating academic factors..."
                                 android:textColor="@color/prediction_text_main"
                                 android:textSize="12sp"/>
 
                             <TextView
+                                android:id="@+id/tvRiskFactorImpactBadge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="High Impact"
+                                android:text="@string/status"
                                 android:textColor="@color/prediction_danger"
                                 android:background="@drawable/bg_score_label"
                                 android:backgroundTint="@color/prediction_danger_bg"
@@ -644,7 +648,7 @@
                     android:id="@+id/btnViewAllRecommendations"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View All →"
+                    android:text="@string/view_all_9cb4e9"
                     android:textColor="@color/prediction_purple"
                     android:textSize="12sp"
                     android:textStyle="bold"

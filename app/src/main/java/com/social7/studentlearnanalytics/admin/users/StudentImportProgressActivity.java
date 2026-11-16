@@ -127,7 +127,7 @@ public class StudentImportProgressActivity extends AppCompatActivity {
             isFinished = true;
             pollHandler.removeCallbacks(pollRunnable);
 
-            btnDoneOrCancel.setText("Done");
+            btnDoneOrCancel.setText(R.string.done);
             btnDoneOrCancel.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                     getResources().getColor(R.color.admin_primary_blue)));
             btnDoneOrCancel.setTextColor(android.graphics.Color.WHITE);
@@ -153,7 +153,7 @@ public class StudentImportProgressActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                        Toast.makeText(StudentImportProgressActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentImportProgressActivity.this, R.string.network_error_42cd08, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

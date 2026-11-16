@@ -214,15 +214,15 @@ public class NavigationMenuActivity extends AppCompatActivity {
     private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout Confirmation")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Logout", (dialog, which) -> {
+                .setMessage(R.string.are_you_sure_you_want_to_logout)
+                .setPositiveButton(R.string.logout, (dialog, which) -> {
                     sessionManager.clearSession();
                     Intent intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 

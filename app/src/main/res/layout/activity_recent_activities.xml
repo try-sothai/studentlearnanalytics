@@ -13,7 +13,7 @@
         android:paddingStart="20dp"
         android:paddingTop="12dp"
         android:paddingEnd="20dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -22,7 +22,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_social_button"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back"
             app:tint="@color/slas_text_primary" />
 
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Recent Activities"
+            android:text="@string/recent_activities"
             android:textColor="@color/slas_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -52,56 +52,83 @@
             android:paddingVertical="8dp">
 
             <TextView
+                android:id="@+id/chipActAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_filter_active"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
-                android:text="All"
+                android:text="@string/all"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/chipActAssignments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/bg_filter_inactive"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="Assignments"
+                android:text="@string/assignments"
                 android:textColor="@color/slas_text_secondary" />
 
             <TextView
+                android:id="@+id/chipActQuizzes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/bg_filter_inactive"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="Quizzes"
+                android:text="@string/quizzes"
                 android:textColor="@color/slas_text_secondary" />
 
             <TextView
+                android:id="@+id/chipActGrades"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/bg_filter_inactive"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="Grades"
+                android:text="@string/grades"
                 android:textColor="@color/slas_text_secondary" />
 
             <TextView
+                android:id="@+id/chipActAttendance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/bg_filter_inactive"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="System"
+                android:text="@string/attendance"
+                android:textColor="@color/slas_text_secondary" />
+
+            <TextView
+                android:id="@+id/chipActCourses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_filter_inactive"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/nav_courses"
                 android:textColor="@color/slas_text_secondary" />
         </LinearLayout>
     </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tvEmptyActivities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="32dp"
+        android:text="@string/no_academic_activities_found_for_this_cate"
+        android:textColor="@color/slas_text_secondary"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecentActivities"

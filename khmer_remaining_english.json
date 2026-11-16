@@ -1,0 +1,3562 @@
+{
+    "stats": {
+        "java_files": 209,
+        "xml_files": 193,
+        "xml_unique": 588,
+        "java_unique": 248,
+        "total_unique": 817
+    },
+    "xml": {
+        "Lab 402 - Building B": [
+            "layout\/activity_add_assessment.xml (android:text)"
+        ],
+        "Q1: What is the time complexity of searching in a BST?": [
+            "layout\/activity_add_assessment.xml (android:text)"
+        ],
+        "Options: A: O(1) • B: O(log n) [Correct] • C: O(n²) • D: O(n!)": [
+            "layout\/activity_add_assessment.xml (android:text)"
+        ],
+        "CS501": [
+            "layout\/activity_add_course.xml (android:text)"
+        ],
+        "e.g. Building A, Room 203": [
+            "layout\/activity_add_teacher.xml (android:hint)",
+            "layout\/activity_edit_teacher.xml (android:hint)"
+        ],
+        "e.g. សុខ ចាន់": [
+            "layout\/activity_add_user.xml (android:hint)"
+        ],
+        "e.g. Sok Chan": [
+            "layout\/activity_add_user.xml (android:hint)"
+        ],
+        "YYYY-MM-DD": [
+            "layout\/activity_add_user.xml (android:hint)"
+        ],
+        "SLAS Admin Console • v2.4.0 (Build 2026.2)": [
+            "layout\/activity_admin_about_system.xml (android:text)"
+        ],
+        "Institution: National University of Management": [
+            "layout\/activity_admin_about_system.xml (android:text)"
+        ],
+        "© 2026 Student Learning Analytics System. All rights reserved.": [
+            "layout\/activity_admin_about_system.xml (android:text)"
+        ],
+        "142.8 MB": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "Mar 10, 2026": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "PostgreSQL 15": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "slas_backup_20260310.sql": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "Mar 10, 2026 02:00 AM • 142.8 MB • Auto": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "slas_backup_20260303.sql": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "Mar 03, 2026 02:00 AM • 139.4 MB • Auto": [
+            "layout\/activity_admin_backup_data_settings.xml (android:text)"
+        ],
+        "A": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_edit_admin.xml (android:text)",
+            "layout\/item_admin_faculty_evaluation.xml (android:text)",
+            "layout\/item_admin_row.xml (android:text)",
+            "layout\/item_admin_take_attendance_row.xml (android:text)"
+        ],
+        "Mr. Chan": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_admin_teacher_detail.xml (android:text)",
+            "layout\/activity_edit_admin.xml (android:text)",
+            "layout\/activity_edit_teacher.xml (android:text)",
+            "layout\/activity_personal_information.xml (android:text)",
+            "layout\/activity_profile_settings.xml (android:text)",
+            "layout\/activity_student_detail.xml (android:text)",
+            "layout\/fragment_system_settings.xml (android:text)",
+            "layout\/fragment_teacher_profile.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)",
+            "layout\/item_admin_row.xml (android:text)",
+            "layout\/item_admin_teacher.xml (android:text)",
+            "layout\/nav_header_admin.xml (android:text)",
+            "layout\/nav_header_teacher.xml (android:text)"
+        ],
+        "ADM001": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_edit_admin.xml (android:text)",
+            "layout\/item_admin_row.xml (android:text)"
+        ],
+        "chan@univ.edu": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_admin_teacher_detail.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Mar 10, 1988": [
+            "layout\/activity_admin_detail.xml (android:text)"
+        ],
+        "Sep 01, 2020": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_admin_teacher_detail.xml (android:text)"
+        ],
+        "May 29, 2024, 09:45 AM": [
+            "layout\/activity_admin_detail.xml (android:text)",
+            "layout\/activity_admin_teacher_detail.xml (android:text)"
+        ],
+        "• User Management: Full Access\\n• Course Management: Full Access\\n• Reports & Analytics: Full Access\\n• System Settings: Full Access": [
+            "layout\/activity_admin_detail.xml (android:text)"
+        ],
+        "S": [
+            "layout\/activity_admin_student_detail.xml (android:text)",
+            "layout\/activity_course_detail.xml (android:text)",
+            "layout\/activity_edit_student.xml (android:text)",
+            "layout\/activity_student_report.xml (android:text)",
+            "layout\/item_admin_take_attendance_row.xml (android:text)",
+            "layout\/item_admin_user.xml (android:text)",
+            "layout\/item_student_row.xml (android:text)",
+            "layout\/layout_student_header.xml (android:text)"
+        ],
+        "Sophea": [
+            "layout\/activity_admin_student_detail.xml (android:text)",
+            "layout\/activity_edit_student.xml (android:text)",
+            "layout\/activity_fragment_profile.xml (android:text)",
+            "layout\/activity_navigation_menu.xml (android:text)",
+            "layout\/activity_student_detail.xml (android:text)",
+            "layout\/activity_student_report.xml (android:text)",
+            "layout\/item_admin_class_enrollment.xml (android:text)",
+            "layout\/item_admin_exam_prediction.xml (android:text)",
+            "layout\/item_admin_gradebook_row.xml (android:text)",
+            "layout\/item_admin_intervention_plan_row.xml (android:text)",
+            "layout\/item_admin_pred_vs_actual_row.xml (android:text)",
+            "layout\/item_admin_recommendation_history_row.xml (android:text)",
+            "layout\/item_admin_student_attendance_row.xml (android:text)",
+            "layout\/item_admin_student_recommendation_row.xml (android:text)",
+            "layout\/item_admin_student_report_list.xml (android:text)",
+            "layout\/item_admin_take_attendance_row.xml (android:text)",
+            "layout\/item_admin_user.xml (android:text)",
+            "layout\/item_student_row.xml (android:text)",
+            "layout\/item_teacher_grading_card.xml (android:text)",
+            "layout\/item_teacher_submission_card.xml (android:text)"
+        ],
+        "STU23001": [
+            "layout\/activity_admin_student_detail.xml (android:text)",
+            "layout\/activity_edit_student.xml (android:text)",
+            "layout\/item_admin_class_enrollment.xml (android:text)",
+            "layout\/item_admin_exam_prediction.xml (android:text)",
+            "layout\/item_admin_gradebook_row.xml (android:text)",
+            "layout\/item_admin_intervention_plan_row.xml (android:text)",
+            "layout\/item_admin_pred_vs_actual_row.xml (android:text)",
+            "layout\/item_admin_recommendation_history_row.xml (android:text)",
+            "layout\/item_admin_student_attendance_row.xml (android:text)",
+            "layout\/item_admin_student_recommendation_row.xml (android:text)",
+            "layout\/item_admin_student_report_list.xml (android:text)",
+            "layout\/item_admin_take_attendance_row.xml (android:text)",
+            "layout\/item_admin_user.xml (android:text)",
+            "layout\/item_teacher_grading_card.xml (android:text)",
+            "layout\/item_teacher_submission_card.xml (android:text)"
+        ],
+        "sophea@univ.edu": [
+            "layout\/activity_admin_student_detail.xml (android:text)",
+            "layout\/item_admin_user.xml (android:text)"
+        ],
+        "Jan 15, 2003": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "Bachelor of Computer Science": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "2024–2025": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "Sep 01, 2023": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "May 29, 2024, 10:30 AM": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "• GPA: 3.25 \/ 4.0\\n• Enrolled Courses: 6 Courses\\n• Current Semester: Fall 2024": [
+            "layout\/activity_admin_student_detail.xml (android:text)"
+        ],
+        "Student Learning Analytics System (SLAS)": [
+            "layout\/activity_admin_system_config_settings.xml (android:text)"
+        ],
+        "C": [
+            "layout\/activity_admin_teacher_detail.xml (android:text)",
+            "layout\/activity_course_detail.xml (android:text)",
+            "layout\/activity_edit_teacher.xml (android:text)",
+            "layout\/activity_profile_settings.xml (android:text)",
+            "layout\/fragment_system_settings.xml (android:text)",
+            "layout\/fragment_teacher_profile.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)",
+            "layout\/item_admin_teacher.xml (android:text)",
+            "layout\/nav_header_teacher.xml (android:text)"
+        ],
+        "TCH001": [
+            "layout\/activity_admin_teacher_detail.xml (android:text)",
+            "layout\/activity_edit_teacher.xml (android:text)",
+            "layout\/item_admin_teacher.xml (android:text)",
+            "layout\/item_admin_teacher_performance.xml (android:text)",
+            "layout\/item_admin_teacher_report.xml (android:text)",
+            "layout\/item_admin_teacher_workload.xml (android:text)"
+        ],
+        "Mar 10, 1990": [
+            "layout\/activity_admin_teacher_detail.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Experienced lecturer in Data Structures and Algorithms.": [
+            "layout\/activity_admin_teacher_detail.xml (android:text)"
+        ],
+        "• CS101 Data Structures (Section A)\\n• CS202 Database Systems (Section B)": [
+            "layout\/activity_admin_teacher_detail.xml (android:text)"
+        ],
+        "CS101 – Data Structures": [
+            "layout\/activity_course_detail.xml (android:text)"
+        ],
+        "Teacher: Mr. Chan": [
+            "layout\/activity_course_detail.xml (android:text)",
+            "layout\/fragment_teacher_students.xml (android:text)",
+            "layout\/item_course.xml (android:text)"
+        ],
+        "08:00 – 09:30": [
+            "layout\/activity_course_detail.xml (android:text)"
+        ],
+        "A101": [
+            "layout\/activity_course_detail.xml (android:text)"
+        ],
+        "D": [
+            "layout\/activity_course_detail.xml (android:text)",
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "R": [
+            "layout\/activity_course_detail.xml (android:text)",
+            "layout\/item_recommendation.xml (android:text)"
+        ],
+        "V": [
+            "layout\/activity_course_detail.xml (android:text)"
+        ],
+        "CS101 — Intro to Computer Science": [
+            "layout\/activity_course_report.xml (android:text)",
+            "layout\/fragment_admin_course_report.xml (android:text)",
+            "layout\/fragment_manage_scores.xml (android:text)",
+            "layout\/fragment_teacher_assessment.xml (android:text)",
+            "layout\/item_admin_teacher_assignment_report.xml (android:text)"
+        ],
+        "MA101 — Calculus I": [
+            "layout\/activity_course_report.xml (android:text)",
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "IT201 — Web Development": [
+            "layout\/activity_course_report.xml (android:text)",
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "BUS101 — Business Management": [
+            "layout\/activity_course_report.xml (android:text)",
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "EN101 — English Communication": [
+            "layout\/activity_course_report.xml (android:text)",
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Assignment 1: Linked Lists & Pointers": [
+            "layout\/activity_enter_score.xml (android:text)",
+            "layout\/item_teacher_assignment_card.xml (android:text)"
+        ],
+        "Course: CS101 - Intro to CS • Max Score: 100 pts": [
+            "layout\/activity_enter_score.xml (android:text)"
+        ],
+        "Student Name (e.g., Sophea)": [
+            "layout\/activity_enter_score.xml (android:hint)"
+        ],
+        "Sophea (STU23001)": [
+            "layout\/activity_enter_score.xml (android:text)"
+        ],
+        "Awarded Score (Max: 100 pts)": [
+            "layout\/activity_enter_score.xml (android:hint)"
+        ],
+        "Excellent implementation! Code structure is clean.": [
+            "layout\/activity_enter_score.xml (android:text)"
+        ],
+        "STU023001": [
+            "layout\/activity_fragment_profile.xml (android:text)",
+            "layout\/activity_navigation_menu.xml (android:text)",
+            "layout\/activity_student_detail.xml (android:text)",
+            "layout\/activity_student_report.xml (android:text)",
+            "layout\/item_student_row.xml (android:text)"
+        ],
+        "▲ +5%": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "▲ +3%": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "▲ +2%": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "▼ -2%": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "▲ +0.15": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "Data Structures - Due May 25, 2024": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)",
+            "layout\/item_recent_activity.xml (android:text)"
+        ],
+        "2h ago": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "Web Development - Score: 85\/100": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "5h ago": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "Database Systems - Grade: A-": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "1d ago": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "Computer Networks - Chapter 4 Lecture Notes": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "2d ago": [
+            "layout\/activity_fragment_student_dashboard.xml (android:text)"
+        ],
+        "Generate Report": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Report Period": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Student Dist.": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Academic Perf.": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Attendance Sum.": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "GPA Stats": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Gender Dist.": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Nationality Dist.": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Export Format": [
+            "layout\/activity_generate_report.xml (android:text)",
+            "layout\/dialog_student_export.xml (android:text)"
+        ],
+        "PDF": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Excel": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "CSV": [
+            "layout\/activity_generate_report.xml (android:text)"
+        ],
+        "Engagement Averages": [
+            "layout\/activity_learning_analytics.xml (android:text)"
+        ],
+        "Detailed Breakdown": [
+            "layout\/activity_learning_progress_detail.xml (android:text)",
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "Coursework": [
+            "layout\/activity_learning_progress_detail.xml (android:text)"
+        ],
+        "Quiz attempts": [
+            "layout\/activity_learning_progress_detail.xml (android:text)"
+        ],
+        "Examinations": [
+            "layout\/activity_learning_progress_detail.xml (android:text)"
+        ],
+        "Generate official academic progress document": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Export PDF Report": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Academic Indicators": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Cumulative GPA: --": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Academic Standing: --": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Enrolled Courses & Results": [
+            "layout\/activity_learning_report.xml (android:text)"
+        ],
+        "Graduation Cap Logo": [
+            "layout\/activity_login.xml (android:contentDescription)"
+        ],
+        "Welcome Back!": [
+            "layout\/activity_login.xml (android:text)"
+        ],
+        "Sign in to your student account": [
+            "layout\/activity_login.xml (android:text)"
+        ],
+        "STD001": [
+            "layout\/activity_login.xml (android:text)"
+        ],
+        "Achieve Tomorrow\"": [
+            "layout\/activity_login.xml (android:text)"
+        ],
+        "Student Illustration": [
+            "layout\/activity_login.xml (android:contentDescription)"
+        ],
+        "Welcome": [
+            "layout\/activity_main.xml (android:text)"
+        ],
+        "Ambient glow": [
+            "layout\/activity_navigation_menu.xml (android:contentDescription)"
+        ],
+        "Graduation Cap": [
+            "layout\/activity_navigation_menu.xml (android:contentDescription)"
+        ],
+        "\"Learn Today, Achieve Tomorrow\"": [
+            "layout\/activity_navigation_menu.xml (android:text)"
+        ],
+        "Oct 28, 2024 10:30 AM": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "New Teacher Registration": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "Ms. Dany has registered as a new teacher and is pending your approval. Please review her information and approve or reject the registration.": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "Ms. Dany": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "dany@teacher.edu": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "Registered At:": [
+            "layout\/activity_notification_detail.xml (android:text)"
+        ],
+        "Push Notifications": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Receive important updates on your device.": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "New User Registration\\nNotify when new users register": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Course Updates\\nNotify about course changes": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Report Generation\\nNotify when reports are ready": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Receive notifications via email.": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "New User Registration\\nEmail when new users register": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Course Updates\\nNotifications about course changes": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Quiet Hours\\nDisable notifications during specific hours": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "10:00 PM": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "End Time": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "07:00 AM": [
+            "layout\/activity_notification_settings.xml (android:text)"
+        ],
+        "Unable to load performance details": [
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "Please check your connection and try again.": [
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "Detailed breakdown of your academic performance": [
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "N\/A": [
+            "layout\/activity_overall_performance.xml (android:text)",
+            "layout\/fragment_student_courses.xml (android:text)"
+        ],
+        "View detailed information for each component": [
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "💡 Performance insights will update as academic records become available.": [
+            "layout\/activity_overall_performance.xml (android:text)"
+        ],
+        "Camera": [
+            "layout\/activity_personal_information.xml (android:contentDescription)",
+            "layout\/activity_profile_settings.xml (android:contentDescription)",
+            "layout\/fragment_teacher_profile.xml (android:contentDescription)"
+        ],
+        "chan@university.edu": [
+            "layout\/activity_personal_information.xml (android:text)"
+        ],
+        "Department (Read-Only)": [
+            "layout\/activity_personal_information.xml (android:text)"
+        ],
+        "Detailed analysis and breakdown": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "Based on your current performance and learning behavior.": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "This score is predicted using machine learning based on your attendance, assignments, quizzes, and past performance.": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "How is this calculated?": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "There is a moderate chance that your performance may decline if no improvement is made.": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "Evaluating academic factors...": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "Recommendations to Reduce Risk": [
+            "layout\/activity_prediction_detail.xml (android:text)",
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "✓ Practice more past quiz questions": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "✓ Attend all upcoming classes": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "✓ Review weak topics regularly": [
+            "layout\/activity_prediction_detail.xml (android:text)"
+        ],
+        "Administrator Information (Read-Only)": [
+            "layout\/activity_profile_settings.xml (android:text)"
+        ],
+        "ADM-001": [
+            "layout\/activity_profile_settings.xml (android:text)"
+        ],
+        "College of Computer Studies": [
+            "layout\/activity_profile_settings.xml (android:text)",
+            "layout\/fragment_teacher_profile.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)",
+            "layout\/item_admin_course_category.xml (android:text)"
+        ],
+        "Account Created Date": [
+            "layout\/activity_profile_settings.xml (android:text)"
+        ],
+        "Jan 15, 2024": [
+            "layout\/activity_profile_settings.xml (android:text)",
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Today at 08:30 AM (This Device)": [
+            "layout\/activity_profile_settings.xml (android:text)",
+            "layout\/fragment_teacher_profile.xml (android:text)"
+        ],
+        "Personalized suggestions for your learning": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Goal Icon": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Let's Achieve Your Goals!": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Better Learning • A Brighter Future": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Follow these recommendations to improve your performance.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Illustration": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Quiz Rec": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "High Priority": [
+            "layout\/activity_recommendation_detail.xml (android:text)",
+            "layout\/activity_risk_analysis.xml (android:text)",
+            "layout\/fragment_admin_incident_workspace.xml (android:text)",
+            "layout\/fragment_recommendations.xml (android:text)",
+            "layout\/fragment_student_recommendations.xml (android:text)",
+            "layout\/item_admin_incident.xml (android:text)",
+            "layout\/item_admin_student_recommendation_row.xml (android:text)",
+            "layout\/item_student_recommendation_card.xml (android:text)"
+        ],
+        "Review upcoming quizzes and practice topic questions regularly.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Attendance Rec": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Maintain Good Attendance": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Keep Going": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Keep attending classes regularly to maintain your good performance.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Weak Topics Rec": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Focus on Weak Topics": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Spend more time reviewing course modules where your performance is lower.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Schedule Rec": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Set Study Schedule": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Recommended": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Create a consistent study routine to improve your learning progress.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Resources Rec": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Use Learning Resources": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Review learning resources and practice materials to strengthen your understanding.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "View Resources →": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Trophy": [
+            "layout\/activity_recommendation_detail.xml (android:contentDescription)"
+        ],
+        "Small Steps Lead to Big Success!": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Be consistent and keep improving.": [
+            "layout\/activity_recommendation_detail.xml (android:text)"
+        ],
+        "Assessment, contributing factors, and mitigation plan": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Overall Risk Score Index": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Risk Factors Breakdown": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "-- attendance recorded": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Previous Exam Factor": [
+            "layout\/activity_risk_analysis.xml (android:contentDescription)"
+        ],
+        "Previous Exam Results": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Review weak lecture topics and practice weekly quiz questions.": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Maintain Class Attendance": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Keep your attendance above 85% to stay in low risk zone.": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Ongoing": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Consult Instructor \/ Mentor": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Attend office hours or join study groups for challenging concepts.": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "Suggested": [
+            "layout\/activity_risk_analysis.xml (android:text)"
+        ],
+        "LearnAnalytics Logo": [
+            "layout\/activity_splash.xml (android:contentDescription)"
+        ],
+        "Track • Analyze • Improve\\nYour Future": [
+            "layout\/activity_splash.xml (android:text)"
+        ],
+        "Education is the key to a brighter future": [
+            "layout\/activity_splash.xml (android:text)"
+        ],
+        "Computer Science • Year 3": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "sophea@university.edu": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "Individual Performance Trend": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "• May 25, 2024: Score entered for Assignment 4 (80\/100)": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "• May 10, 2024: Attended CS101 class (Present)": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "• Apr 15, 2024: Completed Quiz 2 (78\/100)": [
+            "layout\/activity_student_detail.xml (android:text)"
+        ],
+        "Bulk Student Import": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Step 1: Download Template": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Use the standardized university template with sample rows and instruction guides.": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Excel (.xlsx)": [
+            "layout\/activity_student_import.xml (android:text)",
+            "layout\/dialog_student_export.xml (android:text)"
+        ],
+        "CSV (.csv)": [
+            "layout\/activity_student_import.xml (android:text)",
+            "layout\/dialog_student_export.xml (android:text)"
+        ],
+        "Step 2: Upload File": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Supported formats: .xlsx, .csv (Max 5MB \/ 5,000 rows)": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Click to select .xlsx or .csv file": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Upload and Validate File": [
+            "layout\/activity_student_import.xml (android:text)"
+        ],
+        "Search by filename or ID...": [
+            "layout\/activity_student_import_history.xml (android:hint)"
+        ],
+        "Duplicates": [
+            "layout\/activity_student_import_preview.xml (android:text)"
+        ],
+        "Download Error Report (CSV)": [
+            "layout\/activity_student_import_preview.xml (android:text)"
+        ],
+        "students.xlsx": [
+            "layout\/activity_student_import_progress.xml (android:text)"
+        ],
+        "Processed": [
+            "layout\/activity_student_import_progress.xml (android:text)"
+        ],
+        "CS101 - Data Structures • Sem 1, 2024": [
+            "layout\/activity_student_report.xml (android:text)"
+        ],
+        "Write a note...": [
+            "layout\/activity_student_report.xml (android:hint)"
+        ],
+        "Assignment 1: Algorithms & Complexity": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "CS101 • Data Structures": [
+            "layout\/activity_submit_assignment.xml (android:text)",
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Max Marks: 100 • Weight: 20% • Due: Dec 31, 2026": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "Instructions:\\nPlease write your complete solution below or upload a PDF document containing your analysis.": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "Your Solution \/ Written Response": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "Type your written answer here...": [
+            "layout\/activity_submit_assignment.xml (android:hint)"
+        ],
+        "Attachment (PDF, DOCX, ZIP)": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "No file attached": [
+            "layout\/activity_submit_assignment.xml (android:text)"
+        ],
+        "Quiz 1: Computer Science Fundamentals": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Questions: 5 • Total Marks: 100 • Time Limit: 30 Mins": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Instructions:\\n1. Read each question carefully before answering.\\n2. You can navigate between questions using Previous and Next.\\n3. Your progress is saved automatically.\\n4. Ensure you click 'Submit Quiz' before time expires.": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Start Quiz Now": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "What is the worst-case time complexity of QuickSort?": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Option A: O(n log n)": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Option B: O(n^2)": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Option C: O(n)": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Option D: O(1)": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Your attempt has been recorded. Results will be released by your instructor.": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Return to Assessment Hub": [
+            "layout\/activity_take_quiz.xml (android:text)"
+        ],
+        "Choose file format and optional filters.": [
+            "layout\/dialog_student_export.xml (android:text)"
+        ],
+        "Academic Structure & Terms": [
+            "layout\/fragment_admin_academic_structure.xml (android:text)"
+        ],
+        "Semesters & Term Windows": [
+            "layout\/fragment_admin_academic_structure.xml (android:text)"
+        ],
+        "Start: 2026-09-01 • End: 2026-12-20 • Status: Current": [
+            "layout\/fragment_admin_academic_structure.xml (android:text)"
+        ],
+        "Start: 2027-01-15 • End: 2027-05-30 • Status: Upcoming": [
+            "layout\/fragment_admin_academic_structure.xml (android:text)"
+        ],
+        "Executive Reports & Audit Logs": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Admin \/ System Audits & Reports": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Export PDF": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)",
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "System Audit Log Entries": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Timestamp: 2026-10-30 14:22:10": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Actor: Admin (admin@univ.edu) • Action: UPDATE_COURSE": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Target: CS101 Curriculum • Outcome: Success": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Timestamp: 2026-10-30 11:05:40": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Actor: System • Action: ML_RISK_EVALUATION": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Target: Student Risk Batch • Outcome: Success": [
+            "layout\/fragment_admin_audit_logs.xml (android:text)"
+        ],
+        "Search student name, ID, class cohort...": [
+            "layout\/fragment_admin_class_enrollment.xml (android:hint)"
+        ],
+        "Full Cohorts": [
+            "layout\/fragment_admin_class_enrollment.xml (android:text)"
+        ],
+        "Timetables": [
+            "layout\/fragment_admin_class_schedules.xml (android:text)"
+        ],
+        "Conflict Status": [
+            "layout\/fragment_admin_class_schedules.xml (android:text)"
+        ],
+        "No Conflicts": [
+            "layout\/fragment_admin_class_schedules.xml (android:text)"
+        ],
+        "36 hrs\/wk": [
+            "layout\/fragment_admin_class_schedules.xml (android:text)"
+        ],
+        "Manage university classes, schedules and classrooms": [
+            "layout\/fragment_admin_classes.xml (android:text)"
+        ],
+        "Class Directory": [
+            "layout\/fragment_admin_classes.xml (android:text)"
+        ],
+        "Avg. Pass Rate": [
+            "layout\/fragment_admin_classes.xml (android:text)"
+        ],
+        "<": [
+            "layout\/fragment_admin_classes.xml (android:text)",
+            "layout\/fragment_admin_users.xml (android:text)",
+            "layout\/fragment_course_management.xml (android:text)",
+            "layout\/fragment_teacher_management.xml (android:text)",
+            "layout\/fragment_teacher_students.xml (android:text)"
+        ],
+        ">": [
+            "layout\/fragment_admin_classes.xml (android:text)",
+            "layout\/fragment_admin_users.xml (android:text)",
+            "layout\/fragment_course_management.xml (android:text)",
+            "layout\/fragment_teacher_management.xml (android:text)",
+            "layout\/fragment_teacher_students.xml (android:text)"
+        ],
+        "Occupied": [
+            "layout\/fragment_admin_classrooms.xml (android:text)"
+        ],
+        "Fully Assigned": [
+            "layout\/fragment_admin_course_assignments.xml (android:text)"
+        ],
+        "Colleges": [
+            "layout\/fragment_admin_course_categories.xml (android:text)"
+        ],
+        "Course Directory & Syllabi": [
+            "layout\/fragment_admin_course_directory.xml (android:text)"
+        ],
+        "Admin \/ Courses & Syllabi": [
+            "layout\/fragment_admin_course_directory.xml (android:text)"
+        ],
+        "Avg Class Size": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Course Enrollment Growth Trend": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Active Cohorts": [
+            "layout\/fragment_admin_course_report.xml (android:text)",
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "Avg Utilization": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Monthly Course Enrollment Line Chart": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Course Enrollment Roster": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Completion Rate": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Dropout Rate": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Course Completion Roster": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "CS101 (96%)": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "MA101 (78%)": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Course Average Pass Rates Bar Chart": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Course Performance Roster": [
+            "layout\/fragment_admin_course_report.xml (android:text)"
+        ],
+        "Reviewed": [
+            "layout\/fragment_admin_curriculum_audit.xml (android:text)"
+        ],
+        "Issues Found": [
+            "layout\/fragment_admin_curriculum_audit.xml (android:text)"
+        ],
+        "● ": [
+            "layout\/fragment_admin_dashboard.xml (android:text)"
+        ],
+        "Enrollment & Cohort Management": [
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "Admin \/ Student Enrollments & Cohorts": [
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "Recent Cohort Bindings": [
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "IT-4A • Information Technology": [
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "CS-3A • Computer Science": [
+            "layout\/fragment_admin_enrollment.xml (android:text)"
+        ],
+        "Faculty Reviewed": [
+            "layout\/fragment_admin_faculty_evaluation.xml (android:text)"
+        ],
+        "—": [
+            "layout\/fragment_admin_faculty_evaluation.xml (android:text)"
+        ],
+        "Reviews Needed": [
+            "layout\/fragment_admin_faculty_evaluation.xml (android:text)"
+        ],
+        "Incident Resolution Workspace": [
+            "layout\/fragment_admin_incident_workspace.xml (android:text)"
+        ],
+        "Track & resolve academic, attendance & student issues": [
+            "layout\/fragment_admin_incident_workspace.xml (android:text)"
+        ],
+        "Incident Workspace": [
+            "layout\/fragment_admin_incident_workspace.xml (android:text)"
+        ],
+        "Open Issues": [
+            "layout\/fragment_admin_incident_workspace.xml (android:text)"
+        ],
+        "Under Review": [
+            "layout\/fragment_admin_incident_workspace.xml (android:text)"
+        ],
+        "Stay updated with system activities": [
+            "layout\/fragment_admin_notifications.xml (android:text)"
+        ],
+        "Notifications Bell": [
+            "layout\/fragment_admin_notifications.xml (android:contentDescription)"
+        ],
+        "Empty Notifications Illustration": [
+            "layout\/fragment_admin_notifications.xml (android:contentDescription)"
+        ],
+        "You're all caught up! There are no notifications at the moment.": [
+            "layout\/fragment_admin_notifications.xml (android:text)"
+        ],
+        "📷": [
+            "layout\/fragment_admin_profile.xml (android:text)"
+        ],
+        "admin@university.edu": [
+            "layout\/fragment_admin_profile.xml (android:text)"
+        ],
+        "Total Logins": [
+            "layout\/fragment_admin_profile.xml (android:text)"
+        ],
+        "May 29, 2024 09:30 AM": [
+            "layout\/fragment_admin_profile.xml (android:text)"
+        ],
+        "View, analyze and export university reports": [
+            "layout\/fragment_admin_reports.xml (android:text)"
+        ],
+        "Teaching load, performance, classes": [
+            "layout\/fragment_admin_reports.xml (android:text)"
+        ],
+        "Course enrollment, completion, analytics": [
+            "layout\/fragment_admin_reports.xml (android:text)"
+        ],
+        "Admin \/ At-Risk Alerts & Interventions": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Active Plans": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "At-Risk Student Alerts & Interventions": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Dara V. (STD042) • IT-4A": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Risk Level: HIGH • Reason: Low Attendance (58%) & Failed Quiz 2": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Intervention Status: Action Plan Assigned • Staff: Mr. Chan": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Sokha K. (STD089) • CS-3B": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "Risk Level: MEDIUM • Reason: Missing Assignment 3": [
+            "layout\/fragment_admin_risk_management.xml (android:text)"
+        ],
+        "New Intake": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Returning": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Graduation Rate": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Monthly Enrollment Growth Bar": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Student Enrollment Roster": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Honor Roll": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "GPA Range Distribution": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Student Performance Roster": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Late Arrivals": [
+            "layout\/fragment_admin_student_report.xml (android:text)"
+        ],
+        "Staffed Classes": [
+            "layout\/fragment_admin_teacher_assignments.xml (android:text)",
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Teaching Workload Distribution": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Faculty Overview Directory": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Teaching Workload Metrics": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "1,080 Hrs\/Wk": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "19.2 Hrs\/Wk": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Faculty Teaching Load List": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Course & Class Staffing Summary": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Teacher Assignment Matrix": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Student Rating": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Faculty Performance Scores by Dept": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Faculty Evaluation Scores Roster": [
+            "layout\/fragment_admin_teacher_report.xml (android:text)"
+        ],
+        "Manage students, teachers and administrators": [
+            "layout\/fragment_admin_users.xml (android:text)"
+        ],
+        "Search administrators...": [
+            "layout\/fragment_admin_users.xml (android:hint)"
+        ],
+        "Total Roster": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "Attendance Distribution Ratio": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "P: 3": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "L: 1": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "E: 1": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "Student Attendance Analytics Roster": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "Export Excel": [
+            "layout\/fragment_attendance.xml (android:text)"
+        ],
+        "Browse, audit & manage university course curriculum": [
+            "layout\/fragment_course_management.xml (android:text)"
+        ],
+        "Curriculum Audit": [
+            "layout\/fragment_course_management.xml (android:text)"
+        ],
+        "All Statuses (18)": [
+            "layout\/fragment_course_management.xml (android:text)"
+        ],
+        "No courses match the selected search or status filters.": [
+            "layout\/fragment_course_management.xml (android:text)"
+        ],
+        "Page 1 of 2": [
+            "layout\/fragment_course_management.xml (android:text)"
+        ],
+        "8 Needing Grading": [
+            "layout\/fragment_manage_scores.xml (android:text)"
+        ],
+        "IT402 — Web Development Systems": [
+            "layout\/fragment_manage_scores.xml (android:text)",
+            "layout\/fragment_teacher_assessment.xml (android:text)"
+        ],
+        "CS101 - Data Structures": [
+            "layout\/fragment_manage_scores.xml (android:text)",
+            "layout\/fragment_teacher_analytics.xml (android:text)",
+            "layout\/fragment_teacher_students.xml (android:text)",
+            "layout\/item_course.xml (android:text)",
+            "layout\/item_course_analytics_card.xml (android:text)",
+            "layout\/item_pending_course_header.xml (android:text)"
+        ],
+        "out of 28 assessments": [
+            "layout\/fragment_manage_scores.xml (android:text)"
+        ],
+        "Assignment Scores Roster": [
+            "layout\/fragment_manage_scores.xml (android:text)"
+        ],
+        "Quiz Scores Roster": [
+            "layout\/fragment_manage_scores.xml (android:text)"
+        ],
+        "Student Academic Gradebook Roster": [
+            "layout\/fragment_manage_scores.xml (android:text)"
+        ],
+        "MAE": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "RMSE": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "Prediction vs Actual": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "System Automated Retrain": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "MAE: 5.32  •  RMSE: 7.85": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "Apr 25, 2024": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "MAE: 5.61  •  RMSE: 8.12": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "Mar 25, 2024": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "Initial Model Training": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "MAE: 6.01  •  RMSE: 8.95": [
+            "layout\/fragment_ml_model_evaluation.xml (android:text)"
+        ],
+        "Pred vs Actual": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Model Insights": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "ML Model Evaluation Metrics": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "MAE Error": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "2.45 pts": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "RMSE Error": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "3.12 pts": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "R² Variance": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Test Samples": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "v2.4 RF": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Optimal": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)",
+            "layout\/item_admin_evaluation_history_row.xml (android:text)"
+        ],
+        "Actual vs Predicted Performance Line Chart": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Student Actual vs Predicted Score Roster": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Trained Machine Learning Models Comparison": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Model Feature Importance & Drivers": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "38% Weight": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "25% Weight": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "20% Weight": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Historical Cumulative GPA": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "17% Weight": [
+            "layout\/fragment_prediction_evaluation.xml (android:text)"
+        ],
+        "Avg Predicted Score": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "At-Risk Cohorts": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "94.2% ML": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Predicted Score Distribution Bar Chart": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "out of 35 students (14.3%)": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "High Absence (> 15%)": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Multiple Issues": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Expected Grade": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Grade: B+": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "91.5% ML": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Student Exam Predictions Roster": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Risk Factor Analysis Summary": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Primary Risk Factor": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Absence > 15%": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Risk Improvement": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "-2.1% Improved": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Course Risk Factor Breakdown": [
+            "layout\/fragment_prediction_risk.xml (android:text)"
+        ],
+        "Student Recs": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Priority Recs": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Intervention Plans": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Total AI Recs": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "8 Urgent": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Medium Priority": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Low Priority": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "19 Advisory": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Completed Plans": [
+            "layout\/fragment_recommendations.xml (android:text)",
+            "layout\/fragment_student_recommendations.xml (android:text)"
+        ],
+        "24 Plans": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Recommendation Priority Ratio": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Run AI Recommendation Engine": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Analyze student grades, attendance & quiz logs": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Generate AI Recs": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "High & Urgent Priority Academic Recommendations": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Academic Support & Intervention Plans": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Completed Support Archives & Impact": [
+            "layout\/fragment_recommendations.xml (android:text)"
+        ],
+        "Enrolled Course Roster": [
+            "layout\/fragment_student_courses.xml (android:text)"
+        ],
+        "Academic Support & AI Recommendations Summary": [
+            "layout\/fragment_student_recommendations.xml (android:text)"
+        ],
+        "0 Urgent": [
+            "layout\/fragment_student_recommendations.xml (android:text)"
+        ],
+        "Personalized AI Study Recommendations": [
+            "layout\/fragment_student_recommendations.xml (android:text)"
+        ],
+        "No recommendations available yet.": [
+            "layout\/fragment_student_recommendations.xml (android:text)"
+        ],
+        "Update your student password and login credentials": [
+            "layout\/fragment_student_settings.xml (android:text)"
+        ],
+        "Configure assignment, quiz, and grade alerts": [
+            "layout\/fragment_student_settings.xml (android:text)"
+        ],
+        "About SLAS Student Portal": [
+            "layout\/fragment_student_settings.xml (android:text)"
+        ],
+        "Manage push and email notifications": [
+            "layout\/fragment_system_settings.xml (android:text)"
+        ],
+        "Appearance": [
+            "layout\/fragment_system_settings.xml (android:text)"
+        ],
+        "Theme, language and display options": [
+            "layout\/fragment_system_settings.xml (android:text)"
+        ],
+        "Exit admin account session": [
+            "layout\/fragment_system_settings.xml (android:text)"
+        ],
+        "Real-time performance and analytics overview": [
+            "layout\/fragment_system_statistics.xml (android:text)"
+        ],
+        "↑ +5.2%": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "↑ +3%": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "↑ +12%": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "Performers": [
+            "layout\/fragment_teacher_analytics.xml (android:contentDescription)"
+        ],
+        "Top Performers": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "↑ +15%": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "Lightbulb": [
+            "layout\/fragment_teacher_analytics.xml (android:contentDescription)"
+        ],
+        "Review students with repeated absences": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "Average scores increased this month": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "Review risk factors and provide support": [
+            "layout\/fragment_teacher_analytics.xml (android:text)"
+        ],
+        "Drafts": [
+            "layout\/fragment_teacher_assessment.xml (android:text)"
+        ],
+        "Assignments & Homework Roster": [
+            "layout\/fragment_teacher_assessment.xml (android:text)"
+        ],
+        "Quiz Builder & Active Quizzes Roster": [
+            "layout\/fragment_teacher_assessment.xml (android:text)"
+        ],
+        "Archived (0)": [
+            "layout\/fragment_teacher_course_management.xml (android:text)"
+        ],
+        "All Depts": [
+            "layout\/fragment_teacher_course_management.xml (android:text)"
+        ],
+        "Added quiz scores - CS101": [
+            "layout\/fragment_teacher_dashboard.xml (android:text)"
+        ],
+        "2 hours ago": [
+            "layout\/fragment_teacher_dashboard.xml (android:text)",
+            "layout\/item_recent_activity.xml (android:text)"
+        ],
+        "Updated attendance - CS102": [
+            "layout\/fragment_teacher_dashboard.xml (android:text)"
+        ],
+        "4 hours ago": [
+            "layout\/fragment_teacher_dashboard.xml (android:text)"
+        ],
+        "1 day ago": [
+            "layout\/fragment_teacher_dashboard.xml (android:text)"
+        ],
+        "Manage and monitor registered teachers": [
+            "layout\/fragment_teacher_management.xml (android:text)"
+        ],
+        "Senior Lecturer • Computer Science Dept": [
+            "layout\/fragment_teacher_profile.xml (android:text)"
+        ],
+        "Faculty Information (Read-Only)": [
+            "layout\/fragment_teacher_profile.xml (android:text)"
+        ],
+        "TCH-001": [
+            "layout\/fragment_teacher_profile.xml (android:text)"
+        ],
+        "M.Sc. Computer Science": [
+            "layout\/fragment_teacher_profile.xml (android:text)"
+        ],
+        "Senior Lecturer • CS Department": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "ID: TCH-001": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "M.Sc. Computer Science & Software Engineering": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Courses: CS101, IT402 • Classes: BSIT 4-A, BSIT 4-B": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)",
+            "layout\/item_admin_faculty_evaluation.xml (android:text)",
+            "layout\/item_admin_teacher_report.xml (android:text)"
+        ],
+        "Account Created": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Today at 08:30 AM": [
+            "layout\/fragment_teacher_profile_overview.xml (android:text)"
+        ],
+        "Good Perf.": [
+            "layout\/fragment_teacher_reports.xml (android:text)"
+        ],
+        "Overall Avg": [
+            "layout\/fragment_teacher_reports.xml (android:text)"
+        ],
+        "Pie Chart Icon": [
+            "layout\/fragment_teacher_reports.xml (android:contentDescription)"
+        ],
+        "Book": [
+            "layout\/fragment_teacher_reports.xml (android:contentDescription)"
+        ],
+        "Select a course to view detailed analytics": [
+            "layout\/fragment_teacher_reports.xml (android:text)"
+        ],
+        "Computer Science Dept.": [
+            "layout\/fragment_teacher_students.xml (android:text)"
+        ],
+        "Need Attention (6)": [
+            "layout\/fragment_teacher_students.xml (android:text)"
+        ],
+        "Showing 1–8 of 35 students": [
+            "layout\/fragment_teacher_students.xml (android:text)"
+        ],
+        "CS101": [
+            "layout\/item_admin_class.xml (android:text)",
+            "layout\/item_admin_course.xml (android:text)",
+            "layout\/item_admin_course_assignment.xml (android:text)",
+            "layout\/item_admin_course_report_list.xml (android:text)",
+            "layout\/item_admin_curriculum_audit.xml (android:text)",
+            "layout\/item_admin_risk_analysis.xml (android:text)",
+            "layout\/item_student_course_card.xml (android:text)",
+            "layout\/item_student_recommendation_card.xml (android:text)",
+            "layout\/item_teacher_assignment_card.xml (android:text)",
+            "layout\/item_teacher_quiz_card.xml (android:text)"
+        ],
+        "Data Structures": [
+            "layout\/item_admin_class.xml (android:text)",
+            "layout\/item_admin_course.xml (android:text)",
+            "layout\/item_admin_teacher.xml (android:text)",
+            "layout\/item_exam.xml (android:text)"
+        ],
+        "Enrolled Class: BSIT 4-A • College of Computer Studies": [
+            "layout\/item_admin_class_enrollment.xml (android:text)"
+        ],
+        "Enrolled: Mar 01, 2026 • AY 2025-2026 Sem 1": [
+            "layout\/item_admin_class_enrollment.xml (android:text)"
+        ],
+        "BSIT 4-A": [
+            "layout\/item_admin_class_schedule.xml (android:text)",
+            "layout\/item_admin_teacher_assignment.xml (android:text)",
+            "layout\/item_admin_teacher_assignment_report.xml (android:text)"
+        ],
+        "Web Systems & Technologies": [
+            "layout\/item_admin_class_schedule.xml (android:text)"
+        ],
+        "Validated": [
+            "layout\/item_admin_class_schedule.xml (android:text)"
+        ],
+        "Mon \/ Wed 08:00 AM - 11:00 AM": [
+            "layout\/item_admin_class_schedule.xml (android:text)"
+        ],
+        "Room: Computer Lab 101 • Teacher: Prof. Alan Santos": [
+            "layout\/item_admin_class_schedule.xml (android:text)"
+        ],
+        "Lab 101": [
+            "layout\/item_admin_classroom.xml (android:text)"
+        ],
+        "Computer Lab 1": [
+            "layout\/item_admin_classroom.xml (android:text)"
+        ],
+        "CCS Building • 1st Floor • Computer Lab": [
+            "layout\/item_admin_classroom.xml (android:text)"
+        ],
+        "Capacity: 40 PCs • Projector, AC, High-Speed LAN": [
+            "layout\/item_admin_classroom.xml (android:text)"
+        ],
+        "Data Structures & Algorithms": [
+            "layout\/item_admin_course_assignment.xml (android:text)",
+            "layout\/item_admin_curriculum_audit.xml (android:text)",
+            "layout\/item_admin_risk_analysis.xml (android:text)"
+        ],
+        "Class: BSCS 3-A • Teacher: Engr. John Reyes": [
+            "layout\/item_admin_course_assignment.xml (android:text)"
+        ],
+        "Information Technology": [
+            "layout\/item_admin_course_category.xml (android:text)"
+        ],
+        "Head: Dr. Maria Cruz": [
+            "layout\/item_admin_course_category.xml (android:text)"
+        ],
+        "Intro to Computer Science": [
+            "layout\/item_admin_course_report_list.xml (android:text)"
+        ],
+        "College of Computer Studies • 3 Credits": [
+            "layout\/item_admin_course_report_list.xml (android:text)"
+        ],
+        "1,240 Enrolled • 98.2% Completion Rate • Avg Score: 88.5%": [
+            "layout\/item_admin_course_report_list.xml (android:text)"
+        ],
+        "Verified": [
+            "layout\/item_admin_curriculum_audit.xml (android:text)"
+        ],
+        "Class: BSCS 3-A • Teacher: Engr. John Reyes • 3 Credits": [
+            "layout\/item_admin_curriculum_audit.xml (android:text)"
+        ],
+        "Audit note: All required learning modules and syllabi uploaded.": [
+            "layout\/item_admin_curriculum_audit.xml (android:text)"
+        ],
+        "Random Forest v2.4 (CS101)": [
+            "layout\/item_admin_evaluation_history_row.xml (android:text)"
+        ],
+        "CS101 Data Structures • 1,240 Test Records Evaluated": [
+            "layout\/item_admin_evaluation_history_row.xml (android:text)"
+        ],
+        "MAE: 2.45 pts • RMSE: 3.12 pts • R²: 0.88 (88% Variance Explained)": [
+            "layout\/item_admin_evaluation_history_row.xml (android:text)"
+        ],
+        "CS101 - Intro to CS • BSIT 4-A": [
+            "layout\/item_admin_exam_prediction.xml (android:text)",
+            "layout\/item_admin_gradebook_row.xml (android:text)",
+            "layout\/item_admin_pred_vs_actual_row.xml (android:text)",
+            "layout\/item_admin_student_attendance_row.xml (android:text)"
+        ],
+        "Current Avg: 88.5% • Predicted Exam: 92.0% • 94.5% Confidence": [
+            "layout\/item_admin_exam_prediction.xml (android:text)"
+        ],
+        "Prof. Alan Santos": [
+            "layout\/item_admin_faculty_evaluation.xml (android:text)",
+            "layout\/item_admin_teacher_performance.xml (android:text)",
+            "layout\/item_admin_teacher_report.xml (android:text)",
+            "layout\/item_admin_teacher_workload.xml (android:text)"
+        ],
+        "College of Computer Studies • Associate Professor": [
+            "layout\/item_admin_faculty_evaluation.xml (android:text)"
+        ],
+        "Class Pass Rate: 94.2% • Student Rating: 4.8 \/ 5.0": [
+            "layout\/item_admin_faculty_evaluation.xml (android:text)"
+        ],
+        "Low Attendance Alert - Sophea": [
+            "layout\/item_admin_incident.xml (android:text)"
+        ],
+        "Student: Sophea (STU23001) [View Dossier]": [
+            "layout\/item_admin_incident.xml (android:text)"
+        ],
+        "Class: BSIT 4-A • Logged: Mar 10, 2026 • Assigned: Advisor Santos": [
+            "layout\/item_admin_incident.xml (android:text)"
+        ],
+        "Support Plan: 1-on-1 Academic Counseling & Peer Tutoring": [
+            "layout\/item_admin_intervention_plan_row.xml (android:text)"
+        ],
+        "Target Goal: Raise GPA to 2.80 • Timeline: May 12 - Jun 30, 2026": [
+            "layout\/item_admin_intervention_plan_row.xml (android:text)"
+        ],
+        "Random Forest Regressor": [
+            "layout\/item_admin_model_comparison_row.xml (android:text)"
+        ],
+        "Best Performer": [
+            "layout\/item_admin_model_comparison_row.xml (android:text)"
+        ],
+        "Version: SLAS-ML v2.4 • 1,240 Test Samples": [
+            "layout\/item_admin_model_comparison_row.xml (android:text)"
+        ],
+        "MAE: 2.12 pts • RMSE: 2.85 pts • R²: 0.91 (91% Var) • Speed: 1.2s": [
+            "layout\/item_admin_model_comparison_row.xml (android:text)"
+        ],
+        "Low Residual (1.5 pts)": [
+            "layout\/item_admin_pred_vs_actual_row.xml (android:text)"
+        ],
+        "Actual Score: 88.0% • Predicted Score: 86.5% • Absolute Error: 1.5 pts": [
+            "layout\/item_admin_pred_vs_actual_row.xml (android:text)"
+        ],
+        "+12.5% GPA Increase": [
+            "layout\/item_admin_recommendation_history_row.xml (android:text)"
+        ],
+        "Recommendation: Additional Tutoring in CS101 Data Structures": [
+            "layout\/item_admin_recommendation_history_row.xml (android:text)"
+        ],
+        "Generated: Jan 10, 2026 • Completed: Mar 15, 2026 • Priority: High": [
+            "layout\/item_admin_recommendation_history_row.xml (android:text)"
+        ],
+        "College of Computer Studies • 35 Enrolled": [
+            "layout\/item_admin_risk_analysis.xml (android:text)"
+        ],
+        "Primary Risk Factor: Low Attendance (<75%) and Missed Quizzes": [
+            "layout\/item_admin_risk_analysis.xml (android:text)"
+        ],
+        "Present: 118 Days • Absent: 2 Days • Late: 0 • Excused: 0": [
+            "layout\/item_admin_student_attendance_row.xml (android:text)"
+        ],
+        "CS101 - Data Structures • BSIT 4-A": [
+            "layout\/item_admin_student_recommendation_row.xml (android:text)"
+        ],
+        "AI Suggestion: Schedule 1-on-1 Tutoring & Practice Exercises": [
+            "layout\/item_admin_student_recommendation_row.xml (android:text)"
+        ],
+        "GPA: 2.10 • Attendance: 58% • Assignment Avg: 62% • Quiz Avg: 55%": [
+            "layout\/item_admin_student_recommendation_row.xml (android:text)"
+        ],
+        "BSIT 4-A • College of Computer Studies": [
+            "layout\/item_admin_student_report_list.xml (android:text)"
+        ],
+        "P": [
+            "layout\/item_admin_take_attendance_row.xml (android:text)"
+        ],
+        "L": [
+            "layout\/item_admin_take_attendance_row.xml (android:text)"
+        ],
+        "E": [
+            "layout\/item_admin_take_attendance_row.xml (android:text)"
+        ],
+        "Web Systems & Development": [
+            "layout\/item_admin_teacher_assignment.xml (android:text)"
+        ],
+        "Assigned Teacher: Prof. Alan Santos": [
+            "layout\/item_admin_teacher_assignment.xml (android:text)",
+            "layout\/item_admin_teacher_assignment_report.xml (android:text)"
+        ],
+        "College of Computer Studies • AY 2025-2026 Sem 1": [
+            "layout\/item_admin_teacher_assignment.xml (android:text)"
+        ],
+        "College of Computer Studies • AY 2024-2025 Semester 1": [
+            "layout\/item_admin_teacher_assignment_report.xml (android:text)"
+        ],
+        "College of Computer Studies • Evaluation Complete": [
+            "layout\/item_admin_teacher_performance.xml (android:text)"
+        ],
+        "96.5% Course Pass Rate • 4.9\/5.0 Student Rating": [
+            "layout\/item_admin_teacher_performance.xml (android:text)"
+        ],
+        "94.2% Rating": [
+            "layout\/item_admin_teacher_report.xml (android:text)"
+        ],
+        "Department: College of Computer Studies • 18 Teaching Hrs\/Wk": [
+            "layout\/item_admin_teacher_report.xml (android:text)"
+        ],
+        "Normal Workload": [
+            "layout\/item_admin_teacher_workload.xml (android:text)"
+        ],
+        "Department: College of Computer Studies": [
+            "layout\/item_admin_teacher_workload.xml (android:text)"
+        ],
+        "Weekly Teaching Load: 18 Hrs\/Wk • 2 Courses Assigned": [
+            "layout\/item_admin_teacher_workload.xml (android:text)"
+        ],
+        "Dara": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "STU023002": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "Data Science": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "Absence": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "Main Reasons": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "• High absence rate": [
+            "layout\/item_at_risk_student_card.xml (android:text)"
+        ],
+        "Topic 1": [
+            "layout\/item_attendance_record.xml (android:text)"
+        ],
+        "35 students • Mon, Wed 08:00–09:30 • Room A101": [
+            "layout\/item_course.xml (android:text)"
+        ],
+        "Instructor: Mr. Chan": [
+            "layout\/item_course_analytics_card.xml (android:text)"
+        ],
+        "OCT": [
+            "layout\/item_exam.xml (android:text)"
+        ],
+        "Midterm • 9:00 AM • Room B-204": [
+            "layout\/item_exam.xml (android:text)"
+        ],
+        "Feedback: Good job": [
+            "layout\/item_grade_breakdown.xml (android:text)"
+        ],
+        "10:30 AM": [
+            "layout\/item_notification_row.xml (android:text)"
+        ],
+        "Assignment 2: Linked Lists": [
+            "layout\/item_pending_assessment_row.xml (android:text)"
+        ],
+        "Oct 10, 2024": [
+            "layout\/item_pending_assessment_row.xml (android:text)"
+        ],
+        "17 remaining": [
+            "layout\/item_pending_assessment_row.xml (android:text)"
+        ],
+        "Expand": [
+            "layout\/item_pending_course_header.xml (android:contentDescription)"
+        ],
+        "New Assignment Added": [
+            "layout\/item_recent_activity.xml (android:text)"
+        ],
+        "Review quiz topics and practice more past questions.": [
+            "layout\/item_recommendation.xml (android:text)"
+        ],
+        "Reason text goes here.": [
+            "layout\/item_recommendation_card.xml (android:text)"
+        ],
+        "Suggested Action": [
+            "layout\/item_recommendation_card.xml (android:text)"
+        ],
+        "Sep 15, 2024": [
+            "layout\/item_score_row.xml (android:text)"
+        ],
+        "Core Course": [
+            "layout\/item_student_course_card.xml (android:text)"
+        ],
+        "Intro to Computer Science & Programming": [
+            "layout\/item_student_course_card.xml (android:text)"
+        ],
+        "Instructor: Prof. Emily Johnson • Room 402": [
+            "layout\/item_student_course_card.xml (android:text)"
+        ],
+        "#12": [
+            "layout\/item_student_import_history.xml (android:text)"
+        ],
+        "students_2026.xlsx": [
+            "layout\/item_student_import_history.xml (android:text)"
+        ],
+        "Imported by: Admin • 2026-11-05": [
+            "layout\/item_student_import_history.xml (android:text)"
+        ],
+        "bsr180872": [
+            "layout\/item_student_import_row.xml (android:text)"
+        ],
+        "Sok Chan (សុខ ចាន់)": [
+            "layout\/item_student_import_row.xml (android:text)"
+        ],
+        "Review Weak Topic: Linked Lists & Pointer Operations": [
+            "layout\/item_student_recommendation_card.xml (android:text)"
+        ],
+        "Your Quiz 2 score in Data Structures was 58%. Reviewing Chapter 4 practice exercises can increase your predicted exam score by +15%.": [
+            "layout\/item_student_recommendation_card.xml (android:text)"
+        ],
+        "Review Topic": [
+            "layout\/item_student_recommendation_card.xml (android:text)"
+        ],
+        "Class: BSIT 4-A • Computer Science Dept": [
+            "layout\/item_teacher_assignment_card.xml (android:text)"
+        ],
+        "Due Date: Oct 20, 2024 • Total Marks: 100 pts • Submissions: 28\/35 (7 Pending)": [
+            "layout\/item_teacher_assignment_card.xml (android:text)"
+        ],
+        "88 \/ 100 pts": [
+            "layout\/item_teacher_grading_card.xml (android:text)"
+        ],
+        "Assessment: Assignment 1 - Linked Lists": [
+            "layout\/item_teacher_grading_card.xml (android:text)"
+        ],
+        "Grading Status: Graded & Published • Feedback: Excellent work!": [
+            "layout\/item_teacher_grading_card.xml (android:text)"
+        ],
+        "Quiz 1: Big-O Complexity & Sorting": [
+            "layout\/item_teacher_quiz_card.xml (android:text)"
+        ],
+        "Class: BSCS 3-A • 10 Multiple Choice Questions": [
+            "layout\/item_teacher_quiz_card.xml (android:text)"
+        ],
+        "Duration: 30 Mins • Marks: 50 pts • Attempts: 30\/35 Students Completed": [
+            "layout\/item_teacher_quiz_card.xml (android:text)"
+        ],
+        "Quiz Builder": [
+            "layout\/item_teacher_quiz_card.xml (android:text)"
+        ],
+        "Assessment: Assignment 1 - Linked Lists & Pointers": [
+            "layout\/item_teacher_submission_card.xml (android:text)"
+        ],
+        "Submitted: Oct 10, 2024 02:30 PM • Attachment: solution_file_v1.pdf": [
+            "layout\/item_teacher_submission_card.xml (android:text)"
+        ],
+        "Overview & quick analytics for your assigned classes": [
+            "layout\/layout_teacher_header.xml (android:text)"
+        ],
+        "Personalized academic recommendations": [
+            "layout\/nav_drawer_student.xml (android:text)"
+        ],
+        "Academic reports and performance summaries": [
+            "layout\/nav_drawer_student.xml (android:text)"
+        ],
+        "Account and application preferences": [
+            "layout\/nav_drawer_student.xml (android:text)"
+        ],
+        "Help center and student support": [
+            "layout\/nav_drawer_student.xml (android:text)"
+        ],
+        "Application information and version": [
+            "layout\/nav_drawer_student.xml (android:text)"
+        ],
+        "ST2024001": [
+            "layout\/nav_header_student.xml (android:text)"
+        ]
+    },
+    "java": {
+        "#": [
+            "adapter\/StudentImportHistoryAdapter.java"
+        ],
+        "Database backup initiated successfully!": [
+            "admin\/AdminBackupDataActivity.java"
+        ],
+        "Downloading SQL database archive...": [
+            "admin\/AdminBackupDataActivity.java"
+        ],
+        "Are you sure you want to logout from the admin panel?": [
+            "admin\/AdminProfileFragment.java"
+        ],
+        "Edit Profile clicked": [
+            "admin\/AdminProfileFragment.java"
+        ],
+        "Role Name (e.g. Department Chair)": [
+            "admin\/AdminUserRolesSettingsActivity.java"
+        ],
+        "Manage university classes, schedules and classrooms": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Class Directory Detail": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "View Representative Dossier": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Scheduling Conflict Detected!": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Add Classroom Facility": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Enroll Student in Class Cohort": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Class Capacity Limit Reached!": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Please fill in Class Name and Class Code": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Please fill in Class Code, Room, and Time Slot": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Please fill in Room Number and Name": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Please fill in Class Code and Teacher Name": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Assigned ": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Please fill in Student ID and Class Code": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Previous page": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Next page": [
+            "admin\/classes\/ClassManagementFragment.java"
+        ],
+        "Curriculum Audit Detail": [
+            "admin\/classes\/CourseCurriculumAuditFragment.java",
+            "admin\/CourseManagementFragment.java"
+        ],
+        "Incident Workspace Detail": [
+            "admin\/classes\/IncidentResolutionWorkspaceFragment.java"
+        ],
+        "Open Student Dossier": [
+            "admin\/classes\/IncidentResolutionWorkspaceFragment.java"
+        ],
+        "All Statuses (": [
+            "admin\/CourseManagementFragment.java"
+        ],
+        "Page ": [
+            "admin\/CourseManagementFragment.java"
+        ],
+        "College: ": [
+            "admin\/CourseManagementFragment.java"
+        ],
+        "Course code is required": [
+            "admin\/courses\/AddCourseActivity.java"
+        ],
+        "Course name is required": [
+            "admin\/courses\/AddCourseActivity.java"
+        ],
+        "Credits is required": [
+            "admin\/courses\/AddCourseActivity.java"
+        ],
+        "Oct 28, 2024 ": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Approve Registration?": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Are you sure you want to approve Ms. Dany's teacher registration?": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Reject Registration?": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Are you sure you want to reject Ms. Dany's teacher registration?": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Ms. Dany's teacher registration approved successfully!": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Ms. Dany's teacher registration rejected.": [
+            "admin\/NotificationDetailActivity.java"
+        ],
+        "Unread (": [
+            "admin\/NotificationFragment.java",
+            "student\/NotificationFragment.java"
+        ],
+        "No Matching Notifications": [
+            "admin\/NotificationFragment.java"
+        ],
+        "No notifications found matching your search or filter criteria.": [
+            "admin\/NotificationFragment.java"
+        ],
+        "You're all caught up! There are no notifications at the moment.": [
+            "admin\/NotificationFragment.java"
+        ],
+        "All notifications marked as read": [
+            "admin\/NotificationFragment.java",
+            "student\/NotificationFragment.java",
+            "teacher\/NotificationFragment.java"
+        ],
+        "Read notifications deleted": [
+            "admin\/NotificationFragment.java"
+        ],
+        "Please select at least one report metric": [
+            "admin\/reports\/GenerateReportActivity.java"
+        ],
+        "Summary Statistics for AY 2024-2025:\\n\\n": [
+            "admin\/ReportsFragment.java"
+        ],
+        "Full name is required": [
+            "admin\/teachers\/AddTeacherActivity.java",
+            "admin\/teachers\/EditTeacherActivity.java",
+            "admin\/users\/AddAdminActivity.java",
+            "admin\/users\/EditAdminActivity.java",
+            "admin\/users\/EditStudentActivity.java",
+            "admin\/users\/ProfileSettingsActivity.java",
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "Teacher ID is required": [
+            "admin\/teachers\/AddTeacherActivity.java"
+        ],
+        "Email address is required": [
+            "admin\/teachers\/AddTeacherActivity.java",
+            "admin\/teachers\/EditTeacherActivity.java",
+            "admin\/users\/AddAdminActivity.java",
+            "admin\/users\/EditAdminActivity.java",
+            "admin\/users\/ProfileSettingsActivity.java",
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "Please select a work type": [
+            "admin\/teachers\/AddTeacherActivity.java"
+        ],
+        "Network error creating teacher": [
+            "admin\/teachers\/AddTeacherActivity.java"
+        ],
+        "Are you sure you want to ": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java",
+            "admin\/UserManagementFragment.java",
+            "admin\/users\/AdminDetailActivity.java",
+            "admin\/users\/AdminStudentDetailActivity.java"
+        ],
+        "Administrative Notes (Tap to edit)": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java",
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Enter administrative note for teacher...": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java"
+        ],
+        "Teacher Administrative Notes": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java"
+        ],
+        "Failed to update account status (HTTP ": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java",
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Network error updating status: ": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java",
+            "admin\/UserManagementFragment.java",
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Notes updated": [
+            "admin\/teachers\/AdminTeacherDetailActivity.java",
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "N\/A": [
+            "admin\/teachers\/EditTeacherActivity.java",
+            "admin\/users\/EditAdminActivity.java",
+            "admin\/users\/EditStudentActivity.java",
+            "student\/CourseDetailActivity.java",
+            "student\/StudentCoursesFragment.java"
+        ],
+        "Failed to update teacher: HTTP ": [
+            "admin\/teachers\/EditTeacherActivity.java"
+        ],
+        "Network error updating teacher: ": [
+            "admin\/teachers\/EditTeacherActivity.java"
+        ],
+        "Manage students, teachers and administrators": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Search faculty members...": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Rating 1.0 - 5.0 (required when completed)": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Are you sure you want to delete user ": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Failed to load faculty (HTTP ": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "No faculty members found": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Network error: ": [
+            "admin\/UserManagementFragment.java",
+            "admin\/users\/AddStudentActivity.java",
+            "admin\/users\/EditStudentActivity.java",
+            "admin\/users\/StudentImportActivity.java",
+            "admin\/users\/StudentImportHistoryActivity.java",
+            "admin\/users\/StudentImportPreviewActivity.java",
+            "student\/academic\/AcademicJourneyActivity.java",
+            "student\/analytics\/LearningAnalyticsActivity.java",
+            "student\/attendance\/AttendanceOverviewActivity.java",
+            "student\/attendance\/CourseAttendanceActivity.java",
+            "student\/grades\/CourseGradeActivity.java",
+            "student\/grades\/GradesOverviewActivity.java",
+            "student\/quiz\/TakeQuizActivity.java",
+            "student\/recommendations\/SmartRecommendationsActivity.java"
+        ],
+        "Saved": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Select at least one": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Self-deletion is prohibited. You cannot delete your own account.": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Failed to delete user (HTTP ": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Network error deleting user: ": [
+            "admin\/UserManagementFragment.java"
+        ],
+        "Current password is required": [
+            "admin\/users\/AccountSecurityActivity.java"
+        ],
+        "New password must be at least 8 characters": [
+            "admin\/users\/AccountSecurityActivity.java"
+        ],
+        "Passwords do not match": [
+            "admin\/users\/AccountSecurityActivity.java",
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Two-Factor Authentication ": [
+            "admin\/users\/AccountSecurityActivity.java"
+        ],
+        "Admin ID is required": [
+            "admin\/users\/AddAdminActivity.java"
+        ],
+        "Network error creating admin": [
+            "admin\/users\/AddAdminActivity.java"
+        ],
+        "Khmer Name is required": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "English Name is required": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Date of Birth is required (YYYY-MM-DD)": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Student ID \/ Username is required": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Password must be at least 8 characters": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Student ID \/ Username: ": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Server Error: Failed to load lookups": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Failed to load academic options": [
+            "admin\/users\/AddStudentActivity.java"
+        ],
+        "Module Permissions Overview": [
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Recent Activity Log": [
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "• Created at: ": [
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Enter administrative note for admin...": [
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Admin Administrative Notes": [
+            "admin\/users\/AdminDetailActivity.java"
+        ],
+        "Admin & Advisor Notes (Tap card to Add \/ Edit)": [
+            "admin\/users\/AdminStudentDetailActivity.java"
+        ],
+        "Enter advisor or administrative notes for ": [
+            "admin\/users\/AdminStudentDetailActivity.java"
+        ],
+        "Failed to update status (HTTP ": [
+            "admin\/users\/AdminStudentDetailActivity.java"
+        ],
+        "Failed to update admin: HTTP ": [
+            "admin\/users\/EditAdminActivity.java"
+        ],
+        "Network error updating admin: ": [
+            "admin\/users\/EditAdminActivity.java"
+        ],
+        "Please enter a valid email or leave blank": [
+            "admin\/users\/EditStudentActivity.java"
+        ],
+        "Profile image updated": [
+            "admin\/users\/ProfileSettingsActivity.java"
+        ],
+        "Exporting students...": [
+            "admin\/users\/StudentExportDialog.java"
+        ],
+        "Export failed (HTTP ": [
+            "admin\/users\/StudentExportDialog.java"
+        ],
+        "Network error exporting: ": [
+            "admin\/users\/StudentExportDialog.java"
+        ],
+        "Saved to ": [
+            "admin\/users\/StudentExportDialog.java"
+        ],
+        "Failed to download template (HTTP ": [
+            "admin\/users\/StudentImportActivity.java"
+        ],
+        "Template saved to: ": [
+            "admin\/users\/StudentImportActivity.java"
+        ],
+        "Failed to read file: ": [
+            "admin\/users\/StudentImportActivity.java"
+        ],
+        "Saved: ": [
+            "admin\/users\/StudentImportHistoryActivity.java",
+            "admin\/users\/StudentImportPreviewActivity.java"
+        ],
+        "Error saving: ": [
+            "admin\/users\/StudentImportHistoryActivity.java",
+            "admin\/users\/StudentImportPreviewActivity.java"
+        ],
+        "Import cancelled": [
+            "admin\/users\/StudentImportPreviewActivity.java"
+        ],
+        "Could not confirm import (HTTP ": [
+            "admin\/users\/StudentImportPreviewActivity.java"
+        ],
+        "Cancellation requested": [
+            "admin\/users\/StudentImportProgressActivity.java"
+        ],
+        "Please enter current password": [
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Please enter new password": [
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Password does not meet all requirements": [
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Please confirm new password": [
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Password changed successfully!": [
+            "auth\/ChangePasswordActivity.java"
+        ],
+        "Please enter your email": [
+            "auth\/ForgotPasswordActivity.java"
+        ],
+        "Reset link request submitted": [
+            "auth\/ForgotPasswordActivity.java"
+        ],
+        "Please enter your Student \/ Teacher \/ Admin ID": [
+            "auth\/LoginActivity.java"
+        ],
+        "Please enter your password": [
+            "auth\/LoginActivity.java"
+        ],
+        "Welcome to Student Learning Analytics": [
+            "MainActivity.java"
+        ],
+        "Failed to load data.": [
+            "student\/academic\/AcademicJourneyActivity.java",
+            "student\/attendance\/AttendanceOverviewActivity.java",
+            "student\/attendance\/CourseAttendanceActivity.java",
+            "student\/grades\/GradesOverviewActivity.java"
+        ],
+        "Failed to load analytics.": [
+            "student\/analytics\/LearningAnalyticsActivity.java"
+        ],
+        "Max Marks: ": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Resubmit Work": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Status: Draft (Saved)": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Work submitted successfully!": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Draft saved successfully.": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Network error submitting work: ": [
+            "student\/assignment\/SubmitAssignmentActivity.java"
+        ],
+        "Your performance in ": [
+            "student\/CourseDetailActivity.java"
+        ],
+        "Your current score in ": [
+            "student\/CourseDetailActivity.java"
+        ],
+        "Track your assignments, quizzes, and exam schedule in the tabs above to stay on top of this course.": [
+            "student\/CourseDetailActivity.java"
+        ],
+        "Room TBA": [
+            "student\/CourseDetailActivity.java"
+        ],
+        "Error parsing exam data": [
+            "student\/ExamDetailActivity.java"
+        ],
+        "Session expired, please login again": [
+            "student\/ExamDetailActivity.java",
+            "student\/quiz\/QuizDetailActivity.java"
+        ],
+        "Failed to load exams": [
+            "student\/ExamDetailActivity.java"
+        ],
+        "Network error: Unable to load exams": [
+            "student\/ExamDetailActivity.java"
+        ],
+        "Invalid Course Offering": [
+            "student\/grades\/CourseGradeActivity.java"
+        ],
+        "Failed to load grade details.": [
+            "student\/grades\/CourseGradeActivity.java"
+        ],
+        "My Academic Results": [
+            "student\/grades\/GradesOverviewActivity.java"
+        ],
+        "Cumulative GPA: ": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Academic Standing: ": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Predicted Final Score: ": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "No courses enrolled for this period.": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Generating PDF Report": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Creating official Learning Analytics PDF document for ": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "PDF saved: ": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Failed to generate PDF document": [
+            "student\/LearningReportActivity.java",
+            "student\/ReportFragment.java"
+        ],
+        "Logout Confirmation": [
+            "student\/NavigationMenuActivity.java",
+            "student\/ProfileFragment.java"
+        ],
+        "Important (": [
+            "student\/NotificationFragment.java"
+        ],
+        "Unable to load notifications. Please check your connection.": [
+            "student\/NotificationFragment.java"
+        ],
+        "Insufficient Data": [
+            "student\/PredictionDetailActivity.java"
+        ],
+        "Based on current GPA (": [
+            "student\/PredictionFragment.java"
+        ],
+        "Unavailable": [
+            "student\/PredictionFragment.java"
+        ],
+        "Personal Information": [
+            "student\/ProfileFragment.java"
+        ],
+        "Academic Information": [
+            "student\/ProfileFragment.java"
+        ],
+        "Help & Support": [
+            "student\/ProfileFragment.java"
+        ],
+        "Error parsing quiz data": [
+            "student\/quiz\/QuizDetailActivity.java"
+        ],
+        "Failed to load quizzes": [
+            "student\/quiz\/QuizDetailActivity.java"
+        ],
+        "Network error: Unable to load quizzes": [
+            "student\/quiz\/QuizDetailActivity.java"
+        ],
+        "Your answers have been recorded and automatically graded.": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Leave Quiz?": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Your progress is saved, but the timer will continue running.": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Leave": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Stay": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Failed to load quiz details": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Time expired! Submitting quiz...": [
+            "student\/quiz\/TakeQuizActivity.java"
+        ],
+        "Recommendation marked as completed": [
+            "student\/RecommendationDetailActivity.java"
+        ],
+        "Generating new AI recommendations...": [
+            "student\/RecommendationFragment.java"
+        ],
+        "Failed to load recommendations.": [
+            "student\/recommendations\/SmartRecommendationsActivity.java"
+        ],
+        "Your academic progress is at high risk. Urgent attention is required to improve attendance and assessment scores.": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Moderate Risk": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "You are at medium risk. Keep improving your attendance and quiz performance to lower academic risk.": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Your academic progress is on track! Maintain your current study habits and high class attendance.": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "No records yet": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Moderate": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Needs Improvement": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Risk assessment evaluation is currently unavailable.": [
+            "student\/RiskAnalysisActivity.java"
+        ],
+        "Need assistance with your Student Learning Analytics account?\\n\\n": [
+            "student\/StudentMainActivity.java"
+        ],
+        "Student Learning Analytics System (SLAS)\\nVersion 1.0.0\\n\\n": [
+            "student\/StudentMainActivity.java"
+        ],
+        "Are you sure you want to log out of your student account?": [
+            "student\/StudentMainActivity.java"
+        ],
+        "Marked recommendation as completed!": [
+            "student\/StudentRecommendationFragment.java"
+        ],
+        "Could not update recommendation status": [
+            "student\/StudentRecommendationFragment.java"
+        ],
+        "All notification alerts (Assignments, Quizzes, Grades, and System Announcements) are active for your student account.": [
+            "student\/StudentSettingsFragment.java"
+        ],
+        "About SLAS Student Portal": [
+            "student\/StudentSettingsFragment.java"
+        ],
+        "Student Learning Analytics System (SLAS)\\n": [
+            "student\/StudentSettingsFragment.java"
+        ],
+        "Question Text": [
+            "teacher\/assessment\/AddAssessmentActivity.java"
+        ],
+        "Correct Option (e.g. Option B)": [
+            "teacher\/assessment\/AddAssessmentActivity.java"
+        ],
+        "Active Mode: ": [
+            "teacher\/assessment\/AddAssessmentActivity.java"
+        ],
+        "Question added to quiz successfully!": [
+            "teacher\/assessment\/AddAssessmentActivity.java",
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Awarded score cannot exceed 100 pts!": [
+            "teacher\/assessment\/EnterScoreActivity.java"
+        ],
+        "Student score saved and published successfully!": [
+            "teacher\/assessment\/EnterScoreActivity.java"
+        ],
+        "Are you sure you want to delete '": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Question Title (e.g., What is Big-O of Array Access?)": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Correct Option (e.g., Option A: O(1))": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Quiz Question Builder — ": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Awarded Score (Max: ": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Great effort! Clean code structure.": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Grade Student Submission — ": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Assignment deleted": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Awarded score cannot exceed ": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Grade published successfully for ": [
+            "teacher\/assessment\/TeacherAssessmentFragment.java"
+        ],
+        "Submit attendance record for CS101 (BSIT 4-A) on ": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "P: ": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "A: ": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "L: ": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "E: ": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "Date (e.g. May 12, 2026)": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "Marked all students as Present": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "Attendance session recorded successfully!": [
+            "teacher\/attendance\/AttendanceFragment.java"
+        ],
+        "Target": [
+            "teacher\/ClassAnalyticsFragment.java"
+        ],
+        "Student Gradebook Breakdown": [
+            "teacher\/ManageScoresFragment.java"
+        ],
+        "out of 28 assessments": [
+            "teacher\/ManageScoresFragment.java"
+        ],
+        "Prediction vs Actual Residual Detail": [
+            "teacher\/PredictionEvaluationFragment.java"
+        ],
+        "ML Model Architecture Comparison": [
+            "teacher\/PredictionEvaluationFragment.java"
+        ],
+        "Model Architecture: ": [
+            "teacher\/PredictionEvaluationFragment.java"
+        ],
+        "Student Risk Profile & Diagnosis": [
+            "teacher\/PredictionRiskFragment.java"
+        ],
+        "View Full Dossier": [
+            "teacher\/PredictionRiskFragment.java"
+        ],
+        "Student Name or ID (e.g. Dara - STU23001)": [
+            "teacher\/RecommendationFragment.java"
+        ],
+        "Support Activity (e.g. Peer Tutoring in CS101)": [
+            "teacher\/RecommendationFragment.java"
+        ],
+        "Generated 4 new AI recommendations for assigned classes!": [
+            "teacher\/RecommendationFragment.java"
+        ],
+        "Assigned support plan for ": [
+            "teacher\/RecommendationFragment.java"
+        ],
+        "Intervention plan marked as completed!": [
+            "teacher\/RecommendationFragment.java"
+        ],
+        "Note Title (e.g. Academic Progress)": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Write a note about this student...": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Sophea": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "STU023001": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "CS101 - Data Structures • Sem 1, 2024": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "S": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Please write a note before saving": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Exporting Student Report PDF...": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Printing Student Report...": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Please enter title and content": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Note saved: ": [
+            "teacher\/student\/StudentReportActivity.java"
+        ],
+        "Teacher: Mr. Chan": [
+            "teacher\/StudentListFragment.java"
+        ],
+        "Computer Science Dept.": [
+            "teacher\/StudentListFragment.java"
+        ],
+        "At Risk (": [
+            "teacher\/StudentListFragment.java"
+        ],
+        "Need Attention (": [
+            "teacher\/StudentListFragment.java"
+        ],
+        "Showing 0 of 0 students": [
+            "teacher\/StudentListFragment.java"
+        ],
+        "Senior Lecturer • Computer Science Department": [
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "Mar 10, 1990": [
+            "teacher\/TeacherProfileFragment.java",
+            "teacher\/TeacherProfileOverviewFragment.java"
+        ],
+        "TCH-001": [
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "College of Computer Studies": [
+            "teacher\/TeacherProfileFragment.java",
+            "teacher\/TeacherProfileOverviewFragment.java"
+        ],
+        "M.Sc. Computer Science": [
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "Teacher profile photo selection opened": [
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "Teacher profile updated and saved successfully!": [
+            "teacher\/TeacherProfileFragment.java"
+        ],
+        "ID: TCH-001": [
+            "teacher\/TeacherProfileOverviewFragment.java"
+        ],
+        "M.Sc. Computer Science & Software Engineering": [
+            "teacher\/TeacherProfileOverviewFragment.java"
+        ],
+        "Senior Lecturer • Computer Science Dept": [
+            "teacher\/TeacherProfileOverviewFragment.java"
+        ]
+    },
+    "all": [
+        "Lab 402 - Building B",
+        "Q1: What is the time complexity of searching in a BST?",
+        "Options: A: O(1) • B: O(log n) [Correct] • C: O(n²) • D: O(n!)",
+        "CS501",
+        "e.g. Building A, Room 203",
+        "e.g. សុខ ចាន់",
+        "e.g. Sok Chan",
+        "YYYY-MM-DD",
+        "SLAS Admin Console • v2.4.0 (Build 2026.2)",
+        "Institution: National University of Management",
+        "© 2026 Student Learning Analytics System. All rights reserved.",
+        "142.8 MB",
+        "Mar 10, 2026",
+        "PostgreSQL 15",
+        "slas_backup_20260310.sql",
+        "Mar 10, 2026 02:00 AM • 142.8 MB • Auto",
+        "slas_backup_20260303.sql",
+        "Mar 03, 2026 02:00 AM • 139.4 MB • Auto",
+        "A",
+        "Mr. Chan",
+        "ADM001",
+        "chan@univ.edu",
+        "Mar 10, 1988",
+        "Sep 01, 2020",
+        "May 29, 2024, 09:45 AM",
+        "• User Management: Full Access\\n• Course Management: Full Access\\n• Reports & Analytics: Full Access\\n• System Settings: Full Access",
+        "S",
+        "Sophea",
+        "STU23001",
+        "sophea@univ.edu",
+        "Jan 15, 2003",
+        "Bachelor of Computer Science",
+        "2024–2025",
+        "Sep 01, 2023",
+        "May 29, 2024, 10:30 AM",
+        "• GPA: 3.25 \/ 4.0\\n• Enrolled Courses: 6 Courses\\n• Current Semester: Fall 2024",
+        "Student Learning Analytics System (SLAS)",
+        "C",
+        "TCH001",
+        "Mar 10, 1990",
+        "Experienced lecturer in Data Structures and Algorithms.",
+        "• CS101 Data Structures (Section A)\\n• CS202 Database Systems (Section B)",
+        "CS101 – Data Structures",
+        "Teacher: Mr. Chan",
+        "08:00 – 09:30",
+        "A101",
+        "D",
+        "R",
+        "V",
+        "CS101 — Intro to Computer Science",
+        "MA101 — Calculus I",
+        "IT201 — Web Development",
+        "BUS101 — Business Management",
+        "EN101 — English Communication",
+        "Assignment 1: Linked Lists & Pointers",
+        "Course: CS101 - Intro to CS • Max Score: 100 pts",
+        "Student Name (e.g., Sophea)",
+        "Sophea (STU23001)",
+        "Awarded Score (Max: 100 pts)",
+        "Excellent implementation! Code structure is clean.",
+        "STU023001",
+        "▲ +5%",
+        "▲ +3%",
+        "▲ +2%",
+        "▼ -2%",
+        "▲ +0.15",
+        "Data Structures - Due May 25, 2024",
+        "2h ago",
+        "Web Development - Score: 85\/100",
+        "5h ago",
+        "Database Systems - Grade: A-",
+        "1d ago",
+        "Computer Networks - Chapter 4 Lecture Notes",
+        "2d ago",
+        "Generate Report",
+        "Report Period",
+        "Student Dist.",
+        "Academic Perf.",
+        "Attendance Sum.",
+        "GPA Stats",
+        "Gender Dist.",
+        "Nationality Dist.",
+        "Export Format",
+        "PDF",
+        "Excel",
+        "CSV",
+        "Engagement Averages",
+        "Detailed Breakdown",
+        "Coursework",
+        "Quiz attempts",
+        "Examinations",
+        "Generate official academic progress document",
+        "Export PDF Report",
+        "Academic Indicators",
+        "Cumulative GPA: --",
+        "Academic Standing: --",
+        "Enrolled Courses & Results",
+        "Graduation Cap Logo",
+        "Welcome Back!",
+        "Sign in to your student account",
+        "STD001",
+        "Achieve Tomorrow\"",
+        "Student Illustration",
+        "Welcome",
+        "Ambient glow",
+        "Graduation Cap",
+        "\"Learn Today, Achieve Tomorrow\"",
+        "Oct 28, 2024 10:30 AM",
+        "New Teacher Registration",
+        "Ms. Dany has registered as a new teacher and is pending your approval. Please review her information and approve or reject the registration.",
+        "Ms. Dany",
+        "dany@teacher.edu",
+        "Registered At:",
+        "Push Notifications",
+        "Receive important updates on your device.",
+        "New User Registration\\nNotify when new users register",
+        "Course Updates\\nNotify about course changes",
+        "Report Generation\\nNotify when reports are ready",
+        "Receive notifications via email.",
+        "New User Registration\\nEmail when new users register",
+        "Course Updates\\nNotifications about course changes",
+        "Quiet Hours\\nDisable notifications during specific hours",
+        "10:00 PM",
+        "End Time",
+        "07:00 AM",
+        "Unable to load performance details",
+        "Please check your connection and try again.",
+        "Detailed breakdown of your academic performance",
+        "N\/A",
+        "View detailed information for each component",
+        "💡 Performance insights will update as academic records become available.",
+        "Camera",
+        "chan@university.edu",
+        "Department (Read-Only)",
+        "Detailed analysis and breakdown",
+        "Based on your current performance and learning behavior.",
+        "This score is predicted using machine learning based on your attendance, assignments, quizzes, and past performance.",
+        "How is this calculated?",
+        "There is a moderate chance that your performance may decline if no improvement is made.",
+        "Evaluating academic factors...",
+        "Recommendations to Reduce Risk",
+        "✓ Practice more past quiz questions",
+        "✓ Attend all upcoming classes",
+        "✓ Review weak topics regularly",
+        "Administrator Information (Read-Only)",
+        "ADM-001",
+        "College of Computer Studies",
+        "Account Created Date",
+        "Jan 15, 2024",
+        "Today at 08:30 AM (This Device)",
+        "Personalized suggestions for your learning",
+        "Goal Icon",
+        "Let's Achieve Your Goals!",
+        "Better Learning • A Brighter Future",
+        "Follow these recommendations to improve your performance.",
+        "Illustration",
+        "Quiz Rec",
+        "High Priority",
+        "Review upcoming quizzes and practice topic questions regularly.",
+        "Attendance Rec",
+        "Maintain Good Attendance",
+        "Keep Going",
+        "Keep attending classes regularly to maintain your good performance.",
+        "Weak Topics Rec",
+        "Focus on Weak Topics",
+        "Spend more time reviewing course modules where your performance is lower.",
+        "Schedule Rec",
+        "Set Study Schedule",
+        "Recommended",
+        "Create a consistent study routine to improve your learning progress.",
+        "Resources Rec",
+        "Use Learning Resources",
+        "Review learning resources and practice materials to strengthen your understanding.",
+        "View Resources →",
+        "Trophy",
+        "Small Steps Lead to Big Success!",
+        "Be consistent and keep improving.",
+        "Assessment, contributing factors, and mitigation plan",
+        "Overall Risk Score Index",
+        "Risk Factors Breakdown",
+        "-- attendance recorded",
+        "Previous Exam Factor",
+        "Previous Exam Results",
+        "Review weak lecture topics and practice weekly quiz questions.",
+        "Maintain Class Attendance",
+        "Keep your attendance above 85% to stay in low risk zone.",
+        "Ongoing",
+        "Consult Instructor \/ Mentor",
+        "Attend office hours or join study groups for challenging concepts.",
+        "Suggested",
+        "LearnAnalytics Logo",
+        "Track • Analyze • Improve\\nYour Future",
+        "Education is the key to a brighter future",
+        "Computer Science • Year 3",
+        "sophea@university.edu",
+        "Individual Performance Trend",
+        "• May 25, 2024: Score entered for Assignment 4 (80\/100)",
+        "• May 10, 2024: Attended CS101 class (Present)",
+        "• Apr 15, 2024: Completed Quiz 2 (78\/100)",
+        "Bulk Student Import",
+        "Step 1: Download Template",
+        "Use the standardized university template with sample rows and instruction guides.",
+        "Excel (.xlsx)",
+        "CSV (.csv)",
+        "Step 2: Upload File",
+        "Supported formats: .xlsx, .csv (Max 5MB \/ 5,000 rows)",
+        "Click to select .xlsx or .csv file",
+        "Upload and Validate File",
+        "Search by filename or ID...",
+        "Duplicates",
+        "Download Error Report (CSV)",
+        "students.xlsx",
+        "Processed",
+        "CS101 - Data Structures • Sem 1, 2024",
+        "Write a note...",
+        "Assignment 1: Algorithms & Complexity",
+        "CS101 • Data Structures",
+        "Max Marks: 100 • Weight: 20% • Due: Dec 31, 2026",
+        "Instructions:\\nPlease write your complete solution below or upload a PDF document containing your analysis.",
+        "Your Solution \/ Written Response",
+        "Type your written answer here...",
+        "Attachment (PDF, DOCX, ZIP)",
+        "No file attached",
+        "Quiz 1: Computer Science Fundamentals",
+        "Questions: 5 • Total Marks: 100 • Time Limit: 30 Mins",
+        "Instructions:\\n1. Read each question carefully before answering.\\n2. You can navigate between questions using Previous and Next.\\n3. Your progress is saved automatically.\\n4. Ensure you click 'Submit Quiz' before time expires.",
+        "Start Quiz Now",
+        "What is the worst-case time complexity of QuickSort?",
+        "Option A: O(n log n)",
+        "Option B: O(n^2)",
+        "Option C: O(n)",
+        "Option D: O(1)",
+        "Your attempt has been recorded. Results will be released by your instructor.",
+        "Return to Assessment Hub",
+        "Choose file format and optional filters.",
+        "Academic Structure & Terms",
+        "Semesters & Term Windows",
+        "Start: 2026-09-01 • End: 2026-12-20 • Status: Current",
+        "Start: 2027-01-15 • End: 2027-05-30 • Status: Upcoming",
+        "Executive Reports & Audit Logs",
+        "Admin \/ System Audits & Reports",
+        "Export PDF",
+        "System Audit Log Entries",
+        "Timestamp: 2026-10-30 14:22:10",
+        "Actor: Admin (admin@univ.edu) • Action: UPDATE_COURSE",
+        "Target: CS101 Curriculum • Outcome: Success",
+        "Timestamp: 2026-10-30 11:05:40",
+        "Actor: System • Action: ML_RISK_EVALUATION",
+        "Target: Student Risk Batch • Outcome: Success",
+        "Search student name, ID, class cohort...",
+        "Full Cohorts",
+        "Timetables",
+        "Conflict Status",
+        "No Conflicts",
+        "36 hrs\/wk",
+        "Manage university classes, schedules and classrooms",
+        "Class Directory",
+        "Avg. Pass Rate",
+        "<",
+        ">",
+        "Occupied",
+        "Fully Assigned",
+        "Colleges",
+        "Course Directory & Syllabi",
+        "Admin \/ Courses & Syllabi",
+        "Avg Class Size",
+        "Course Enrollment Growth Trend",
+        "Active Cohorts",
+        "Avg Utilization",
+        "Monthly Course Enrollment Line Chart",
+        "Course Enrollment Roster",
+        "Completion Rate",
+        "Dropout Rate",
+        "Course Completion Roster",
+        "CS101 (96%)",
+        "MA101 (78%)",
+        "Course Average Pass Rates Bar Chart",
+        "Course Performance Roster",
+        "Reviewed",
+        "Issues Found",
+        "● ",
+        "Enrollment & Cohort Management",
+        "Admin \/ Student Enrollments & Cohorts",
+        "Recent Cohort Bindings",
+        "IT-4A • Information Technology",
+        "CS-3A • Computer Science",
+        "Faculty Reviewed",
+        "—",
+        "Reviews Needed",
+        "Incident Resolution Workspace",
+        "Track & resolve academic, attendance & student issues",
+        "Incident Workspace",
+        "Open Issues",
+        "Under Review",
+        "Stay updated with system activities",
+        "Notifications Bell",
+        "Empty Notifications Illustration",
+        "You're all caught up! There are no notifications at the moment.",
+        "📷",
+        "admin@university.edu",
+        "Total Logins",
+        "May 29, 2024 09:30 AM",
+        "View, analyze and export university reports",
+        "Teaching load, performance, classes",
+        "Course enrollment, completion, analytics",
+        "Admin \/ At-Risk Alerts & Interventions",
+        "Active Plans",
+        "At-Risk Student Alerts & Interventions",
+        "Dara V. (STD042) • IT-4A",
+        "Risk Level: HIGH • Reason: Low Attendance (58%) & Failed Quiz 2",
+        "Intervention Status: Action Plan Assigned • Staff: Mr. Chan",
+        "Sokha K. (STD089) • CS-3B",
+        "Risk Level: MEDIUM • Reason: Missing Assignment 3",
+        "New Intake",
+        "Returning",
+        "Graduation Rate",
+        "Monthly Enrollment Growth Bar",
+        "Student Enrollment Roster",
+        "Honor Roll",
+        "GPA Range Distribution",
+        "Student Performance Roster",
+        "Late Arrivals",
+        "Staffed Classes",
+        "Teaching Workload Distribution",
+        "Faculty Overview Directory",
+        "Teaching Workload Metrics",
+        "1,080 Hrs\/Wk",
+        "19.2 Hrs\/Wk",
+        "Faculty Teaching Load List",
+        "Course & Class Staffing Summary",
+        "Teacher Assignment Matrix",
+        "Student Rating",
+        "Faculty Performance Scores by Dept",
+        "Faculty Evaluation Scores Roster",
+        "Manage students, teachers and administrators",
+        "Search administrators...",
+        "Total Roster",
+        "Attendance Distribution Ratio",
+        "P: 3",
+        "L: 1",
+        "E: 1",
+        "Student Attendance Analytics Roster",
+        "Export Excel",
+        "Browse, audit & manage university course curriculum",
+        "Curriculum Audit",
+        "All Statuses (18)",
+        "No courses match the selected search or status filters.",
+        "Page 1 of 2",
+        "8 Needing Grading",
+        "IT402 — Web Development Systems",
+        "CS101 - Data Structures",
+        "out of 28 assessments",
+        "Assignment Scores Roster",
+        "Quiz Scores Roster",
+        "Student Academic Gradebook Roster",
+        "MAE",
+        "RMSE",
+        "Prediction vs Actual",
+        "System Automated Retrain",
+        "MAE: 5.32  •  RMSE: 7.85",
+        "Apr 25, 2024",
+        "MAE: 5.61  •  RMSE: 8.12",
+        "Mar 25, 2024",
+        "Initial Model Training",
+        "MAE: 6.01  •  RMSE: 8.95",
+        "Pred vs Actual",
+        "Model Insights",
+        "ML Model Evaluation Metrics",
+        "MAE Error",
+        "2.45 pts",
+        "RMSE Error",
+        "3.12 pts",
+        "R² Variance",
+        "Test Samples",
+        "v2.4 RF",
+        "Optimal",
+        "Actual vs Predicted Performance Line Chart",
+        "Student Actual vs Predicted Score Roster",
+        "Trained Machine Learning Models Comparison",
+        "Model Feature Importance & Drivers",
+        "38% Weight",
+        "25% Weight",
+        "20% Weight",
+        "Historical Cumulative GPA",
+        "17% Weight",
+        "Avg Predicted Score",
+        "At-Risk Cohorts",
+        "94.2% ML",
+        "Predicted Score Distribution Bar Chart",
+        "out of 35 students (14.3%)",
+        "High Absence (> 15%)",
+        "Multiple Issues",
+        "Expected Grade",
+        "Grade: B+",
+        "91.5% ML",
+        "Student Exam Predictions Roster",
+        "Risk Factor Analysis Summary",
+        "Primary Risk Factor",
+        "Absence > 15%",
+        "Risk Improvement",
+        "-2.1% Improved",
+        "Course Risk Factor Breakdown",
+        "Student Recs",
+        "Priority Recs",
+        "Intervention Plans",
+        "Total AI Recs",
+        "8 Urgent",
+        "Medium Priority",
+        "Low Priority",
+        "19 Advisory",
+        "Completed Plans",
+        "24 Plans",
+        "Recommendation Priority Ratio",
+        "Run AI Recommendation Engine",
+        "Analyze student grades, attendance & quiz logs",
+        "Generate AI Recs",
+        "High & Urgent Priority Academic Recommendations",
+        "Academic Support & Intervention Plans",
+        "Completed Support Archives & Impact",
+        "Enrolled Course Roster",
+        "Academic Support & AI Recommendations Summary",
+        "0 Urgent",
+        "Personalized AI Study Recommendations",
+        "No recommendations available yet.",
+        "Update your student password and login credentials",
+        "Configure assignment, quiz, and grade alerts",
+        "About SLAS Student Portal",
+        "Manage push and email notifications",
+        "Appearance",
+        "Theme, language and display options",
+        "Exit admin account session",
+        "Real-time performance and analytics overview",
+        "↑ +5.2%",
+        "↑ +3%",
+        "↑ +12%",
+        "Performers",
+        "Top Performers",
+        "↑ +15%",
+        "Lightbulb",
+        "Review students with repeated absences",
+        "Average scores increased this month",
+        "Review risk factors and provide support",
+        "Drafts",
+        "Assignments & Homework Roster",
+        "Quiz Builder & Active Quizzes Roster",
+        "Archived (0)",
+        "All Depts",
+        "Added quiz scores - CS101",
+        "2 hours ago",
+        "Updated attendance - CS102",
+        "4 hours ago",
+        "1 day ago",
+        "Manage and monitor registered teachers",
+        "Senior Lecturer • Computer Science Dept",
+        "Faculty Information (Read-Only)",
+        "TCH-001",
+        "M.Sc. Computer Science",
+        "Senior Lecturer • CS Department",
+        "ID: TCH-001",
+        "M.Sc. Computer Science & Software Engineering",
+        "Courses: CS101, IT402 • Classes: BSIT 4-A, BSIT 4-B",
+        "Account Created",
+        "Today at 08:30 AM",
+        "Good Perf.",
+        "Overall Avg",
+        "Pie Chart Icon",
+        "Book",
+        "Select a course to view detailed analytics",
+        "Computer Science Dept.",
+        "Need Attention (6)",
+        "Showing 1–8 of 35 students",
+        "CS101",
+        "Data Structures",
+        "Enrolled Class: BSIT 4-A • College of Computer Studies",
+        "Enrolled: Mar 01, 2026 • AY 2025-2026 Sem 1",
+        "BSIT 4-A",
+        "Web Systems & Technologies",
+        "Validated",
+        "Mon \/ Wed 08:00 AM - 11:00 AM",
+        "Room: Computer Lab 101 • Teacher: Prof. Alan Santos",
+        "Lab 101",
+        "Computer Lab 1",
+        "CCS Building • 1st Floor • Computer Lab",
+        "Capacity: 40 PCs • Projector, AC, High-Speed LAN",
+        "Data Structures & Algorithms",
+        "Class: BSCS 3-A • Teacher: Engr. John Reyes",
+        "Information Technology",
+        "Head: Dr. Maria Cruz",
+        "Intro to Computer Science",
+        "College of Computer Studies • 3 Credits",
+        "1,240 Enrolled • 98.2% Completion Rate • Avg Score: 88.5%",
+        "Verified",
+        "Class: BSCS 3-A • Teacher: Engr. John Reyes • 3 Credits",
+        "Audit note: All required learning modules and syllabi uploaded.",
+        "Random Forest v2.4 (CS101)",
+        "CS101 Data Structures • 1,240 Test Records Evaluated",
+        "MAE: 2.45 pts • RMSE: 3.12 pts • R²: 0.88 (88% Variance Explained)",
+        "CS101 - Intro to CS • BSIT 4-A",
+        "Current Avg: 88.5% • Predicted Exam: 92.0% • 94.5% Confidence",
+        "Prof. Alan Santos",
+        "College of Computer Studies • Associate Professor",
+        "Class Pass Rate: 94.2% • Student Rating: 4.8 \/ 5.0",
+        "Low Attendance Alert - Sophea",
+        "Student: Sophea (STU23001) [View Dossier]",
+        "Class: BSIT 4-A • Logged: Mar 10, 2026 • Assigned: Advisor Santos",
+        "Support Plan: 1-on-1 Academic Counseling & Peer Tutoring",
+        "Target Goal: Raise GPA to 2.80 • Timeline: May 12 - Jun 30, 2026",
+        "Random Forest Regressor",
+        "Best Performer",
+        "Version: SLAS-ML v2.4 • 1,240 Test Samples",
+        "MAE: 2.12 pts • RMSE: 2.85 pts • R²: 0.91 (91% Var) • Speed: 1.2s",
+        "Low Residual (1.5 pts)",
+        "Actual Score: 88.0% • Predicted Score: 86.5% • Absolute Error: 1.5 pts",
+        "+12.5% GPA Increase",
+        "Recommendation: Additional Tutoring in CS101 Data Structures",
+        "Generated: Jan 10, 2026 • Completed: Mar 15, 2026 • Priority: High",
+        "College of Computer Studies • 35 Enrolled",
+        "Primary Risk Factor: Low Attendance (<75%) and Missed Quizzes",
+        "Present: 118 Days • Absent: 2 Days • Late: 0 • Excused: 0",
+        "CS101 - Data Structures • BSIT 4-A",
+        "AI Suggestion: Schedule 1-on-1 Tutoring & Practice Exercises",
+        "GPA: 2.10 • Attendance: 58% • Assignment Avg: 62% • Quiz Avg: 55%",
+        "BSIT 4-A • College of Computer Studies",
+        "P",
+        "L",
+        "E",
+        "Web Systems & Development",
+        "Assigned Teacher: Prof. Alan Santos",
+        "College of Computer Studies • AY 2025-2026 Sem 1",
+        "College of Computer Studies • AY 2024-2025 Semester 1",
+        "College of Computer Studies • Evaluation Complete",
+        "96.5% Course Pass Rate • 4.9\/5.0 Student Rating",
+        "94.2% Rating",
+        "Department: College of Computer Studies • 18 Teaching Hrs\/Wk",
+        "Normal Workload",
+        "Department: College of Computer Studies",
+        "Weekly Teaching Load: 18 Hrs\/Wk • 2 Courses Assigned",
+        "Dara",
+        "STU023002",
+        "Data Science",
+        "Absence",
+        "Main Reasons",
+        "• High absence rate",
+        "Topic 1",
+        "35 students • Mon, Wed 08:00–09:30 • Room A101",
+        "Instructor: Mr. Chan",
+        "OCT",
+        "Midterm • 9:00 AM • Room B-204",
+        "Feedback: Good job",
+        "10:30 AM",
+        "Assignment 2: Linked Lists",
+        "Oct 10, 2024",
+        "17 remaining",
+        "Expand",
+        "New Assignment Added",
+        "Review quiz topics and practice more past questions.",
+        "Reason text goes here.",
+        "Suggested Action",
+        "Sep 15, 2024",
+        "Core Course",
+        "Intro to Computer Science & Programming",
+        "Instructor: Prof. Emily Johnson • Room 402",
+        "#12",
+        "students_2026.xlsx",
+        "Imported by: Admin • 2026-11-05",
+        "bsr180872",
+        "Sok Chan (សុខ ចាន់)",
+        "Review Weak Topic: Linked Lists & Pointer Operations",
+        "Your Quiz 2 score in Data Structures was 58%. Reviewing Chapter 4 practice exercises can increase your predicted exam score by +15%.",
+        "Review Topic",
+        "Class: BSIT 4-A • Computer Science Dept",
+        "Due Date: Oct 20, 2024 • Total Marks: 100 pts • Submissions: 28\/35 (7 Pending)",
+        "88 \/ 100 pts",
+        "Assessment: Assignment 1 - Linked Lists",
+        "Grading Status: Graded & Published • Feedback: Excellent work!",
+        "Quiz 1: Big-O Complexity & Sorting",
+        "Class: BSCS 3-A • 10 Multiple Choice Questions",
+        "Duration: 30 Mins • Marks: 50 pts • Attempts: 30\/35 Students Completed",
+        "Quiz Builder",
+        "Assessment: Assignment 1 - Linked Lists & Pointers",
+        "Submitted: Oct 10, 2024 02:30 PM • Attachment: solution_file_v1.pdf",
+        "Overview & quick analytics for your assigned classes",
+        "Personalized academic recommendations",
+        "Academic reports and performance summaries",
+        "Account and application preferences",
+        "Help center and student support",
+        "Application information and version",
+        "ST2024001",
+        "#",
+        "Database backup initiated successfully!",
+        "Downloading SQL database archive...",
+        "Are you sure you want to logout from the admin panel?",
+        "Edit Profile clicked",
+        "Role Name (e.g. Department Chair)",
+        "Class Directory Detail",
+        "View Representative Dossier",
+        "Scheduling Conflict Detected!",
+        "Add Classroom Facility",
+        "Enroll Student in Class Cohort",
+        "Class Capacity Limit Reached!",
+        "Please fill in Class Name and Class Code",
+        "Please fill in Class Code, Room, and Time Slot",
+        "Please fill in Room Number and Name",
+        "Please fill in Class Code and Teacher Name",
+        "Assigned ",
+        "Please fill in Student ID and Class Code",
+        "Previous page",
+        "Next page",
+        "Curriculum Audit Detail",
+        "Incident Workspace Detail",
+        "Open Student Dossier",
+        "All Statuses (",
+        "Page ",
+        "College: ",
+        "Course code is required",
+        "Course name is required",
+        "Credits is required",
+        "Oct 28, 2024 ",
+        "Approve Registration?",
+        "Are you sure you want to approve Ms. Dany's teacher registration?",
+        "Reject Registration?",
+        "Are you sure you want to reject Ms. Dany's teacher registration?",
+        "Ms. Dany's teacher registration approved successfully!",
+        "Ms. Dany's teacher registration rejected.",
+        "Unread (",
+        "No Matching Notifications",
+        "No notifications found matching your search or filter criteria.",
+        "All notifications marked as read",
+        "Read notifications deleted",
+        "Please select at least one report metric",
+        "Summary Statistics for AY 2024-2025:\\n\\n",
+        "Full name is required",
+        "Teacher ID is required",
+        "Email address is required",
+        "Please select a work type",
+        "Network error creating teacher",
+        "Are you sure you want to ",
+        "Administrative Notes (Tap to edit)",
+        "Enter administrative note for teacher...",
+        "Teacher Administrative Notes",
+        "Failed to update account status (HTTP ",
+        "Network error updating status: ",
+        "Notes updated",
+        "Failed to update teacher: HTTP ",
+        "Network error updating teacher: ",
+        "Search faculty members...",
+        "Rating 1.0 - 5.0 (required when completed)",
+        "Are you sure you want to delete user ",
+        "Failed to load faculty (HTTP ",
+        "No faculty members found",
+        "Network error: ",
+        "Saved",
+        "Select at least one",
+        "Self-deletion is prohibited. You cannot delete your own account.",
+        "Failed to delete user (HTTP ",
+        "Network error deleting user: ",
+        "Current password is required",
+        "New password must be at least 8 characters",
+        "Passwords do not match",
+        "Two-Factor Authentication ",
+        "Admin ID is required",
+        "Network error creating admin",
+        "Khmer Name is required",
+        "English Name is required",
+        "Date of Birth is required (YYYY-MM-DD)",
+        "Student ID \/ Username is required",
+        "Password must be at least 8 characters",
+        "Student ID \/ Username: ",
+        "Server Error: Failed to load lookups",
+        "Failed to load academic options",
+        "Module Permissions Overview",
+        "Recent Activity Log",
+        "• Created at: ",
+        "Enter administrative note for admin...",
+        "Admin Administrative Notes",
+        "Admin & Advisor Notes (Tap card to Add \/ Edit)",
+        "Enter advisor or administrative notes for ",
+        "Failed to update status (HTTP ",
+        "Failed to update admin: HTTP ",
+        "Network error updating admin: ",
+        "Please enter a valid email or leave blank",
+        "Profile image updated",
+        "Exporting students...",
+        "Export failed (HTTP ",
+        "Network error exporting: ",
+        "Saved to ",
+        "Failed to download template (HTTP ",
+        "Template saved to: ",
+        "Failed to read file: ",
+        "Saved: ",
+        "Error saving: ",
+        "Import cancelled",
+        "Could not confirm import (HTTP ",
+        "Cancellation requested",
+        "Please enter current password",
+        "Please enter new password",
+        "Password does not meet all requirements",
+        "Please confirm new password",
+        "Password changed successfully!",
+        "Please enter your email",
+        "Reset link request submitted",
+        "Please enter your Student \/ Teacher \/ Admin ID",
+        "Please enter your password",
+        "Welcome to Student Learning Analytics",
+        "Failed to load data.",
+        "Failed to load analytics.",
+        "Max Marks: ",
+        "Resubmit Work",
+        "Status: Draft (Saved)",
+        "Work submitted successfully!",
+        "Draft saved successfully.",
+        "Network error submitting work: ",
+        "Your performance in ",
+        "Your current score in ",
+        "Track your assignments, quizzes, and exam schedule in the tabs above to stay on top of this course.",
+        "Room TBA",
+        "Error parsing exam data",
+        "Session expired, please login again",
+        "Failed to load exams",
+        "Network error: Unable to load exams",
+        "Invalid Course Offering",
+        "Failed to load grade details.",
+        "My Academic Results",
+        "Cumulative GPA: ",
+        "Academic Standing: ",
+        "Predicted Final Score: ",
+        "No courses enrolled for this period.",
+        "Generating PDF Report",
+        "Creating official Learning Analytics PDF document for ",
+        "PDF saved: ",
+        "Failed to generate PDF document",
+        "Logout Confirmation",
+        "Important (",
+        "Unable to load notifications. Please check your connection.",
+        "Insufficient Data",
+        "Based on current GPA (",
+        "Unavailable",
+        "Personal Information",
+        "Academic Information",
+        "Help & Support",
+        "Error parsing quiz data",
+        "Failed to load quizzes",
+        "Network error: Unable to load quizzes",
+        "Your answers have been recorded and automatically graded.",
+        "Leave Quiz?",
+        "Your progress is saved, but the timer will continue running.",
+        "Leave",
+        "Stay",
+        "Failed to load quiz details",
+        "Time expired! Submitting quiz...",
+        "Recommendation marked as completed",
+        "Generating new AI recommendations...",
+        "Failed to load recommendations.",
+        "Your academic progress is at high risk. Urgent attention is required to improve attendance and assessment scores.",
+        "Moderate Risk",
+        "You are at medium risk. Keep improving your attendance and quiz performance to lower academic risk.",
+        "Your academic progress is on track! Maintain your current study habits and high class attendance.",
+        "No records yet",
+        "Moderate",
+        "Needs Improvement",
+        "Risk assessment evaluation is currently unavailable.",
+        "Need assistance with your Student Learning Analytics account?\\n\\n",
+        "Student Learning Analytics System (SLAS)\\nVersion 1.0.0\\n\\n",
+        "Are you sure you want to log out of your student account?",
+        "Marked recommendation as completed!",
+        "Could not update recommendation status",
+        "All notification alerts (Assignments, Quizzes, Grades, and System Announcements) are active for your student account.",
+        "Student Learning Analytics System (SLAS)\\n",
+        "Question Text",
+        "Correct Option (e.g. Option B)",
+        "Active Mode: ",
+        "Question added to quiz successfully!",
+        "Awarded score cannot exceed 100 pts!",
+        "Student score saved and published successfully!",
+        "Are you sure you want to delete '",
+        "Question Title (e.g., What is Big-O of Array Access?)",
+        "Correct Option (e.g., Option A: O(1))",
+        "Quiz Question Builder — ",
+        "Awarded Score (Max: ",
+        "Great effort! Clean code structure.",
+        "Grade Student Submission — ",
+        "Assignment deleted",
+        "Awarded score cannot exceed ",
+        "Grade published successfully for ",
+        "Submit attendance record for CS101 (BSIT 4-A) on ",
+        "P: ",
+        "A: ",
+        "L: ",
+        "E: ",
+        "Date (e.g. May 12, 2026)",
+        "Marked all students as Present",
+        "Attendance session recorded successfully!",
+        "Target",
+        "Student Gradebook Breakdown",
+        "Prediction vs Actual Residual Detail",
+        "ML Model Architecture Comparison",
+        "Model Architecture: ",
+        "Student Risk Profile & Diagnosis",
+        "View Full Dossier",
+        "Student Name or ID (e.g. Dara - STU23001)",
+        "Support Activity (e.g. Peer Tutoring in CS101)",
+        "Generated 4 new AI recommendations for assigned classes!",
+        "Assigned support plan for ",
+        "Intervention plan marked as completed!",
+        "Note Title (e.g. Academic Progress)",
+        "Write a note about this student...",
+        "Please write a note before saving",
+        "Exporting Student Report PDF...",
+        "Printing Student Report...",
+        "Please enter title and content",
+        "Note saved: ",
+        "At Risk (",
+        "Need Attention (",
+        "Showing 0 of 0 students",
+        "Senior Lecturer • Computer Science Department",
+        "Teacher profile photo selection opened",
+        "Teacher profile updated and saved successfully!"
+    ]
+}

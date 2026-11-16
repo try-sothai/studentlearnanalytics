@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="6dp"
-                android:text="Account"
+                android:text="@string/account"
                 android:textColor="@color/drawer_secondary_text"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -131,7 +131,7 @@
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:contentDescription="Log Out Icon"
+                android:contentDescription="@string/log_out_icon"
                 android:src="@drawable/ic_logout_red"
                 app:tint="@color/drawer_logout_red" />
 
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Log Out"
+                android:text="@string/log_out"
                 android:textColor="@color/drawer_logout_red"
                 android:textSize="15sp"
                 android:textStyle="bold" />

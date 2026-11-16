@@ -96,8 +96,8 @@ public class ClassEnrollmentAdapter extends RecyclerView.Adapter<ClassEnrollment
         public void bind(EnrollmentItem item, OnEnrollmentClickListener listener) {
             if (tvStudentId != null) tvStudentId.setText(item.studentId);
             if (tvStudentName != null) tvStudentName.setText(item.studentName);
-            if (tvClassName != null) tvClassName.setText("Enrolled Class: " + item.className);
-            if (tvEnrollmentDate != null) tvEnrollmentDate.setText("Enrolled: " + item.enrollmentDate);
+            if (tvClassName != null) tvClassName.setText(tvClassName.getContext().getString(R.string.enrolled_class) + item.className);
+            if (tvEnrollmentDate != null) tvEnrollmentDate.setText(tvEnrollmentDate.getContext().getString(R.string.enrolled) + item.enrollmentDate);
             if (tvEnrollmentStatus != null) {
                 tvEnrollmentStatus.setText(item.status);
                 if ("Enrolled".equalsIgnoreCase(item.status) || "Active".equalsIgnoreCase(item.status)) {

@@ -119,18 +119,18 @@ public class TeacherMainActivity extends AppCompatActivity {
         if (headerInfo != null) headerInfo.setOnClickListener(profileClickListener);
         if (avatarContainer != null) avatarContainer.setOnClickListener(profileClickListener);
 
-        bindDrawerItem(0, R.id.itemTeacherDrawerDashboard, R.drawable.ic_home, "Dashboard", null);
-        bindDrawerItem(1, R.id.itemTeacherDrawerStudents, R.drawable.ic_users, "Students", "Assigned student roster");
-        bindDrawerItem(2, R.id.itemTeacherDrawerCourses, R.drawable.ic_open_book, "Courses", "Manage assigned courses");
-        bindDrawerItem(3, R.id.itemTeacherDrawerAssessments, R.drawable.ic_open_book, "Assessments", "Assignments, Quizzes & Exams");
-        bindDrawerItem(4, R.id.itemTeacherDrawerPrediction, R.drawable.ic_analytics, "Prediction & Risk", "At-risk student predictions");
-        bindDrawerItem(5, R.id.itemTeacherDrawerScores, R.drawable.ic_star_active, "Manage Scores", "Record assignment & exam scores");
-        bindDrawerItem(6, R.id.itemTeacherDrawerAttendance, R.drawable.ic_calendar, "Attendance", "Track class attendance");
-        bindDrawerItem(7, R.id.itemTeacherDrawerRecommendation, R.drawable.ic_circle_info, "Recommendations", "AI academic support guidance");
-        bindDrawerItem(8, R.id.itemTeacherDrawerReports, R.drawable.ic_chart_bar, "Reports", "Export class performance reports");
-        bindDrawerItem(9, R.id.itemTeacherDrawerEvaluation, R.drawable.ic_circle_help, "Prediction Evaluation", "Model accuracy evaluation");
-        bindDrawerItem(10, R.id.itemTeacherDrawerNotifications, R.drawable.ic_notifications, "Notifications", "Academic alerts & updates");
-        bindDrawerItem(11, R.id.itemTeacherDrawerProfile, R.drawable.ic_profile, "Profile", "Manage faculty profile");
+        bindDrawerItem(0, R.id.itemTeacherDrawerDashboard, R.drawable.ic_home, R.string.dashboard, 0);
+        bindDrawerItem(1, R.id.itemTeacherDrawerStudents, R.drawable.ic_users, R.string.nav_students, R.string.assigned_student_roster);
+        bindDrawerItem(2, R.id.itemTeacherDrawerCourses, R.drawable.ic_open_book, R.string.nav_courses, R.string.manage_assigned_courses);
+        bindDrawerItem(3, R.id.itemTeacherDrawerAssessments, R.drawable.ic_open_book, R.string.assessments, R.string.assignments_quizzes_exams);
+        bindDrawerItem(4, R.id.itemTeacherDrawerPrediction, R.drawable.ic_analytics, R.string.prediction_risk, R.string.at_risk_student_predictions);
+        bindDrawerItem(5, R.id.itemTeacherDrawerScores, R.drawable.ic_star_active, R.string.manage_scores, R.string.record_assignment_exam_scores);
+        bindDrawerItem(6, R.id.itemTeacherDrawerAttendance, R.drawable.ic_calendar, R.string.attendance, R.string.track_class_attendance);
+        bindDrawerItem(7, R.id.itemTeacherDrawerRecommendation, R.drawable.ic_circle_info, R.string.recommendations, R.string.ai_academic_support_guidance);
+        bindDrawerItem(8, R.id.itemTeacherDrawerReports, R.drawable.ic_chart_bar, R.string.nav_reports, R.string.export_class_performance_reports);
+        bindDrawerItem(9, R.id.itemTeacherDrawerEvaluation, R.drawable.ic_circle_help, R.string.prediction_evaluation, R.string.model_accuracy_evaluation);
+        bindDrawerItem(10, R.id.itemTeacherDrawerNotifications, R.drawable.ic_notifications, R.string.nav_notifications, R.string.academic_alerts_updates);
+        bindDrawerItem(11, R.id.itemTeacherDrawerProfile, R.drawable.ic_profile, R.string.nav_profile, R.string.manage_faculty_profile);
 
         View btnLogout = findViewById(R.id.btnTeacherDrawerLogout);
         if (btnLogout != null) {
@@ -141,7 +141,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         }
     }
 
-    private void bindDrawerItem(int index, int layoutId, int iconRes, String title, String subtitle) {
+    private void bindDrawerItem(int index, int layoutId, int iconRes, int titleRes, int subtitleRes) {
         View itemRoot = findViewById(layoutId);
         if (itemRoot == null) return;
 
@@ -152,10 +152,10 @@ public class TeacherMainActivity extends AppCompatActivity {
         TextView tvSubtitle = itemRoot.findViewById(R.id.tvDrawerItemSubtitle);
 
         if (imgIcon != null) imgIcon.setImageResource(iconRes);
-        if (tvTitle != null) tvTitle.setText(title);
+        if (tvTitle != null && titleRes != 0) tvTitle.setText(titleRes);
         if (tvSubtitle != null) {
-            if (subtitle != null && !subtitle.isEmpty()) {
-                tvSubtitle.setText(subtitle);
+            if (subtitleRes != 0) {
+                tvSubtitle.setText(subtitleRes);
                 tvSubtitle.setVisibility(View.VISIBLE);
             } else {
                 tvSubtitle.setVisibility(View.GONE);

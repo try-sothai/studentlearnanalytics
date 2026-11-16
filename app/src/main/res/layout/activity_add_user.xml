@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Add Student"
+            android:text="@string/add_student"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -72,7 +72,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="01. PERSONAL INFORMATION"
+                        android:text="@string/str_01_personal_information"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -87,7 +87,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Khmer Name *"
+                        android:text="@string/khmer_name"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -110,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="English Name *"
+                        android:text="@string/english_name"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -144,7 +144,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Gender *"
+                                android:text="@string/gender"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -165,7 +165,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Date of Birth *"
+                                android:text="@string/date_of_birth_8cd760"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -190,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Place of Birth"
+                        android:text="@string/place_of_birth"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -204,7 +204,7 @@
                             android:id="@+id/etAddStudentPob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Province / City"
+                            android:hint="@string/province_city"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -213,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Current Address"
+                        android:text="@string/current_address"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -227,7 +227,7 @@
                             android:id="@+id/etAddStudentAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Current Residential Address"
+                            android:hint="@string/current_residential_address"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -254,7 +254,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="02. FAMILY INFORMATION"
+                        android:text="@string/str_02_family_information"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -269,7 +269,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Father's Information"
+                        android:text="@string/father_s_information"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -280,7 +280,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Father's Khmer Name"
+                        android:hint="@string/father_s_khmer_name"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -290,7 +290,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Father's English Name"
+                        android:hint="@string/father_s_english_name"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -300,7 +300,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Father's Phone Number"
+                        android:hint="@string/father_s_phone_number"
                         android:inputType="phone"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
@@ -310,7 +310,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="Mother's Information"
+                        android:text="@string/mother_s_information"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -321,7 +321,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Mother's Khmer Name"
+                        android:hint="@string/mother_s_khmer_name"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -331,7 +331,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Mother's English Name"
+                        android:hint="@string/mother_s_english_name"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -341,7 +341,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="6dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Mother's Phone Number"
+                        android:hint="@string/mother_s_phone_number"
                         android:inputType="phone"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
@@ -369,7 +369,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="03. EMERGENCY CONTACT"
+                        android:text="@string/str_03_emergency_contact"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -385,7 +385,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Contact Person Name"
+                        android:hint="@string/contact_person_name"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -395,7 +395,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Relationship (e.g. Parent, Guardian)"
+                        android:hint="@string/relationship_e_g_parent_guardian"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -405,7 +405,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Phone Number"
+                        android:hint="@string/phone_number"
                         android:inputType="phone"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
@@ -416,7 +416,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_spinner_border"
-                        android:hint="Address"
+                        android:hint="@string/address"
                         android:paddingHorizontal="12dp"
                         android:textSize="13sp" />
 
@@ -443,7 +443,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="04. ACCOUNT INFORMATION"
+                        android:text="@string/str_04_account_information"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -458,7 +458,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Student ID / Username *"
+                        android:text="@string/student_id_username"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -472,7 +472,7 @@
                             android:id="@+id/etAddStudentIdentifier"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Institutional ID (e.g. bsr180872)"
+                            android:hint="@string/institutional_id_e_g_bsr180872"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -481,7 +481,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Password (Optional - leave blank to auto-generate)"
+                        android:text="@string/password_optional_leave_blank_to_auto_gene"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -495,7 +495,7 @@
                             android:id="@+id/etAddStudentPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Min 8 characters"
+                            android:hint="@string/min_8_characters"
                             android:inputType="textPassword"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -523,7 +523,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="05. ACADEMIC INFORMATION"
+                        android:text="@string/str_05_academic_information"
                         android:textColor="@color/admin_primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -538,7 +538,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Department *"
+                        android:text="@string/department_0e3338"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -554,7 +554,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Program *"
+                        android:text="@string/program"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -570,7 +570,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Year Level *"
+                        android:text="@string/year_level"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -586,7 +586,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Academic Year *"
+                        android:text="@string/academic_year"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -602,7 +602,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Semester (Optional)"
+                        android:text="@string/semester_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -630,7 +630,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="6dp"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:textAllCaps="false"
                     android:textColor="@color/admin_text_secondary"
                     app:cornerRadius="10dp"
@@ -643,7 +643,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="6dp"
                     android:backgroundTint="@color/admin_primary_blue"
-                    android:text="Save Student"
+                    android:text="@string/save_student"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textStyle="bold"

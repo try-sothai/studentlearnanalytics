@@ -24,7 +24,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_back"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:text="Teacher Detail"
+            android:text="@string/teacher_detail"
             android:textColor="@color/admin_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Menu"
+            android:contentDescription="@string/menu"
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_more_vert"
@@ -127,7 +127,7 @@
                             android:background="@drawable/bg_badge_core"
                             android:paddingHorizontal="10dp"
                             android:paddingVertical="4dp"
-                            android:text="Active"
+                            android:text="@string/status_active"
                             android:textColor="@color/admin_active_green"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -156,7 +156,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/bg_notif_tab_active"
                         android:gravity="center"
-                        android:text="Overview"
+                        android:text="@string/overview"
                         android:textColor="@color/white"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -167,7 +167,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Courses"
+                        android:text="@string/nav_courses"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -178,7 +178,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Classes"
+                        android:text="@string/classes"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -189,7 +189,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Notes"
+                        android:text="@string/notes"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -230,7 +230,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Personal Information"
+                                android:text="@string/personal_information"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -243,7 +243,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
                                 android:padding="4dp"
-                                android:text="Edit"
+                                android:text="@string/edit"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
@@ -257,37 +257,37 @@
 
                         <!-- Row: Full Name -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Full Name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/full_name" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherFullName" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Mr. Chan" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Teacher ID -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Teacher ID" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/teacher_id" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherId" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="TCH001" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Email Address -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Email Address" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/email_address_643a86" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherEmail" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="chan@univ.edu" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Phone Number -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Phone Number" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/phone_number" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherPhone" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="+855 12 345 678" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Gender -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Gender" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherGender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Male" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/gender_019ec3" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherGender" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/gender_male" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Date of Birth -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Date of Birth" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/date_of_birth" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherDob" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Mar 10, 1990" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
@@ -314,7 +314,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Professional Information"
+                            android:text="@string/professional_information"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -327,37 +327,37 @@
 
                         <!-- Row: Department -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Department" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherDept" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Computer Science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/department" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherDept" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/computer_science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Position -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Position" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherPosition" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Lecturer" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/position_52f5e0" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherPosition" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/lecturer" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Hire Date -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Hire Date" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/hire_date" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherHireDate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Sep 01, 2020" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Work Type -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Work Type" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherWorkType" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Full-time" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/work_type_94d23b" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherWorkType" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/full_time" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Office Location -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Office Location" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherOffice" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Building A, Room 203" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/office_location" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherOffice" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/building_a_room_203" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Bio -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bio" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/bio" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherBio" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Experienced lecturer in Data Structures and Algorithms." android:textColor="@color/admin_text_primary" android:textSize="13sp" />
                         </LinearLayout>
 
@@ -384,7 +384,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Account Information"
+                            android:text="@string/account_information"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -397,19 +397,19 @@
 
                         <!-- Row: Account Status -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Status" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
-                            <TextView android:id="@+id/tvValTeacherAccountStatus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Active" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/account_status" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:id="@+id/tvValTeacherAccountStatus" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="@string/status_active" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Created At -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Created At" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/created_at" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherCreatedAt" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="Sep 01, 2020" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <!-- Row: Last Login -->
                         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Last Login" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
+                            <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="@string/last_login" android:textColor="@color/admin_text_secondary" android:textSize="13sp" />
                             <TextView android:id="@+id/tvValTeacherLastLogin" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="end" android:text="May 29, 2024, 09:45 AM" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
                         </LinearLayout>
 
@@ -446,7 +446,7 @@
                             android:id="@+id/tvTeacherOtherTabTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Assigned Courses"
+                            android:text="@string/assigned_courses"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -482,7 +482,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
-            android:text="Deactivate Account"
+            android:text="@string/deactivate_account"
             android:textAllCaps="false"
             android:textColor="@color/admin_inactive_red"
             android:textSize="13sp"
@@ -498,7 +498,7 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/admin_primary_blue"
-            android:text="Edit Teacher"
+            android:text="@string/edit_teacher"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="13sp"

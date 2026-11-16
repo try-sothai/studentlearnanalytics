@@ -223,7 +223,7 @@ public class ClassManagementFragment extends Fragment {
         pillFilterInactive = root.findViewById(R.id.pillFilterInactive);
 
         if (btnAddClass != null) {
-            btnAddClass.setText("+ Add New Class");
+            btnAddClass.setText(R.string.add_new_class_d8426f);
             btnAddClass.setOnClickListener(v -> showAddClassDialog());
         }
 

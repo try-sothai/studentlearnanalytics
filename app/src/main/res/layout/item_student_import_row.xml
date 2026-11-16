@@ -27,7 +27,7 @@
                 android:id="@+id/tvRowNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Row 2"
+                android:text="@string/row_2"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:id="@+id/tvRowStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="VALID"
+                android:text="@string/valid_c9f1a6"
                 android:textColor="@color/admin_active_green"
                 android:textSize="11sp"
                 android:textStyle="bold" />
