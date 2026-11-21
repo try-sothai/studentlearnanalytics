@@ -19,13 +19,17 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
-        <!-- Course Code Icon/Badge Container -->
+        <!-- Class Code Badge Container -->
         <FrameLayout
             android:id="@+id/codeContainer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="56dp"
+            android:minHeight="44dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
             android:background="@drawable/bg_badge_core">
 
             <TextView
@@ -33,37 +37,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="CS101"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="CLASS-A"
                 android:textColor="@color/primary"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </FrameLayout>
 
-        <!-- Course Info -->
+        <!-- Class Info -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvCourseName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Data Structures"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Class A"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvCourseCredits"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="@string/str_3_credits"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:text=""
                 android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <!-- Status Chip -->

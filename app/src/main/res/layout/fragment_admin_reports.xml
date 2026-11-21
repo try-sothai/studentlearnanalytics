@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <!-- Top Header Bar -->
     <LinearLayout
@@ -16,7 +15,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,20 +25,20 @@
 
             <ImageView
                 android:id="@+id/btnReportsMenu"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:contentDescription="@string/menu"
                 android:focusable="true"
-                android:padding="4dp"
+                android:padding="8dp"
                 android:src="@drawable/ic_menu"
                 app:tint="@color/admin_text_primary" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -57,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="View, analyze and export university reports"
+                    android:text="@string/reports_analytics_subtitle"
                     android:textColor="@color/admin_text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -183,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Academic Year Selector Card -->
                 <com.google.android.material.card.MaterialCardView
@@ -289,10 +288,11 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvOverviewTotalStudents"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="2,845"
+                                android:text="--"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -352,10 +352,11 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvOverviewTotalTeachers"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="56"
+                                android:text="--"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -414,10 +415,11 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvOverviewTotalCourses"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="89"
+                                android:text="--"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -476,10 +478,11 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tvOverviewTotalUsers"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="1,089"
+                                android:text="--"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -501,7 +504,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="14dp"
                     app:cardBackgroundColor="@color/card_white"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="1dp"
@@ -512,7 +515,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"

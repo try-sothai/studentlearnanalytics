@@ -10,7 +10,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/teacher_card_bg"
-    app:cardCornerRadius="14dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="1dp"
     app:strokeColor="@color/teacher_border"
     app:strokeWidth="1dp">
@@ -19,13 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="10dp"
         android:gravity="center_vertical">
 
         <FrameLayout
             android:id="@+id/iconHeaderContainer"
             android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_height="30dp"
             android:background="@drawable/bg_course_icon_blue">
 
             <ImageView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="CS101 - Data Structures"
                 android:textColor="@color/teacher_dark_navy"
-                android:textSize="14sp"
+                android:textSize="12.5sp"
                 android:textStyle="bold" />
 
             <TextView

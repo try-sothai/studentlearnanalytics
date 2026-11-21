@@ -1,6 +1,10 @@
 package com.social7.studentlearnanalytics.admin.users;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +25,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
+import com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
 
 import java.util.ArrayList;
@@ -138,6 +144,14 @@ public class AddStudentActivity extends AppCompatActivity {
         tilAddStudentPassword = findViewById(R.id.tilAddStudentPassword);
         etAddStudentIdentifier = findViewById(R.id.etAddStudentIdentifier);
         etAddStudentPassword = findViewById(R.id.etAddStudentPassword);
+        if (etAddStudentPassword != null) {
+            etAddStudentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            etAddStudentPassword.setText("STD@12345");
+            etAddStudentPassword.setEnabled(false);
+        }
+        if (tilAddStudentPassword != null) {
+            tilAddStudentPassword.setHelperText("Standardized initial password assigned automatically to all new students.");
+        }
 
         // 05.
         spAddDepartment = findViewById(R.id.spAddDepartment);
@@ -322,6 +336,8 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        DatePickerHelper.attachDatePicker(tilAddStudentDob, etAddStudentDob, true);
+
         if (btnCancelAddStudent != null) {
             btnCancelAddStudent.setOnClickListener(v -> finish());
         }
@@ -334,8 +350,8 @@ public class AddStudentActivity extends AppCompatActivity {
     private void attemptSaveStudent() {
         clearErrors();
 
-        String khmerName = getText(etAddStudentKhmerName);
-        String englishName = getText(etAddStudentEnglishName);
+        String khmerName = PersonNameDisplayHelper.clean(getText(etAddStudentKhmerName));
+        String englishName = PersonNameDisplayHelper.clean(getText(etAddStudentEnglishName));
         String dob = getText(etAddStudentDob);
         String identifier = getText(etAddStudentIdentifier);
         String password = getText(etAddStudentPassword);
@@ -344,28 +360,20 @@ public class AddStudentActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        if (khmerName.isEmpty()) {
-            if (tilAddStudentKhmerName != null) tilAddStudentKhmerName.setError("Khmer Name is required");
+        if (!PersonNameDisplayHelper.hasAtLeastOneName(khmerName, englishName)) {
+            String errMsg = getString(R.string.err_name_one_required);
+            if (tilAddStudentKhmerName != null) tilAddStudentKhmerName.setError(errMsg);
+            if (tilAddStudentEnglishName != null) tilAddStudentEnglishName.setError(errMsg);
             valid = false;
         }
 
-        if (englishName.isEmpty()) {
-            if (tilAddStudentEnglishName != null) tilAddStudentEnglishName.setError("English Name is required");
-            valid = false;
-        }
-
-        if (dob.isEmpty()) {
-            if (tilAddStudentDob != null) tilAddStudentDob.setError("Date of Birth is required (YYYY-MM-DD)");
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (tilAddStudentDob != null) tilAddStudentDob.setError(getString(R.string.err_invalid_date));
             valid = false;
         }
 
         if (identifier.isEmpty()) {
             if (tilAddStudentIdentifier != null) tilAddStudentIdentifier.setError("Student ID / Username is required");
-            valid = false;
-        }
-
-        if (!password.isEmpty() && password.length() < 8) {
-            if (tilAddStudentPassword != null) tilAddStudentPassword.setError("Password must be at least 8 characters");
             valid = false;
         }
 
@@ -399,14 +407,13 @@ public class AddStudentActivity extends AppCompatActivity {
         String gender = spAddStudentGender != null ? spAddStudentGender.getSelectedItem().toString() : "Male";
 
         JsonObject body = new JsonObject();
-        body.addProperty("khmer_name", khmerName);
-        body.addProperty("english_name", englishName);
+        if (!khmerName.isEmpty()) body.addProperty("khmer_name", khmerName);
+        if (!englishName.isEmpty()) body.addProperty("english_name", englishName);
         body.addProperty("gender", gender);
-        body.addProperty("date_of_birth", dob);
+        if (!dob.isEmpty()) body.addProperty("date_of_birth", dob);
         body.addProperty("place_of_birth", pob);
         body.addProperty("current_address", address);
         body.addProperty("student_identifier", identifier);
-        if (!password.isEmpty()) body.addProperty("password", password);
 
         body.addProperty("department_id", selectedDept.id);
         body.addProperty("program_id", selectedProg.id);
@@ -440,21 +447,31 @@ public class AddStudentActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject d = response.body().has("data") ? response.body().getAsJsonObject("data") : null;
-                    String tempPass = d != null && d.has("temporary_password") && !d.get("temporary_password").isJsonNull()
-                            ? d.get("temporary_password").getAsString() : null;
+                    String initialPass = d != null && d.has("initial_password") && !d.get("initial_password").isJsonNull()
+                            ? d.get("initial_password").getAsString()
+                            : (d != null && d.has("temporary_password") && !d.get("temporary_password").isJsonNull()
+                                ? d.get("temporary_password").getAsString() : "STD@12345");
+                    String username = d != null && d.has("username") && !d.get("username").isJsonNull()
+                            ? d.get("username").getAsString() : identifier;
 
-                    if (tempPass != null && !tempPass.isEmpty()) {
-                        new MaterialAlertDialogBuilder(AddStudentActivity.this)
-                                .setTitle(R.string.student_created_successfully)
-                                .setMessage("Student ID / Username: " + identifier + "\nTemporary Password: " + tempPass
-                                        + "\n\nPlease record this password. It will not be shown again.")
-                                .setPositiveButton(R.string.done, (dialog, which) -> finish())
-                                .setCancelable(false)
-                                .show();
-                    } else {
-                        Toast.makeText(AddStudentActivity.this, R.string.student_created_successfully_7abfec, Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                    String credSummary = "Student ID: " + username
+                            + "\nUsername: " + username
+                            + "\nInitial Password: " + initialPass
+                            + "\nRole: student";
+                    new MaterialAlertDialogBuilder(AddStudentActivity.this)
+                            .setTitle(R.string.student_created_successfully)
+                            .setMessage(credSummary + "\n\nStudent can log in immediately using their Student ID and initial password.")
+                            .setPositiveButton("Copy Credentials", (dialog, which) -> {
+                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                if (cm != null) {
+                                    cm.setPrimaryClip(ClipData.newPlainText("SLAS Student Credentials", credSummary));
+                                    Toast.makeText(AddStudentActivity.this, "Credentials copied to clipboard", Toast.LENGTH_SHORT).show();
+                                }
+                                finish();
+                            })
+                            .setNegativeButton(R.string.done, (dialog, which) -> finish())
+                            .setCancelable(false)
+                            .show();
                 } else {
                     String msg = "Failed to save student (HTTP " + response.code() + ")";
                     try {

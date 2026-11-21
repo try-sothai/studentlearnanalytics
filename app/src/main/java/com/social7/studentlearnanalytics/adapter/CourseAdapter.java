@@ -57,19 +57,28 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     public void filter(String query, String semester, String department, String sortOption, boolean isArchivedTab) {
         filteredList.clear();
+        String qLower = query != null ? query.trim().toLowerCase(Locale.ROOT) : "";
+        String deptLower = department != null ? department.trim().toLowerCase(Locale.ROOT) : "";
         for (Course course : originalList) {
-            boolean matchesQuery = query == null || query.trim().isEmpty()
-                    || course.getCode().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
-                    || course.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
-                    || course.getDepartment().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT));
+            if (course == null) continue;
+            String code = course.getCode() != null ? course.getCode() : "";
+            String name = course.getName() != null ? course.getName() : "";
+            String dept = course.getDepartment() != null ? course.getDepartment() : "";
+            String sem = course.getSemester() != null ? course.getSemester() : "";
+            String status = course.getStatus() != null ? course.getStatus() : "";
+
+            boolean matchesQuery = qLower.isEmpty()
+                    || code.toLowerCase(Locale.ROOT).contains(qLower)
+                    || name.toLowerCase(Locale.ROOT).contains(qLower)
+                    || dept.toLowerCase(Locale.ROOT).contains(qLower);
 
             boolean matchesSemester = semester == null || semester.trim().isEmpty() || semester.equalsIgnoreCase("All")
-                    || course.getSemester().equalsIgnoreCase(semester);
+                    || sem.equalsIgnoreCase(semester);
 
-            boolean matchesDept = department == null || department.trim().isEmpty() || department.contains("All")
-                    || course.getDepartment().toLowerCase(Locale.ROOT).contains(department.toLowerCase(Locale.ROOT));
+            boolean matchesDept = deptLower.isEmpty() || deptLower.contains("all")
+                    || dept.toLowerCase(Locale.ROOT).contains(deptLower);
 
-            boolean matchesTab = isArchivedTab ? "Archived".equalsIgnoreCase(course.getStatus()) : !"Archived".equalsIgnoreCase(course.getStatus());
+            boolean matchesTab = isArchivedTab ? "Archived".equalsIgnoreCase(status) : !"Archived".equalsIgnoreCase(status);
 
             if (matchesQuery && matchesSemester && matchesDept && matchesTab) {
                 filteredList.add(course);
@@ -78,11 +87,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         if (sortOption != null) {
             if (sortOption.contains("Name")) {
-                Collections.sort(filteredList, (c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
+                Collections.sort(filteredList, (c1, c2) -> {
+                    String n1 = c1.getName() != null ? c1.getName() : "";
+                    String n2 = c2.getName() != null ? c2.getName() : "";
+                    return n1.compareToIgnoreCase(n2);
+                });
             } else if (sortOption.contains("Students")) {
                 Collections.sort(filteredList, (c1, c2) -> Integer.compare(c2.getStudentCount(), c1.getStudentCount()));
             } else {
-                Collections.sort(filteredList, (c1, c2) -> c1.getCode().compareToIgnoreCase(c2.getCode()));
+                Collections.sort(filteredList, (c1, c2) -> {
+                    String code1 = c1.getCode() != null ? c1.getCode() : "";
+                    String code2 = c2.getCode() != null ? c2.getCode() : "";
+                    return code1.compareToIgnoreCase(code2);
+                });
             }
         }
 

@@ -96,7 +96,9 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String role = user != null && !user.getRole().isEmpty() ? user.getRole() : "student";
+                    String role = !loginResponse.getRole().isEmpty()
+                            ? loginResponse.getRole()
+                            : (user != null && !user.getRole().isEmpty() ? user.getRole() : "student");
                     String name = user != null && !user.getName().isEmpty() ? user.getName() : studentId;
                     String userId = !loginResponse.getStudentId().isEmpty() ? loginResponse.getStudentId() : studentId;
                     String numericUserId = user != null ? user.getId() : "";
@@ -109,13 +111,25 @@ public class LoginActivity extends AppCompatActivity {
                     navigateToRoleMain(role);
                 } else {
                     Log.e(TAG, "Login failed HTTP code: " + response.code());
+                    String serverMsg = "";
+                    try (okhttp3.ResponseBody eb = response.errorBody()) {
+                        if (eb != null) {
+                            com.google.gson.JsonObject errObj = com.google.gson.JsonParser.parseString(eb.string()).getAsJsonObject();
+                            if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                serverMsg = errObj.get("message").getAsString();
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
                     String message;
                     if (response.code() == 401) {
                         message = "Invalid Student / Teacher / Admin ID or password.";
                     } else if (response.code() == 403) {
-                        message = "Account is inactive or deactivated.";
+                        message = !serverMsg.isEmpty() ? serverMsg : "Account is inactive or deactivated.";
+                    } else if (response.code() == 429) {
+                        message = !serverMsg.isEmpty() ? serverMsg : "Too many login attempts. Please wait and try again.";
                     } else {
-                        message = "Login failed (server error " + response.code() + "). Please try again.";
+                        message = !serverMsg.isEmpty() ? serverMsg : "Login failed (server error " + response.code() + "). Please try again.";
                     }
                     Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
                 }

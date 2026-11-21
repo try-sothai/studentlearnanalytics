@@ -1,6 +1,5 @@
 package com.social7.studentlearnanalytics.teacher;
 
-
 import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,12 +34,22 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.model.TeacherAnalyticsResponse;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.teacher.analytics.CourseAnalyticsAdapter;
+import com.social7.studentlearnanalytics.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReportsFragment extends Fragment {
 
@@ -117,24 +125,34 @@ public class ReportsFragment extends Fragment {
 
         BarChart barChart = view.findViewById(R.id.barChartAvgByCourse);
         if (barChart != null) {
-            setupBarChart(barChart);
+            barChart.getAxisRight().setEnabled(false);
+            barChart.getDescription().setEnabled(false);
+            barChart.getLegend().setEnabled(false);
+            barChart.setNoDataText(getString(R.string.empty_state_no_data));
+            ChartFontHelper.applyKhmerFont(barChart.getContext(), barChart);
         }
 
         PieChart pieChart = view.findViewById(R.id.pieChartStatusDoughnut);
         if (pieChart != null) {
-            setupPieChart(pieChart);
+            pieChart.setUsePercentValues(true);
+            pieChart.setDrawHoleEnabled(true);
+            pieChart.setHoleRadius(50f);
+            pieChart.setTransparentCircleRadius(55f);
+            pieChart.setHoleColor(Color.WHITE);
+            pieChart.getDescription().setEnabled(false);
+            pieChart.setNoDataText(getString(R.string.empty_state_no_data));
+            ChartFontHelper.applyKhmerFont(pieChart.getContext(), pieChart);
         }
 
         RecyclerView rvList = view.findViewById(R.id.rvCourseAnalyticsList);
         if (rvList != null) {
             rvList.setLayoutManager(new LinearLayoutManager(requireContext()));
-            List<CourseAnalyticsAdapter.CourseAnalyticsItem> items = getSampleCourseAnalytics();
-            adapter = new CourseAnalyticsAdapter(requireContext(), items, item -> {
+            adapter = new CourseAnalyticsAdapter(requireContext(), new ArrayList<>(), item -> {
                 if (getActivity() instanceof TeacherMainActivity) {
                     ClassAnalyticsFragment fragment = ClassAnalyticsFragment.newInstance(
                             item.code,
                             item.name,
-                            "BSCS 3-A",
+                            item.instructor,
                             item.semester,
                             true
                     );
@@ -143,6 +161,9 @@ public class ReportsFragment extends Fragment {
             });
             rvList.setAdapter(adapter);
         }
+
+        fetchTeacherAnalytics(barChart, pieChart);
+        fetchTeacherCourseOfferings(rvList);
 
         return view;
     }
@@ -234,125 +255,164 @@ public class ReportsFragment extends Fragment {
         }
     }
 
-    private void setupBarChart(BarChart chart) {
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 82f));
-        entries.add(new BarEntry(1, 76f));
-        entries.add(new BarEntry(2, 88f));
-        entries.add(new BarEntry(3, 71f));
+    private void fetchTeacherAnalytics(@Nullable BarChart barChart, @Nullable PieChart pieChart) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(requireContext()).getTeacherAnalytics(null, null, null, null, null, null)
+                .enqueue(new Callback<TeacherAnalyticsResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TeacherAnalyticsResponse> call, @NonNull Response<TeacherAnalyticsResponse> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (!response.isSuccessful() || response.body() == null || response.body().getData() == null) return;
+                        TeacherAnalyticsResponse.Data data = response.body().getData();
+                        List<TeacherAnalyticsResponse.EngagementItem> engagement = data.getEngagement();
 
-        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.average_score));
-        dataSet.setColors(new int[]{
-                Color.parseColor("#2563FF"), // CS101 - Blue
-                Color.parseColor("#16C784"), // CS102 - Green
-                Color.parseColor("#FF9B16"), // CS201 - Orange
-                Color.parseColor("#873BFF")  // CS301 - Purple
-        });
-        dataSet.setValueTextSize(11f);
-        dataSet.setValueTextColor(Color.parseColor("#10165C"));
-        dataSet.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return String.format(Locale.US, "%.0f%%", value);
-            }
-        });
+                        if (barChart != null && !engagement.isEmpty()) {
+                            List<BarEntry> entries = new ArrayList<>();
+                            List<String> labels = new ArrayList<>();
+                            float sumCompleted = 0f, sumLate = 0f, sumMissed = 0f;
+                            int count = 0;
+                            for (int i = 0; i < engagement.size(); i++) {
+                                TeacherAnalyticsResponse.EngagementItem item = engagement.get(i);
+                                float comp = item.getCompleted() != null ? item.getCompleted().floatValue() : 0f;
+                                float late = item.getLate() != null ? item.getLate().floatValue() : 0f;
+                                float miss = item.getMissed() != null ? item.getMissed().floatValue() : 0f;
+                                entries.add(new BarEntry(i, comp));
+                                labels.add(item.getActivity() != null ? item.getActivity() : "");
+                                if (item.getTotalEvents() > 0) {
+                                    sumCompleted += comp;
+                                    sumLate += late;
+                                    sumMissed += miss;
+                                    count++;
+                                }
+                            }
+                            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.average_score));
+                            dataSet.setColors(new int[]{
+                                    Color.parseColor("#2563FF"),
+                                    Color.parseColor("#16C784"),
+                                    Color.parseColor("#FF9B16"),
+                                    Color.parseColor("#873BFF")
+                            });
+                            dataSet.setValueTextSize(11f);
+                            dataSet.setValueTextColor(Color.parseColor("#10165C"));
+                            dataSet.setValueFormatter(new ValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value) {
+                                    return String.format(Locale.US, "%.0f%%", value);
+                                }
+                            });
+                            BarData barData = new BarData(dataSet);
+                            barData.setBarWidth(0.45f);
+                            barChart.setData(barData);
 
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.45f);
-        chart.setData(barData);
+                            XAxis xAxis = barChart.getXAxis();
+                            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                            xAxis.setDrawGridLines(false);
+                            xAxis.setGranularity(1f);
+                            xAxis.setValueFormatter(new IndexAxisValueFormatter(labels.toArray(new String[0])));
+                            xAxis.setTextColor(Color.parseColor("#10165C"));
+                            xAxis.setTextSize(11f);
 
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"CS101", "CS102", "CS201", "CS301"}));
-        xAxis.setTextColor(Color.parseColor("#10165C"));
-        xAxis.setTextSize(11f);
+                            YAxis leftAxis = barChart.getAxisLeft();
+                            leftAxis.setAxisMinimum(0f);
+                            leftAxis.setAxisMaximum(100f);
+                            leftAxis.setGranularity(20f);
+                            leftAxis.setTextColor(Color.parseColor("#6676AD"));
+                            leftAxis.setGridColor(Color.parseColor("#DCE5FF"));
 
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(100f);
-        leftAxis.setGranularity(20f);
-        leftAxis.setTextColor(Color.parseColor("#6676AD"));
-        leftAxis.setGridColor(Color.parseColor("#DCE5FF"));
+                            ChartFontHelper.applyKhmerFont(barChart.getContext(), barChart);
+                            barChart.invalidate();
 
-        chart.getAxisRight().setEnabled(false);
-        chart.getDescription().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.animateY(800);
-        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
-        chart.invalidate();
+                            if (pieChart != null && count > 0) {
+                                List<PieEntry> pieEntries = new ArrayList<>();
+                                if (sumCompleted > 0f) pieEntries.add(new PieEntry(sumCompleted / count, "Completed"));
+                                if (sumLate > 0f) pieEntries.add(new PieEntry(sumLate / count, "Late"));
+                                if (sumMissed > 0f) pieEntries.add(new PieEntry(sumMissed / count, "Missed"));
+                                if (!pieEntries.isEmpty()) {
+                                    PieDataSet pds = new PieDataSet(pieEntries, "");
+                                    pds.setColors(new int[]{Color.parseColor("#16C784"), Color.parseColor("#FF9B16"), Color.parseColor("#FF4055")});
+                                    pds.setSliceSpace(3f);
+                                    pds.setValueTextSize(11f);
+                                    pds.setValueTextColor(Color.WHITE);
+                                    PieData pd = new PieData(pds);
+                                    pd.setValueFormatter(new PercentFormatter(pieChart));
+                                    pieChart.setData(pd);
+                                    int coursesCnt = data.getSummary() != null ? data.getSummary().getMyCourses() : count;
+                                    pieChart.setCenterText(coursesCnt + " Courses");
+                                    pieChart.setCenterTextColor(Color.parseColor("#10165C"));
+                                    pieChart.setCenterTextSize(14f);
+                                    Legend legend = pieChart.getLegend();
+                                    legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+                                    legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+                                    legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+                                    legend.setTextColor(Color.parseColor("#10165C"));
+                                    legend.setTextSize(11f);
+                                    ChartFontHelper.applyKhmerFont(pieChart.getContext(), pieChart);
+                                    pieChart.invalidate();
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TeacherAnalyticsResponse> call, @NonNull Throwable t) {
+                    }
+                });
     }
 
-    private void setupPieChart(PieChart chart) {
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(2f, "Good (50%)"));
-        entries.add(new PieEntry(1f, "Medium (25%)"));
-        entries.add(new PieEntry(1f, "At Risk (25%)"));
+    private void fetchTeacherCourseOfferings(@Nullable RecyclerView rvList) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(requireContext()).getTeacherCourseOfferings()
+                .enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                        JsonElement dataEl = response.body().get("data");
+                        if (!dataEl.isJsonArray()) return;
+                        JsonArray arr = dataEl.getAsJsonArray();
+                        List<CourseAnalyticsAdapter.CourseAnalyticsItem> items = new ArrayList<>();
+                        int[] bgs = new int[]{
+                                R.drawable.bg_course_icon_blue,
+                                R.drawable.bg_course_icon_orange,
+                                R.drawable.bg_course_icon_green,
+                                R.drawable.bg_metric_purple
+                        };
+                        for (int i = 0; i < arr.size(); i++) {
+                            if (!arr.get(i).isJsonObject()) continue;
+                            JsonObject o = arr.get(i).getAsJsonObject();
+                            String id = UiUtils.optString(o, "id", String.valueOf(i + 1));
+                            JsonObject course = o.has("course") && o.get("course").isJsonObject() ? o.getAsJsonObject("course") : new JsonObject();
+                            JsonObject cls = o.has("class_room") && o.get("class_room").isJsonObject() ? o.getAsJsonObject("class_room") : new JsonObject();
+                            JsonObject sem = o.has("semester") && o.get("semester").isJsonObject() ? o.getAsJsonObject("semester") : new JsonObject();
 
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(new int[]{
-                Color.parseColor("#16C784"), // Good - Green
-                Color.parseColor("#FF9B16"), // Medium - Orange
-                Color.parseColor("#FF4055")  // At Risk - Red
-        });
-        dataSet.setSliceSpace(3f);
-        dataSet.setValueTextSize(11f);
-        dataSet.setValueTextColor(Color.WHITE);
+                            String code = UiUtils.optString(course, "code", UiUtils.optString(course, "course_code", "CRS"));
+                            String name = UiUtils.optString(course, "name", UiUtils.optString(course, "course_name", "Course"));
+                            String className = UiUtils.optString(cls, "name", UiUtils.optString(cls, "code", ""));
+                            int enrolled = UiUtils.optInt(o, "enrollments_count", 0);
+                            int avgScore = (int) Math.round(o.has("average_score") && !o.get("average_score").isJsonNull() ? o.get("average_score").getAsDouble() : 0.0);
+                            String riskStatus = UiUtils.optString(o, "risk_status", "Good");
+                            String semName = UiUtils.optString(sem, "name", "");
+                            items.add(new CourseAnalyticsAdapter.CourseAnalyticsItem(
+                                    id, code, name, className,
+                                    enrolled + " students", semName, avgScore, riskStatus, bgs[i % bgs.length]
+                            ));
+                        }
+                        if (rvList != null) {
+                            adapter = new CourseAnalyticsAdapter(requireContext(), items, item -> {
+                                if (getActivity() instanceof TeacherMainActivity) {
+                                    ClassAnalyticsFragment fragment = ClassAnalyticsFragment.newInstance(
+                                            item.code, item.name, item.instructor, item.semester, true);
+                                    ((TeacherMainActivity) getActivity()).openFragment(fragment);
+                                }
+                            });
+                            adapter.filter(searchQuery, selectedCategory);
+                            rvList.setAdapter(adapter);
+                        }
+                    }
 
-        PieData pieData = new PieData(dataSet);
-        pieData.setValueFormatter(new PercentFormatter(chart));
-
-        chart.setUsePercentValues(true);
-        chart.setDrawHoleEnabled(true);
-        chart.setHoleRadius(50f);
-        chart.setTransparentCircleRadius(55f);
-        chart.setHoleColor(Color.WHITE);
-
-        chart.setCenterText("4 Courses");
-        chart.setCenterTextColor(Color.parseColor("#10165C"));
-        chart.setCenterTextSize(14f);
-
-        chart.getDescription().setEnabled(false);
-        Legend legend = chart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legend.setTextColor(Color.parseColor("#10165C"));
-        legend.setTextSize(11f);
-
-        chart.setData(pieData);
-        chart.animateXY(800, 800);
-        ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
-        chart.invalidate();
-    }
-
-    private List<CourseAnalyticsAdapter.CourseAnalyticsItem> getSampleCourseAnalytics() {
-        List<CourseAnalyticsAdapter.CourseAnalyticsItem> list = new ArrayList<>();
-
-        list.add(new CourseAnalyticsAdapter.CourseAnalyticsItem(
-                "1", "CS101", "Data Structures", "Mr. Chan",
-                "156 students", "Semester 1, 2024", 82, "Good",
-                R.drawable.bg_course_icon_blue
-        ));
-
-        list.add(new CourseAnalyticsAdapter.CourseAnalyticsItem(
-                "2", "CS102", "Database Systems", "Ms. Dara",
-                "120 students", "Semester 1, 2024", 76, "Medium",
-                R.drawable.bg_course_icon_orange
-        ));
-
-        list.add(new CourseAnalyticsAdapter.CourseAnalyticsItem(
-                "3", "CS201", "Web Development", "Mr. Vireak",
-                "98 students", "Semester 1, 2024", 88, "Good",
-                R.drawable.bg_course_icon_green
-        ));
-
-        list.add(new CourseAnalyticsAdapter.CourseAnalyticsItem(
-                "4", "CS301", "Computer Networks", "Dr. Sokha",
-                "80 students", "Semester 1, 2024", 71, "At Risk",
-                R.drawable.bg_metric_purple
-        ));
-
-        return list;
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    }
+                });
     }
 }

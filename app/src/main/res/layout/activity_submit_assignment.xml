@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -35,7 +35,7 @@
             android:layout_marginStart="16dp"
             android:text="@string/submit_assignment"
             android:textColor="@color/text_primary"
-            android:textSize="18sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -44,7 +44,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:visibility="gone" />
 
     <ScrollView
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="20dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,14 +64,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvAssignmentTitle"
@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:text="Assignment 1: Algorithms &amp; Complexity"
                         android:textColor="@color/text_primary"
-                        android:textSize="18sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -89,13 +89,13 @@
                         android:layout_marginTop="4dp"
                         android:text="CS101 • Data Structures"
                         android:textColor="@color/primary"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="16dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/divider_color" />
 
                     <TextView
@@ -104,16 +104,16 @@
                         android:layout_height="wrap_content"
                         android:text="Max Marks: 100 • Weight: 20% • Due: Dec 31, 2026"
                         android:textColor="@color/text_secondary"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvInstructions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="Instructions:\nPlease write your complete solution below or upload a PDF document containing your analysis."
                         android:textColor="@color/text_primary"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -122,23 +122,23 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Your Solution / Written Response"
                         android:textColor="@color/text_primary"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -161,17 +161,17 @@
                             android:inputType="textMultiLine"
                             android:lines="6"
                             android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- File Attachment Section -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Attachment (PDF, DOCX, ZIP)"
+                        android:layout_marginTop="10dp"
+                        android:text="Attachment (PDF, PNG, JPG, DOC, DOCX, ZIP)"
                         android:textColor="@color/text_primary"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -199,7 +199,7 @@
                             android:layout_weight="1"
                             android:text="No file attached"
                             android:textColor="@color/text_secondary"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnSelectFile"
@@ -211,11 +211,52 @@
                             app:cornerRadius="8dp" />
                     </LinearLayout>
 
+                    <!-- Existing Submission Preview & Detail Actions -->
+                    <LinearLayout
+                        android:id="@+id/layoutSubmittedFileActions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnViewSubmittedFile"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/view_submitted_file"
+                            android:textAllCaps="false"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="@color/primary" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOpenSubmissionDetail"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/view_submission"
+                            android:textAllCaps="false"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="@color/primary" />
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/tvStatusMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/status_draft_not_submitted"
                         android:textColor="@color/warning_orange"
                         android:textSize="12sp"
@@ -228,7 +269,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -239,7 +280,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/save_draft"
-                    android:textSize="14sp"
+                    android:textSize="12.5sp"
                     app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -251,7 +292,7 @@
                     android:backgroundTint="@color/primary"
                     android:text="@string/submit_work"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="12.5sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp" />
 

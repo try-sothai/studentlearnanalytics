@@ -29,22 +29,22 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/overall_attendance_rate"
                     android:textColor="#757575"
-                    android:textSize="14sp" />
+                    android:textSize="12.5sp" />
 
                 <TextView
                     android:id="@+id/tvAttendanceRate"
@@ -53,7 +53,7 @@
                     android:layout_marginTop="8dp"
                     android:text="--"
                     android:textColor="?attr/colorPrimary"
-                    android:textSize="32sp"
+                    android:textSize="21sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

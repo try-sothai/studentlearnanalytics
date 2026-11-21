@@ -1,12 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipeRefreshAdminDashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
-    android:fitsSystemWindows="true">
+    android:background="@color/app_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,24 +17,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
-            app:elevation="0dp"
-            android:fitsSystemWindows="true">
+            app:elevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingTop="0dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp">
+                android:paddingStart="14dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="12dp">
 
                 <ImageView
                     android:id="@+id/btnAdminMenu"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/menu"
+                    android:focusable="true"
+                    android:padding="10dp"
                     android:src="@drawable/ic_menu"
                     app:tint="@color/text_primary"
-                    android:contentDescription="@string/menu"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -164,7 +166,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="@dimen/admin_dashboard_padding">
+
+                    <TextView
+                        android:id="@+id/tvDashboardOverviewDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/dashboard_overview_subtitle"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp" />
 
                     <!-- 2x2 Grid Summary Cards -->
                     <GridLayout
@@ -192,15 +204,36 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:minHeight="@dimen/admin_kpi_card_min_height"
                                 android:orientation="vertical"
                                 android:padding="14dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/active_classes"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text="@string/active_classes"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="12.5sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:background="@drawable/bg_circle_soft_blue"
+                                        android:contentDescription="@string/active_classes"
+                                        android:padding="4dp"
+                                        android:src="@drawable/ic_group"
+                                        app:tint="@color/primary" />
+                                </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/tvActiveClassesCount"
@@ -213,10 +246,20 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/active_classes_desc"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp" />
+
+                                <TextView
                                     android:id="@+id/tvActiveClassesChange"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
+                                    android:layout_marginTop="4dp"
                                     android:text="@string/str_12_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
@@ -243,15 +286,36 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:minHeight="@dimen/admin_kpi_card_min_height"
                                 android:orientation="vertical"
                                 android:padding="14dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/total_students"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text="@string/total_students"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="12.5sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:background="@drawable/bg_circle_soft_blue"
+                                        android:contentDescription="@string/total_students"
+                                        android:padding="4dp"
+                                        android:src="@drawable/ic_users"
+                                        app:tint="@color/secondary_blue" />
+                                </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/tvTotalStudentsCount"
@@ -264,10 +328,20 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/total_students_desc"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp" />
+
+                                <TextView
                                     android:id="@+id/tvTotalStudentsChange"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
+                                    android:layout_marginTop="4dp"
                                     android:text="@string/str_4_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
@@ -294,15 +368,36 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:minHeight="@dimen/admin_kpi_card_min_height"
                                 android:orientation="vertical"
                                 android:padding="14dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/avg_performance"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text="@string/avg_performance"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="12.5sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:background="@drawable/bg_circle_soft_blue"
+                                        android:contentDescription="@string/avg_performance"
+                                        android:padding="4dp"
+                                        android:src="@drawable/ic_chart_bar"
+                                        app:tint="@color/warning_orange" />
+                                </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/tvAvgPerformanceCount"
@@ -315,10 +410,20 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/avg_performance_desc"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp" />
+
+                                <TextView
                                     android:id="@+id/tvAvgPerformanceChange"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
+                                    android:layout_marginTop="4dp"
                                     android:text="@string/str_5_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
@@ -345,15 +450,36 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:minHeight="@dimen/admin_kpi_card_min_height"
                                 android:orientation="vertical"
                                 android:padding="14dp">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/at_risk_alerts"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text="@string/at_risk_alerts"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="12.5sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:background="@drawable/bg_circle_soft_blue"
+                                        android:contentDescription="@string/at_risk_alerts"
+                                        android:padding="4dp"
+                                        android:src="@drawable/ic_warning_triangle"
+                                        app:tint="@color/success_green" />
+                                </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/tvAtRiskCount"
@@ -366,10 +492,20 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/at_risk_alerts_desc"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp" />
+
+                                <TextView
                                     android:id="@+id/tvAtRiskChange"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
+                                    android:layout_marginTop="4dp"
                                     android:text="@string/str_10_this_month"
                                     android:textColor="@color/success_green"
                                     android:textSize="11sp"
@@ -382,9 +518,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginBottom="14dp"
                         app:cardBackgroundColor="@color/card_white"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="2dp"
@@ -395,7 +531,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="12dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -406,6 +542,7 @@
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
                                     android:layout_weight="1"
                                     android:text="@string/annual_student_enrollment_engagement"
                                     android:textColor="@color/text_primary"
@@ -415,18 +552,27 @@
                                 <Spinner
                                     android:id="@+id/spAcademicYearFilter"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="36dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="44dp"
                                     android:background="@drawable/bg_spinner"
                                     android:paddingHorizontal="8dp" />
                             </LinearLayout>
 
-                            <!-- Custom Legend Row -->
-                            <LinearLayout
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/annual_enrollment_desc"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
+                            <!-- Wrapping Legend Row -->
+                            <com.google.android.material.chip.ChipGroup
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                app:chipSpacingHorizontal="12dp"
+                                app:chipSpacingVertical="4dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -439,7 +585,6 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
                                     android:text="@string/dot_active_learners"
                                     android:textColor="#0EA5E9"
                                     android:textSize="11sp"
@@ -448,16 +593,15 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
                                     android:text="@string/at_risk_students_dfb3f5"
                                     android:textColor="#EF4444"
                                     android:textSize="11sp"
                                     android:textStyle="bold" />
-                            </LinearLayout>
+                            </com.google.android.material.chip.ChipGroup>
 
                             <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="200dp"
+                                android:layout_height="180dp"
                                 android:layout_marginTop="10dp">
 
                                 <com.github.mikephil.charting.charts.LineChart
@@ -471,7 +615,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:background="@drawable/bg_badge_credit"
-                                    android:paddingHorizontal="16dp"
+                                    android:paddingHorizontal="12dp"
                                     android:paddingVertical="8dp"
                                     android:text="@string/no_data_available_selected_year"
                                     android:textColor="@color/text_secondary"
@@ -491,13 +635,16 @@
                                     android:id="@+id/btnCompareYears"
                                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="38dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="44dp"
                                     android:layout_marginEnd="6dp"
                                     android:layout_weight="1"
+                                    android:maxLines="2"
+                                    android:ellipsize="end"
                                     android:text="@string/compare_years"
                                     android:textAllCaps="false"
                                     android:textColor="@color/primary"
-                                    android:textSize="11sp"
+                                    android:textSize="11.5sp"
                                     android:textStyle="bold"
                                     app:cornerRadius="8dp"
                                     app:strokeColor="@color/primary"
@@ -507,13 +654,16 @@
                                     android:id="@+id/btnHistoricalReports"
                                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                                     android:layout_width="0dp"
-                                    android:layout_height="38dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="44dp"
                                     android:layout_marginStart="6dp"
                                     android:layout_weight="1"
+                                    android:maxLines="2"
+                                    android:ellipsize="end"
                                     android:text="@string/historical_reports"
                                     android:textAllCaps="false"
                                     android:textColor="@color/text_secondary"
-                                    android:textSize="11sp"
+                                    android:textSize="11.5sp"
                                     app:cornerRadius="8dp"
                                     app:strokeColor="@color/divider_color"
                                     app:strokeWidth="1dp" />
@@ -526,8 +676,8 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginBottom="14dp"
                         app:cardBackgroundColor="@color/card_white"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="2dp"
@@ -538,7 +688,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -548,10 +698,18 @@
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/academic_performance_desc"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
                             <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:layout_marginTop="16dp">
+                                android:layout_height="180dp"
+                                android:layout_marginTop="10dp">
 
                                 <com.github.mikephil.charting.charts.BarChart
                                     android:id="@+id/performanceChart"
@@ -574,8 +732,8 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginBottom="14dp"
                         app:cardBackgroundColor="@color/card_white"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="2dp"
@@ -586,7 +744,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -596,10 +754,18 @@
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/attendance_analytics_desc"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
                             <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:layout_marginTop="16dp">
+                                android:layout_height="180dp"
+                                android:layout_marginTop="10dp">
 
                                 <com.github.mikephil.charting.charts.BarChart
                                     android:id="@+id/attendanceChart"
@@ -622,8 +788,8 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginBottom="14dp"
                         app:cardBackgroundColor="@color/card_white"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="2dp"
@@ -634,7 +800,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -644,10 +810,18 @@
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/risk_distribution_desc"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
+
                             <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:layout_marginTop="16dp">
+                                android:layout_height="180dp"
+                                android:layout_marginTop="10dp">
 
                                 <com.github.mikephil.charting.charts.PieChart
                                     android:id="@+id/riskChart"
@@ -671,8 +845,9 @@
                         android:id="@+id/cardDashSystemStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="12dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
@@ -686,7 +861,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="12dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -715,6 +890,14 @@
                                     android:focusable="true"
                                     android:background="?attr/selectableItemBackgroundBorderless" />
                             </LinearLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/system_status_desc"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"

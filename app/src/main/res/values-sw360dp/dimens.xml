@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="admin_drawer_width">296dp</dimen>
+    <dimen name="admin_dashboard_padding">12dp</dimen>
+    <dimen name="admin_kpi_card_min_height">132dp</dimen>
+</resources>

@@ -22,6 +22,7 @@ public class TakeAttendanceAdapter extends RecyclerView.Adapter<TakeAttendanceAd
     }
 
     public static class StudentAttendanceItem {
+        public int dbId;
         public String id;
         public String name;
         public String status; // "P", "A", "L", "E"

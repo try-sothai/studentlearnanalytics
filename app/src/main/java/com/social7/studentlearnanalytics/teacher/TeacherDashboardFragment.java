@@ -470,6 +470,13 @@ public class TeacherDashboardFragment extends Fragment {
 
                         if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                             TeacherAnalyticsResponse.Data data = response.body().getData();
+                            if (data.getSummary() != null) {
+                                TeacherDashboardSummaryResponse.Summary s = data.getSummary();
+                                if (tvTotalStudentsCount != null) tvTotalStudentsCount.setText(String.valueOf(s.getTotalStudents()));
+                                if (tvMyCoursesCount != null) tvMyCoursesCount.setText(String.valueOf(s.getMyCourses()));
+                                if (tvAtRiskCount != null) tvAtRiskCount.setText(String.valueOf(s.getAtRiskStudents()));
+                                if (tvPendingScoresCount != null) tvPendingScoresCount.setText(String.valueOf(s.getPendingScores()));
+                            }
                             updateScopeSubtitle(data.getScope());
                             renderEngagementChart(data.getEngagement());
                         } else {

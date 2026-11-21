@@ -10,10 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="20dp"
+        android:paddingStart="12dp"
         android:paddingTop="12dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="24dp">
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp">
 
         <!-- Top Header Bar -->
         <LinearLayout
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/academic_risk_analysis"
                     android:textColor="@color/slas_text_primary"
-                    android:textSize="20sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -60,10 +60,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="1dp"
             app:strokeColor="@color/slas_border"
             app:strokeWidth="1dp">
 
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                android:padding="12dp">
 
                 <FrameLayout
                     android:layout_width="56dp"
@@ -118,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/loading"
                             android:textColor="@color/slas_warning"
-                            android:textSize="22sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -153,10 +153,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="1dp"
             app:strokeColor="@color/slas_border"
             app:strokeWidth="1dp">
 
@@ -164,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:text="-- / 100"
                         android:textColor="@color/slas_text_primary"
-                        android:textSize="24sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -195,7 +195,7 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:progress="0"
                     android:progressBackgroundTint="@color/slas_border"
                     android:progressTint="@color/slas_warning" />
@@ -241,20 +241,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:text="Risk Factors Breakdown"
             android:textColor="@color/slas_text_primary"
-            android:textSize="16sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
 
         <!-- Factors List Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="1dp"
             app:strokeColor="@color/slas_border"
             app:strokeWidth="1dp">
 
@@ -262,7 +262,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Factor 1: Attendance -->
                 <LinearLayout
@@ -293,7 +293,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/attendance_rate"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -323,7 +323,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginVertical="6dp"
                     android:background="@color/slas_border" />
 
                 <!-- Factor 2: Assignments -->
@@ -355,7 +355,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/assignment_completion"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -385,7 +385,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginVertical="6dp"
                     android:background="@color/slas_border" />
 
                 <!-- Factor 3: Quizzes -->
@@ -417,7 +417,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/quiz_performance"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -447,7 +447,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginVertical="6dp"
                     android:background="@color/slas_border" />
 
                 <!-- Factor 4: Previous Exam -->
@@ -479,7 +479,7 @@
                             android:layout_height="wrap_content"
                             android:text="Previous Exam Results"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -513,20 +513,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:text="Recommendations to Reduce Risk"
             android:textColor="@color/slas_text_primary"
-            android:textSize="16sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:cardBackgroundColor="@color/slas_surface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="1dp"
             app:strokeColor="@color/slas_border"
             app:strokeWidth="1dp">
 
@@ -534,7 +534,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Rec 1 -->
                 <LinearLayout
@@ -565,7 +565,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/improve_quiz_performance"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -594,7 +594,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
+                    android:layout_marginVertical="6dp"
                     android:background="@color/slas_border" />
 
                 <!-- Rec 2 -->
@@ -626,7 +626,7 @@
                             android:layout_height="wrap_content"
                             android:text="Maintain Class Attendance"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -655,7 +655,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
+                    android:layout_marginVertical="6dp"
                     android:background="@color/slas_border" />
 
                 <!-- Rec 3 -->
@@ -687,7 +687,7 @@
                             android:layout_height="wrap_content"
                             android:text="Consult Instructor / Mentor"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="14sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <TextView

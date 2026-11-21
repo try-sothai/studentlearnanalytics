@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <!-- Top Header Bar -->
@@ -16,7 +15,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,12 +173,19 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSearchTeacher"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
+                    android:layout_height="wrap_content"
                     android:hint="@string/search_teachers"
                     android:inputType="text"
-                    android:paddingVertical="8dp"
+                    android:paddingVertical="10dp"
                     android:textColor="@color/admin_text_primary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" 
+                        android:minHeight="44dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/teacher_secondary_text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -308,7 +314,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:padding="16dp"
+        android:padding="12dp"
         tools:listitem="@layout/item_admin_teacher" />
 
     <!-- Pagination Controls at Bottom -->

@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Admin;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,6 +86,7 @@ public class EditAdminActivity extends AppCompatActivity {
         etEditAdminPhone = findViewById(R.id.etEditAdminPhone);
         etEditAdminDob = findViewById(R.id.etEditAdminDob);
         etEditAdminDesc = findViewById(R.id.etEditAdminDesc);
+        DatePickerHelper.attachDatePicker(tilEditAdminDob, etEditAdminDob, true);
 
         spEditAdminRole = findViewById(R.id.spEditAdminRole);
         spEditAdminAccessLevel = findViewById(R.id.spEditAdminAccessLevel);
@@ -195,6 +197,13 @@ public class EditAdminActivity extends AppCompatActivity {
             if (tilEditAdminEmail != null) tilEditAdminEmail.setError(null);
         }
 
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (tilEditAdminDob != null) tilEditAdminDob.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        } else {
+            if (tilEditAdminDob != null) tilEditAdminDob.setError(null);
+        }
+
         if (isValid) {
             String role = spEditAdminRole != null && spEditAdminRole.getSelectedItem() != null ? spEditAdminRole.getSelectedItem().toString() : currentAdmin.getRole();
             String accessLevel = spEditAdminAccessLevel != null && spEditAdminAccessLevel.getSelectedItem() != null ? spEditAdminAccessLevel.getSelectedItem().toString() : currentAdmin.getAccessLevel();
@@ -206,7 +215,7 @@ public class EditAdminActivity extends AppCompatActivity {
             payload.addProperty("name", name);
             payload.addProperty("email", email);
             if (!phone.isEmpty()) payload.addProperty("phone", phone);
-            if (!dob.isEmpty()) payload.addProperty("date_of_birth", dob);
+            payload.addProperty("date_of_birth", dob);
             if (!desc.isEmpty()) payload.addProperty("description", desc);
             payload.addProperty("role_title", role);
             payload.addProperty("access_level", accessLevel);

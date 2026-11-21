@@ -43,7 +43,7 @@ public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportR
     }
 
     static class RowViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvRowNumber, tvStudentIdentifier, tvRowStatus, tvRowNames, tvRowErrors;
+        private final TextView tvRowNumber, tvStudentIdentifier, tvRowStatus, tvRowNames, tvRowMeta, tvRowErrors;
 
         public RowViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -51,6 +51,7 @@ public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportR
             tvStudentIdentifier = itemView.findViewById(R.id.tvStudentIdentifier);
             tvRowStatus = itemView.findViewById(R.id.tvRowStatus);
             tvRowNames = itemView.findViewById(R.id.tvRowNames);
+            tvRowMeta = itemView.findViewById(R.id.tvRowMeta);
             tvRowErrors = itemView.findViewById(R.id.tvRowErrors);
         }
 
@@ -71,8 +72,30 @@ public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportR
             }
 
             String en = item.englishName != null ? item.englishName : "";
-            String kh = item.khmerName != null ? " (" + item.khmerName + ")" : "";
+            String kh = item.khmerName != null && !item.khmerName.isEmpty() ? " (" + item.khmerName + ")" : "";
             tvRowNames.setText(en + kh);
+
+            if (tvRowMeta != null) {
+                StringBuilder meta = new StringBuilder();
+                if (item.departmentCode != null && !item.departmentCode.isEmpty()) {
+                    meta.append("Dept: ").append(item.departmentCode);
+                }
+                if (item.programCode != null && !item.programCode.isEmpty()) {
+                    if (meta.length() > 0) meta.append(" • ");
+                    meta.append("Program: ").append(item.programCode);
+                }
+                if ("IMPORTED".equalsIgnoreCase(status)) {
+                    if (meta.length() > 0) meta.append(" • ");
+                    String uname = item.username != null && !item.username.isEmpty() ? item.username : item.studentIdentifier;
+                    meta.append("Username: ").append(uname).append(" • Initial Pass: STD@12345 • Role: student");
+                }
+                if (meta.length() > 0) {
+                    tvRowMeta.setVisibility(View.VISIBLE);
+                    tvRowMeta.setText(meta.toString());
+                } else {
+                    tvRowMeta.setVisibility(View.GONE);
+                }
+            }
 
             if (item.errors != null && !item.errors.isEmpty()) {
                 tvRowErrors.setVisibility(View.VISIBLE);

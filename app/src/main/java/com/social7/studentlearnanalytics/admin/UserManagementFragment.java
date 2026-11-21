@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -68,7 +70,8 @@ public class UserManagementFragment extends Fragment implements
     // Primary Tabs
     private MaterialButton btnTabStudents, btnTabTeachers, btnTabAdmins, btnTabFacultyEval;
 
-    // Containers
+    // Containers & AppBar
+    private com.google.android.material.appbar.AppBarLayout appBarUsers;
     private View layoutStudentsContainer, layoutTeachersContainer, layoutAdminsContainer, layoutFacultyEvalContainer;
 
     // Students Tab Views
@@ -86,8 +89,14 @@ public class UserManagementFragment extends Fragment implements
     private EditText etSearchTeacher;
     private TextView pillFilterAllTeachers, pillFilterActiveTeachers, pillFilterInactiveTeachers;
     private Spinner spDepartmentFilter;
-    private MaterialButton btnAddTeacher;
+    private MaterialButton btnAddTeacher, btnImportTeachers;
     private String currentTeacherDepartmentFilter = "All Departments";
+    private final ActivityResultLauncher<String[]> teacherImportPicker =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
+                if (uri != null) {
+                    uploadTeacherImportUri(uri);
+                }
+            });
 
     // Admins Tab Views
     private RecyclerView rvAdmins;
@@ -116,6 +125,8 @@ public class UserManagementFragment extends Fragment implements
     private int currentPage = 1;
     private int lastPage = 1;
     private static final int PER_PAGE = 10;
+    private final android.os.Handler searchHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private Runnable pendingSearchRunnable;
 
     public UserManagementFragment() {
     }
@@ -165,7 +176,7 @@ public class UserManagementFragment extends Fragment implements
         TextView tvHeaderTitle = view.findViewById(R.id.tvHeaderTitle);
         TextView tvHeaderSubtitle = view.findViewById(R.id.tvHeaderSubtitle);
         if (tvHeaderTitle != null) tvHeaderTitle.setText(R.string.user_management);
-        if (tvHeaderSubtitle != null) tvHeaderSubtitle.setText("Manage students, teachers and administrators");
+        if (tvHeaderSubtitle != null) tvHeaderSubtitle.setText(R.string.user_management_subtitle);
 
         // Primary Tabs
         btnTabStudents = view.findViewById(R.id.btnTabStudents);
@@ -173,11 +184,12 @@ public class UserManagementFragment extends Fragment implements
         btnTabAdmins = view.findViewById(R.id.btnTabAdmins);
         btnTabFacultyEval = view.findViewById(R.id.btnTabFacultyEval);
 
-        // Containers
-        layoutStudentsContainer = view.findViewById(R.id.layoutStudentsContainer);
-        layoutTeachersContainer = view.findViewById(R.id.layoutTeachersContainer);
-        layoutAdminsContainer = view.findViewById(R.id.layoutAdminsContainer);
-        layoutFacultyEvalContainer = view.findViewById(R.id.layoutFacultyEvalContainer);
+        // Collapsible Containers + AppBar
+        appBarUsers = view.findViewById(R.id.appBarUsers);
+        layoutStudentsContainer = view.findViewById(R.id.layoutStudentsControls);
+        layoutTeachersContainer = view.findViewById(R.id.layoutTeachersControls);
+        layoutAdminsContainer = view.findViewById(R.id.layoutAdminsControls);
+        layoutFacultyEvalContainer = view.findViewById(R.id.layoutFacultyEvalControls);
 
         // Bind Students Views
         bindStudentsViews(view);
@@ -222,10 +234,22 @@ public class UserManagementFragment extends Fragment implements
         this.currentPage = 1;
         updatePrimaryTabStyles(tabIndex);
 
+        if (appBarUsers != null) appBarUsers.setExpanded(true, false);
+
         if (layoutStudentsContainer != null) layoutStudentsContainer.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
         if (layoutTeachersContainer != null) layoutTeachersContainer.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
         if (layoutAdminsContainer != null) layoutAdminsContainer.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
         if (layoutFacultyEvalContainer != null) layoutFacultyEvalContainer.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
+
+        if (rvUsers != null) rvUsers.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
+        if (rvTeachers != null) rvTeachers.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
+        if (rvAdmins != null) rvAdmins.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
+        if (rvFacultyEvaluation != null) rvFacultyEvaluation.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
+
+        MaterialButton[] tabs = new MaterialButton[]{btnTabStudents, btnTabTeachers, btnTabAdmins, btnTabFacultyEval};
+        if (tabIndex >= 0 && tabIndex < tabs.length) {
+            com.social7.studentlearnanalytics.utils.UiUtils.scrollToTab(tabs[tabIndex]);
+        }
 
         if (tabIndex == 0) {
             loadStudentList();
@@ -275,25 +299,26 @@ public class UserManagementFragment extends Fragment implements
                         JsonObject data = root.has("data") && root.get("data").isJsonObject()
                                 ? root.getAsJsonObject("data") : root;
 
-                        int totalStudents = data.has("total_students") ? data.get("total_students").getAsInt() : 0;
-                        int activeStudents = data.has("active_students") ? data.get("active_students").getAsInt() : 0;
-                        int inactiveStudents = data.has("inactive_students") ? data.get("inactive_students").getAsInt() : 0;
+                        int totalStudents = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "total_students", 0);
+                        int activeStudents = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "active_students", 0);
+                        int inactiveStudents = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "inactive_students", 0);
 
                         if (pillFilterAll != null) pillFilterAll.setText(pillFilterAll.getContext().getString(R.string.all_students) + totalStudents + ")");
                         if (pillFilterActive != null) pillFilterActive.setText(pillFilterActive.getContext().getString(R.string.active) + activeStudents + ")");
                         if (pillFilterInactive != null) pillFilterInactive.setText(pillFilterInactive.getContext().getString(R.string.inactive) + inactiveStudents + ")");
 
-                        int totalTeachers = data.has("total_teachers") ? data.get("total_teachers").getAsInt() : 0;
-                        int activeTeachers = data.has("active_teachers") ? data.get("active_teachers").getAsInt() : 0;
-                        int inactiveTeachers = data.has("inactive_teachers") ? data.get("inactive_teachers").getAsInt() : 0;
+                        int totalTeachers = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "total_teachers", 0);
+                        int activeTeachers = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "active_teachers", 0);
+                        int inactiveTeachers = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "inactive_teachers", 0);
 
                         if (pillFilterAllTeachers != null) pillFilterAllTeachers.setText(pillFilterAllTeachers.getContext().getString(R.string.all_teachers) + totalTeachers + ")");
                         if (pillFilterActiveTeachers != null) pillFilterActiveTeachers.setText(pillFilterActiveTeachers.getContext().getString(R.string.active) + activeTeachers + ")");
                         if (pillFilterInactiveTeachers != null) pillFilterInactiveTeachers.setText(pillFilterInactiveTeachers.getContext().getString(R.string.inactive) + inactiveTeachers + ")");
 
-                        int totalAdmins = data.has("total_admins") ? data.get("total_admins").getAsInt() : (data.has("total_administrators") ? data.get("total_administrators").getAsInt() : 0);
-                        int activeAdmins = data.has("active_admins") ? data.get("active_admins").getAsInt() : 0;
-                        int inactiveAdmins = data.has("inactive_admins") ? data.get("inactive_admins").getAsInt() : 0;
+                        int totalAdmins = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "total_admins",
+                                com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "total_administrators", 0));
+                        int activeAdmins = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "active_admins", 0);
+                        int inactiveAdmins = com.social7.studentlearnanalytics.utils.UiUtils.optInt(data, "inactive_admins", 0);
 
                         if (pillFilterAllAdmins != null) pillFilterAllAdmins.setText(pillFilterAllAdmins.getContext().getString(R.string.all_admins) + totalAdmins + ")");
                         if (pillFilterActiveAdmins != null) pillFilterActiveAdmins.setText(pillFilterActiveAdmins.getContext().getString(R.string.active) + activeAdmins + ")");
@@ -331,8 +356,10 @@ public class UserManagementFragment extends Fragment implements
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    currentPage = 1;
-                    loadStudentList();
+                    scheduleDebouncedSearch(() -> {
+                        currentPage = 1;
+                        loadStudentList();
+                    });
                 }
 
                 @Override
@@ -445,7 +472,10 @@ public class UserManagementFragment extends Fragment implements
                                         JsonObject obj = el.getAsJsonObject();
 
                                         Long numId = obj.has("id") ? obj.get("id").getAsLong() : null;
-                                        String name = obj.has("name") && !obj.get("name").isJsonNull() ? obj.get("name").getAsString() : "Student";
+                                        String khmerName = obj.has("khmer_name") && !obj.get("khmer_name").isJsonNull() ? obj.get("khmer_name").getAsString() : "";
+                                        String englishName = obj.has("english_name") && !obj.get("english_name").isJsonNull() ? obj.get("english_name").getAsString() : "";
+                                        String rawName = obj.has("name") && !obj.get("name").isJsonNull() ? obj.get("name").getAsString() : "Student";
+                                        String name = com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, rawName);
                                         String email = obj.has("email") && !obj.get("email").isJsonNull() ? obj.get("email").getAsString() : "";
                                         String userStatus = obj.has("status") && !obj.get("status").isJsonNull() ? obj.get("status").getAsString() : "Active";
                                         
@@ -501,14 +531,12 @@ public class UserManagementFragment extends Fragment implements
     private void loadFallbackStudents() {
         if (!isAdded()) return;
         masterUserList.clear();
-        masterUserList.add(new User(1L, "1", "Sok Dara", "student@slas.com", "Student", "Active", "STD001"));
-        masterUserList.add(new User(2L, "2", "Chan Sophea", "std002@slas.com", "Student", "Active", "STD002"));
-        masterUserList.add(new User(3L, "3", "Vannak Rith", "std003@slas.com", "Student", "Active", "STD003"));
-        masterUserList.add(new User(4L, "4", "Srey Mom", "std004@slas.com", "Student", "Inactive", "STD004"));
-        masterUserList.add(new User(5L, "5", "Kosal Meas", "std005@slas.com", "Student", "Active", "STD005"));
         lastPage = 1;
         updatePaginationBar();
         bindStudentList();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), getString(R.string.empty_state_no_data), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindStudentList() {
@@ -542,8 +570,10 @@ public class UserManagementFragment extends Fragment implements
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    currentPage = 1;
-                    loadTeacherList();
+                    scheduleDebouncedSearch(() -> {
+                        currentPage = 1;
+                        loadTeacherList();
+                    });
                 }
 
                 @Override
@@ -586,6 +616,166 @@ public class UserManagementFragment extends Fragment implements
                 Intent intent = new Intent(requireContext(), AddTeacherActivity.class);
                 startActivity(intent);
             });
+        }
+
+        btnImportTeachers = root.findViewById(R.id.btnImportTeachers);
+        if (btnImportTeachers != null) {
+            btnImportTeachers.setOnClickListener(v -> showTeacherImportOptionsDialog());
+        }
+    }
+
+    private void showTeacherImportOptionsDialog() {
+        if (!isAdded() || getContext() == null) return;
+        String[] options = new String[]{
+                getString(R.string.select_teacher_import_file),
+                getString(R.string.download_teacher_template)
+        };
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.import_teachers_title)
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        teacherImportPicker.launch(new String[]{
+                                "text/csv",
+                                "text/comma-separated-values",
+                                "application/csv",
+                                "application/vnd.ms-excel",
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "*/*"
+                        });
+                    } else {
+                        downloadTeacherImportTemplateFile();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void downloadTeacherImportTemplateFile() {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(requireContext()).downloadTeacherImportTemplate().enqueue(new Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<okhttp3.ResponseBody> call, @NonNull Response<okhttp3.ResponseBody> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    com.social7.studentlearnanalytics.admin.users.StudentExportDialog.saveExportFile(
+                            getContext().getApplicationContext(),
+                            response.body(),
+                            "teacher_import_template.csv",
+                            "text/csv"
+                    );
+                    Toast.makeText(getContext(), "Template saved: teacher_import_template.csv", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed to download template (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<okhttp3.ResponseBody> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error downloading template", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void uploadTeacherImportUri(android.net.Uri uri) {
+        if (!isAdded() || getContext() == null) return;
+        try (java.io.InputStream is = requireContext().getContentResolver().openInputStream(uri)) {
+            if (is == null) {
+                Toast.makeText(getContext(), "Cannot open selected file", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            java.io.ByteArrayOutputStream buffer = new java.io.ByteArrayOutputStream();
+            byte[] chunk = new byte[4096];
+            int len;
+            while ((len = is.read(chunk)) != -1) {
+                buffer.write(chunk, 0, len);
+            }
+            byte[] bytes = buffer.toByteArray();
+            String mimeType = requireContext().getContentResolver().getType(uri);
+            String filename = "teachers_import.csv";
+            try (android.database.Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIdx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                    if (nameIdx >= 0 && cursor.getString(nameIdx) != null) {
+                        filename = cursor.getString(nameIdx);
+                    }
+                }
+            }
+            okhttp3.MediaType mt = okhttp3.MediaType.parse(mimeType != null ? mimeType : "text/csv");
+            okhttp3.RequestBody reqBody = okhttp3.RequestBody.create(mt, bytes);
+            okhttp3.MultipartBody.Part part = okhttp3.MultipartBody.Part.createFormData("file", filename, reqBody);
+
+            Toast.makeText(getContext(), "Importing teachers...", Toast.LENGTH_SHORT).show();
+            ApiClient.getApiService(requireContext()).importTeachers(part).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (!isAdded() || getContext() == null) return;
+                    JsonObject body = response.body();
+                    if (body == null && response.errorBody() != null) {
+                        try {
+                            body = com.google.gson.JsonParser.parseString(response.errorBody().string()).getAsJsonObject();
+                        } catch (Exception ignored) {}
+                    }
+                    StringBuilder summary = new StringBuilder();
+                    if (body != null && body.has("message") && !body.get("message").isJsonNull()) {
+                        summary.append(body.get("message").getAsString()).append("\n\n");
+                    }
+                    if (body != null && body.has("data") && body.get("data").isJsonObject()) {
+                        JsonObject data = body.getAsJsonObject("data");
+                        if (data.has("created_teachers") && data.get("created_teachers").isJsonArray()) {
+                            JsonArray created = data.getAsJsonArray("created_teachers");
+                            if (created.size() > 0) {
+                                summary.append("Created Accounts (Initial Password: TCH@12345):\n");
+                                for (JsonElement el : created) {
+                                    JsonObject item = el.getAsJsonObject();
+                                    summary.append("• ").append(item.get("login_id").getAsString())
+                                            .append(" — ").append(item.get("name").getAsString())
+                                            .append(" (").append(item.get("account_status").getAsString()).append(")\n");
+                                }
+                                summary.append("\n");
+                            }
+                        }
+                        if (data.has("errors") && data.get("errors").isJsonArray()) {
+                            JsonArray errs = data.getAsJsonArray("errors");
+                            if (errs.size() > 0) {
+                                summary.append("Failed Rows:\n");
+                                for (JsonElement el : errs) {
+                                    JsonObject errObj = el.getAsJsonObject();
+                                    summary.append("• Row ").append(errObj.get("row").getAsInt());
+                                    if (errObj.has("teacher_id") && !errObj.get("teacher_id").isJsonNull()) {
+                                        summary.append(" (").append(errObj.get("teacher_id").getAsString()).append(")");
+                                    }
+                                    summary.append(": ");
+                                    if (errObj.has("errors") && errObj.get("errors").isJsonArray()) {
+                                        for (JsonElement em : errObj.getAsJsonArray("errors")) {
+                                            summary.append(em.getAsString()).append(" ");
+                                        }
+                                    }
+                                    summary.append("\n");
+                                }
+                            }
+                        }
+                    }
+                    if (summary.length() == 0) {
+                        summary.append("Import completed (HTTP ").append(response.code()).append(").");
+                    }
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle(R.string.import_teachers_title)
+                            .setMessage(summary.toString().trim())
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
+                    fetchUserStatistics();
+                    loadTeacherList();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (!isAdded() || getContext() == null) return;
+                    Toast.makeText(getContext(), "Network error importing teachers: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Failed to read file: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -645,8 +835,10 @@ public class UserManagementFragment extends Fragment implements
 
         String querySearch = getSearchText(etSearchTeacher);
         String status = currentTeacherStatusFilter.toLowerCase();
+        String deptParam = (currentTeacherDepartmentFilter != null && !"All Departments".equalsIgnoreCase(currentTeacherDepartmentFilter))
+                ? currentTeacherDepartmentFilter : null;
 
-        ApiClient.getApiService(getContext()).getUsers("teacher", status, querySearch, currentPage, PER_PAGE)
+        ApiClient.getApiService(getContext()).getTeachersPaged(status, deptParam, querySearch, currentPage, PER_PAGE)
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -666,13 +858,80 @@ public class UserManagementFragment extends Fragment implements
                                         if (!el.isJsonObject()) continue;
                                         JsonObject obj = el.getAsJsonObject();
 
-                                        String id = obj.has("code") && !obj.get("code").isJsonNull() ? obj.get("code").getAsString() : (obj.has("id") ? obj.get("id").getAsString() : "TCH");
-                                        String name = obj.has("name") && !obj.get("name").isJsonNull() ? obj.get("name").getAsString() : "Teacher";
+                                        String id = obj.has("teacher_code") && !obj.get("teacher_code").isJsonNull()
+                                                ? obj.get("teacher_code").getAsString()
+                                                : (obj.has("code") && !obj.get("code").isJsonNull() ? obj.get("code").getAsString() : "TCH");
+                                        String khmerName = obj.has("khmer_name") && !obj.get("khmer_name").isJsonNull() ? obj.get("khmer_name").getAsString() : "";
+                                        String englishName = obj.has("english_name") && !obj.get("english_name").isJsonNull() ? obj.get("english_name").getAsString() : "";
+                                        String rawName = obj.has("name") && !obj.get("name").isJsonNull() ? obj.get("name").getAsString() : "Teacher";
+                                        String name = com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, rawName);
                                         String email = obj.has("email") && !obj.get("email").isJsonNull() ? obj.get("email").getAsString() : "";
-                                        String dept = obj.has("department_name") && !obj.get("department_name").isJsonNull() ? obj.get("department_name").getAsString() : "Computer Science";
+                                        String dept = obj.has("department_name") && !obj.get("department_name").isJsonNull() && !obj.get("department_name").getAsString().isEmpty()
+                                                ? obj.get("department_name").getAsString() : "Computer Science";
+                                        String pos = obj.has("position") && !obj.get("position").isJsonNull() && !obj.get("position").getAsString().isEmpty()
+                                                ? obj.get("position").getAsString() : "Lecturer";
                                         String teacherStatus = obj.has("status") && !obj.get("status").isJsonNull() ? obj.get("status").getAsString() : "Active";
 
-                                        masterTeacherList.add(new Teacher(id, name, email, dept, "Lecturer", capitalize(teacherStatus)));
+                                        Teacher tItem = new Teacher(id, name, email, dept, pos, capitalize(teacherStatus));
+                                        tItem.setKhmerName(khmerName);
+                                        tItem.setEnglishName(englishName);
+                                        if (obj.has("hire_date") && !obj.get("hire_date").isJsonNull()) {
+                                            tItem.setHireDate(obj.get("hire_date").getAsString());
+                                        }
+                                        if (obj.has("id") && !obj.get("id").isJsonNull()) {
+                                            tItem.setDbId(obj.get("id").getAsLong());
+                                        }
+                                        if (obj.has("user_id") && !obj.get("user_id").isJsonNull()) {
+                                            tItem.setUserId(obj.get("user_id").getAsLong());
+                                        }
+                                        if (obj.has("login_id") && !obj.get("login_id").isJsonNull()) {
+                                            tItem.setLoginId(obj.get("login_id").getAsString());
+                                        }
+                                        if (obj.has("teacher_profile_status") && !obj.get("teacher_profile_status").isJsonNull()) {
+                                            tItem.setProfileStatus(capitalize(obj.get("teacher_profile_status").getAsString()));
+                                        }
+                                        if (obj.has("login_account_status") && !obj.get("login_account_status").isJsonNull()) {
+                                            tItem.setLoginAccountStatus(obj.get("login_account_status").getAsString());
+                                        }
+                                        if (obj.has("account_created") && !obj.get("account_created").isJsonNull()) {
+                                            tItem.setAccountCreated(obj.get("account_created").getAsBoolean());
+                                        }
+                                        if (obj.has("account_linked") && !obj.get("account_linked").isJsonNull()) {
+                                            tItem.setAccountLinked(obj.get("account_linked").getAsBoolean());
+                                        }
+                                        if (obj.has("can_login") && !obj.get("can_login").isJsonNull()) {
+                                            tItem.setCanLogin(obj.get("can_login").getAsBoolean());
+                                        }
+                                        if (obj.has("phone") && !obj.get("phone").isJsonNull()) {
+                                            tItem.setPhone(obj.get("phone").getAsString());
+                                        }
+                                        if (obj.has("date_of_birth") && !obj.get("date_of_birth").isJsonNull()) {
+                                            tItem.setDob(obj.get("date_of_birth").getAsString());
+                                        }
+                                        if (obj.has("work_type") && !obj.get("work_type").isJsonNull()) {
+                                            tItem.setWorkType(obj.get("work_type").getAsString());
+                                        }
+                                        if (obj.has("office_location_id") && !obj.get("office_location_id").isJsonNull()) {
+                                            tItem.setOfficeLocationId(obj.get("office_location_id").getAsInt());
+                                        }
+                                        if (obj.has("office_location") && !obj.get("office_location").isJsonNull()) {
+                                            tItem.setOfficeLocation(obj.get("office_location").getAsString());
+                                        }
+                                        if (obj.has("biography") && !obj.get("biography").isJsonNull()) {
+                                            tItem.setBio(obj.get("biography").getAsString());
+                                        } else if (obj.has("bio") && !obj.get("bio").isJsonNull()) {
+                                            tItem.setBio(obj.get("bio").getAsString());
+                                        }
+                                        if (obj.has("specializations") && obj.get("specializations").isJsonArray()) {
+                                            java.util.List<String> specs = new java.util.ArrayList<>();
+                                            for (JsonElement se : obj.getAsJsonArray("specializations")) {
+                                                if (!se.isJsonNull()) specs.add(se.getAsString());
+                                            }
+                                            tItem.setSpecializations(specs);
+                                        } else if (obj.has("specialization") && !obj.get("specialization").isJsonNull()) {
+                                            tItem.setSpecialization(obj.get("specialization").getAsString());
+                                        }
+                                        masterTeacherList.add(tItem);
                                     }
                                 }
                             } catch (Exception e) {
@@ -698,13 +957,12 @@ public class UserManagementFragment extends Fragment implements
     private void loadFallbackTeachers() {
         if (!isAdded()) return;
         masterTeacherList.clear();
-        masterTeacherList.add(new Teacher("TCH001", "Emily Johnson", "teacher@slas.com", "Computer Science", "Associate Professor", "Active"));
-        masterTeacherList.add(new Teacher("TCH002", "Michael Chen", "tch002@slas.com", "Computer Science", "Professor", "Active"));
-        masterTeacherList.add(new Teacher("TCH003", "Sophia Martinez", "tch003@slas.com", "Information Technology", "Assistant Professor", "Active"));
-        masterTeacherList.add(new Teacher("TCH004", "David Kim", "tch004@slas.com", "Information Systems", "Senior Lecturer", "Active"));
         lastPage = 1;
         updatePaginationBar();
         bindTeacherList();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), getString(R.string.empty_state_no_data), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindTeacherList() {
@@ -730,15 +988,17 @@ public class UserManagementFragment extends Fragment implements
         pillFilterInactiveAdmins = root.findViewById(R.id.pillFilterInactiveAdmins);
 
         if (etSearchAdmin != null) {
-            etSearchAdmin.setHint(R.string.search_by_name_email_or_admin_id);
+            etSearchAdmin.setHint(R.string.search_admins_hint);
             etSearchAdmin.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    currentPage = 1;
-                    loadAdminList();
+                    scheduleDebouncedSearch(() -> {
+                        currentPage = 1;
+                        loadAdminList();
+                    });
                 }
 
                 @Override
@@ -859,11 +1119,12 @@ public class UserManagementFragment extends Fragment implements
     private void loadFallbackAdmins() {
         if (!isAdded()) return;
         masterAdminList.clear();
-        masterAdminList.add(new Admin("ADM001", "Admin SLAS", "admin@slas.com", "Super Administrator", "Active"));
-        masterAdminList.add(new Admin("ADM002", "System Admin", "admin@slas.local", "Academic Admin", "Active"));
         lastPage = 1;
         updatePaginationBar();
         bindAdminList();
+        if (getContext() != null) {
+            Toast.makeText(getContext(), getString(R.string.empty_state_no_data), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindAdminList() {
@@ -880,22 +1141,21 @@ public class UserManagementFragment extends Fragment implements
     // 4. FACULTY EVALUATION TAB IMPLEMENTATION
     // ==========================================
     private void bindFacultyEvalViews(View root) {
-        View layoutEval = root.findViewById(R.id.layoutFacultyEvalContainer);
-        if (layoutEval == null) return;
-
-        rvFacultyEvaluation = layoutEval.findViewById(R.id.rvFacultyEvaluation);
-        etSearchFaculty = layoutEval.findViewById(R.id.etSearchFaculty);
+        rvFacultyEvaluation = root.findViewById(R.id.rvFacultyEvaluation);
+        etSearchFaculty = root.findViewById(R.id.etSearchFaculty);
 
         if (etSearchFaculty != null) {
-            etSearchFaculty.setHint("Search faculty members...");
+            etSearchFaculty.setHint(R.string.search_faculty_hint);
             etSearchFaculty.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    currentPage = 1;
-                    loadFacultyEvaluationData();
+                    scheduleDebouncedSearch(() -> {
+                        currentPage = 1;
+                        loadFacultyEvaluationData();
+                    });
                 }
 
                 @Override
@@ -937,44 +1197,49 @@ public class UserManagementFragment extends Fragment implements
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                        if (!isAdded()) return;
+                        if (!isAdded() || getContext() == null) return;
                         if (!response.isSuccessful() || response.body() == null) {
-                            Toast.makeText(requireContext(), "Failed to load faculty (HTTP " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.network_error_server), Toast.LENGTH_SHORT).show();
                             if (facultyAdapter != null) facultyAdapter.setItems(facultyList);
                             return;
                         }
                         JsonObject root = response.body();
                         JsonObject meta = root.has("meta") && root.get("meta").isJsonObject() ? root.getAsJsonObject("meta") : null;
                         if (meta != null) {
-                            lastPage = Math.max(1, meta.get("last_page").getAsInt());
-                            currentPage = meta.get("current_page").getAsInt();
+                            lastPage = Math.max(1, com.social7.studentlearnanalytics.utils.UiUtils.optInt(meta, "last_page", 1));
+                            currentPage = Math.max(1, com.social7.studentlearnanalytics.utils.UiUtils.optInt(meta, "current_page", 1));
                         }
-                        for (JsonElement el : root.getAsJsonArray("data")) {
-                            JsonObject o = el.getAsJsonObject();
-                            FacultyEvaluationAdapter.FacultyItem item = new FacultyEvaluationAdapter.FacultyItem(
-                                    str(o, "name", "Unknown"),
-                                    str(o, "position", "—"),
-                                    str(o, "department", "No department"),
-                                    o.get("courses_count").getAsInt() + " assigned",
-                                    o.get("classes_count").getAsInt() + " assigned",
-                                    o.get("class_pass_rate").isJsonNull() ? "N/A" : o.get("class_pass_rate").getAsString() + "%",
-                                    o.get("student_rating").isJsonNull() ? "N/A" : o.get("student_rating").getAsString() + " / 5.0",
-                                    str(o, "review_status", "Pending Review"));
-                            item.id = o.get("id").getAsInt();
-                            item.facultyId = str(o, "faculty_id", "");
-                            facultyList.add(item);
+                        if (root.has("data") && root.get("data").isJsonArray()) {
+                            for (JsonElement el : root.getAsJsonArray("data")) {
+                                if (!el.isJsonObject()) continue;
+                                JsonObject o = el.getAsJsonObject();
+                                String passRate = com.social7.studentlearnanalytics.utils.UiUtils.optString(o, "class_pass_rate", "");
+                                String rating = com.social7.studentlearnanalytics.utils.UiUtils.optString(o, "student_rating", "");
+                                FacultyEvaluationAdapter.FacultyItem item = new FacultyEvaluationAdapter.FacultyItem(
+                                        str(o, "name", "Unknown"),
+                                        str(o, "position", "—"),
+                                        str(o, "department", "No department"),
+                                        com.social7.studentlearnanalytics.utils.UiUtils.optInt(o, "courses_count", 0) + " assigned",
+                                        com.social7.studentlearnanalytics.utils.UiUtils.optInt(o, "classes_count", 0) + " assigned",
+                                        passRate.isEmpty() ? "N/A" : passRate + "%",
+                                        rating.isEmpty() ? "N/A" : rating + " / 5.0",
+                                        str(o, "review_status", "Pending Review"));
+                                item.id = com.social7.studentlearnanalytics.utils.UiUtils.optInt(o, "id", 0);
+                                item.facultyId = str(o, "faculty_id", "");
+                                facultyList.add(item);
+                            }
                         }
                         if (facultyAdapter != null) facultyAdapter.setItems(facultyList);
                         if (facultyList.isEmpty()) {
-                            Toast.makeText(requireContext(), "No faculty members found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.search_no_results), Toast.LENGTH_SHORT).show();
                         }
                         updatePaginationBar();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                        if (!isAdded()) return;
-                        Toast.makeText(requireContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (!isAdded() || getContext() == null) return;
+                        Toast.makeText(getContext(), getString(R.string.network_error_server), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -1247,10 +1512,27 @@ public class UserManagementFragment extends Fragment implements
                 .setTitle(R.string.submit_faculty_review)
                 .setView(box)
                 .setPositiveButton(R.string.submit, (d, w) -> {
+                    String status = (String) spStatus.getSelectedItem();
+                    String ratingStr = etRating.getText().toString().trim();
+                    if ("completed".equalsIgnoreCase(status) && ratingStr.isEmpty()) {
+                        Toast.makeText(requireContext(), "Rating (1.0 - 5.0) is required when completed.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     JsonObject body = new JsonObject();
-                    body.addProperty("status", (String) spStatus.getSelectedItem());
-                    String rating = etRating.getText().toString().trim();
-                    if (!rating.isEmpty()) body.addProperty("rating", Double.parseDouble(rating));
+                    body.addProperty("status", status);
+                    if (!ratingStr.isEmpty()) {
+                        try {
+                            double val = Double.parseDouble(ratingStr);
+                            if (val < 1.0 || val > 5.0) {
+                                Toast.makeText(requireContext(), "Rating must be between 1.0 and 5.0.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            body.addProperty("rating", val);
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(requireContext(), "Invalid rating number.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     String comments = etComments.getText().toString().trim();
                     if (!comments.isEmpty()) body.addProperty("comments", comments);
                     ApiClient.getApiService(requireContext()).submitFacultyReview(item.id, body)
@@ -1344,6 +1626,27 @@ public class UserManagementFragment extends Fragment implements
         else if (selectedTab == 2) loadAdminList();
     }
 
+    private void scheduleDebouncedSearch(Runnable action) {
+        if (pendingSearchRunnable != null) {
+            searchHandler.removeCallbacks(pendingSearchRunnable);
+        }
+        pendingSearchRunnable = () -> {
+            if (isAdded() && getView() != null) {
+                action.run();
+            }
+        };
+        searchHandler.postDelayed(pendingSearchRunnable, 300L);
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (pendingSearchRunnable != null) {
+            searchHandler.removeCallbacks(pendingSearchRunnable);
+            pendingSearchRunnable = null;
+        }
+        super.onDestroyView();
+    }
+
     private String getSearchText(EditText editText) {
         return (editText != null && editText.getText() != null) ? editText.getText().toString() : "";
     }
@@ -1434,8 +1737,34 @@ public class UserManagementFragment extends Fragment implements
                 .setTitle(currentlyActive ? "Deactivate Account" : "Activate Account")
                 .setMessage("Are you sure you want to " + action + " account for " + teacher.getName() + " (" + teacher.getId() + ")?")
                 .setPositiveButton(R.string.confirm, (dialog, which) -> {
-                    String targetId = teacher.getUserId() != null ? String.valueOf(teacher.getUserId()) : teacher.getId();
-                    updateUserStatusOnBackend(targetId, newStatus, action);
+                    if (teacher.getUserId() != null && teacher.getUserId() > 0) {
+                        updateUserStatusOnBackend(String.valueOf(teacher.getUserId()), newStatus, action);
+                    } else if (teacher.getDbId() != null && teacher.getDbId() > 0) {
+                        JsonObject body = new JsonObject();
+                        body.addProperty("status", newStatus);
+                        ApiClient.getApiService(requireContext())
+                                .updateTeacher(String.valueOf(teacher.getDbId()), body)
+                                .enqueue(new Callback<JsonObject>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                        if (!isAdded()) return;
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(requireContext(), "active".equalsIgnoreCase(newStatus)
+                                                    ? R.string.account_activated_success : R.string.account_deactivated_success, Toast.LENGTH_SHORT).show();
+                                            fetchUserStatistics();
+                                            reloadCurrentTab();
+                                        } else {
+                                            Toast.makeText(requireContext(), getString(R.string.status_update_failed, response.code()), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                        if (!isAdded()) return;
+                                        Toast.makeText(requireContext(), getString(R.string.network_error_updating_status_fmt, t.getMessage()), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
@@ -1513,8 +1842,37 @@ public class UserManagementFragment extends Fragment implements
 
     @Override
     public void onDeleteTeacher(Teacher teacher) {
-        String targetId = teacher.getUserId() != null ? String.valueOf(teacher.getUserId()) : teacher.getId();
-        confirmAndDeleteUser(targetId, teacher.getName());
+        if (teacher.getUserId() != null && teacher.getUserId() > 0) {
+            confirmAndDeleteUser(String.valueOf(teacher.getUserId()), teacher.getName(), teacher.getId());
+            return;
+        }
+        String teacherDbId = teacher.getDbId() != null ? String.valueOf(teacher.getDbId()) : teacher.getId();
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_user_account)
+                .setMessage(getString(R.string.confirm_delete_user_msg, teacher.getName(), teacher.getId()))
+                .setPositiveButton(R.string.delete, (dialog, which) -> ApiClient.getApiService(requireContext())
+                        .deleteTeacher(teacherDbId)
+                        .enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                if (!isAdded()) return;
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(requireContext(), R.string.user_deleted_successfully, Toast.LENGTH_SHORT).show();
+                                    fetchUserStatistics();
+                                    reloadCurrentTab();
+                                } else {
+                                    Toast.makeText(requireContext(), getString(R.string.delete_user_failed, response.code()), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                if (!isAdded()) return;
+                                Toast.makeText(requireContext(), getString(R.string.network_error_deleting_user_fmt, t.getMessage()), Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override

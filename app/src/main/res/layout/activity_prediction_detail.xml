@@ -21,9 +21,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
+            android:paddingStart="12dp"
             android:paddingTop="12dp"
-            android:paddingEnd="20dp"
+            android:paddingEnd="12dp"
             android:paddingBottom="12dp">
 
             <ImageButton
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/exam_score_prediction"
                     android:textColor="@color/prediction_text_main"
-                    android:textSize="18sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/btnBack"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,23 +104,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="10dp">
 
             <!-- Prediction Summary Hero Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/prediction_border"
                 app:strokeWidth="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvSummaryTitle"
@@ -128,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/predicted_exam_score"
                         android:textColor="@color/prediction_text_secondary"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -139,7 +139,7 @@
                         android:layout_marginTop="6dp"
                         tools:text="76.5 / 100"
                         android:textColor="@color/prediction_purple"
-                        android:textSize="32sp"
+                        android:textSize="21sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvSummaryTitle" />
@@ -179,9 +179,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/prediction_purple_light"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="0dp"
                 app:strokeColor="#D8CFFF"
                 app:strokeWidth="1dp">
@@ -189,7 +189,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="14dp"
+                    android:padding="12dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -214,10 +214,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/score_breakdown"
                 android:textColor="@color/prediction_text_main"
-                android:textSize="16sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
@@ -225,15 +225,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/prediction_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="12dp"
                     android:orientation="vertical">
 
                     <!-- Attendance Breakdown -->
@@ -260,7 +260,7 @@
                             android:layout_marginStart="12dp"
                             android:text="@string/attendance_20"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
 
                         <ProgressBar
                             android:id="@+id/pbAttendance"
@@ -279,7 +279,7 @@
                             tools:text="88%"
                             android:textStyle="bold"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <!-- Assignment Breakdown -->
@@ -306,7 +306,7 @@
                             android:layout_marginStart="12dp"
                             android:text="@string/assignment_20"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
 
                         <ProgressBar
                             android:id="@+id/pbAssignment"
@@ -325,7 +325,7 @@
                             tools:text="80%"
                             android:textStyle="bold"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <!-- Quiz Breakdown -->
@@ -352,7 +352,7 @@
                             android:layout_marginStart="12dp"
                             android:text="@string/quiz_30"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
 
                         <ProgressBar
                             android:id="@+id/pbQuiz"
@@ -371,7 +371,7 @@
                             tools:text="78%"
                             android:textStyle="bold"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <!-- Previous Exam Breakdown -->
@@ -397,7 +397,7 @@
                             android:layout_marginStart="12dp"
                             android:text="@string/previous_exam_30"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
 
                         <ProgressBar
                             android:id="@+id/pbExam"
@@ -416,7 +416,7 @@
                             tools:text="76%"
                             android:textStyle="bold"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <!-- GPA Breakdown -->
@@ -443,7 +443,7 @@
                             android:layout_marginStart="12dp"
                             android:text="@string/current_gpa"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
 
                         <ProgressBar
                             android:id="@+id/pbGpa"
@@ -463,7 +463,7 @@
                             tools:text="3.25"
                             android:textStyle="bold"
                             android:textColor="@color/prediction_text_main"
-                            android:textSize="13sp"/>
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -473,7 +473,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
@@ -483,7 +483,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/risk_analysis"
                     android:textColor="@color/prediction_text_main"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -499,15 +499,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/prediction_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="12dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -555,7 +555,7 @@
                                 tools:text="Medium Risk"
                                 android:textStyle="bold"
                                 android:textColor="@color/prediction_warning"
-                                android:textSize="14sp"/>
+                                android:textSize="12.5sp"/>
 
                             <TextView
                                 android:id="@+id/tvRiskDescription"
@@ -572,7 +572,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/prediction_border"
-                        android:layout_marginVertical="14dp"/>
+                        android:layout_marginVertical="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -580,7 +580,7 @@
                         android:text="@string/risk_factors"
                         android:textStyle="bold"
                         android:textColor="@color/prediction_text_main"
-                        android:textSize="13sp"/>
+                        android:textSize="12sp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -632,7 +632,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -641,7 +641,7 @@
                     android:layout_height="wrap_content"
                     android:text="Recommendations to Reduce Risk"
                     android:textColor="@color/prediction_text_main"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -660,17 +660,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/prediction_card"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/prediction_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
+                    android:padding="12dp"
                     android:orientation="vertical">
 
                     <TextView

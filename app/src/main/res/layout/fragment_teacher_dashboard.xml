@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp">
 
             <!-- Summary Cards 2x2 Grid -->
             <LinearLayout
@@ -43,12 +44,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="5dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:cardBackgroundColor="@color/card_white"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="1dp"
                         app:strokeColor="@color/divider_color"
                         app:strokeWidth="1dp">
 
@@ -56,7 +57,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="11dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -65,32 +66,45 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:background="@drawable/bg_circle_soft_blue"
-                                    android:padding="8dp"
+                                    android:padding="6dp"
                                     android:src="@drawable/ic_profile"
                                     app:tint="@color/primary"
                                     android:contentDescription="@string/nav_students" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="7dp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
                                     android:text="@string/total_students"
                                     android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:textSize="11.5sp" />
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tvTotalStudentsCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="6dp"
                                 android:text="--"
                                 android:textColor="@color/text_primary"
-                                android:textSize="26sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="Enrolled across classes"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -101,12 +115,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="5dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:cardBackgroundColor="@color/card_white"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="1dp"
                         app:strokeColor="@color/divider_color"
                         app:strokeWidth="1dp">
 
@@ -114,7 +128,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="11dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -123,32 +137,45 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:background="@drawable/bg_stat_card_green"
-                                    android:padding="8dp"
+                                    android:padding="6dp"
                                     android:src="@drawable/ic_book"
                                     app:tint="@color/success_green"
                                     android:contentDescription="@string/nav_courses" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="7dp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
                                     android:text="@string/my_courses"
                                     android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:textSize="11.5sp" />
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tvMyCoursesCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="6dp"
                                 android:text="--"
                                 android:textColor="@color/text_primary"
-                                android:textSize="26sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="Active teaching load"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -159,7 +186,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <!-- Card 3: At-Risk Students -->
@@ -168,12 +195,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="5dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:cardBackgroundColor="@color/card_white"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="1dp"
                         app:strokeColor="@color/divider_color"
                         app:strokeWidth="1dp">
 
@@ -181,7 +208,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="11dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -190,32 +217,45 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:background="@drawable/bg_notification_risk"
-                                    android:padding="8dp"
+                                    android:padding="6dp"
                                     android:src="@drawable/ic_prediction"
                                     app:tint="@color/white"
                                     android:contentDescription="@string/risk" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="7dp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
                                     android:text="@string/at_risk_students"
                                     android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:textSize="11.5sp" />
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tvAtRiskCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="6dp"
                                 android:text="--"
                                 android:textColor="@color/danger_red"
-                                android:textSize="26sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="Needs academic support"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -226,12 +266,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="5dp"
                         android:clickable="true"
                         android:focusable="true"
                         app:cardBackgroundColor="@color/card_white"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="1dp"
                         app:strokeColor="@color/divider_color"
                         app:strokeWidth="1dp">
 
@@ -239,7 +279,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="11dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -248,32 +288,45 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="38dp"
-                                    android:layout_height="38dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:background="@drawable/bg_stat_card_blue"
-                                    android:padding="8dp"
+                                    android:padding="6dp"
                                     android:src="@drawable/ic_assignment"
                                     app:tint="@color/secondary_blue"
                                     android:contentDescription="@string/status_pending" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
+                                    android:layout_marginStart="7dp"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
                                     android:text="@string/pending_scores"
                                     android:textColor="@color/text_secondary"
-                                    android:textSize="12sp" />
+                                    android:textSize="11.5sp" />
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tvPendingScoresCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="6dp"
                                 android:text="--"
                                 android:textColor="@color/primary"
-                                android:textSize="26sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="Awaiting grade entry"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp" />
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -286,10 +339,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/divider_color"
                 app:strokeWidth="1dp">
 
@@ -297,7 +350,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <!-- Title & Header -->
                     <LinearLayout
@@ -317,7 +370,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/learning_engagement_overview"
                                 android:textColor="@color/text_primary"
-                                android:textSize="16sp"
+                                android:textSize="14.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -327,17 +380,17 @@
                                 android:layout_marginTop="2dp"
                                 android:text="@string/attendance_assignment_homework_quiz"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="11sp" />
+                                android:textSize="10.5sp" />
                         </LinearLayout>
 
                         <!-- Refresh Action Button -->
                         <ImageView
                             android:id="@+id/btnRefreshChart"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:contentDescription="@string/refresh_analytics"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:src="@drawable/ic_refresh"
                             app:tint="@color/text_secondary" />
 
@@ -347,7 +400,7 @@
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:scrollbars="none">
 
                         <LinearLayout
@@ -360,70 +413,70 @@
                             <Spinner
                                 android:id="@+id/spinnerAcademicYear"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Semester Selector -->
                             <Spinner
                                 android:id="@+id/spinnerSemester"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Course Selector -->
                             <Spinner
                                 android:id="@+id/spinnerCourse"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Class Selector -->
                             <Spinner
                                 android:id="@+id/spinnerClass"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Program / Major Selector -->
                             <Spinner
                                 android:id="@+id/spinnerProgram"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Study Year Selector -->
                             <Spinner
                                 android:id="@+id/spinnerStudyYear"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="6dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                             <!-- Generation Selector -->
                             <Spinner
                                 android:id="@+id/spinnerGeneration"
                                 android:layout_width="wrap_content"
-                                android:layout_height="36dp"
+                                android:layout_height="32dp"
                                 android:background="@drawable/bg_spinner"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="28dp" />
+                                android:paddingStart="8dp"
+                                android:paddingEnd="24dp" />
 
                         </LinearLayout>
                     </HorizontalScrollView>
@@ -432,14 +485,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <!-- Completed Legend -->
                         <View
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:background="@drawable/bg_circle_soft_blue"
                             android:backgroundTint="#10B981" />
 
@@ -447,15 +500,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
+                            android:layout_marginEnd="12dp"
                             android:text="@string/status_completed"
                             android:textColor="@color/text_secondary"
-                            android:textSize="11sp" />
+                            android:textSize="10.5sp" />
 
                         <!-- Late Legend -->
                         <View
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:background="@drawable/bg_circle_soft_blue"
                             android:backgroundTint="#F59E0B" />
 
@@ -463,15 +516,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:layout_marginEnd="16dp"
+                            android:layout_marginEnd="12dp"
                             android:text="@string/status_late"
                             android:textColor="@color/text_secondary"
-                            android:textSize="11sp" />
+                            android:textSize="10.5sp" />
 
                         <!-- Missed Legend -->
                         <View
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:background="@drawable/bg_circle_soft_blue"
                             android:backgroundTint="#EF4444" />
 
@@ -481,15 +534,15 @@
                             android:layout_marginStart="4dp"
                             android:text="@string/missed"
                             android:textColor="@color/text_secondary"
-                            android:textSize="11sp" />
+                            android:textSize="10.5sp" />
 
                     </LinearLayout>
 
                     <!-- Chart Container with Loading, Empty & Error States -->
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:layout_marginTop="10dp">
+                        android:layout_height="195dp"
+                        android:layout_marginTop="6dp">
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/barChartEngagement"
@@ -516,16 +569,16 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/no_activity_data"
                                 android:textColor="@color/text_primary"
-                                android:textSize="14sp"
+                                android:textSize="13.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="3dp"
                                 android:text="@string/no_learning_events_recorded"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="12sp" />
+                                android:textSize="11.5sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -542,17 +595,17 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/failed_load_engagement_analytics"
                                 android:textColor="@color/danger_red"
-                                android:textSize="13sp" />
+                                android:textSize="12.5sp" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnRetryChart"
                                 style="@style/Widget.MaterialComponents.Button.TextButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="2dp"
                                 android:text="@string/retry"
                                 android:textColor="@color/primary"
-                                android:textSize="12sp" />
+                                android:textSize="11.5sp" />
                         </LinearLayout>
 
                     </FrameLayout>
@@ -565,19 +618,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="14dp"
                 android:text="@string/recent_activities_cc0a4a"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/divider_color"
                 app:strokeWidth="1dp">
 
@@ -585,7 +638,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <!-- Activity 1 -->
                     <LinearLayout
@@ -595,10 +648,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_circle_soft_blue"
-                            android:padding="8dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_assignment"
                             app:tint="@color/primary"
                             android:contentDescription="@string/activity" />
@@ -607,7 +660,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="10dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -615,16 +668,16 @@
                                 android:layout_height="wrap_content"
                                 android:text="Added quiz scores - CS101"
                                 android:textColor="@color/text_primary"
-                                android:textSize="13sp"
+                                android:textSize="12.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
+                                android:layout_marginTop="1dp"
                                 android:text="2 hours ago"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="11sp" />
+                                android:textSize="10.5sp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -632,7 +685,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/divider_color"
-                        android:layout_marginVertical="10dp" />
+                        android:layout_marginVertical="8dp" />
 
                     <!-- Activity 2 -->
                     <LinearLayout
@@ -642,10 +695,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_green"
-                            android:padding="8dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_calendar"
                             app:tint="@color/success_green"
                             android:contentDescription="@string/activity" />
@@ -654,7 +707,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="10dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -662,16 +715,16 @@
                                 android:layout_height="wrap_content"
                                 android:text="Updated attendance - CS102"
                                 android:textColor="@color/text_primary"
-                                android:textSize="13sp"
+                                android:textSize="12.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
+                                android:layout_marginTop="1dp"
                                 android:text="4 hours ago"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="11sp" />
+                                android:textSize="10.5sp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -679,7 +732,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/divider_color"
-                        android:layout_marginVertical="10dp" />
+                        android:layout_marginVertical="8dp" />
 
                     <!-- Activity 3 -->
                     <LinearLayout
@@ -689,10 +742,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_purple"
-                            android:padding="8dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_profile"
                             app:tint="@color/primary"
                             android:contentDescription="@string/activity" />
@@ -701,7 +754,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="10dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -709,16 +762,16 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/new_student_enrolled_cs101"
                                 android:textColor="@color/text_primary"
-                                android:textSize="13sp"
+                                android:textSize="12.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
+                                android:layout_marginTop="1dp"
                                 android:text="1 day ago"
                                 android:textColor="@color/text_secondary"
-                                android:textSize="11sp" />
+                                android:textSize="10.5sp" />
                         </LinearLayout>
                     </LinearLayout>
 

@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/btnBackAddTeacher"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- Personal Information Card -->
             <com.google.android.material.card.MaterialCardView
@@ -66,7 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -82,17 +82,25 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
-                    <!-- Full Name -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name_rule_hint"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="11sp" />
+
+                    <!-- Khmer Name -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/full_name_d9bc75"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/khmer_name_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAddTeacherName"
+                        android:id="@+id/tilAddTeacherKhmerName"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,10 +114,45 @@
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAddTeacherName"
+                            android:id="@+id/etAddTeacherKhmerName"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="@string/enter_full_name"
+                            android:hint="@string/khmer_name_hint"
+                            android:inputType="textPersonName"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- English Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/english_name_optional"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilAddTeacherEnglishName"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAddTeacherEnglishName"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:hint="@string/english_name_hint"
                             android:inputType="textPersonName"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -151,12 +194,12 @@
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Email Address -->
+                    <!-- Email Address (Optional) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="@string/email_address"
+                        android:text="@string/email_address_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -179,7 +222,7 @@
                             android:id="@+id/etAddTeacherEmail"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="@string/enter_email_address"
+                            android:hint="@string/enter_email_optional"
                             android:inputType="textEmailAddress"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -249,8 +292,47 @@
                             android:id="@+id/etAddTeacherDob"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
+                            android:clickable="true"
+                            android:focusable="false"
                             android:hint="@string/select_date_of_birth"
-                            android:inputType="date"
+                            android:inputType="none"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Hire Date -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/hire_date_label"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilAddTeacherHireDate"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAddTeacherHireDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:hint="@string/select_hire_date"
+                            android:inputType="none"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="14sp" />
@@ -274,7 +356,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -340,12 +422,12 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/bg_spinner" />
 
-                    <!-- Office Location -->
+                    <!-- Office Location (Searchable Grouped Selector) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="@string/office_location"
+                        android:text="@string/office_location_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -362,25 +444,73 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
                         app:boxStrokeColor="@color/admin_primary_blue"
+                        app:endIconDrawable="@drawable/ic_search"
+                        app:endIconMode="custom"
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAddTeacherOffice"
                             android:layout_width="match_parent"
-                            android:layout_height="46dp"
-                            android:hint="e.g. Building A, Room 203"
-                            android:inputType="text"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:hint="@string/select_or_search_office_location"
+                            android:minHeight="46dp"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Bio -->
+                    <!-- Specialization (Multi-select Searchable + Chips) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="@string/bio"
+                        android:text="@string/specialization_optional"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupAddTeacherSpecializations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:visibility="gone"
+                        app:chipSpacingHorizontal="6dp"
+                        app:chipSpacingVertical="4dp" />
+
+                    <TextView
+                        android:id="@+id/tvAddTeacherSpecEmptyHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/no_specializations_selected"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSelectAddTeacherSpecializations"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/select_or_search_specializations"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/admin_primary_blue"
+                        app:strokeWidth="1dp" />
+
+                    <!-- Biography (Multiline Unicode Khmer + English) -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/biography_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -397,16 +527,22 @@
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
                         app:boxStrokeColor="@color/admin_primary_blue"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="2000"
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAddTeacherBio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/short_biography"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:paddingVertical="8dp"
+                            android:gravity="top|start"
+                            android:hint="@string/teacher_biography_placeholder"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:maxLength="2000"
+                            android:maxLines="7"
+                            android:minLines="3"
+                            android:paddingVertical="10dp"
+                            android:scrollbars="vertical"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -429,7 +565,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -492,7 +628,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancelAddTeacher"

@@ -21,17 +21,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="16dp">
+            android:paddingStart="12dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp">
 
             <ImageView
                 android:id="@+id/btnMenu"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="@drawable/bg_social_button"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:src="@drawable/ic_menu"
                 app:tint="@color/slas_text_primary"
                 android:contentDescription="@string/menu"
@@ -48,15 +48,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btnMenu"
                 app:layout_constraintEnd_toStartOf="@id/headerActions"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="6dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_back"
                     android:textColor="@color/slas_text_secondary"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/tvUserName"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     tools:text="Student! 👋"
                     android:textColor="@color/slas_text_primary"
-                    android:textSize="18sp"
+                    android:textSize="16.5sp"
                     android:textStyle="bold"
                     android:maxLines="1"
                     android:ellipsize="end" />
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     tools:text="Student ID: STU023001"
                     android:textColor="@color/slas_primary_purple"
-                    android:textSize="11sp"
+                    android:textSize="10.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     tools:text="Computer Science | 3rd Year"
                     android:textColor="@color/slas_text_secondary"
-                    android:textSize="11sp"
+                    android:textSize="10.5sp"
                     android:maxLines="1"
                     android:ellipsize="end" />
             </LinearLayout>
@@ -101,25 +101,25 @@
                 <!-- Notifications Button -->
                 <FrameLayout
                     android:id="@+id/notifContainer"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginEnd="6dp"
                     android:clickable="true"
                     android:focusable="true">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="17dp"
                         app:cardBackgroundColor="@color/slas_surface"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/slas_border"
                         app:strokeWidth="1dp">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_notifications"
                             app:tint="@color/slas_text_primary"
@@ -128,14 +128,14 @@
 
                     <TextView
                         android:id="@+id/tvDashboardNotifBadge"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:background="@drawable/bg_notification_badge"
                         android:gravity="center"
                         android:text="0"
                         android:visibility="gone"
                         android:textColor="@color/white"
-                        android:textSize="9sp"
+                        android:textSize="8.5sp"
                         android:textStyle="bold"
                         android:layout_gravity="top|end" />
                 </FrameLayout>
@@ -143,19 +143,19 @@
                 <!-- Profile Button -->
                 <FrameLayout
                     android:id="@+id/profileContainer"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:clickable="true"
                     android:focusable="true">
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="20dp"
+                        app:cardCornerRadius="17dp"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/slas_primary_purple"
-                        app:strokeWidth="2dp">
+                        app:strokeWidth="1.5dp">
 
                         <ImageView
                             android:id="@+id/imgUserProfile"
@@ -181,16 +181,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="10dp">
 
             <!-- Overall Performance Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOverallPerformance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp"
                 android:clickable="true"
@@ -200,21 +200,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_header_gradient"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/iconCard"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         app:cardBackgroundColor="#33FFFFFF"
-                        app:cardCornerRadius="24dp"
+                        app:cardCornerRadius="20dp"
                         app:cardElevation="0dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
 
                         <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:layout_gravity="center"
                             android:contentDescription="@string/performance_icon"
                             android:src="@drawable/ic_analytics"
@@ -225,10 +225,10 @@
                         android:id="@+id/tvPerfLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginStart="10dp"
                         android:text="@string/overall_performance"
                         android:textColor="#E0E0E0"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         app:layout_constraintTop_toTopOf="@id/iconCard"
                         app:layout_constraintStart_toEndOf="@id/iconCard" />
 
@@ -247,18 +247,18 @@
                             android:layout_height="wrap_content"
                             tools:text="82%"
                             android:textColor="@color/white"
-                            android:textSize="32sp"
+                            android:textSize="24sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvPerfTrend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginBottom="4dp"
                             android:text="▲ +5%"
                             android:textColor="#10B981"
-                            android:textSize="13sp"
+                            android:textSize="11.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -266,10 +266,10 @@
                         android:id="@+id/tvPerfMsg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/keep_going_you_re_doing_great"
                         android:textColor="#E0E0E0"
-                        android:textSize="11sp"
+                        android:textSize="10.5sp"
                         app:layout_constraintTop_toBottomOf="@id/scoreLayout"
                         app:layout_constraintStart_toStartOf="@id/iconCard"
                         app:layout_constraintEnd_toStartOf="@id/btnViewDetails"/>
@@ -278,13 +278,17 @@
                         android:id="@+id/btnViewDetails"
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="0dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="32dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:paddingHorizontal="10dp"
                         android:text="@string/details_664789"
-                        android:textSize="11sp"
+                        android:textSize="10.5sp"
                         android:textAllCaps="false"
-                        app:cornerRadius="18dp"
+                        app:cornerRadius="15dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -296,7 +300,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp">
 
                 <!-- Attendance -->
                 <com.google.android.material.card.MaterialCardView
@@ -304,10 +308,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -317,7 +321,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -326,11 +330,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_stat_card_green"
                                 android:backgroundTint="@color/slas_success_bg"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_home"
                                 app:tint="@color/slas_success"
                                 android:contentDescription="@string/attendance" />
@@ -339,10 +343,10 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/attendance"
                                 android:textColor="@color/slas_text_secondary"
-                                android:textSize="12sp"
+                                android:textSize="11.5sp"
                                 android:ellipsize="end"
                                 android:maxLines="1" />
                         </LinearLayout>
@@ -351,10 +355,10 @@
                             android:id="@+id/tvMetricAttendance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="88%"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -363,7 +367,7 @@
                             android:layout_height="wrap_content"
                             android:text="▲ +3%"
                             android:textColor="@color/slas_success"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -374,10 +378,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -387,7 +391,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -396,11 +400,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_stat_card_purple"
                                 android:backgroundTint="@color/slas_light_purple"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_assignment"
                                 app:tint="@color/slas_primary_purple"
                                 android:contentDescription="@string/assignments" />
@@ -409,10 +413,10 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/assignments"
                                 android:textColor="@color/slas_text_secondary"
-                                android:textSize="12sp"
+                                android:textSize="11.5sp"
                                 android:ellipsize="end"
                                 android:maxLines="1" />
                         </LinearLayout>
@@ -421,10 +425,10 @@
                             android:id="@+id/tvMetricAssignments"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="80%"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -433,7 +437,7 @@
                             android:layout_height="wrap_content"
                             android:text="▲ +2%"
                             android:textColor="@color/slas_success"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -443,7 +447,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="8dp">
 
                 <!-- Quizzes -->
                 <com.google.android.material.card.MaterialCardView
@@ -451,10 +455,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -464,7 +468,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -473,11 +477,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_stat_card_orange"
                                 android:backgroundTint="@color/slas_warning_bg"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/slas_warning"
                                 android:contentDescription="@string/quizzes" />
@@ -486,10 +490,10 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/quizzes"
                                 android:textColor="@color/slas_text_secondary"
-                                android:textSize="12sp"
+                                android:textSize="11.5sp"
                                 android:ellipsize="end"
                                 android:maxLines="1" />
                         </LinearLayout>
@@ -498,10 +502,10 @@
                             android:id="@+id/tvMetricQuizzes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="78%"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -510,7 +514,7 @@
                             android:layout_height="wrap_content"
                             android:text="▼ -2%"
                             android:textColor="@color/slas_danger"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -521,10 +525,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -534,7 +538,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -543,11 +547,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_stat_card_blue"
                                 android:backgroundTint="@color/slas_soft_blue"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_prediction"
                                 app:tint="@color/slas_blue"
                                 android:contentDescription="@string/gpa" />
@@ -556,10 +560,10 @@
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/gpa"
                                 android:textColor="@color/slas_text_secondary"
-                                android:textSize="12sp"
+                                android:textSize="11.5sp"
                                 android:ellipsize="end"
                                 android:maxLines="1" />
                         </LinearLayout>
@@ -568,10 +572,10 @@
                             android:id="@+id/tvMetricGpa"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="3.65"
                             android:textColor="@color/slas_text_primary"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -580,7 +584,7 @@
                             android:layout_height="wrap_content"
                             android:text="▲ +0.15"
                             android:textColor="@color/slas_success"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -591,7 +595,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="8dp">
 
                 <!-- Predicted Score Card -->
                 <com.google.android.material.card.MaterialCardView
@@ -599,10 +603,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -612,7 +616,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -621,11 +625,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_circle_soft_blue"
                                 android:backgroundTint="@color/slas_light_purple"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_analytics"
                                 app:tint="@color/slas_primary_purple"
                                 android:contentDescription="@string/predicted_score" />
@@ -646,10 +650,10 @@
                             android:id="@+id/tvPredictedScore"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="76.5 / 100"
                             android:textColor="@color/slas_primary_purple"
-                            android:textSize="16sp"
+                            android:textSize="15.5sp"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:ellipsize="end" />
@@ -658,8 +662,8 @@
                             android:id="@+id/pbPredictedScore"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_height="5dp"
+                            android:layout_marginTop="6dp"
                             android:progress="76"
                             android:progressTint="@color/slas_primary_purple"
                             android:progressBackgroundTint="@color/slas_border" />
@@ -668,7 +672,7 @@
                             android:id="@+id/tvConfidence"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/model_confidence_87"
                             android:textColor="@color/slas_success"
                             android:textSize="10sp"
@@ -683,10 +687,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="4dp"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp"
                     android:clickable="true"
@@ -696,7 +700,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -705,11 +709,11 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
                                 android:background="@drawable/bg_notification_risk"
                                 android:backgroundTint="@color/slas_warning_bg"
-                                android:padding="6dp"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_prediction"
                                 app:tint="@color/slas_warning"
                                 android:contentDescription="@string/risk_level" />
@@ -741,10 +745,10 @@
                             android:id="@+id/tvRiskLevel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             tools:text="MEDIUM"
                             android:textColor="@color/slas_warning"
-                            android:textSize="16sp"
+                            android:textSize="15.5sp"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:ellipsize="end" />
@@ -753,7 +757,7 @@
                             android:id="@+id/tvRiskMsg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             android:text="@string/keep_improving_performance"
                             android:textColor="@color/slas_text_secondary"
                             android:textSize="10sp"
@@ -768,7 +772,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -777,7 +781,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/quick_actions"
                     android:textColor="@color/slas_text_primary"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -786,9 +790,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/view_all_9cb4e9"
                     android:textColor="@color/slas_primary_purple"
-                    android:textSize="12sp"
+                    android:textSize="11.5sp"
                     android:textStyle="bold"
-                    android:padding="6dp"
+                    android:padding="4dp"
                     android:clickable="true"
                     android:focusable="true"/>
             </LinearLayout>
@@ -796,7 +800,7 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -807,183 +811,183 @@
                     <!-- Action 1: Courses -->
                     <LinearLayout
                         android:id="@+id/actionCourses"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp"
-                        android:layout_marginEnd="10dp">
+                        android:padding="9dp"
+                        android:layout_marginEnd="8dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_book"
                             app:tint="@color/slas_primary_purple"
                             android:background="@drawable/bg_circle_soft_blue"
                             android:backgroundTint="@color/slas_light_purple"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/nav_courses" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/my_courses"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
 
                     <!-- Action 2: Attendance -->
                     <LinearLayout
                         android:id="@+id/actionAttendance"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp"
-                        android:layout_marginEnd="10dp">
+                        android:padding="9dp"
+                        android:layout_marginEnd="8dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_home"
                             app:tint="@color/slas_success"
                             android:background="@drawable/bg_stat_card_green"
                             android:backgroundTint="@color/slas_success_bg"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/attendance" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/attendance"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
 
                     <!-- Action 3: Assignments -->
                     <LinearLayout
                         android:id="@+id/actionAssignments"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp"
-                        android:layout_marginEnd="10dp">
+                        android:padding="9dp"
+                        android:layout_marginEnd="8dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_assignment"
                             app:tint="@color/slas_primary_purple"
                             android:background="@drawable/bg_stat_card_purple"
                             android:backgroundTint="@color/slas_light_purple"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/assignments" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/assignments"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
 
                     <!-- Action 4: Quizzes -->
                     <LinearLayout
                         android:id="@+id/actionQuizzes"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp"
-                        android:layout_marginEnd="10dp">
+                        android:padding="9dp"
+                        android:layout_marginEnd="8dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/slas_warning"
                             android:background="@drawable/bg_stat_card_orange"
                             android:backgroundTint="@color/slas_warning_bg"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/quizzes" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/quizzes"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
 
                     <!-- Action 5: Exams -->
                     <LinearLayout
                         android:id="@+id/actionExams"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp"
-                        android:layout_marginEnd="10dp">
+                        android:padding="9dp"
+                        android:layout_marginEnd="8dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_prediction"
                             app:tint="@color/slas_danger"
                             android:background="@color/slas_danger_bg"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/exams" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/exams"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
 
                     <!-- Action 6: Analytics -->
                     <LinearLayout
                         android:id="@+id/actionAnalytics"
-                        android:layout_width="88dp"
+                        android:layout_width="78dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:background="@drawable/bg_quick_action"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="12dp">
+                        android:padding="9dp">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/slas_blue"
                             android:background="@color/slas_soft_blue"
-                            android:padding="6dp"
+                            android:padding="5dp"
                             android:contentDescription="@string/nav_analytics" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:text="@string/nav_analytics"
                             android:textColor="@color/slas_text_secondary"
-                            android:textSize="11sp"
+                            android:textSize="10.5sp"
                             android:gravity="center"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -994,7 +998,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -1003,7 +1007,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/recent_activities_cc0a4a"
                     android:textColor="@color/slas_text_primary"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -1012,9 +1016,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/view_all_9cb4e9"
                     android:textColor="@color/slas_primary_purple"
-                    android:textSize="12sp"
+                    android:textSize="11.5sp"
                     android:textStyle="bold"
-                    android:padding="6dp"
+                    android:padding="4dp"
                     android:clickable="true"
                     android:focusable="true"/>
             </LinearLayout>
@@ -1022,10 +1026,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp">
 
@@ -1034,7 +1038,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="10dp">
 
                     <!-- Activity Item 1 -->
                     <LinearLayout
@@ -1044,11 +1048,11 @@
                         android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_purple"
                             android:backgroundTint="@color/slas_light_purple"
-                            android:padding="7dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_assignment"
                             app:tint="@color/slas_primary_purple"
                             android:contentDescription="@string/assignment_icon" />
@@ -1058,14 +1062,14 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginStart="12dp">
+                            android:layout_marginStart="10dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/new_assignment_added"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
-                                android:textSize="13sp"/>
+                                android:textSize="12.5sp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1082,7 +1086,7 @@
                             android:textSize="10sp"/>
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="10dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="7dp"/>
 
                     <!-- Activity Item 2 -->
                     <LinearLayout
@@ -1092,11 +1096,11 @@
                         android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_orange"
                             android:backgroundTint="@color/slas_warning_bg"
-                            android:padding="7dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_analytics"
                             app:tint="@color/slas_warning"
                             android:contentDescription="@string/quiz_icon" />
@@ -1106,14 +1110,14 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginStart="12dp">
+                            android:layout_marginStart="10dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/quiz_result_released"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
-                                android:textSize="13sp"/>
+                                android:textSize="12.5sp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1130,7 +1134,7 @@
                             android:textSize="10sp"/>
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="10dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="7dp"/>
 
                     <!-- Activity Item 3: Grade Updated -->
                     <LinearLayout
@@ -1140,11 +1144,11 @@
                         android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_green"
                             android:backgroundTint="@color/slas_success_bg"
-                            android:padding="7dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_prediction"
                             app:tint="@color/slas_success"
                             android:contentDescription="@string/grade_icon" />
@@ -1154,14 +1158,14 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginStart="12dp">
+                            android:layout_marginStart="10dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/grade_updated"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
-                                android:textSize="13sp"/>
+                                android:textSize="12.5sp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1178,7 +1182,7 @@
                             android:textSize="10sp"/>
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="10dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/slas_border" android:layout_marginVertical="7dp"/>
 
                     <!-- Activity Item 4: Course Material -->
                     <LinearLayout
@@ -1188,11 +1192,11 @@
                         android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:background="@drawable/bg_stat_card_purple"
                             android:backgroundTint="@color/slas_light_purple"
-                            android:padding="7dp"
+                            android:padding="6dp"
                             android:src="@drawable/ic_book"
                             app:tint="@color/slas_primary_purple"
                             android:contentDescription="@string/material_icon" />
@@ -1202,14 +1206,14 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginStart="12dp">
+                            android:layout_marginStart="10dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/new_course_material"
                                 android:textColor="@color/slas_text_primary"
                                 android:textStyle="bold"
-                                android:textSize="13sp"/>
+                                android:textSize="12.5sp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1233,7 +1237,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -1242,13 +1246,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/my_learning_progress_98ac06"
                     android:textColor="@color/slas_text_primary"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
+                    app:cardCornerRadius="6dp"
                     app:cardElevation="0dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp">
@@ -1256,8 +1260,8 @@
                         android:id="@+id/tvDashboardSemesterBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="4dp"
+                        android:paddingHorizontal="7dp"
+                        android:paddingVertical="3dp"
                         android:text="@string/current_semester"
                         android:textColor="@color/slas_text_secondary"
                         android:textSize="10sp" />
@@ -1268,10 +1272,10 @@
                 android:id="@+id/cardLearningProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp"
                 android:clickable="true"
@@ -1281,33 +1285,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="10dp">
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/lineChartPerformance"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp" />
+                        android:layout_height="165dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="4dp"
                         android:gravity="center">
 
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="12dp">
-                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_success"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/attendance" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="10dp">
+                            <View android:layout_width="7dp" android:layout_height="7dp" android:background="@color/slas_success"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/attendance" android:textColor="@color/slas_text_secondary" android:textSize="9.5sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="12dp">
-                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_primary_purple"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assignments" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginEnd="10dp">
+                            <View android:layout_width="7dp" android:layout_height="7dp" android:background="@color/slas_primary_purple"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assignments" android:textColor="@color/slas_text_secondary" android:textSize="9.5sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                            <View android:layout_width="8dp" android:layout_height="8dp" android:background="@color/slas_warning"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/quizzes" android:textColor="@color/slas_text_secondary" android:textSize="9sp" android:layout_marginStart="4dp"/>
+                            <View android:layout_width="7dp" android:layout_height="7dp" android:background="@color/slas_warning"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/quizzes" android:textColor="@color/slas_text_secondary" android:textSize="9.5sp" android:layout_marginStart="4dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

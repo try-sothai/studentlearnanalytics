@@ -21,9 +21,6 @@ import com.social7.studentlearnanalytics.model.StudentImportItem;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +116,12 @@ public class StudentImportHistoryActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            saveReportFile(response.body(), "import_" + item.id + "_error_report.csv");
+                            StudentExportDialog.saveExportFile(
+                                    getApplicationContext(),
+                                    response.body(),
+                                    "import_" + item.id + "_error_report.csv",
+                                    "text/csv"
+                            );
                         } else {
                             Toast.makeText(StudentImportHistoryActivity.this, R.string.failed_to_download_error_report, Toast.LENGTH_SHORT).show();
                         }
@@ -130,27 +132,5 @@ public class StudentImportHistoryActivity extends AppCompatActivity {
                         Toast.makeText(StudentImportHistoryActivity.this, R.string.network_error_42cd08, Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void saveReportFile(ResponseBody body, String filename) {
-        new Thread(() -> {
-            try {
-                File downloadsDir = getExternalFilesDir(android.os.Environment.DIRECTORY_DOWNLOADS);
-                if (downloadsDir == null) downloadsDir = getFilesDir();
-                File outFile = new File(downloadsDir, filename);
-
-                try (InputStream is = body.byteStream();
-                     FileOutputStream fos = new FileOutputStream(outFile)) {
-                    byte[] buf = new byte[8192];
-                    int len;
-                    while ((len = is.read(buf)) != -1) {
-                        fos.write(buf, 0, len);
-                    }
-                }
-                runOnUiThread(() -> Toast.makeText(StudentImportHistoryActivity.this, "Saved: " + outFile.getName(), Toast.LENGTH_LONG).show());
-            } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(StudentImportHistoryActivity.this, "Error saving: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
     }
 }

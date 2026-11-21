@@ -9,11 +9,11 @@
         android:id="@+id/tvStudyYear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
         android:text="@string/year_1"
         android:textColor="?attr/colorPrimary"
-        android:textSize="20sp"
+        android:textSize="14.5sp"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

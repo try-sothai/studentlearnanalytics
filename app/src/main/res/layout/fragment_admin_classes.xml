@@ -6,322 +6,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
-    <!-- Top Header Bar -->
+    <!-- Essential Fixed Top App Bar (Menu + Title + Bell only) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_white"
-        android:elevation="2dp"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp">
+
+        <ImageView
+            android:id="@+id/btnUsersMenu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/menu"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
+            app:tint="@color/admin_text_primary" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/btnUsersMenu"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="12dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="Menu"
-                android:focusable="true"
-                android:padding="4dp"
-                android:src="@drawable/ic_menu"
-                app:tint="@color/admin_text_primary" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvHeaderTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Class Management"
-                    android:textColor="@color/admin_text_primary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvHeaderSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Manage university classes, schedules and classrooms"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imgNotifBell"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_circle_soft_blue"
-                android:padding="8dp"
-                android:src="@drawable/ic_notifications"
-                android:contentDescription="Notifications"
-                app:tint="@color/admin_primary_blue" />
-        </LinearLayout>
-
-        <!-- Sub-Navigation Bar for Class Management Workflows -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:scrollbars="none">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvHeaderTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/class_management_title"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="19sp"
+                android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubTabClassDirectory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="6dp"
-                    android:backgroundTint="@color/admin_primary_blue"
-                    android:text="Class Directory"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp" />
+            <TextView
+                android:id="@+id/tvHeaderSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/class_management_subtitle"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubTabClassSchedules"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="Class Schedules"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubTabClassroomManagement"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="Classroom Management"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubTabTeacherAssignments"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="Teacher Assignments"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubTabClassEnrollment"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="Class Enrollment"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
+        <ImageView
+            android:id="@+id/imgNotifBell"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_soft_blue"
+            android:contentDescription="@string/nav_notifications"
+            android:padding="8dp"
+            android:src="@drawable/ic_notifications"
+            app:tint="@color/admin_primary_blue" />
     </LinearLayout>
 
-    <!-- Main Content Frame for Class Management Tabs -->
-    <FrameLayout
-        android:id="@+id/layoutClassContentFrame"
+    <!-- Coordinated Scroll-Away Controls + Full-Height Record Lists -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- TAB 1: CLASS DIRECTORY CONTAINER -->
-        <LinearLayout
-            android:id="@+id/layoutClassDirectoryContainer"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarClasses"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/card_white"
+            app:elevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/card_white"
-                android:elevation="2dp"
                 android:orientation="vertical"
-                android:paddingHorizontal="16dp"
-                android:paddingBottom="16dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="10dp"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                <!-- Summary Statistics Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
-                        app:cardBackgroundColor="@color/card_white"
-                        app:cardElevation="1dp"
-                        app:strokeColor="@color/admin_border"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Classes" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                            <TextView android:id="@+id/tvStatActiveClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="28" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginHorizontal="2dp"
-                        app:cardBackgroundColor="@color/card_white"
-                        app:cardElevation="1dp"
-                        app:strokeColor="@color/admin_border"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Students" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                            <TextView android:id="@+id/tvStatTotalStudents" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="840" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginHorizontal="2dp"
-                        app:cardBackgroundColor="@color/card_white"
-                        app:cardElevation="1dp"
-                        app:strokeColor="@color/admin_border"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Avg. Pass Rate" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                            <TextView android:id="@+id/tvStatAvgPerf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="86.4%" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        app:cardBackgroundColor="@color/card_white"
-                        app:cardElevation="1dp"
-                        app:strokeColor="@color/admin_border"
-                        app:strokeWidth="1dp">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attention" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                            <TextView android:id="@+id/tvStatAttention" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red" android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <!-- Search and Filter Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilSearchUsers"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:boxBackgroundColor="@color/white"
-                        app:boxCornerRadiusBottomEnd="10dp"
-                        app:boxCornerRadiusBottomStart="10dp"
-                        app:boxCornerRadiusTopEnd="10dp"
-                        app:boxCornerRadiusTopStart="10dp"
-                        app:boxStrokeColor="@color/admin_primary_blue"
-                        app:hintEnabled="false"
-                        app:startIconDrawable="@drawable/ic_search"
-                        app:startIconTint="@color/admin_text_secondary">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etSearchUser"
-                            android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:hint="Search classes by name, code or teacher..."
-                            android:inputType="text"
-                            android:paddingVertical="8dp"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="14sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <ImageView
-                        android:id="@+id/btnFilterIcon"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_circle_soft_blue"
-                        android:contentDescription="Filter"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_filter"
-                        app:tint="@color/admin_primary_blue" />
-                </LinearLayout>
-
-                <!-- Status Filter Pills Row -->
+                <!-- Horizontal Module Sub-Tabs -->
                 <HorizontalScrollView
+                    android:id="@+id/hsvClassSubTabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="12dp"
                     android:scrollbars="none">
 
                     <LinearLayout
@@ -329,107 +107,907 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/pillFilterAll"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSubTabClassDirectory"
                             android:layout_width="wrap_content"
-                            android:layout_height="32dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
-                            android:background="@drawable/bg_notif_tab_active"
-                            android:gravity="center"
-                            android:paddingHorizontal="14dp"
-                            android:text="All Classes (28)"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/tab_class_directory"
+                            android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
 
-                        <TextView
-                            android:id="@+id/pillFilterActive"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSubTabClassSchedules"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_marginHorizontal="6dp"
-                            android:background="@drawable/bg_notif_tab_inactive"
-                            android:gravity="center"
-                            android:paddingHorizontal="14dp"
-                            android:text="Active (25)"
-                            android:textColor="@color/admin_active_green"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/tab_class_schedules"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
 
-                        <TextView
-                            android:id="@+id/pillFilterInactive"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSubTabBuildingManagement"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="6dp"
-                            android:background="@drawable/bg_notif_tab_inactive"
-                            android:gravity="center"
-                            android:paddingHorizontal="14dp"
-                            android:text="Inactive (3)"
-                            android:textColor="@color/admin_inactive_red"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/tab_building_mgmt"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp"
-                            android:textStyle="bold" />
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSubTabTeacherAssignments"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/tab_teacher_assignments"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSubTabClassEnrollment"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/tab_class_enrollment"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
                     </LinearLayout>
                 </HorizontalScrollView>
 
-                <!-- Prominent + Add Class Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddUser"
+                <!-- TAB 0 CONTROLS: CLASS DIRECTORY -->
+                <LinearLayout
+                    android:id="@+id/layoutClassDirectoryControls"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/admin_primary_blue"
-                    android:text="@string/add_new_class_d8426f"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="6dp"
-                    app:iconTint="@color/white" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="1dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/active_classes" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatActiveClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="1dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/total_students" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatTotalStudents" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="1dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/avg_performance" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatAvgPerf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="1dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/at_risk_alerts" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatAttention" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_inactive_red" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilSearchUsers"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_classes_hint"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageView
+                            android:id="@+id/btnFilterIcon"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_circle_soft_blue"
+                            android:contentDescription="@string/filter"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_filter"
+                            app:tint="@color/admin_primary_blue" />
+                    </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/pillFilterAll"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_active"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="@string/all_classes"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterActive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="@string/status_active"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterInactive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="@string/status_inactive"
+                                android:textColor="@color/admin_inactive_red"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:minHeight="44dp"
+                        android:text="@string/add_new_class_d8426f"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="13.5sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_add"
+                        app:iconGravity="textStart"
+                        app:iconPadding="6dp"
+                        app:iconTint="@color/white" />
+                </LinearLayout>
+
+                <!-- TAB 1 CONTROLS: CLASS SCHEDULES -->
+                <LinearLayout
+                    android:id="@+id/layoutSchedulesControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <!-- Class Selector Dropdown (Real classes from /api/classes) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/select_class_filter_hint"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/actvScheduleClassFilter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:text="@string/all_classes_option"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvSelectedScheduleClassInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchSchedule"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_class_schedule_course_teacher_room"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddSchedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/schedule_924d50"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/timetables_label" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvTotalSchedules" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/conflict_status_label" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvScheduleConflictStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:ellipsize="end" android:maxLines="1" android:text="@string/no_conflicts_label" android:textColor="@color/admin_active_green" android:textSize="13sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/active_hours" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvScheduleActiveHours" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0 hrs/wk" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                    <!-- Weekly Day Filter Pills -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/layoutScheduleDayPills"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <!-- TAB 2 CONTROLS: BUILDING MANAGEMENT -->
+                <LinearLayout
+                    android:id="@+id/layoutBuildingControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchBuilding"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_building_name_or_code"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddBuilding"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/building_btn_label"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/buildings" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvTotalBuildings" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/total_floors_label" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvTotalFloors" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/assigned_classes_label" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvAssignedClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- TAB 3 CONTROLS: TEACHER ASSIGNMENTS -->
+                <LinearLayout
+                    android:id="@+id/layoutTeacherAssignControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchTeacherAssign"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_class_course_teacher_assignment"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAssignTeacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/assign_97fff5"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/assigned_staff" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvTotalAssignedTeachers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/staffed_classes_label" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStaffedClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0 / 0" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/unassigned" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvUnassignedClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_inactive_red" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- TAB 4 CONTROLS: CLASS ENROLLMENT -->
+                <LinearLayout
+                    android:id="@+id/layoutClassEnrollmentControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchEnrollment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_enrollment_hint"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnEnrollStudent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/enroll"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/total_enrolled" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvTotalEnrolled" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/capacity_rate" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvCapacityRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0%" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/full_cohorts" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvFullCohorts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/warning_orange" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <!-- Class List -->
+        <!-- Full-Height Scrolling Data Lists -->
+        <FrameLayout
+            android:id="@+id/layoutClassContentFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvUsers"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:padding="16dp"
+                android:padding="12dp"
                 tools:listitem="@layout/item_admin_class" />
 
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSchedules"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_admin_class_schedule" />
 
-        <!-- TAB 2: CLASS SCHEDULES CONTAINER -->
-        <include
-            android:id="@+id/layoutSchedulesContainer"
-            layout="@layout/fragment_admin_class_schedules"
-            android:visibility="gone" />
+            <ProgressBar
+                android:id="@+id/pbSchedulesState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
-        <!-- TAB 3: CLASSROOM MANAGEMENT CONTAINER -->
-        <include
-            android:id="@+id/layoutClassroomsContainer"
-            layout="@layout/fragment_admin_classrooms"
-            android:visibility="gone" />
+            <LinearLayout
+                android:id="@+id/layoutSchedulesEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
 
-        <!-- TAB 4: TEACHER ASSIGNMENTS CONTAINER -->
-        <include
-            android:id="@+id/layoutTeacherAssignContainer"
-            layout="@layout/fragment_admin_teacher_assignments"
-            android:visibility="gone" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/admin_border"
+                    app:strokeWidth="1dp">
 
-        <!-- TAB 5: CLASS ENROLLMENT CONTAINER -->
-        <include
-            android:id="@+id/layoutClassEnrollmentContainer"
-            layout="@layout/fragment_admin_class_enrollment"
-            android:visibility="gone" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="22dp">
 
-    </FrameLayout>
+                        <ImageView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_calendar"
+                            app:tint="@color/admin_primary_blue" />
 
-    <!-- Pagination Controls at Bottom -->
+                        <TextView
+                            android:id="@+id/tvSchedulesEmptyTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:text="@string/schedules_empty_for_class"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSchedulesEmptySubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text=""
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="13sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSchedulesEmptyAction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="42dp"
+                            android:paddingHorizontal="20dp"
+                            android:text="@string/create_schedule_cta"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBuildings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_admin_building" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTeacherAssignments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_admin_teacher_assignment" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvEnrollments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone"
+                tools:listitem="@layout/item_admin_class_enrollment" />
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Compact Pagination Controls at Bottom -->
     <LinearLayout
         android:id="@+id/layoutPagination"
         android:layout_width="match_parent"
@@ -438,13 +1016,13 @@
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingVertical="8dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPrevPage"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -452,7 +1030,7 @@
             android:padding="0dp"
             android:text="&lt;"
             android:textColor="@color/admin_text_primary"
-            app:cornerRadius="18dp"
+            app:cornerRadius="17dp"
             app:strokeColor="@color/admin_border" />
 
         <LinearLayout
@@ -497,8 +1075,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNextPage"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -506,7 +1084,7 @@
             android:padding="0dp"
             android:text="&gt;"
             android:textColor="@color/admin_text_primary"
-            app:cornerRadius="18dp"
+            app:cornerRadius="17dp"
             app:strokeColor="@color/admin_border" />
     </LinearLayout>
 

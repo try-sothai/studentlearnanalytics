@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/student_drawer_view"
-    android:layout_width="300dp"
+    android:layout_width="280dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@drawable/bg_admin_drawer"
@@ -27,17 +27,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:paddingVertical="4dp">
 
             <!-- "Main Menu" Section Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/main_menu"
                 android:textColor="@color/drawer_secondary_text"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
             <!-- 0. Home -->
@@ -45,20 +45,20 @@
                 android:id="@+id/itemStudentDrawerHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconHome"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_home"
                     app:tint="@color/drawer_primary_blue" />
@@ -66,8 +66,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -77,23 +77,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/nav_home"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleHome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/student_dashboard_and_academic_overview"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronHome"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -104,20 +106,20 @@
                 android:id="@+id/itemStudentDrawerCourses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconCourses"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_book"
                     app:tint="@color/drawer_primary_blue" />
@@ -125,8 +127,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -136,23 +138,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/my_courses"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleCourses"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/view_enrolled_courses_and_course_progress"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronCourses"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -163,20 +167,20 @@
                 android:id="@+id/itemStudentDrawerAnalytics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconAnalytics"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_analytics"
                     app:tint="@color/drawer_primary_blue" />
@@ -184,8 +188,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -195,23 +199,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/learning_analytics"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleAnalytics"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/track_academic_performance_and_learning_pr"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronAnalytics"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -222,20 +228,20 @@
                 android:id="@+id/itemStudentDrawerPrediction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconPrediction"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_prediction"
                     app:tint="@color/drawer_primary_blue" />
@@ -243,8 +249,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -254,23 +260,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/prediction_risk"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitlePrediction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/view_predicted_scores_and_academic_risk"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronPrediction"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -281,20 +289,20 @@
                 android:id="@+id/itemStudentDrawerRecommendations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconRecommendations"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_circle_info"
                     app:tint="@color/drawer_primary_blue" />
@@ -302,8 +310,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -313,23 +321,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/recommendations"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleRecommendations"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Personalized academic recommendations"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronRecommendations"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -340,20 +350,20 @@
                 android:id="@+id/itemStudentDrawerAssessments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconAssessments"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_assignment"
                     app:tint="@color/drawer_primary_blue" />
@@ -361,8 +371,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -372,23 +382,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/assessments"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleAssessments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/assignments_homework_quizzes_and_exams"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronAssessments"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -399,18 +411,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="6dp"
                 android:background="@color/drawer_divider" />
 
             <!-- "Account" Section Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/account"
                 android:textColor="@color/drawer_secondary_text"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
             <!-- 6. Notifications -->
@@ -418,20 +430,20 @@
                 android:id="@+id/itemStudentDrawerNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconNotifications"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_notifications"
                     app:tint="@color/drawer_primary_blue" />
@@ -439,8 +451,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -450,23 +462,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/nav_notifications"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleNotifications"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/academic_notifications_and_announcements"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronNotifications"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -477,20 +491,20 @@
                 android:id="@+id/itemStudentDrawerReports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconReports"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_reports"
                     app:tint="@color/drawer_primary_blue" />
@@ -498,8 +512,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -509,23 +523,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/nav_reports"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleReports"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Academic reports and performance summaries"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronReports"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -536,20 +552,20 @@
                 android:id="@+id/itemStudentDrawerProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconProfile"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_profile"
                     app:tint="@color/drawer_primary_blue" />
@@ -557,8 +573,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -568,23 +584,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/nav_profile"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="@string/manage_personal_and_academic_information"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronProfile"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -595,20 +613,20 @@
                 android:id="@+id/itemStudentDrawerSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconSettings"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_nav_settings"
                     app:tint="@color/drawer_primary_blue" />
@@ -616,8 +634,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -627,23 +645,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/nav_settings"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleSettings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Account and application preferences"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronSettings"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -654,18 +674,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="6dp"
                 android:background="@color/drawer_divider" />
 
             <!-- "Other" Section Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/other"
                 android:textColor="@color/drawer_secondary_text"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
             <!-- 10. Help & Support -->
@@ -673,20 +693,20 @@
                 android:id="@+id/itemStudentDrawerHelp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconHelp"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_circle_info"
                     app:tint="@color/drawer_primary_blue" />
@@ -694,8 +714,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -705,23 +725,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/help_support"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleHelp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Help center and student support"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronHelp"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -732,20 +754,20 @@
                 android:id="@+id/itemStudentDrawerAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginVertical="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="2dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="10dp">
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="7dp">
 
                 <ImageView
                     android:id="@+id/imgDrawerItemIconAbout"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/menu_icon"
                     android:src="@drawable/ic_info"
                     app:tint="@color/drawer_primary_blue" />
@@ -753,8 +775,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -764,23 +786,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/about"
                         android:textColor="@color/drawer_dark_navy"
-                        android:textSize="14sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvDrawerItemSubtitleAbout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="1dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="Application information and version"
                         android:textColor="@color/drawer_secondary_text"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/imgDrawerItemChevronAbout"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:contentDescription="@string/chevron_right"
                     android:src="@drawable/ic_chevron_right"
                     app:tint="@color/drawer_primary_blue" />
@@ -793,22 +817,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="10dp">
 
         <LinearLayout
             android:id="@+id/itemStudentDrawerLogout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_admin_drawer_logout"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="12dp">
 
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:contentDescription="@string/log_out_icon"
                 android:src="@drawable/ic_nav_logout"
                 app:tint="@color/drawer_logout_red" />
@@ -816,10 +840,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/log_out"
                 android:textColor="@color/drawer_logout_red"
-                android:textSize="15sp"
+                android:textSize="13.5sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

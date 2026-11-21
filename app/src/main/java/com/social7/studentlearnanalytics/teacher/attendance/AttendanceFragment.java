@@ -1,10 +1,7 @@
 package com.social7.studentlearnanalytics.teacher.attendance;
 
-
-import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,26 +26,33 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
-import com.social7.studentlearnanalytics.admin.reports.GenerateReportActivity;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
+import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.teacher.ReportsFragment;
 import com.social7.studentlearnanalytics.teacher.TeacherMainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AttendanceFragment extends Fragment {
 
-    // Sub-Tab Buttons
     private TextView tabAttOverview, tabAttTake, tabAttRecords, tabAttStudent, tabAttReports;
-
-    // Sub-Tab Containers
     private View secAttOverviewContainer, secAttTakeContainer, secAttRecordsContainer, secAttStudentContainer, secAttReportsContainer;
 
-    // Sub-Tab 0: Overview
     private PieChart pieChartAttendance;
 
-    // Sub-Tab 1: Take Attendance
     private RecyclerView rvTakeAttendanceRoster;
     private TakeAttendanceAdapter takeAttendanceAdapter;
     private final List<TakeAttendanceAdapter.StudentAttendanceItem> takeAttendanceList = new ArrayList<>();
@@ -56,23 +60,21 @@ public class AttendanceFragment extends Fragment {
     private TextView tvTakeCountPresent, tvTakeCountAbsent, tvTakeCountLate, tvTakeCountExcused;
     private EditText edtSearchTakeAttendance;
 
-    // Sub-Tab 2: Attendance Records
     private AttendanceAdapter recordsAdapter;
     private RecyclerView rvAttendanceRecords;
-    private List<AttendanceAdapter.AttendanceRecordItem> recordList;
+    private final List<AttendanceAdapter.AttendanceRecordItem> recordList = new ArrayList<>();
     private EditText edtSearchAttendanceRecords;
 
-    // Sub-Tab 3: Student Attendance
     private RecyclerView rvStudentAttendanceRoster;
     private StudentAttendanceAdapter studentAttendanceAdapter;
     private final List<StudentAttendanceAdapter.StudentAttendanceRecord> studentAttendanceList = new ArrayList<>();
     private EditText edtSearchStudentAttendance;
 
-    // Sub-Tab 4: Attendance Reports
     private MaterialButton btnExportAttendancePdf, btnExportAttendanceExcel;
 
-    // Selected Sub-Tab Flag (0=Overview, 1=Take, 2=Records, 3=Student, 4=Reports)
     private int selectedSubTab = 0;
+    private int currentOfferingId = 0;
+    private String selectedIsoDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
 
     public AttendanceFragment() {
     }
@@ -86,28 +88,24 @@ public class AttendanceFragment extends Fragment {
     ) {
         View view = inflater.inflate(R.layout.fragment_attendance, container, false);
 
-        // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
                     view, getString(R.string.attendance_management), "Manage daily attendance, roster, and attendance analytics"
             );
         }
 
-        // Sub-Tab Buttons
         tabAttOverview = view.findViewById(R.id.tabAttOverview);
         tabAttTake = view.findViewById(R.id.tabAttTake);
         tabAttRecords = view.findViewById(R.id.tabAttRecords);
         tabAttStudent = view.findViewById(R.id.tabAttStudent);
         tabAttReports = view.findViewById(R.id.tabAttReports);
 
-        // Containers
         secAttOverviewContainer = view.findViewById(R.id.secAttOverviewContainer);
         secAttTakeContainer = view.findViewById(R.id.secAttTakeContainer);
         secAttRecordsContainer = view.findViewById(R.id.secAttRecordsContainer);
         secAttStudentContainer = view.findViewById(R.id.secAttStudentContainer);
         secAttReportsContainer = view.findViewById(R.id.secAttReportsContainer);
 
-        // Bind Sub-views
         bindOverviewViews(view);
         bindTakeAttendanceViews(view);
         bindRecordsViews(view);
@@ -116,6 +114,7 @@ public class AttendanceFragment extends Fragment {
 
         setupSubTabListeners();
         selectSubTab(selectedSubTab);
+        fetchAttendanceOverview();
 
         return view;
     }
@@ -137,16 +136,6 @@ public class AttendanceFragment extends Fragment {
         if (secAttRecordsContainer != null) secAttRecordsContainer.setVisibility(subIndex == 2 ? View.VISIBLE : View.GONE);
         if (secAttStudentContainer != null) secAttStudentContainer.setVisibility(subIndex == 3 ? View.VISIBLE : View.GONE);
         if (secAttReportsContainer != null) secAttReportsContainer.setVisibility(subIndex == 4 ? View.VISIBLE : View.GONE);
-
-        if (subIndex == 0) {
-            setupOverviewPieChart();
-        } else if (subIndex == 1) {
-            setupTakeAttendanceList();
-        } else if (subIndex == 2) {
-            setupRecordsList();
-        } else if (subIndex == 3) {
-            setupStudentAttendanceRoster();
-        }
     }
 
     private void updateSubTabButtonStyles(int activeIndex) {
@@ -166,26 +155,92 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    // ==========================================
-    // 0. OVERVIEW SUB-TAB
-    // ==========================================
-    private void bindOverviewViews(View root) {
-        pieChartAttendance = root.findViewById(R.id.pieChartAttendance);
+    private void fetchAttendanceOverview() {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherAttendanceOverview(currentOfferingId > 0 ? currentOfferingId : null)
+                .enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                            JsonObject data = response.body().getAsJsonObject("data");
+                            if (data.has("selected_offering_id") && !data.get("selected_offering_id").isJsonNull()) {
+                                currentOfferingId = data.get("selected_offering_id").getAsInt();
+                            }
+
+                            bindOverviewChart(data.has("summary") && data.get("summary").isJsonObject()
+                                    ? data.getAsJsonObject("summary") : null);
+                            bindRoster(data.has("roster") && data.get("roster").isJsonArray()
+                                    ? data.getAsJsonArray("roster") : null);
+                            bindSessions(data.has("sessions") && data.get("sessions").isJsonArray()
+                                    ? data.getAsJsonArray("sessions") : null);
+                            bindStudentBreakdown(data.has("student_breakdown") && data.get("student_breakdown").isJsonArray()
+                                    ? data.getAsJsonArray("student_breakdown") : null);
+                        } else {
+                            Toast.makeText(getContext(), "Unable to load attendance data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        Toast.makeText(getContext(), "Network error loading attendance", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void setupOverviewPieChart() {
-        if (pieChartAttendance == null || pieChartAttendance.getData() != null) return;
+    private void bindOverviewViews(View root) {
+        pieChartAttendance = root.findViewById(R.id.pieChartAttendance);
+        if (pieChartAttendance != null) {
+            pieChartAttendance.setNoDataText("Loading attendance overview...");
+        }
+    }
+
+    private void bindOverviewChart(JsonObject summary) {
+        if (pieChartAttendance == null) return;
+        if (summary == null) {
+            pieChartAttendance.clear();
+            pieChartAttendance.setNoDataText("No attendance records available");
+            pieChartAttendance.invalidate();
+            return;
+        }
+
+        int present = getInt(summary, "present");
+        int absent = getInt(summary, "absent");
+        int late = getInt(summary, "late");
+        int excused = getInt(summary, "excused");
+        int total = present + absent + late + excused;
+        float rate = summary.has("rate") && !summary.get("rate").isJsonNull() ? summary.get("rate").getAsFloat() : 0f;
+
+        if (total == 0) {
+            pieChartAttendance.clear();
+            pieChartAttendance.setNoDataText("No attendance sessions recorded yet");
+            pieChartAttendance.invalidate();
+            return;
+        }
 
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(92.8f, "Present"));
-        entries.add(new PieEntry(4.5f, "Absent"));
-        entries.add(new PieEntry(1.8f, "Late"));
-        entries.add(new PieEntry(0.9f, "Excused"));
+        List<Integer> colors = new ArrayList<>();
+        if (present > 0) {
+            entries.add(new PieEntry(present, "Present"));
+            colors.add(Color.parseColor("#10B981"));
+        }
+        if (absent > 0) {
+            entries.add(new PieEntry(absent, "Absent"));
+            colors.add(Color.parseColor("#EF4444"));
+        }
+        if (late > 0) {
+            entries.add(new PieEntry(late, "Late"));
+            colors.add(Color.parseColor("#F59E0B"));
+        }
+        if (excused > 0) {
+            entries.add(new PieEntry(excused, "Excused"));
+            colors.add(Color.parseColor("#9333EA"));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(new int[]{
-                Color.parseColor("#10B981"), Color.parseColor("#EF4444"), Color.parseColor("#F59E0B"), Color.parseColor("#9333EA")
-        });
+        dataSet.setColors(colors);
         dataSet.setSliceSpace(3f);
         dataSet.setDrawValues(false);
 
@@ -195,19 +250,16 @@ public class AttendanceFragment extends Fragment {
         pieChartAttendance.setHoleColor(Color.WHITE);
         pieChartAttendance.setHoleRadius(65f);
         pieChartAttendance.setTransparentCircleRadius(70f);
-        pieChartAttendance.setCenterText("92.8%");
+        pieChartAttendance.setCenterText(String.format(Locale.US, "%.1f%%", rate));
         pieChartAttendance.setCenterTextColor(Color.parseColor("#10165C"));
         pieChartAttendance.setCenterTextSize(22f);
         pieChartAttendance.getDescription().setEnabled(false);
         pieChartAttendance.getLegend().setEnabled(false);
-        pieChartAttendance.animateY(800);
+        pieChartAttendance.animateY(600);
         ChartFontHelper.applyKhmerFont(pieChartAttendance.getContext(), pieChartAttendance);
         pieChartAttendance.invalidate();
     }
 
-    // ==========================================
-    // 1. TAKE ATTENDANCE SUB-TAB
-    // ==========================================
     private void bindTakeAttendanceViews(View root) {
         btnTakeAttDatePicker = root.findViewById(R.id.btnTakeAttDatePicker);
         btnMarkAllPresent = root.findViewById(R.id.btnMarkAllPresent);
@@ -218,6 +270,12 @@ public class AttendanceFragment extends Fragment {
         tvTakeCountAbsent = root.findViewById(R.id.tvTakeCountAbsent);
         tvTakeCountLate = root.findViewById(R.id.tvTakeCountLate);
         tvTakeCountExcused = root.findViewById(R.id.tvTakeCountExcused);
+
+        if (rvTakeAttendanceRoster != null && getContext() != null) {
+            takeAttendanceAdapter = new TakeAttendanceAdapter(requireContext(), takeAttendanceList, this::updateTakeCounters);
+            rvTakeAttendanceRoster.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvTakeAttendanceRoster.setAdapter(takeAttendanceAdapter);
+        }
 
         edtSearchTakeAttendance = root.findViewById(R.id.edtSearchTakeAttendance);
         if (edtSearchTakeAttendance != null) {
@@ -238,6 +296,7 @@ public class AttendanceFragment extends Fragment {
         }
 
         if (btnTakeAttDatePicker != null) {
+            btnTakeAttDatePicker.setText(selectedIsoDate);
             btnTakeAttDatePicker.setOnClickListener(v -> showDatePicker());
         }
 
@@ -253,35 +312,75 @@ public class AttendanceFragment extends Fragment {
 
         if (btnSaveAttendance != null) {
             btnSaveAttendance.setOnClickListener(v -> {
+                if (currentOfferingId <= 0 || takeAttendanceList.isEmpty()) {
+                    Toast.makeText(requireContext(), "No enrolled students available to record attendance.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.confirm_attendance_submission)
-                        .setMessage("Submit attendance record for CS101 (BSIT 4-A) on " +
-                                (btnTakeAttDatePicker != null ? btnTakeAttDatePicker.getText() : "May 12, 2026") + "?")
-                        .setPositiveButton(R.string.submit_attendance, (dialog, which) -> {
-                            Toast.makeText(requireContext(), R.string.class_attendance_saved_successfully, Toast.LENGTH_LONG).show();
-                            selectSubTab(2); // Navigate to Attendance Records
-                        })
+                        .setMessage("Submit attendance record on " + selectedIsoDate + "?")
+                        .setPositiveButton(R.string.submit_attendance, (dialog, which) -> submitAttendanceToApi())
                         .setNegativeButton(R.string.cancel, null)
                         .show();
             });
         }
     }
 
-    private void setupTakeAttendanceList() {
-        if (rvTakeAttendanceRoster == null || takeAttendanceAdapter != null) return;
-
+    private void bindRoster(JsonArray arr) {
         takeAttendanceList.clear();
-        takeAttendanceList.add(new TakeAttendanceAdapter.StudentAttendanceItem("STU23001", "Sophea", "P"));
-        takeAttendanceList.add(new TakeAttendanceAdapter.StudentAttendanceItem("STU23002", "Dara", "A"));
-        takeAttendanceList.add(new TakeAttendanceAdapter.StudentAttendanceItem("STU23003", "Rathana", "L"));
-        takeAttendanceList.add(new TakeAttendanceAdapter.StudentAttendanceItem("STU23004", "Sokha", "P"));
-        takeAttendanceList.add(new TakeAttendanceAdapter.StudentAttendanceItem("STU23005", "Bopha", "E"));
-
-        takeAttendanceAdapter = new TakeAttendanceAdapter(requireContext(), takeAttendanceList, this::updateTakeCounters);
-        rvTakeAttendanceRoster.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvTakeAttendanceRoster.setAdapter(takeAttendanceAdapter);
-
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject obj = el.getAsJsonObject();
+                String code = getStr(obj, "student_code", "STU");
+                String name = getStr(obj, "name", "Student");
+                String st = getStr(obj, "status", "P");
+                TakeAttendanceAdapter.StudentAttendanceItem item = new TakeAttendanceAdapter.StudentAttendanceItem(code, name, st);
+                item.dbId = getInt(obj, "student_id");
+                takeAttendanceList.add(item);
+            }
+        }
+        if (takeAttendanceAdapter != null) {
+            takeAttendanceAdapter.filter("");
+        }
         updateTakeCounters();
+    }
+
+    private void submitAttendanceToApi() {
+        if (getContext() == null || currentOfferingId <= 0) return;
+
+        JsonObject body = new JsonObject();
+        body.addProperty("attendance_date", selectedIsoDate);
+        JsonArray records = new JsonArray();
+        for (TakeAttendanceAdapter.StudentAttendanceItem item : takeAttendanceAdapter.getItems()) {
+            if (item.dbId <= 0) continue;
+            JsonObject rec = new JsonObject();
+            rec.addProperty("student_id", item.dbId);
+            rec.addProperty("status", item.status);
+            records.add(rec);
+        }
+        body.add("records", records);
+
+        ApiClient.getApiService(requireContext()).submitTeacherAttendance(currentOfferingId, body)
+                .enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (response.isSuccessful()) {
+                            Toast.makeText(requireContext(), R.string.class_attendance_saved_successfully, Toast.LENGTH_LONG).show();
+                            fetchAttendanceOverview();
+                            selectSubTab(2);
+                        } else {
+                            Toast.makeText(requireContext(), "Failed to save attendance (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        Toast.makeText(requireContext(), "Network error saving attendance", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void updateTakeCounters() {
@@ -302,20 +401,30 @@ public class AttendanceFragment extends Fragment {
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-            String selectedDate = String.format(java.util.Locale.US, "%02d/%02d/%d", month + 1, dayOfMonth, year);
+            selectedIsoDate = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             if (btnTakeAttDatePicker != null) {
-                btnTakeAttDatePicker.setText(selectedDate);
+                btnTakeAttDatePicker.setText(selectedIsoDate);
             }
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
-    // ==========================================
-    // 2. ATTENDANCE RECORDS SUB-TAB
-    // ==========================================
     private void bindRecordsViews(View root) {
         rvAttendanceRecords = root.findViewById(R.id.rvAttendanceRecords);
         edtSearchAttendanceRecords = root.findViewById(R.id.edtSearchAttendanceRecords);
+
+        if (rvAttendanceRecords != null && getContext() != null) {
+            rvAttendanceRecords.setLayoutManager(new LinearLayoutManager(requireContext()));
+            recordsAdapter = new AttendanceAdapter(requireContext(), recordList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.attendance_session_detail)
+                        .setMessage(getString(R.string.date_7ae482) + item.date + "\n" +
+                                "Session Status: " + item.status)
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvAttendanceRecords.setAdapter(recordsAdapter);
+        }
 
         if (edtSearchAttendanceRecords != null) {
             edtSearchAttendanceRecords.addTextChangedListener(new TextWatcher() {
@@ -336,82 +445,46 @@ public class AttendanceFragment extends Fragment {
 
         MaterialButton btnAdd = root.findViewById(R.id.btnAddAttendanceRecord);
         if (btnAdd != null) {
-            btnAdd.setOnClickListener(v -> showAddAttendanceDialog());
+            btnAdd.setOnClickListener(v -> selectSubTab(1));
         }
     }
 
-    private void setupRecordsList() {
-        if (rvAttendanceRecords == null || recordsAdapter != null) return;
-
-        rvAttendanceRecords.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recordList = getSampleAttendance();
-        recordsAdapter = new AttendanceAdapter(requireContext(), recordList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.attendance_session_detail)
-                    .setMessage(getString(R.string.date_7ae482) + item.date + "\n" +
-                            "Course: CS101 - Intro to CS\n" +
-                            "Class: BSIT 4-A\n" +
-                            "Session Status: " + item.status + "\n" +
-                            "Enrolled Roster: 35 Students\n" +
-                            "Present: 32 • Absent: 2 • Late: 1")
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-        rvAttendanceRecords.setAdapter(recordsAdapter);
-    }
-
-    private void showAddAttendanceDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(R.string.add_attendance_session);
-
-        LinearLayout layout = new LinearLayout(requireContext());
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(40, 20, 40, 20);
-
-        final EditText edtDate = new EditText(requireContext());
-        edtDate.setHint("Date (e.g. May 12, 2026)");
-        layout.addView(edtDate);
-
-        final EditText edtStatus = new EditText(requireContext());
-        edtStatus.setHint(R.string.status_present_absent);
-        layout.addView(edtStatus);
-
-        builder.setView(layout);
-
-        builder.setPositiveButton(R.string.record_session, (dialog, which) -> {
-            String date = edtDate.getText().toString().trim();
-            String status = edtStatus.getText().toString().trim();
-
-            if (date.isEmpty()) date = "May 12, 2026";
-            if (status.isEmpty()) status = "Present";
-
-            if (recordList != null && recordsAdapter != null) {
-                recordList.add(0, new AttendanceAdapter.AttendanceRecordItem(date, status));
-                recordsAdapter.filter("");
-                Toast.makeText(requireContext(), "Attendance session recorded successfully!", Toast.LENGTH_SHORT).show();
+    private void bindSessions(JsonArray arr) {
+        recordList.clear();
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject obj = el.getAsJsonObject();
+                String date = getStr(obj, "date", "-");
+                String summary = getStr(obj, "summary", getStr(obj, "status", "Completed"));
+                recordList.add(new AttendanceAdapter.AttendanceRecordItem(date, summary));
             }
-        });
-
-        builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
-        builder.show();
+        }
+        if (recordsAdapter != null) {
+            recordsAdapter.filter("");
+        }
     }
 
-    private List<AttendanceAdapter.AttendanceRecordItem> getSampleAttendance() {
-        List<AttendanceAdapter.AttendanceRecordItem> list = new ArrayList<>();
-        list.add(new AttendanceAdapter.AttendanceRecordItem("May 10, 2026", "Present"));
-        list.add(new AttendanceAdapter.AttendanceRecordItem("May 08, 2026", "Present"));
-        list.add(new AttendanceAdapter.AttendanceRecordItem("May 06, 2026", "Absent"));
-        list.add(new AttendanceAdapter.AttendanceRecordItem("May 03, 2026", "Present"));
-        list.add(new AttendanceAdapter.AttendanceRecordItem("May 01, 2026", "Present"));
-        return list;
-    }
-
-    // ==========================================
-    // 3. STUDENT ATTENDANCE SUB-TAB
-    // ==========================================
     private void bindStudentAttendanceViews(View root) {
         rvStudentAttendanceRoster = root.findViewById(R.id.rvStudentAttendanceRoster);
         edtSearchStudentAttendance = root.findViewById(R.id.edtSearchStudentAttendance);
+
+        if (rvStudentAttendanceRoster != null && getContext() != null) {
+            studentAttendanceAdapter = new StudentAttendanceAdapter(requireContext(), studentAttendanceList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.student_attendance_breakdown)
+                        .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
+                                "Student Name: " + item.studentName + "\n" +
+                                "Course & Class: " + item.courseClass + "\n\n" +
+                                "Attendance Log:\n" +
+                                item.counts + "\n\n" +
+                                "Overall Attendance Rate: " + item.rateBadge)
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvStudentAttendanceRoster.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvStudentAttendanceRoster.setAdapter(studentAttendanceAdapter);
+        }
 
         if (edtSearchStudentAttendance != null) {
             edtSearchStudentAttendance.addTextChangedListener(new TextWatcher() {
@@ -431,47 +504,59 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    private void setupStudentAttendanceRoster() {
-        if (rvStudentAttendanceRoster == null || studentAttendanceAdapter != null) return;
-
+    private void bindStudentBreakdown(JsonArray arr) {
         studentAttendanceList.clear();
-        studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord("STU23001", "Sophea", "CS101 - Intro to CS • BSIT 4-A", "Present: 118 Days • Absent: 2 Days • Late: 0 • Excused: 0", "98.5% Rate"));
-        studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord("STU23002", "Dara", "IT402 - Web Systems • BSIT 4-B", "Present: 70 Days • Absent: 48 Days • Late: 2 • Excused: 0", "58.3% Low Attendance"));
-        studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord("STU23003", "Rathana", "CS204 - Algorithms • BSCS 3-A", "Present: 110 Days • Absent: 8 Days • Late: 2 • Excused: 0", "91.6% Rate"));
-        studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord("STU23004", "Sokha", "CS101 - Intro to CS • BSCS 3-B", "Present: 114 Days • Absent: 4 Days • Late: 2 • Excused: 0", "95.0% Rate"));
-        studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord("STU23005", "Bopha", "IS201 - Enterprise Arch • BSIS 2-A", "Present: 98 Days • Absent: 18 Days • Late: 4 • Excused: 0", "81.6% Rate"));
-
-        studentAttendanceAdapter = new StudentAttendanceAdapter(requireContext(), studentAttendanceList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.student_attendance_breakdown)
-                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
-                            "Student Name: " + item.studentName + "\n" +
-                            "Course & Class: " + item.courseClass + "\n\n" +
-                            "Attendance Log:\n" +
-                            item.counts + "\n\n" +
-                            "Overall Attendance Rate: " + item.rateBadge)
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvStudentAttendanceRoster.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvStudentAttendanceRoster.setAdapter(studentAttendanceAdapter);
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject obj = el.getAsJsonObject();
+                String code = getStr(obj, "student_code", "STU");
+                String name = getStr(obj, "name", "Student");
+                String cls = getStr(obj, "class_name", "Class");
+                int p = getInt(obj, "present");
+                int a = getInt(obj, "absent");
+                int l = getInt(obj, "late");
+                int rate = getInt(obj, "rate");
+                String counts = "Present: " + p + " • Absent: " + a + " • Late: " + l;
+                String badge = rate + "% Rate";
+                studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord(code, name, cls, counts, badge));
+            }
+        }
+        if (studentAttendanceAdapter != null) {
+            studentAttendanceAdapter.filter("");
+        }
     }
 
-    // ==========================================
-    // 4. ATTENDANCE REPORTS SUB-TAB
-    // ==========================================
     private void bindReportsViews(View root) {
         btnExportAttendancePdf = root.findViewById(R.id.btnExportAttendancePdf);
         btnExportAttendanceExcel = root.findViewById(R.id.btnExportAttendanceExcel);
 
-        View.OnClickListener exportListener = v -> {
-            Intent intent = new Intent(requireContext(), GenerateReportActivity.class);
-            intent.putExtra("selected_report_type", "Attendance");
-            startActivity(intent);
+        View.OnClickListener openTeacherReports = v -> {
+            if (getActivity() instanceof TeacherMainActivity) {
+                ((TeacherMainActivity) getActivity()).openFragment(new ReportsFragment());
+            }
         };
 
-        if (btnExportAttendancePdf != null) btnExportAttendancePdf.setOnClickListener(exportListener);
-        if (btnExportAttendanceExcel != null) btnExportAttendanceExcel.setOnClickListener(exportListener);
+        if (btnExportAttendancePdf != null) btnExportAttendancePdf.setOnClickListener(openTeacherReports);
+        if (btnExportAttendanceExcel != null) btnExportAttendanceExcel.setOnClickListener(openTeacherReports);
+    }
+
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
+    private int getInt(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return 0;
+        try {
+            return obj.get(key).getAsInt();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

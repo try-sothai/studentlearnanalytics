@@ -4,21 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/drawer_surface"
-    android:paddingStart="16dp"
-    android:paddingTop="20dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="16dp">
+    android:paddingStart="14dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="10dp">
 
     <!-- Close Button (X) -->
     <ImageView
         android:id="@+id/btnTeacherDrawerClose"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/close_navigation_drawer"
         android:focusable="true"
-        android:padding="6dp"
+        android:padding="4dp"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,19 +27,19 @@
     <!-- Avatar with Green Online Dot -->
     <FrameLayout
         android:id="@+id/layoutTeacherAvatarContainer"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_gravity="center"
-            app:cardCornerRadius="30dp"
+            app:cardCornerRadius="22dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/drawer_primary_blue"
-            app:strokeWidth="2dp">
+            app:strokeWidth="1.5dp">
 
             <TextView
                 android:id="@+id/tvTeacherDrawerAvatar"
@@ -49,15 +49,14 @@
                 android:gravity="center"
                 android:text="C"
                 android:textColor="@color/drawer_primary_blue"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Green Online Indicator -->
         <View
             android:id="@+id/viewTeacherOnlineIndicator"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
@@ -70,8 +69,8 @@
         android:id="@+id/layoutTeacherHeaderInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="6dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@id/layoutTeacherAvatarContainer"
         app:layout_constraintEnd_toStartOf="@id/btnTeacherDrawerClose"
@@ -82,34 +81,33 @@
             android:id="@+id/tvTeacherDrawerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mr. Chan"
+            android:text="Teacher"
             android:textColor="@color/drawer_dark_navy"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTeacherDrawerRole"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:text="@string/teacher_cs_dept"
             android:textColor="@color/drawer_secondary_text"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
 
-        <!-- Green Active Status Badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="3dp"
             android:background="@drawable/bg_admin_status_badge"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="3dp">
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp">
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:contentDescription="@string/active_star_icon"
                 android:src="@drawable/ic_star_active" />
 
@@ -119,7 +117,7 @@
                 android:layout_marginStart="4dp"
                 android:text="@string/status_active"
                 android:textColor="@color/drawer_success_green"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
@@ -127,7 +125,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:background="@color/drawer_divider"
         app:layout_constraintTop_toBottomOf="@id/layoutTeacherAvatarContainer" />
 

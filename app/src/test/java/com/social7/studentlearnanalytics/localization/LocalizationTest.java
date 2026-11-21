@@ -77,7 +77,7 @@ public class LocalizationTest {
                 "appearance_settings", "lang_english_us", "lang_khmer_kh",
                 "dashboard", "user_management", "students_teachers_admins",
                 "course_management", "manage_courses_and_curriculum",
-                "class_management", "manage_classes_schedules_and_classrooms",
+                "class_management", "manage_classes_schedules_and_buildings",
                 "reports_analytics", "view_system_reports_and_statistics",
                 "nav_notifications", "view_and_manage_notifications",
                 "nav_settings", "account_and_system_settings",

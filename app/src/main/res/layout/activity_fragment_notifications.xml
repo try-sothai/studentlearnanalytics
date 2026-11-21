@@ -19,13 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <!-- Notification Filter Tabs (All / Unread / Important) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
             <TextView
@@ -134,10 +134,10 @@
                 android:id="@+id/tvEmptyState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/no_notifications_yet"
                 android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -148,7 +148,7 @@
                 android:text="@string/you_re_all_caught_up_new_academic_updates"
                 android:textAlignment="center"
                 android:textColor="@color/admin_text_secondary"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

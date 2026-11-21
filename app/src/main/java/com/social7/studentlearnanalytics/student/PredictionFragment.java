@@ -87,6 +87,7 @@ public class PredictionFragment extends Fragment {
         ApiClient.getApiService(requireContext()).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
             @Override
             public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
+                if (!isAdded() || getContext() == null || getView() == null) return;
                 if (response.isSuccessful() && response.body() != null) {
                     DashboardResponse.DashboardData data = response.body().getData();
                     updateUI(data);
@@ -95,6 +96,8 @@ public class PredictionFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                android.util.Log.w("PredictionFragment", "Failed to load prediction data: " + t.getMessage());
             }
         });
     }

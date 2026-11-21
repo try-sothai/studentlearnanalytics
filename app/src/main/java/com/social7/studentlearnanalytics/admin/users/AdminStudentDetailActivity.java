@@ -1,6 +1,9 @@
 package com.social7.studentlearnanalytics.admin.users;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,11 +31,15 @@ import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Student;
 import com.social7.studentlearnanalytics.model.User;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.RoleGuard;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,6 +98,7 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!RoleGuard.checkAccess(this, "Admin")) return;
         setContentView(R.layout.activity_admin_student_detail);
 
         if (savedInstanceState != null) {
@@ -187,17 +195,26 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
             currentStudent.setUserId(uid);
             if (currentUser != null) currentUser.setNumericId(uid);
         }
+        if (d.has("student") && d.get("student").isJsonObject()) {
+            JsonObject stuObj = d.getAsJsonObject("student");
+            if (stuObj.has("id") && !stuObj.get("id").isJsonNull()) {
+                currentStudent.setDbId(stuObj.get("id").getAsLong());
+            }
+        }
 
         String code = getStr(d, "student_code", getStr(d, "code", currentStudent.getId()));
         currentStudent.setId(code);
         if (currentUser != null) currentUser.setCode(code);
 
         String khmerName = getStr(d, "khmer_name", "");
-        String englishName = getStr(d, "english_name", getStr(d, "name", currentStudent.getName()));
+        String englishName = getStr(d, "english_name", "");
+        String fallbackName = getStr(d, "name", currentStudent.getName());
+        String resolvedName = com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(
+                englishName, khmerName, fallbackName);
         currentStudent.setKhmerName(khmerName);
         currentStudent.setEnglishName(englishName);
-        currentStudent.setName(englishName);
-        if (currentUser != null) currentUser.setName(englishName);
+        currentStudent.setName(resolvedName);
+        if (currentUser != null) currentUser.setName(resolvedName);
 
         String rawEmail = getStr(d, "raw_email", "");
         if (rawEmail.isEmpty()) {
@@ -494,13 +511,15 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
     private void bindData() {
         if (currentStudent == null) return;
 
-        String engName = currentStudent.getName();
+        String engName = currentStudent.getEnglishName();
         String khmName = currentStudent.getKhmerName();
-        String displayName = (!khmName.isEmpty() && !khmName.equals(engName))
+        String primaryName = com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(
+                engName, khmName, currentStudent.getName());
+        String displayName = (!engName.isEmpty() && !khmName.isEmpty() && !khmName.equals(engName))
                 ? engName + " (" + khmName + ")"
-                : engName;
+                : primaryName;
 
-        String initial = (engName != null && !engName.isEmpty()) ? engName.substring(0, 1).toUpperCase(Locale.US) : "S";
+        String initial = !primaryName.isEmpty() ? primaryName.substring(0, 1).toUpperCase(Locale.US) : "S";
 
         if (tvStudentAvatar != null) tvStudentAvatar.setText(initial);
         if (tvDetailStudentName != null) tvDetailStudentName.setText(displayName);
@@ -729,12 +748,16 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
                 boolean isActive = "Active".equalsIgnoreCase(currentStudent.getStatus()) || "enrolled".equalsIgnoreCase(currentStudent.getStatus());
                 popup.getMenu().add(0, 1, 0, R.string.edit_student);
                 popup.getMenu().add(0, 2, 1, isActive ? R.string.deactivate_account : R.string.activate_account);
+                popup.getMenu().add(0, 3, 2, R.string.reset_student_password);
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getItemId() == 1) {
                         openEditScreen();
                         return true;
                     } else if (item.getItemId() == 2) {
                         confirmToggleAccountStatus();
+                        return true;
+                    } else if (item.getItemId() == 3) {
+                        confirmResetStudentPassword();
                         return true;
                     }
                     return false;
@@ -752,6 +775,83 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
         intent.putExtra("student", currentStudent);
         intent.putExtra("user", currentUser);
         startActivity(intent);
+    }
+
+    private void confirmResetStudentPassword() {
+        String targetId = (currentStudent != null && currentStudent.getDbId() != null && currentStudent.getDbId() > 0)
+                ? String.valueOf(currentStudent.getDbId())
+                : (currentStudent != null ? currentStudent.getId() : "");
+        if (targetId.isEmpty()) {
+            Toast.makeText(this, "Student identifier is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String displayCode = currentStudent.getId();
+        String displayName = currentStudent.getName();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.reset_student_password)
+                .setMessage("Reset password for " + displayName + " (" + displayCode + ") to the standard initial password (STD@12345)? Active login sessions for this student will be invalidated immediately.")
+                .setPositiveButton(R.string.confirm, (dialog, which) -> performStudentPasswordReset(targetId))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void performStudentPasswordReset(String targetId) {
+        Toast.makeText(this, "Generating new student credentials...", Toast.LENGTH_SHORT).show();
+        ApiClient.getApiService(this).resetStudentPassword(targetId, new JsonObject()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                    JsonObject d = response.body().getAsJsonObject("data");
+                    String studentCode = getStr(d, "student_identifier", currentStudent.getId());
+                    String username = getStr(d, "username", studentCode);
+                    String role = getStr(d, "role", "student");
+                    String tempPass = getStr(d, "temporary_password", "");
+                    showResetCredentialsDialog(studentCode, username, role, tempPass);
+                } else {
+                    Toast.makeText(AdminStudentDetailActivity.this, "Password reset failed (HTTP " + response.code() + ")", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
+                Toast.makeText(AdminStudentDetailActivity.this, getString(R.string.network_error_prefix) + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showResetCredentialsDialog(String studentId, String username, String role, String newPassword) {
+        String message = "Student Name: " + currentStudent.getName()
+                + "\nStudent ID: " + studentId
+                + "\nUsername: " + username
+                + "\nRole: " + role
+                + "\nNew Initial Password: " + newPassword
+                + "\n\nCopy or save these credentials now. The backend stores only a secure password hash.";
+
+        new AlertDialog.Builder(this)
+                .setTitle("New Student Login Credentials")
+                .setMessage(message)
+                .setPositiveButton("Copy Credentials", (d, w) -> {
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (cm != null) {
+                        String copyText = "Student ID: " + studentId + "\nUsername: " + username + "\nPassword: " + newPassword;
+                        cm.setPrimaryClip(ClipData.newPlainText("SLAS Student Credentials", copyText));
+                        Toast.makeText(this, "Credentials copied to clipboard", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNeutralButton("Save CSV", (d, w) -> {
+                    String safeCode = studentId.replaceAll("[^A-Za-z0-9_-]", "_");
+                    String filename = "student_credentials_" + safeCode + ".csv";
+                    String csv = "\uFEFFstudent_id,username,role,new_initial_password\n"
+                            + studentId + "," + username + "," + role + "," + newPassword + "\n";
+                    byte[] bytes = csv.getBytes(StandardCharsets.UTF_8);
+                    ResponseBody body = ResponseBody.create(MediaType.parse("text/csv"), bytes);
+                    StudentExportDialog.saveExportFile(getApplicationContext(), body, filename, "text/csv");
+                })
+                .setNegativeButton(R.string.close, null)
+                .show();
     }
 
     private void confirmToggleAccountStatus() {

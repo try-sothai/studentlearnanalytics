@@ -22,15 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- Student Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/divider_color"
                 app:strokeWidth="1dp">
 
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvReportAvatar"
@@ -49,7 +49,7 @@
                         android:gravity="center"
                         android:text="S"
                         android:textColor="@color/primary"
-                        android:textSize="20sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -65,7 +65,7 @@
                             android:layout_height="wrap_content"
                             android:text="Sophea"
                             android:textColor="@color/text_primary"
-                            android:textSize="17sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -106,7 +106,7 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -171,15 +171,15 @@
                 android:id="@+id/layoutReportOverview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/divider_color"
                     app:strokeWidth="1dp">
 
@@ -187,21 +187,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/performance_overview_trend"
                             android:textColor="@color/text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/lineChartReportTrend"
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
-                            android:layout_marginTop="12dp" />
+                            android:layout_marginTop="8dp" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -212,7 +212,7 @@
                 android:id="@+id/layoutReportScores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_quiz_scores"
                     android:textColor="@color/text_primary"
-                    android:textSize="15sp"
+                    android:textSize="13.5sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -230,7 +230,7 @@
                 android:id="@+id/layoutReportAttendance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -245,7 +245,7 @@
                 android:id="@+id/layoutReportProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -260,7 +260,7 @@
                 android:id="@+id/layoutReportNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -275,7 +275,7 @@
                     android:id="@+id/edtComposerContent"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:hint="Write a note..." />
 
                 <com.google.android.material.button.MaterialButton

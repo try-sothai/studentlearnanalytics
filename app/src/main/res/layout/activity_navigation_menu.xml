@@ -33,7 +33,7 @@
         android:id="@+id/btnClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -50,9 +50,9 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         app:cardCornerRadius="36dp"
-        app:cardElevation="4dp"
+        app:cardElevation="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="#FFFFFF"
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text="Sophea"
             android:textColor="#FFFFFF"
-            android:textSize="22sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:layout_marginTop="2dp"
             android:text="STU023001"
             android:textColor="#D0D6FF"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvMajor"
@@ -104,7 +104,7 @@
             android:layout_marginTop="2dp"
             android:text="@string/computer_science"
             android:textColor="#D0D6FF"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvYear"
@@ -113,7 +113,7 @@
             android:layout_marginTop="1dp"
             android:text="@string/str_3rd_year"
             android:textColor="#D0D6FF"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <!-- Scrollable Vertical Navigation Menu -->
@@ -121,8 +121,8 @@
         android:id="@+id/scrollMenu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
         android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none"
@@ -133,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
+            android:paddingHorizontal="12dp"
             android:paddingVertical="4dp">
 
             <!-- 1. Home -->
@@ -147,7 +147,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -162,7 +162,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_home"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 2. Courses -->
@@ -176,7 +176,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -191,7 +191,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_courses"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 3. Learning Analytics -->
@@ -205,7 +205,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -220,7 +220,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/learning_analytics"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 4. Prediction & Risk -->
@@ -234,7 +234,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -249,7 +249,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/prediction_risk"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 5. Recommendations -->
@@ -263,7 +263,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -278,7 +278,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/recommendations"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 5.5. Assessments (NEW) -->
@@ -292,7 +292,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -307,7 +307,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/assessments"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 6. Notifications (with Red Badge "3") -->
@@ -321,7 +321,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -336,7 +336,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_notifications"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
 
                 <TextView
                     android:id="@+id/tvNotifBadge"
@@ -363,7 +363,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -378,7 +378,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_reports"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 8. Profile -->
@@ -392,7 +392,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -407,7 +407,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_profile"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 9. Settings -->
@@ -421,7 +421,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -436,7 +436,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/nav_settings"
                     android:textColor="#EFEFFF"
-                    android:textSize="15sp" />
+                    android:textSize="13.5sp" />
             </LinearLayout>
 
             <!-- 10. Logout -->
@@ -450,7 +450,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -465,7 +465,7 @@
                     android:layout_marginStart="18dp"
                     android:text="@string/logout"
                     android:textColor="#FF5252"
-                    android:textSize="15sp"
+                    android:textSize="13.5sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -477,7 +477,7 @@
         android:id="@+id/layoutFooter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

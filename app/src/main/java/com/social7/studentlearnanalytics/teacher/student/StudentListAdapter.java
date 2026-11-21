@@ -54,10 +54,12 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     public void filter(String query, String category) {
         filteredList.clear();
         for (Student student : originalList) {
-            boolean matchesQuery = query == null || query.trim().isEmpty()
-                    || student.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
-                    || student.getId().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
-                    || student.getProgram().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT));
+            if (student == null) continue;
+            String q = query != null ? query.trim().toLowerCase(Locale.ROOT) : "";
+            boolean matchesQuery = q.isEmpty()
+                    || (student.getName() != null && student.getName().toLowerCase(Locale.ROOT).contains(q))
+                    || (student.getId() != null && student.getId().toLowerCase(Locale.ROOT).contains(q))
+                    || (student.getProgram() != null && student.getProgram().toLowerCase(Locale.ROOT).contains(q));
 
             boolean matchesCategory = true;
             if (category != null && !category.trim().isEmpty() && !category.equalsIgnoreCase("All")) {
@@ -172,7 +174,10 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
                     tvStatusBadge.setText(R.string.at_risk);
                     tvStatusBadge.setTextColor(Color.parseColor("#FF4055"));
                     tvStatusBadge.setBackgroundResource(R.drawable.bg_status_at_risk);
-                } else if (itemView.getContext().getString(R.string.need_attention).equalsIgnoreCase(risk) || "Needs Attention".equalsIgnoreCase(risk) || "Medium".equalsIgnoreCase(risk)) {
+                } else if (itemView.getContext().getString(R.string.need_attention).equalsIgnoreCase(risk)
+                        || "Need Attention".equalsIgnoreCase(risk)
+                        || "Needs Attention".equalsIgnoreCase(risk)
+                        || "Medium".equalsIgnoreCase(risk)) {
                     tvStatusBadge.setText(itemView.getContext().getString(R.string.need_attention));
                     tvStatusBadge.setTextColor(Color.parseColor("#FF9B16"));
                     tvStatusBadge.setBackgroundResource(R.drawable.bg_status_attention);

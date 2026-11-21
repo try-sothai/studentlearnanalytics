@@ -28,6 +28,7 @@ import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.adapter.NotificationAdapter;
 import com.social7.studentlearnanalytics.admin.users.NotificationSettingsActivity;
 import com.social7.studentlearnanalytics.model.Notification;
+import com.social7.studentlearnanalytics.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,6 +147,18 @@ public class NotificationFragment extends Fragment {
         updateChipStyle(pillNotifUser, "User".equalsIgnoreCase(category));
         updateChipStyle(pillNotifCourse, "Course".equalsIgnoreCase(category));
 
+        if ("ALL".equalsIgnoreCase(category)) {
+            UiUtils.scrollToTab(pillNotifAll);
+        } else if ("UNREAD".equalsIgnoreCase(category)) {
+            UiUtils.scrollToTab(pillNotifUnread);
+        } else if ("System".equalsIgnoreCase(category)) {
+            UiUtils.scrollToTab(pillNotifSystem);
+        } else if ("User".equalsIgnoreCase(category)) {
+            UiUtils.scrollToTab(pillNotifUser);
+        } else if ("Course".equalsIgnoreCase(category)) {
+            UiUtils.scrollToTab(pillNotifCourse);
+        }
+
         filterAndRefreshNotifications();
     }
 
@@ -163,7 +176,7 @@ public class NotificationFragment extends Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    currentSearchQuery = s.toString().trim();
+                    currentSearchQuery = s != null ? s.toString().trim() : "";
                     filterAndRefreshNotifications();
                 }
 
@@ -179,8 +192,9 @@ public class NotificationFragment extends Fragment {
     }
 
     private void showFilterOptionsDialog() {
+        if (!isAdded() || getContext() == null) return;
         String[] options = {"All Categories", "User Notifications", "Course Notifications", "System Notifications", "Unread Only"};
-        new MaterialAlertDialogBuilder(requireContext())
+        new MaterialAlertDialogBuilder(getContext())
                 .setTitle(R.string.filter_notifications)
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
@@ -203,7 +217,8 @@ public class NotificationFragment extends Fragment {
     }
 
     private void showOverflowPopupMenu(View anchor) {
-        PopupMenu popup = new PopupMenu(requireContext(), anchor);
+        if (!isAdded() || getContext() == null) return;
+        PopupMenu popup = new PopupMenu(getContext(), anchor);
         popup.getMenu().add(0, 1, 0, "Mark All as Read");
         popup.getMenu().add(0, 2, 1, "Delete Read");
         popup.getMenu().add(0, 3, 2, "Notification Settings");
@@ -228,7 +243,8 @@ public class NotificationFragment extends Fragment {
                 showDeleteReadConfirmationDialog();
                 return true;
             } else if (id == 3) {
-                Intent intent = new Intent(requireContext(), NotificationSettingsActivity.class);
+                if (!isAdded() || getContext() == null) return false;
+                Intent intent = new Intent(getContext(), NotificationSettingsActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -243,11 +259,14 @@ public class NotificationFragment extends Fragment {
             n.setRead(true);
         }
         filterAndRefreshNotifications();
-        Toast.makeText(getContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
+        if (isAdded() && getContext() != null) {
+            Toast.makeText(getContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showDeleteReadConfirmationDialog() {
-        new MaterialAlertDialogBuilder(requireContext())
+        if (!isAdded() || getContext() == null) return;
+        new MaterialAlertDialogBuilder(getContext())
                 .setTitle(R.string.delete_read_notifications)
                 .setMessage(R.string.are_you_sure_you_want_to_delete_all_read_n)
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
@@ -259,7 +278,9 @@ public class NotificationFragment extends Fragment {
                     }
                     masterNotificationList.removeAll(toRemove);
                     filterAndRefreshNotifications();
-                    Toast.makeText(getContext(), "Read notifications deleted", Toast.LENGTH_SHORT).show();
+                    if (isAdded() && getContext() != null) {
+                        Toast.makeText(getContext(), "Read notifications deleted", Toast.LENGTH_SHORT).show();
+                    }
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .show();
@@ -328,11 +349,13 @@ public class NotificationFragment extends Fragment {
             if (rvNotifications != null) rvNotifications.setVisibility(View.VISIBLE);
             if (layoutNotifEmptyState != null) layoutNotifEmptyState.setVisibility(View.GONE);
 
+            if (!isAdded() || getContext() == null) return;
             adapter = new NotificationAdapter(getContext(), displayedNotificationList, notification -> {
                 notification.setRead(true);
                 filterAndRefreshNotifications();
 
-                Intent intent = new Intent(requireContext(), NotificationDetailActivity.class);
+                if (!isAdded() || getContext() == null) return;
+                Intent intent = new Intent(getContext(), NotificationDetailActivity.class);
                 intent.putExtra("notification", notification);
                 startActivity(intent);
             });

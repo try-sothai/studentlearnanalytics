@@ -213,9 +213,6 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
                                 String type = obj.has("assignment_type") && !obj.get("assignment_type").isJsonNull()
                                         ? obj.get("assignment_type").getAsString() : "assignment";
-                                if (title.toLowerCase(Locale.US).contains("homework")) {
-                                    type = "homework";
-                                }
 
                                 String semesterName = null;
                                 if (obj.has("semester") && !obj.get("semester").isJsonNull()) {

@@ -24,6 +24,8 @@ import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Student;
 import com.social7.studentlearnanalytics.model.User;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
+import com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,8 @@ public class EditStudentActivity extends AppCompatActivity {
     private User currentUser;
 
     private TextView tvEditAvatarChar, tvEditHeaderName, tvEditHeaderId, tvEditHeaderStatus;
-    private TextInputLayout tilEditStudentName, tilEditStudentEmail, tilEditStudentPhone, tilEditStudentDob;
-    private EditText etEditStudentName, etEditStudentId, etEditStudentEmail, etEditStudentPhone, etEditStudentDob;
+    private TextInputLayout tilEditStudentKhmerName, tilEditStudentEnglishName, tilEditStudentEmail, tilEditStudentPhone, tilEditStudentDob;
+    private EditText etEditStudentKhmerName, etEditStudentEnglishName, etEditStudentId, etEditStudentEmail, etEditStudentPhone, etEditStudentDob;
 
     private Spinner spEditDepartment, spEditProgram, spEditYearLevel, spEditAcademicYear;
     private RadioGroup rgEditAccountStatus;
@@ -94,16 +96,19 @@ public class EditStudentActivity extends AppCompatActivity {
         tvEditHeaderId = findViewById(R.id.tvEditHeaderId);
         tvEditHeaderStatus = findViewById(R.id.tvEditHeaderStatus);
 
-        tilEditStudentName = findViewById(R.id.tilEditStudentName);
+        tilEditStudentKhmerName = findViewById(R.id.tilEditStudentKhmerName);
+        tilEditStudentEnglishName = findViewById(R.id.tilEditStudentEnglishName);
         tilEditStudentEmail = findViewById(R.id.tilEditStudentEmail);
         tilEditStudentPhone = findViewById(R.id.tilEditStudentPhone);
         tilEditStudentDob = findViewById(R.id.tilEditStudentDob);
 
-        etEditStudentName = findViewById(R.id.etEditStudentName);
+        etEditStudentKhmerName = findViewById(R.id.etEditStudentKhmerName);
+        etEditStudentEnglishName = findViewById(R.id.etEditStudentEnglishName);
         etEditStudentId = findViewById(R.id.etEditStudentId);
         etEditStudentEmail = findViewById(R.id.etEditStudentEmail);
         etEditStudentPhone = findViewById(R.id.etEditStudentPhone);
         etEditStudentDob = findViewById(R.id.etEditStudentDob);
+        DatePickerHelper.attachDatePicker(tilEditStudentDob, etEditStudentDob, true);
 
         spEditDepartment = findViewById(R.id.spEditDepartment);
         spEditProgram = findViewById(R.id.spEditProgram);
@@ -272,15 +277,16 @@ public class EditStudentActivity extends AppCompatActivity {
                     if (d.has("student_code") && !d.get("student_code").isJsonNull()) {
                         currentStudent.setId(d.get("student_code").getAsString());
                     }
-                    if (d.has("english_name") && !d.get("english_name").isJsonNull() && !d.get("english_name").getAsString().isEmpty()) {
-                        currentStudent.setName(d.get("english_name").getAsString());
-                        currentStudent.setEnglishName(d.get("english_name").getAsString());
-                    } else if (d.has("name") && !d.get("name").isJsonNull()) {
-                        currentStudent.setName(d.get("name").getAsString());
-                    }
-                    if (d.has("khmer_name") && !d.get("khmer_name").isJsonNull()) {
-                        currentStudent.setKhmerName(d.get("khmer_name").getAsString());
-                    }
+                    String khmerName = d.has("khmer_name") && !d.get("khmer_name").isJsonNull()
+                            ? d.get("khmer_name").getAsString() : "";
+                    String englishName = d.has("english_name") && !d.get("english_name").isJsonNull()
+                            ? d.get("english_name").getAsString() : "";
+                    String fallbackName = d.has("name") && !d.get("name").isJsonNull()
+                            ? d.get("name").getAsString() : currentStudent.getName();
+                    currentStudent.setKhmerName(khmerName);
+                    currentStudent.setEnglishName(englishName);
+                    currentStudent.setName(PersonNameDisplayHelper.resolveDisplayName(
+                            englishName, khmerName, fallbackName));
                     String rawEmail = d.has("raw_email") && !d.get("raw_email").isJsonNull() ? d.get("raw_email").getAsString() : "";
                     currentStudent.setEmail(rawEmail);
 
@@ -332,7 +338,9 @@ public class EditStudentActivity extends AppCompatActivity {
     private void prepopulateFields() {
         if (currentStudent == null) return;
 
-        String name = currentStudent.getName();
+        String khmerName = PersonNameDisplayHelper.clean(currentStudent.getKhmerName());
+        String englishName = PersonNameDisplayHelper.clean(currentStudent.getEnglishName());
+        String name = PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, currentStudent.getName());
         String initial = (name != null && !name.isEmpty()) ? name.substring(0, 1).toUpperCase() : "S";
 
         if (tvEditAvatarChar != null) tvEditAvatarChar.setText(initial);
@@ -346,7 +354,8 @@ public class EditStudentActivity extends AppCompatActivity {
             tvEditHeaderStatus.setBackgroundResource(isActive ? R.drawable.bg_badge_core : R.drawable.bg_badge_credit);
         }
 
-        if (etEditStudentName != null) etEditStudentName.setText(name);
+        if (etEditStudentKhmerName != null) etEditStudentKhmerName.setText(khmerName);
+        if (etEditStudentEnglishName != null) etEditStudentEnglishName.setText(englishName);
         if (etEditStudentId != null) etEditStudentId.setText(currentStudent.getId());
         if (etEditStudentEmail != null) {
             String em = currentStudent.getEmail();
@@ -434,45 +443,56 @@ public class EditStudentActivity extends AppCompatActivity {
     }
 
     private void attemptUpdateStudent() {
-        if (etEditStudentName == null) return;
+        if (etEditStudentKhmerName == null && etEditStudentEnglishName == null) return;
 
-        String name = etEditStudentName.getText().toString().trim();
+        String khmerName = etEditStudentKhmerName != null
+                ? PersonNameDisplayHelper.clean(etEditStudentKhmerName.getText().toString()) : "";
+        String englishName = etEditStudentEnglishName != null
+                ? PersonNameDisplayHelper.clean(etEditStudentEnglishName.getText().toString()) : "";
         String studentCode = etEditStudentId != null ? etEditStudentId.getText().toString().trim() : currentStudent.getId();
         String email = etEditStudentEmail != null ? etEditStudentEmail.getText().toString().trim() : "";
         String phone = etEditStudentPhone != null ? etEditStudentPhone.getText().toString().trim() : "";
         String dob = etEditStudentDob != null ? etEditStudentDob.getText().toString().trim() : "";
 
-        if (name.isEmpty()) {
-            if (tilEditStudentName != null) tilEditStudentName.setError("Full name is required");
+        if (!PersonNameDisplayHelper.hasAtLeastOneName(khmerName, englishName)) {
+            String msg = getString(R.string.err_name_one_required);
+            if (tilEditStudentKhmerName != null) tilEditStudentKhmerName.setError(msg);
+            if (tilEditStudentEnglishName != null) tilEditStudentEnglishName.setError(msg);
             return;
         } else {
-            if (tilEditStudentName != null) tilEditStudentName.setError(null);
+            if (tilEditStudentKhmerName != null) tilEditStudentKhmerName.setError(null);
+            if (tilEditStudentEnglishName != null) tilEditStudentEnglishName.setError(null);
         }
 
         if (!email.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            if (tilEditStudentEmail != null) tilEditStudentEmail.setError("Please enter a valid email or leave blank");
+            if (tilEditStudentEmail != null) tilEditStudentEmail.setError(getString(R.string.err_invalid_email));
             return;
         } else {
             if (tilEditStudentEmail != null) tilEditStudentEmail.setError(null);
         }
 
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (tilEditStudentDob != null) tilEditStudentDob.setError(getString(R.string.err_invalid_date));
+            return;
+        } else {
+            if (tilEditStudentDob != null) tilEditStudentDob.setError(null);
+        }
+
+        String displayName = PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, "Student");
         boolean isCheckedActive = (rbEditActive == null || rbEditActive.isChecked());
         String apiStatus = isCheckedActive ? "active" : "inactive";
 
         JsonObject body = new JsonObject();
-        body.addProperty("name", name);
-        body.addProperty("english_name", name);
+        body.addProperty("khmer_name", khmerName);
+        body.addProperty("english_name", englishName);
+        body.addProperty("name", displayName);
         if (!studentCode.isEmpty()) {
             body.addProperty("student_code", studentCode);
             body.addProperty("student_identifier", studentCode);
         }
-        if (!email.isEmpty()) {
-            body.addProperty("email", email);
-        }
+        body.addProperty("email", email);
         body.addProperty("phone", phone);
-        if (!dob.isEmpty()) {
-            body.addProperty("date_of_birth", dob);
-        }
+        body.addProperty("date_of_birth", dob);
         body.addProperty("status", apiStatus);
 
         if (spEditDepartment != null && spEditDepartment.getSelectedItem() instanceof AddStudentActivity.IdNameItem) {
@@ -508,15 +528,16 @@ public class EditStudentActivity extends AppCompatActivity {
                 if (btnUpdateStudent != null) btnUpdateStudent.setEnabled(true);
 
                 if (response.isSuccessful()) {
-                    currentStudent.setName(name);
-                    currentStudent.setEnglishName(name);
+                    currentStudent.setKhmerName(khmerName);
+                    currentStudent.setEnglishName(englishName);
+                    currentStudent.setName(displayName);
                     currentStudent.setEmail(email);
                     if (!phone.isEmpty()) currentStudent.setPhone(phone);
-                    if (!dob.isEmpty()) currentStudent.setDob(dob);
+                    currentStudent.setDob(dob);
                     currentStudent.setStatus(isCheckedActive ? "Active" : "Inactive");
 
                     if (currentUser != null) {
-                        currentUser.setName(name);
+                        currentUser.setName(displayName);
                         currentUser.setEmail(email);
                         currentUser.setStatus(currentStudent.getStatus());
                     }

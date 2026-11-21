@@ -16,20 +16,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Assessment Summary Card -->
+            <!-- 1. Student & Assessment Summary Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -38,34 +38,109 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
-                    <TextView
-                        android:id="@+id/tvAssessmentTitleHeader"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Assignment 1: Linked Lists &amp; Pointers"
-                        android:textColor="@color/admin_text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvAssessmentTitleHeader"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Assignment"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAssessmentTypeBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_core"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:text="Assignment"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvCourseClassHeader"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Course: CS101 - Intro to CS • Max Score: 100 pts"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12.5sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="8dp"
+                        android:background="@color/admin_border" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvGradingStudentId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_core"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="3dp"
+                            android:text="STU"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvGradingStudentName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSubmissionStatusBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_core"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/admin_active_green"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvSubmissionTimestamp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Student Score Entry Form Card -->
+            <!-- 2. Student Submitted File Preview Card -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSubmittedFile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -74,59 +149,233 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/student_submitted_file"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSubFileTypeBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_core"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvSubFileName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSubFileSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp" />
+
+                    <!-- Inline Visual Preview Container -->
+                    <FrameLayout
+                        android:id="@+id/layoutInlinePreviewBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#F4F7FF"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/ivInlineSubmissionPreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/student_submitted_file"
+                            android:scaleType="fitCenter" />
+
+                        <TextView
+                            android:id="@+id/tvInlinePreviewHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="8dp"
+                            android:background="#B3111827"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="Tap to inspect full screen"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp" />
+
+                        <ProgressBar
+                            android:id="@+id/pbInlinePreview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvSubFileNotice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="#FEF3C7"
+                        android:padding="10dp"
+                        android:textColor="#92400E"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <!-- File Actions Row -->
+                    <LinearLayout
+                        android:id="@+id/layoutSubFileActions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPreviewFullScreen"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/view_file"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="12sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="@color/admin_primary_blue" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOpenSubFileExternal"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/open_file"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="12sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="@color/admin_primary_blue" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDownloadSubFile"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/download_file"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_primary_blue"
+                            android:textSize="12sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="@color/admin_primary_blue" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 3. Student Score Entry Form Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/student_score_feedback"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="12dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
-                    <!-- Student Name -->
+                    <!-- Student Display Field (Read-only for safety) -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxBackgroundColor="@color/card_white"
-                        app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
-                        app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
-                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:boxBackgroundColor="#F8FAFC"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_border"
                         app:hintEnabled="true">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etStudentName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Student Name (e.g., Sophea)"
-                            android:inputType="text"
-                            android:text="Sophea (STU23001)" />
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:hint="Student"
+                            android:inputType="none"
+                            android:textColor="@color/admin_text_primary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Score Input -->
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilAwardedScore"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         app:boxBackgroundColor="@color/card_white"
-                        app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
-                        app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
                         app:boxStrokeColor="@color/admin_primary_blue"
                         app:hintEnabled="true">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAwardedScore"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Awarded Score (Max: 100 pts)"
-                            android:inputType="numberDecimal"
-                            android:text="88" />
+                            android:hint="Awarded Score"
+                            android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Feedback -->
@@ -134,39 +383,56 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         app:boxBackgroundColor="@color/card_white"
-                        app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
-                        app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
                         app:boxStrokeColor="@color/admin_primary_blue"
                         app:hintEnabled="true">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etFeedback"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/teacher_feedback_comments"
                             android:inputType="textMultiLine"
-                            android:lines="3"
-                            android:text="Excellent implementation! Code structure is clean." />
+                            android:lines="3" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSaveScore"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="@color/admin_primary_blue"
-                        android:text="@string/save_publish_score"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="10dp" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSaveDraftScore"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="46dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:text="@string/save_draft_score"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_primary_blue"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/admin_primary_blue" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSaveScore"
+                            android:layout_width="0dp"
+                            android:layout_height="46dp"
+                            android:layout_weight="1.3"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:text="@string/save_publish_score"
+                            android:textAllCaps="false"
+                            android:textColor="@color/card_white"
+                            app:cornerRadius="12dp" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

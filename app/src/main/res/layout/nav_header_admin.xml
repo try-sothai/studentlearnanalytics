@@ -5,20 +5,20 @@
     android:layout_height="wrap_content"
     android:background="@color/drawer_surface"
     android:paddingStart="16dp"
-    android:paddingTop="20dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="16dp">
+    android:paddingTop="16dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="14dp">
 
-    <!-- Close Button (X) -->
+    <!-- Close Button (X) with comfortable touch target -->
     <ImageView
         android:id="@+id/btnAdminDrawerClose"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/close_navigation_drawer"
         android:focusable="true"
-        android:padding="6dp"
+        android:padding="10dp"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,16 +27,16 @@
     <!-- Avatar with Green Online Dot -->
     <FrameLayout
         android:id="@+id/layoutAvatarContainer"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_gravity="center"
-            app:cardCornerRadius="30dp"
+            app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/drawer_primary_blue"
             app:strokeWidth="2dp">
@@ -54,8 +54,8 @@
         <!-- Green Online Indicator -->
         <View
             android:id="@+id/viewOnlineIndicator"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
@@ -65,68 +65,92 @@
 
     <!-- Profile Text Information -->
     <LinearLayout
+        android:id="@+id/layoutAdminProfileText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="6dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/layoutAvatarContainer"
         app:layout_constraintEnd_toStartOf="@id/btnAdminDrawerClose"
         app:layout_constraintStart_toEndOf="@id/layoutAvatarContainer"
         app:layout_constraintTop_toTopOf="@id/layoutAvatarContainer">
 
         <TextView
             android:id="@+id/tvAdminDrawerName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mr. Chan"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/admin_slas"
             android:textColor="@color/drawer_dark_navy"
-            android:textSize="17sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvAdminDrawerRole"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/system_administrator"
             android:textColor="@color/drawer_secondary_text"
             android:textSize="12sp" />
 
-        <!-- Green Active Status Badge -->
+        <!-- Role + Active Status Badges -->
         <LinearLayout
-            android:id="@+id/layoutAdminActiveBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:background="@drawable/bg_admin_status_badge"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="3dp">
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:contentDescription="@string/active_star_icon"
-                android:src="@drawable/ic_star_active" />
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tvAdminDrawerRoleBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/status_active"
-                android:textColor="@color/drawer_success_green"
-                android:textSize="11sp"
+                android:background="@drawable/bg_admin_drawer_item_active"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="@string/admin_role_badge"
+                android:textColor="@color/drawer_primary_blue"
+                android:textSize="10sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layoutAdminActiveBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_admin_status_badge"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp">
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:contentDescription="@string/active_star_icon"
+                    android:src="@drawable/ic_star_active" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/status_active"
+                    android:textColor="@color/drawer_success_green"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="14dp"
         android:background="@color/drawer_divider"
-        app:layout_constraintTop_toBottomOf="@id/layoutAvatarContainer" />
+        app:layout_constraintTop_toBottomOf="@id/layoutAdminProfileText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

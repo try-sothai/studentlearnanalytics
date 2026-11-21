@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/btnBackPreview"
@@ -46,7 +46,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <!-- Summary Cards Grid -->
         <LinearLayout
@@ -127,13 +127,68 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Missing Required Fields" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:id="@+id/tvMissingRequiredRows" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                app:cardBackgroundColor="@color/card_white"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invalid Dept / Program" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:id="@+id/tvInvalidDeptProgramRows" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/warning_orange"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvValidationBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/slas_soft_blue"
+            android:padding="10dp"
+            android:text="File validated. Review rows before confirming import."
+            android:textColor="@color/admin_text_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDownloadErrorReport"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="4dp"
             android:text="Download Error Report (CSV)"
             android:textAllCaps="false"
             android:textColor="@color/admin_inactive_red"
@@ -148,7 +203,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:padding="16dp" />
+        android:padding="12dp" />
 
     <!-- Action Bar -->
     <LinearLayout
@@ -157,7 +212,7 @@
         android:background="@color/card_white"
         android:elevation="4dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancelImport"

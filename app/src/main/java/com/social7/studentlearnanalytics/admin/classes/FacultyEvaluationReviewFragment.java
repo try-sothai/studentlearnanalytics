@@ -20,9 +20,12 @@ public class FacultyEvaluationReviewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() instanceof AdminMainActivity) {
-            ((AdminMainActivity) getActivity()).openFragment(UserManagementFragment.newInstance(3));
-        }
-        return new View(requireContext());
+        View placeholder = new View(inflater.getContext());
+        placeholder.post(() -> {
+            if (isAdded() && getActivity() instanceof AdminMainActivity) {
+                ((AdminMainActivity) getActivity()).openFragment(UserManagementFragment.newInstance(3));
+            }
+        });
+        return placeholder;
     }
 }

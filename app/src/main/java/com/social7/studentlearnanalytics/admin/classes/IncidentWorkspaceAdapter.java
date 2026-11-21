@@ -18,16 +18,22 @@ import java.util.List;
 public class IncidentWorkspaceAdapter extends RecyclerView.Adapter<IncidentWorkspaceAdapter.IncidentViewHolder> {
 
     public static class IncidentItem {
+        public long dbId;
+        public long studentDbId;
+        public long studentUserId;
         public String id;
         public String title;
         public String studentName;
         public String studentId;
+        public String studentEmail;
         public String className;
         public String category;
         public String priority;
         public String status;
         public String date;
         public String assignedStaff;
+        public String description;
+        public String resolutionNotes;
 
         public IncidentItem(String id, String title, String studentName, String studentId, String className, String category, String priority, String status, String date, String assignedStaff) {
             this.id = id;
@@ -82,11 +88,17 @@ public class IncidentWorkspaceAdapter extends RecyclerView.Adapter<IncidentWorks
         filteredList.clear();
         String text = query != null ? query.trim().toLowerCase() : "";
         for (IncidentItem item : originalList) {
+            if (item == null) continue;
             if (text.isEmpty() ||
-                item.title.toLowerCase().contains(text) ||
-                item.studentName.toLowerCase().contains(text) ||
-                item.studentId.toLowerCase().contains(text) ||
-                item.className.toLowerCase().contains(text)) {
+                (item.id != null && item.id.toLowerCase().contains(text)) ||
+                (item.title != null && item.title.toLowerCase().contains(text)) ||
+                (item.studentName != null && item.studentName.toLowerCase().contains(text)) ||
+                (item.studentId != null && item.studentId.toLowerCase().contains(text)) ||
+                (item.className != null && item.className.toLowerCase().contains(text)) ||
+                (item.category != null && item.category.toLowerCase().contains(text)) ||
+                (item.priority != null && item.priority.toLowerCase().contains(text)) ||
+                (item.status != null && item.status.toLowerCase().contains(text)) ||
+                (item.assignedStaff != null && item.assignedStaff.toLowerCase().contains(text))) {
                 filteredList.add(item);
             }
         }

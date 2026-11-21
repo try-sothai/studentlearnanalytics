@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -120,7 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -148,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IT-4A • Information Technology" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enrolled_students_35_semester_1_2026_statu" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
                 </LinearLayout>
@@ -166,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CS-3A • Computer Science" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/enrolled_students_40_semester_1_2026_statu" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="4dp"/>
                 </LinearLayout>

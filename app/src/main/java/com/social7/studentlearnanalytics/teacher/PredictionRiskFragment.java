@@ -1,9 +1,6 @@
 package com.social7.studentlearnanalytics.teacher;
 
-
-import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,47 +28,49 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import com.social7.studentlearnanalytics.model.Student;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.teacher.student.AtRiskStudentAdapter;
 import com.social7.studentlearnanalytics.teacher.student.StudentDetailActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PredictionRiskFragment extends Fragment {
 
-    // Sub-Tab Buttons
     private TextView tabPredOverview, tabPredAtRisk, tabPredExamPrediction, tabPredRiskAnalysis;
-
-    // Containers
     private View secPredOverviewContainer, secPredAtRiskContainer, secPredExamPredictionContainer, secPredRiskAnalysisContainer;
 
-    // Sub-Tab 0: Overview
     private BarChart chartOverviewScoreDist;
     private PieChart chartOverviewRiskPie;
 
-    // Sub-Tab 1: At-Risk Students
     private AtRiskStudentAdapter atRiskAdapter;
     private RecyclerView rvAtRiskStudents;
     private EditText edtSearchAtRisk;
     private String selectedCategory = "All";
     private String searchQuery = "";
+    private final List<AtRiskStudentAdapter.AtRiskStudent> atRiskList = new ArrayList<>();
 
-    // Sub-Tab 2: Exam Score Prediction
     private RecyclerView rvExamPredictionsList;
     private ExamPredictionAdapter examPredictionAdapter;
     private final List<ExamPredictionAdapter.ExamPredictionItem> examPredictionList = new ArrayList<>();
 
-    // Sub-Tab 3: Risk Analysis
     private RecyclerView rvCourseRiskAnalysis;
     private RiskAnalysisAdapter riskAnalysisAdapter;
     private final List<RiskAnalysisAdapter.RiskAnalysisItem> riskAnalysisList = new ArrayList<>();
 
-    // Selected Sub-Tab Flag (0=Overview, 1=At-Risk, 2=ExamPrediction, 3=RiskAnalysis)
     private int selectedSubTab = 0;
 
     public PredictionRiskFragment() {
@@ -86,26 +85,22 @@ public class PredictionRiskFragment extends Fragment {
     ) {
         View view = inflater.inflate(R.layout.fragment_prediction_risk, container, false);
 
-        // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
                     view, getString(R.string.prediction_risk), "Machine learning academic risk & exam score analytics"
             );
         }
 
-        // Sub-Tab Buttons
         tabPredOverview = view.findViewById(R.id.tabPredOverview);
         tabPredAtRisk = view.findViewById(R.id.tabPredAtRisk);
         tabPredExamPrediction = view.findViewById(R.id.tabPredExamPrediction);
         tabPredRiskAnalysis = view.findViewById(R.id.tabPredRiskAnalysis);
 
-        // Containers
         secPredOverviewContainer = view.findViewById(R.id.secPredOverviewContainer);
         secPredAtRiskContainer = view.findViewById(R.id.secPredAtRiskContainer);
         secPredExamPredictionContainer = view.findViewById(R.id.secPredExamPredictionContainer);
         secPredRiskAnalysisContainer = view.findViewById(R.id.secPredRiskAnalysisContainer);
 
-        // Bind Sub-views
         bindOverviewViews(view);
         bindAtRiskViews(view);
         bindExamPredictionViews(view);
@@ -113,6 +108,7 @@ public class PredictionRiskFragment extends Fragment {
 
         setupSubTabListeners();
         selectSubTab(selectedSubTab);
+        fetchRiskAndPredictions();
 
         return view;
     }
@@ -132,16 +128,6 @@ public class PredictionRiskFragment extends Fragment {
         if (secPredAtRiskContainer != null) secPredAtRiskContainer.setVisibility(subIndex == 1 ? View.VISIBLE : View.GONE);
         if (secPredExamPredictionContainer != null) secPredExamPredictionContainer.setVisibility(subIndex == 2 ? View.VISIBLE : View.GONE);
         if (secPredRiskAnalysisContainer != null) secPredRiskAnalysisContainer.setVisibility(subIndex == 3 ? View.VISIBLE : View.GONE);
-
-        if (subIndex == 0) {
-            setupOverviewCharts();
-        } else if (subIndex == 1) {
-            setupAtRiskStudentsList();
-        } else if (subIndex == 2) {
-            setupExamPredictionList();
-        } else if (subIndex == 3) {
-            setupRiskAnalysisList();
-        }
     }
 
     private void updateSubTabButtonStyles(int activeIndex) {
@@ -161,76 +147,136 @@ public class PredictionRiskFragment extends Fragment {
         }
     }
 
-    // ==========================================
-    // 0. OVERVIEW SUB-TAB
-    // ==========================================
+    private void fetchRiskAndPredictions() {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherRiskPredictions().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                    JsonObject data = response.body().getAsJsonObject("data");
+                    bindOverviewFromApi(data);
+                    bindAtRiskFromApi(data.has("at_risk_students") && data.get("at_risk_students").isJsonArray()
+                            ? data.getAsJsonArray("at_risk_students") : null);
+                    bindPredictionsFromApi(data.has("predictions") && data.get("predictions").isJsonArray()
+                            ? data.getAsJsonArray("predictions") : null);
+                    bindCourseRisksFromApi(data.has("course_risks") && data.get("course_risks").isJsonArray()
+                            ? data.getAsJsonArray("course_risks") : null);
+                } else {
+                    Toast.makeText(getContext(), "Unable to load risk & prediction data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading risk & predictions", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void bindOverviewViews(View root) {
         chartOverviewScoreDist = root.findViewById(R.id.chartOverviewScoreDist);
         chartOverviewRiskPie = root.findViewById(R.id.chartOverviewRiskPie);
+        if (chartOverviewScoreDist != null) chartOverviewScoreDist.setNoDataText("Loading score distribution...");
+        if (chartOverviewRiskPie != null) chartOverviewRiskPie.setNoDataText("Loading risk distribution...");
     }
 
-    private void setupOverviewCharts() {
-        if (chartOverviewScoreDist != null && chartOverviewScoreDist.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 185f)); // 90-100
-            entries.add(new BarEntry(1, 320f)); // 80-89
-            entries.add(new BarEntry(2, 210f)); // 70-79
-            entries.add(new BarEntry(3, 85f));  // 60-69
-            entries.add(new BarEntry(4, 40f));  // <60
+    private void bindOverviewFromApi(JsonObject data) {
+        if (chartOverviewScoreDist != null) {
+            JsonObject sb = data.has("score_buckets") && data.get("score_buckets").isJsonObject()
+                    ? data.getAsJsonObject("score_buckets") : null;
+            if (sb != null) {
+                List<BarEntry> entries = new ArrayList<>();
+                entries.add(new BarEntry(0, getInt(sb, "90-100")));
+                entries.add(new BarEntry(1, getInt(sb, "80-89")));
+                entries.add(new BarEntry(2, getInt(sb, "70-79")));
+                entries.add(new BarEntry(3, getInt(sb, "60-69")));
+                entries.add(new BarEntry(4, getInt(sb, "<60")));
 
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.predicted_scores));
-            dataSet.setColors(new int[]{
-                    Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
-            });
-            dataSet.setDrawValues(false);
+                BarDataSet dataSet = new BarDataSet(entries, getString(R.string.predicted_scores));
+                dataSet.setColors(new int[]{
+                        Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
+                });
+                dataSet.setDrawValues(false);
 
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartOverviewScoreDist.setData(barData);
+                BarData barData = new BarData(dataSet);
+                barData.setBarWidth(0.5f);
+                chartOverviewScoreDist.setData(barData);
 
-            XAxis xAxis = chartOverviewScoreDist.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"90-100", "80-89", "70-79", "60-69", "<60"}));
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setGranularity(1f);
-            xAxis.setDrawGridLines(false);
+                XAxis xAxis = chartOverviewScoreDist.getXAxis();
+                xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"90-100", "80-89", "70-79", "60-69", "<60"}));
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setGranularity(1f);
+                xAxis.setDrawGridLines(false);
 
-            chartOverviewScoreDist.getAxisRight().setEnabled(false);
-            chartOverviewScoreDist.getDescription().setEnabled(false);
-            ChartFontHelper.applyKhmerFont(chartOverviewScoreDist.getContext(), chartOverviewScoreDist);
-            chartOverviewScoreDist.invalidate();
+                chartOverviewScoreDist.getAxisRight().setEnabled(false);
+                chartOverviewScoreDist.getDescription().setEnabled(false);
+                ChartFontHelper.applyKhmerFont(chartOverviewScoreDist.getContext(), chartOverviewScoreDist);
+                chartOverviewScoreDist.invalidate();
+            } else {
+                chartOverviewScoreDist.clear();
+                chartOverviewScoreDist.setNoDataText("No score distribution available");
+                chartOverviewScoreDist.invalidate();
+            }
         }
 
-        if (chartOverviewRiskPie != null && chartOverviewRiskPie.getData() == null) {
-            List<PieEntry> entries = new ArrayList<>();
-            entries.add(new PieEntry(85f, "Low Risk"));
-            entries.add(new PieEntry(10f, "Medium Risk"));
-            entries.add(new PieEntry(5f, "High Risk"));
+        if (chartOverviewRiskPie != null) {
+            JsonObject rd = data.has("risk_distribution") && data.get("risk_distribution").isJsonObject()
+                    ? data.getAsJsonObject("risk_distribution") : null;
+            int low = getInt(rd, "low");
+            int med = getInt(rd, "medium");
+            int high = getInt(rd, "high");
+            int tot = low + med + high;
 
-            PieDataSet dataSet = new PieDataSet(entries, "");
-            dataSet.setColors(new int[]{
-                    Color.parseColor("#10B981"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
-            });
-            dataSet.setSliceSpace(2f);
+            if (tot > 0) {
+                List<PieEntry> entries = new ArrayList<>();
+                List<Integer> colors = new ArrayList<>();
+                if (low > 0) {
+                    entries.add(new PieEntry(low, "Low Risk"));
+                    colors.add(Color.parseColor("#10B981"));
+                }
+                if (med > 0) {
+                    entries.add(new PieEntry(med, "Medium Risk"));
+                    colors.add(Color.parseColor("#F59E0B"));
+                }
+                if (high > 0) {
+                    entries.add(new PieEntry(high, "High Risk"));
+                    colors.add(Color.parseColor("#EF4444"));
+                }
 
-            PieData pieData = new PieData(dataSet);
-            pieData.setDrawValues(false);
+                PieDataSet dataSet = new PieDataSet(entries, "");
+                dataSet.setColors(colors);
+                dataSet.setSliceSpace(2f);
 
-            chartOverviewRiskPie.setData(pieData);
-            chartOverviewRiskPie.setHoleRadius(50f);
-            chartOverviewRiskPie.setCenterText("840\nStudents");
-            chartOverviewRiskPie.setCenterTextSize(14f);
-            chartOverviewRiskPie.getDescription().setEnabled(false);
-            ChartFontHelper.applyKhmerFont(chartOverviewRiskPie.getContext(), chartOverviewRiskPie);
-            chartOverviewRiskPie.invalidate();
+                PieData pieData = new PieData(dataSet);
+                pieData.setDrawValues(false);
+
+                chartOverviewRiskPie.setData(pieData);
+                chartOverviewRiskPie.setHoleRadius(50f);
+                chartOverviewRiskPie.setCenterText(tot + "\nStudents");
+                chartOverviewRiskPie.setCenterTextSize(14f);
+                chartOverviewRiskPie.getDescription().setEnabled(false);
+                ChartFontHelper.applyKhmerFont(chartOverviewRiskPie.getContext(), chartOverviewRiskPie);
+                chartOverviewRiskPie.invalidate();
+            } else {
+                chartOverviewRiskPie.clear();
+                chartOverviewRiskPie.setNoDataText("No risk assessment records available");
+                chartOverviewRiskPie.invalidate();
+            }
         }
     }
 
-    // ==========================================
-    // 1. AT-RISK STUDENTS SUB-TAB
-    // ==========================================
     private void bindAtRiskViews(View root) {
         rvAtRiskStudents = root.findViewById(R.id.rvAtRiskStudents);
         edtSearchAtRisk = root.findViewById(R.id.edtSearchAtRisk);
+
+        if (rvAtRiskStudents != null && getContext() != null) {
+            rvAtRiskStudents.setLayoutManager(new LinearLayoutManager(requireContext()));
+            atRiskAdapter = new AtRiskStudentAdapter(requireContext(), atRiskList, this::showStudentRiskProfileDetailDialog);
+            rvAtRiskStudents.setAdapter(atRiskAdapter);
+        }
 
         if (edtSearchAtRisk != null) {
             edtSearchAtRisk.addTextChangedListener(new TextWatcher() {
@@ -251,15 +297,33 @@ public class PredictionRiskFragment extends Fragment {
         }
     }
 
-    private void setupAtRiskStudentsList() {
-        if (rvAtRiskStudents == null || atRiskAdapter != null) return;
-
-        rvAtRiskStudents.setLayoutManager(new LinearLayoutManager(requireContext()));
-        List<AtRiskStudentAdapter.AtRiskStudent> list = getSampleAtRiskStudents();
-        atRiskAdapter = new AtRiskStudentAdapter(requireContext(), list, student -> {
-            showStudentRiskProfileDetailDialog(student);
-        });
-        rvAtRiskStudents.setAdapter(atRiskAdapter);
+    private void bindAtRiskFromApi(JsonArray arr) {
+        atRiskList.clear();
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject o = el.getAsJsonObject();
+                String code = getStr(o, "student_code", "STU");
+                String name = getStr(o, "name", "Student");
+                String cCode = getStr(o, "course_code", "Course");
+                String cls = getStr(o, "class_name", "Section");
+                String riskLvl = getStr(o, "risk_level", "Medium Risk");
+                String scoreStr = String.format(Locale.US, "%.0f%%", getDouble(o, "risk_score"));
+                String factors = getStr(o, "risk_factors", "Academic & Attendance Risk");
+                atRiskList.add(new AtRiskStudentAdapter.AtRiskStudent(
+                        code, name, cCode, cls, riskLvl,
+                        "-", scoreStr, "-",
+                        "• " + factors, "", "",
+                        "#FFE4E6", "#FF4055",
+                        Collections.singletonList("At Risk")
+                ));
+            }
+        }
+        if (rvAtRiskStudents != null && getContext() != null) {
+            atRiskAdapter = new AtRiskStudentAdapter(requireContext(), atRiskList, this::showStudentRiskProfileDetailDialog);
+            rvAtRiskStudents.setAdapter(atRiskAdapter);
+            atRiskAdapter.filter(searchQuery, selectedCategory);
+        }
     }
 
     private void showStudentRiskProfileDetailDialog(AtRiskStudentAdapter.AtRiskStudent student) {
@@ -267,148 +331,130 @@ public class PredictionRiskFragment extends Fragment {
 
         String details = "Student Name: " + student.name + "\n" +
                 "Student ID: " + student.id + "\n" +
-                "Major / Program: " + student.program + " (" + student.year + ")\n\n" +
-                "• Academic GPA: " + student.gpa + " / 4.0\n" +
-                "• Class Absence Rate: " + student.absence + "\n" +
-                "• Assignment Average: " + student.avgScore + "\n" +
-                "• Risk Assessment Level: " + student.riskBadge + "\n\n" +
+                "Course / Cohort: " + student.program + " (" + student.year + ")\n" +
+                "Risk Level: " + student.riskBadge + "\n" +
+                "Risk Score: " + student.avgScore + "\n\n" +
                 "Identified Risk Factors:\n" +
-                student.reason1 + "\n" +
-                student.reason2 + "\n" +
-                student.reason3 + "\n\n" +
-                "Recommended Actions:\n" +
-                "1. Schedule 1-on-1 Academic Tutoring Session\n" +
-                "2. Send Attendance Advisory Warning to Student\n" +
-                "3. Assign Remedial Practice Exercises in CS101";
+                student.reason1;
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Student Risk Profile & Diagnosis")
                 .setMessage(details)
-                .setPositiveButton("View Full Dossier", (dialog, which) -> {
-                    Student s = new Student(
-                            student.id, student.name, student.name.toLowerCase() + "@univ.edu",
-                            "Computer Science", student.program, student.year,
-                            Double.parseDouble(student.gpa), student.riskBadge, 58.0,
-                            student.avatarBgColor, student.avatarTextColor, "CS101"
-                    );
-                    Intent intent = new Intent(requireContext(), StudentDetailActivity.class);
-                    intent.putExtra("student", s);
-                    startActivity(intent);
-                })
                 .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    // ==========================================
-    // 2. EXAM PREDICTION SUB-TAB
-    // ==========================================
     private void bindExamPredictionViews(View root) {
         rvExamPredictionsList = root.findViewById(R.id.rvExamPredictionsList);
+        if (rvExamPredictionsList != null && getContext() != null) {
+            examPredictionAdapter = new ExamPredictionAdapter(requireContext(), examPredictionList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.exam_score_prediction_breakdown)
+                        .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
+                                "Student Name: " + item.studentName + "\n" +
+                                "Course & Class: " + item.courseClass + "\n\n" +
+                                "Prediction Details:\n" +
+                                item.metrics + "\n" +
+                                "Predicted Score: " + item.gradeBadge)
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvExamPredictionsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvExamPredictionsList.setAdapter(examPredictionAdapter);
+        }
     }
 
-    private void setupExamPredictionList() {
-        if (rvExamPredictionsList == null || examPredictionAdapter != null) return;
-
+    private void bindPredictionsFromApi(JsonArray arr) {
         examPredictionList.clear();
-        examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem("STU23001", "Sophea", "CS101 - Intro to CS • BSIT 4-A", "Current Avg: 88.5% • Predicted Exam: 92.0% • 94.5% Confidence", "Grade: A (92%)"));
-        examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem("STU23002", "Dara", "IT402 - Web Systems • BSIT 4-B", "Current Avg: 58.0% • Predicted Exam: 54.0% • 91.0% Confidence", "Grade: F (54%)"));
-        examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem("STU23003", "Rathana", "CS204 - Algorithms • BSCS 3-A", "Current Avg: 62.0% • Predicted Exam: 65.0% • 89.5% Confidence", "Grade: D (65%)"));
-        examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem("STU23004", "Sokha", "CS101 - Intro to CS • BSCS 3-B", "Current Avg: 82.0% • Predicted Exam: 84.5% • 93.0% Confidence", "Grade: B+ (85%)"));
-        examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem("STU23005", "Sreyneang", "IS201 - Enterprise Arch • BSIS 2-A", "Current Avg: 60.0% • Predicted Exam: 58.5% • 90.0% Confidence", "Grade: F (58%)"));
-
-        examPredictionAdapter = new ExamPredictionAdapter(requireContext(), examPredictionList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.exam_score_prediction_breakdown)
-                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
-                            "Student Name: " + item.studentName + "\n" +
-                            "Course & Class: " + item.courseClass + "\n\n" +
-                            "ML Model Prediction Details:\n" +
-                            item.metrics + "\n" +
-                            "Expected Final Grade: " + item.gradeBadge)
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvExamPredictionsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvExamPredictionsList.setAdapter(examPredictionAdapter);
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject o = el.getAsJsonObject();
+                String code = getStr(o, "student_code", "STU");
+                String name = getStr(o, "student_name", "Student");
+                String cCode = getStr(o, "course_code", "COURSE");
+                double pred = getDouble(o, "predicted_score");
+                int conf = getInt(o, "confidence");
+                String metrics = String.format(Locale.US, "Predicted Exam: %.1f%% • %d%% Confidence", pred, conf);
+                String badge = String.format(Locale.US, "Pred: %.0f%%", pred);
+                examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem(code, name, cCode, metrics, badge));
+            }
+        }
+        if (examPredictionAdapter != null) {
+            examPredictionAdapter.notifyDataSetChanged();
+        }
     }
 
-    // ==========================================
-    // 3. RISK ANALYSIS SUB-TAB
-    // ==========================================
     private void bindRiskAnalysisViews(View root) {
         rvCourseRiskAnalysis = root.findViewById(R.id.rvCourseRiskAnalysis);
+        if (rvCourseRiskAnalysis != null && getContext() != null) {
+            riskAnalysisAdapter = new RiskAnalysisAdapter(requireContext(), riskAnalysisList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.course_risk_analysis_summary)
+                        .setMessage(getString(R.string.course_code) + item.courseCode + "\n" +
+                                "Course Name: " + item.courseName + "\n" +
+                                item.departmentCohort + "\n\n" +
+                                item.primaryRiskReason + "\n\n" +
+                                "At-Risk Count: " + item.riskBadge)
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvCourseRiskAnalysis.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvCourseRiskAnalysis.setAdapter(riskAnalysisAdapter);
+        }
     }
 
-    private void setupRiskAnalysisList() {
-        if (rvCourseRiskAnalysis == null || riskAnalysisAdapter != null) return;
-
+    private void bindCourseRisksFromApi(JsonArray arr) {
         riskAnalysisList.clear();
-        riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem("CS101", "Data Structures & Algorithms", "College of Computer Studies • 35 Enrolled", "Primary Risk Factor: Low Attendance (<75%) and Missed Quizzes", "High Risk (5)"));
-        riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem("IT402", "Web Development Systems", "College of Computer Studies • 32 Enrolled", "Primary Risk Factor: Low Assignment Submission Rate", "Medium Risk (3)"));
-        riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem("CS204", "Software Engineering Architecture", "College of Computer Studies • 40 Enrolled", "Primary Risk Factor: Low Midterm Exam Scores", "Low Risk (2)"));
-        riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem("IS201", "Enterprise Systems Architecture", "College of Computer Studies • 28 Enrolled", "Primary Risk Factor: Irregular Attendance", "Medium Risk (3)"));
-
-        riskAnalysisAdapter = new RiskAnalysisAdapter(requireContext(), riskAnalysisList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.course_risk_analysis_summary)
-                    .setMessage(getString(R.string.course_code) + item.courseCode + "\n" +
-                            "Course Name: " + item.courseName + "\n" +
-                            "Department Cohort: " + item.departmentCohort + "\n\n" +
-                            "Root Cause Risk Diagnosis:\n" +
-                            item.primaryRiskReason + "\n\n" +
-                            "Current Risk Level: " + item.riskBadge)
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvCourseRiskAnalysis.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvCourseRiskAnalysis.setAdapter(riskAnalysisAdapter);
+        if (arr != null) {
+            for (JsonElement el : arr) {
+                if (!el.isJsonObject()) continue;
+                JsonObject o = el.getAsJsonObject();
+                String code = getStr(o, "course_code", "COURSE");
+                String name = getStr(o, "course_name", "Course");
+                int high = getInt(o, "high_risk_count");
+                int med = getInt(o, "medium_risk_count");
+                int tot = getInt(o, "at_risk_total");
+                double avg = getDouble(o, "average_score");
+                riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem(
+                        code,
+                        name,
+                        String.format(Locale.US, "Average Score: %.1f%%", avg),
+                        "High Risk: " + high + " • Medium Risk: " + med,
+                        "At Risk (" + tot + ")"
+                ));
+            }
+        }
+        if (riskAnalysisAdapter != null) {
+            riskAnalysisAdapter.notifyDataSetChanged();
+        }
     }
 
-    private List<AtRiskStudentAdapter.AtRiskStudent> getSampleAtRiskStudents() {
-        List<AtRiskStudentAdapter.AtRiskStudent> list = new ArrayList<>();
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
 
-        list.add(new AtRiskStudentAdapter.AtRiskStudent(
-                "STU023002", "Dara", "Data Science", "2nd Year", "High Risk",
-                "2.10", "58%", "12%",
-                "• Low GPA (< 2.20)", "• Low assignment scores", "• High absence rate (> 15%)",
-                "#FFE4E6", "#FF4055",
-                Arrays.asList("Low GPA", "Low Scores", "High Absence", "Multiple Issues")
-        ));
+    private int getInt(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return 0;
+        try {
+            return obj.get(key).getAsInt();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 
-        list.add(new AtRiskStudentAdapter.AtRiskStudent(
-                "STU023003", "Rathana", "Web Development", "3rd Year", "High Risk",
-                "2.75", "62%", "10%",
-                "• Low assignment scores", "• Irregular class attendance", "• Declining performance",
-                "#FEF3C7", "#D97706",
-                Arrays.asList("Low Scores", "High Absence")
-        ));
-
-        list.add(new AtRiskStudentAdapter.AtRiskStudent(
-                "STU023005", "Sreyneang", "Artificial Intelligence", "3rd Year", "High Risk",
-                "2.30", "60%", "14%",
-                "• Low GPA (< 2.40)", "• High absence rate (> 15%)", "• Missed quiz submissions",
-                "#FFE4E6", "#FF4055",
-                Arrays.asList("Low GPA", "Low Scores", "High Absence")
-        ));
-
-        list.add(new AtRiskStudentAdapter.AtRiskStudent(
-                "STU023006", "Chenda", "Data Structures", "2nd Year", "At Risk",
-                "2.10", "65%", "8%",
-                "• Low GPA (< 2.20)", "• Low quiz scores", "• Needs additional academic support",
-                "#F3E8FF", "#7C3AED",
-                Arrays.asList("Low GPA", "Low Scores")
-        ));
-
-        list.add(new AtRiskStudentAdapter.AtRiskStudent(
-                "STU023007", "Kimsan", "Database Systems", "3rd Year", "At Risk",
-                "2.95", "68%", "9%",
-                "• Low assignment scores", "• Irregular attendance", "• Needs study guidance",
-                "#FFEDD5", "#D97706",
-                Arrays.asList("Low GPA", "Low Scores")
-        ));
-
-        return list;
+    private double getDouble(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return 0.0;
+        try {
+            return obj.get(key).getAsDouble();
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 }

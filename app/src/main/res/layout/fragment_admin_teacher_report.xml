@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <!-- Secondary Navigation Bar for Teacher Reports -->
     <com.google.android.material.card.MaterialCardView
@@ -89,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Academic Filters Row -->
                 <LinearLayout
@@ -129,7 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -153,22 +152,22 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_faculty" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatTotalTeachers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="56" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatTotalTeachers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/active_staff" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatActiveTeachers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="48" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatActiveTeachers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/courses_assigned" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatAssignedCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="36" android:textColor="@color/admin_text_primary" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatAssignedCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_text_primary" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pending_reviews" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatPendingReviews" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="3" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatPendingReviews" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
                         </GridLayout>
 
@@ -190,7 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -213,7 +212,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginBottom="8dp"
                     android:text="Faculty Overview Directory"
                     android:textColor="@color/admin_text_primary"
@@ -235,9 +234,17 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSearchTeacherReport"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="wrap_content"
                         android:hint="@string/search_faculty_by_name_department"
-                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp" />
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp" 
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/teacher_secondary_text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -262,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -277,7 +284,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Teaching Workload Metrics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -318,7 +325,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/workload_hours_by_department" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
 
@@ -331,7 +338,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Workload Directory -->
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Faculty Teaching Load List" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Faculty Teaching Load List" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTeacherWorkloadList"
@@ -354,7 +361,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -369,7 +376,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course &amp; Class Staffing Summary" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -395,7 +402,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Teacher Assignment Matrix" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Teacher Assignment Matrix" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTeacherAssignmentsList"
@@ -418,7 +425,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -433,7 +440,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/faculty_performance_metrics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -474,7 +481,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Faculty Performance Scores by Dept" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
 
@@ -487,7 +494,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Performance Roster List -->
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Faculty Evaluation Scores Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Faculty Evaluation Scores Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTeacherPerformanceList"
@@ -507,7 +514,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnExportTeacherReport"

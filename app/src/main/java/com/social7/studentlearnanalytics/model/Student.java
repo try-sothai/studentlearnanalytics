@@ -116,7 +116,7 @@ public class Student implements Serializable {
         return "Student";
     }
     public String getKhmerName() { return khmerName != null ? khmerName : ""; }
-    public String getEnglishName() { return englishName != null && !englishName.isEmpty() ? englishName : (name != null ? name : ""); }
+    public String getEnglishName() { return englishName != null ? englishName : ""; }
     public String getEmail() { return email != null ? email : ""; }
     public String getPhone() { return phone != null && !phone.isEmpty() ? phone : "N/A"; }
     public String getDob() { return dob != null && !dob.isEmpty() ? dob : "N/A"; }

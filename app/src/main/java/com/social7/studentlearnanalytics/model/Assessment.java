@@ -12,6 +12,19 @@ public class Assessment {
     private boolean isSubmitted;
     private boolean isGraded;
 
+    // Extended real-API fields (nullable/defaults for backward compatibility)
+    private String courseCode;
+    private String className;
+    private String academicYearName;
+    private String statusLabel;
+    private String rawStatus;
+    private String actionLabel;
+    private int durationMinutes;
+    private int questionsCount;
+    private String instructions;
+    private boolean isOverdue;
+    private boolean inProgress;
+
     public Assessment(String id, String title, String date, int score, int totalScore, String type) {
         this(id, title, date, score, totalScore, type, null, null, true, true);
     }
@@ -41,13 +54,52 @@ public class Assessment {
     public boolean isSubmitted() { return isSubmitted; }
     public boolean isGraded() { return isGraded; }
 
+    public String getCourseCode() { return courseCode; }
+    public void setCourseCode(String courseCode) { this.courseCode = courseCode; }
+
+    public String getClassName() { return className; }
+    public void setClassName(String className) { this.className = className; }
+
+    public String getAcademicYearName() { return academicYearName; }
+    public void setAcademicYearName(String academicYearName) { this.academicYearName = academicYearName; }
+
+    public String getStatusLabel() { return statusLabel; }
+    public void setStatusLabel(String statusLabel) { this.statusLabel = statusLabel; }
+
+    public String getRawStatus() { return rawStatus; }
+    public void setRawStatus(String rawStatus) { this.rawStatus = rawStatus; }
+
+    public String getActionLabel() { return actionLabel; }
+    public void setActionLabel(String actionLabel) { this.actionLabel = actionLabel; }
+
+    public int getDurationMinutes() { return durationMinutes; }
+    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
+
+    public int getQuestionsCount() { return questionsCount; }
+    public void setQuestionsCount(int questionsCount) { this.questionsCount = questionsCount; }
+
+    public String getInstructions() { return instructions; }
+    public void setInstructions(String instructions) { this.instructions = instructions; }
+
+    public boolean isOverdue() { return isOverdue; }
+    public void setOverdue(boolean overdue) { isOverdue = overdue; }
+
+    public boolean isInProgress() { return inProgress; }
+    public void setInProgress(boolean inProgress) { this.inProgress = inProgress; }
+
     public String getFormattedScore() {
         if (isGraded) {
             return score + " / " + totalScore;
+        } else if (statusLabel != null && !statusLabel.isEmpty()) {
+            return statusLabel;
+        } else if (inProgress) {
+            return "In Progress";
         } else if (isSubmitted) {
             return "Submitted";
+        } else if (isOverdue) {
+            return "Overdue";
         } else {
-            return "Not Submitted";
+            return "Available";
         }
     }
 }

@@ -22,14 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- Teacher Summary Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <FrameLayout
                         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                             android:gravity="center"
                             android:text="C"
                             android:textColor="@color/admin_primary_blue"
-                            android:textSize="22sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -81,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr. Chan"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -112,9 +112,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -123,20 +123,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/personal_information"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <!-- Full Name -->
@@ -170,14 +170,14 @@
                             android:inputType="textPersonName"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Email Address -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/email_address"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -205,14 +205,14 @@
                             android:inputType="textEmailAddress"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Phone Number -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/phone_number"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -239,14 +239,14 @@
                             android:inputType="phone"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Gender Radio Group -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/gender_019ec3"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -266,7 +266,7 @@
                             android:checked="true"
                             android:text="@string/gender_male"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
 
                         <RadioButton
                             android:id="@+id/rbTeacherFemale"
@@ -275,14 +275,14 @@
                             android:layout_marginStart="24dp"
                             android:text="@string/gender_female"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
                     </RadioGroup>
 
                     <!-- Date of Birth -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/date_of_birth"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -309,7 +309,7 @@
                             android:inputType="date"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -319,9 +319,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -330,20 +330,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Faculty Information (Read-Only)"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <!-- Teacher ID -->
@@ -372,14 +372,14 @@
                             android:enabled="false"
                             android:text="TCH-001"
                             android:textColor="@color/admin_text_secondary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Department -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/department"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -402,14 +402,14 @@
                             android:enabled="false"
                             android:text="College of Computer Studies"
                             android:textColor="@color/admin_text_secondary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Academic Qualifications -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/academic_qualifications"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
@@ -432,7 +432,7 @@
                             android:enabled="false"
                             android:text="M.Sc. Computer Science"
                             android:textColor="@color/admin_text_secondary"
-                            android:textSize="14sp" />
+                            android:textSize="12.5sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -442,9 +442,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -453,20 +453,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/security_password"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <LinearLayout
@@ -486,7 +486,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/last_active_session"
                                 android:textColor="@color/admin_text_primary"
-                                android:textSize="13sp"
+                                android:textSize="12sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -525,7 +525,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnTeacherCancelProfile"
@@ -537,7 +537,7 @@
             android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/admin_text_secondary"
-            android:textSize="14sp"
+            android:textSize="12.5sp"
             android:textStyle="bold"
             app:cornerRadius="10dp"
             app:strokeColor="@color/admin_border"
@@ -553,7 +553,7 @@
             android:text="@string/save_changes"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12.5sp"
             android:textStyle="bold"
             app:cornerRadius="10dp" />
     </LinearLayout>

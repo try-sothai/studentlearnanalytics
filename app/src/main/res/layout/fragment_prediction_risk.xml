@@ -18,8 +18,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
         app:cardBackgroundColor="#EAF0FF"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp">
@@ -94,14 +94,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Summary Metrics Grid (2x2) -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -110,20 +110,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/prediction_summary_overview"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginVertical="10dp"
+                            android:layout_marginVertical="6dp"
                             android:background="@color/admin_border" />
 
                         <GridLayout
@@ -132,24 +132,24 @@
                             android:columnCount="2"
                             android:rowCount="2">
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/students_predicted" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_840_students" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_840_students" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Avg Predicted Score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.4%" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.4%" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="At-Risk Cohorts" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/model_accuracy" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.2% ML" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.2% ML" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -159,9 +159,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -170,21 +170,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Predicted Score Distribution Bar Chart"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/chartOverviewScoreDist"
                             android:layout_width="match_parent"
                             android:layout_height="200dp"
-                            android:layout_marginTop="12dp" />
+                            android:layout_marginTop="8dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -192,9 +192,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -203,21 +203,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/student_risk_level_distribution"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/chartOverviewRiskPie"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
-                            android:layout_marginTop="12dp" />
+                            android:layout_marginTop="8dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -236,18 +236,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="16dp"
+                android:paddingHorizontal="12dp"
                 android:paddingTop="4dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="10dp">
 
                 <!-- Risk Summary Panel Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/teacher_card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/teacher_border"
                     app:strokeWidth="1dp">
 
@@ -299,7 +299,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="5"
                                         android:textColor="@color/status_at_risk_text"
-                                        android:textSize="22sp"
+                                        android:textSize="14.5sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -323,22 +323,22 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/low_gpa_2_50" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
-                                <TextView android:id="@+id/tvCountLowGpa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCountLowGpa" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="4" android:textColor="@color/teacher_dark_navy" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/low_assignment_scores" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
-                                <TextView android:id="@+id/tvCountLowScores" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCountLowScores" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textColor="@color/teacher_dark_navy" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Absence (&gt; 15%)" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
-                                <TextView android:id="@+id/tvCountHighAbsence" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCountHighAbsence" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:textColor="@color/teacher_dark_navy" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Multiple Issues" android:textColor="@color/teacher_secondary_text" android:textSize="11sp"/>
-                                <TextView android:id="@+id/tvCountMultipleIssues" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1" android:textColor="@color/teacher_dark_navy" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCountMultipleIssues" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1" android:textColor="@color/teacher_dark_navy" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -349,7 +349,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="8dp"
                     app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
@@ -360,9 +360,17 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtSearchAtRisk"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="wrap_content"
                         android:hint="@string/search_at_risk_student_name_id"
-                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- At-Risk Student List -->
@@ -387,13 +395,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -402,34 +410,34 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/exam_score_prediction_metrics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/exam_score_prediction_metrics" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold"/>
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="6dp" android:background="@color/admin_border"/>
 
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/academic_average" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84.2%" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84.2%" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/predicted_exam" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.8%" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="82.8%" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Expected Grade" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Grade: B+" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Grade: B+" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/confidence" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="91.5% ML" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="91.5% ML" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Student Exam Predictions List -->
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Student Exam Predictions Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Student Exam Predictions Roster" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginTop="10dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExamPredictionsList"
@@ -452,13 +460,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -467,34 +475,34 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Factor Analysis Summary" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
-                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Factor Analysis Summary" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold"/>
+                        <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="6dp" android:background="@color/admin_border"/>
 
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Primary Risk Factor" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absence &gt; 15%" android:textColor="@color/admin_inactive_red" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absence &gt; 15%" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/high_risk_count" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_3_students" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_3_students" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/course_risk_index" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_12_4_avg" android:textColor="@color/warning_orange" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_12_4_avg" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Improvement" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-2.1% Improved" android:textColor="@color/admin_active_green" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-2.1% Improved" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Course Risk Analysis List -->
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Risk Factor Breakdown" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Risk Factor Breakdown" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginTop="10dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCourseRiskAnalysis"

@@ -5,17 +5,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.auth.ChangePasswordActivity;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.storage.SessionManager;
+
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TeacherProfileOverviewFragment extends Fragment {
 
@@ -71,23 +79,67 @@ public class TeacherProfileOverviewFragment extends Fragment {
     }
 
     private void loadProfileData() {
-        String name = sessionManager != null && sessionManager.getUserName() != null && !sessionManager.getUserName().trim().isEmpty() ? sessionManager.getUserName() : "Mr. Chan";
-        String email = name.toLowerCase().replaceAll("[^a-z]", "") + "@univ.edu";
-        if (email.startsWith("@")) email = "chan@univ.edu";
+        String name = sessionManager != null && sessionManager.getUserName() != null ? sessionManager.getUserName() : "";
+        if (!name.isEmpty()) {
+            if (tvOverviewAvatar != null) tvOverviewAvatar.setText(String.valueOf(name.charAt(0)).toUpperCase(Locale.ROOT));
+            if (tvOverviewFullName != null) tvOverviewFullName.setText(name);
+        }
 
-        String initial = !name.isEmpty() ? String.valueOf(name.charAt(0)).toUpperCase() : "T";
+        if (getContext() == null) return;
+        ApiClient.getApiService(requireContext()).getProfile().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject root = response.body();
+                    JsonObject userObj = root.has("data") && root.get("data").isJsonObject()
+                            ? root.getAsJsonObject("data") : root;
+                    if (userObj.has("user") && userObj.get("user").isJsonObject()) {
+                        userObj = userObj.getAsJsonObject("user");
+                    }
 
-        if (tvOverviewAvatar != null) tvOverviewAvatar.setText(initial);
-        if (tvOverviewFullName != null) tvOverviewFullName.setText(name);
-        if (tvOverviewEmail != null) tvOverviewEmail.setText(email);
-        if (tvOverviewPhone != null) tvOverviewPhone.setText("+855 12 345 678");
-        if (tvOverviewGender != null) tvOverviewGender.setText(R.string.gender_male);
-        if (tvOverviewDob != null) tvOverviewDob.setText("Mar 10, 1990");
+                    String fullName = getStr(userObj, "name", name);
+                    String email = getStr(userObj, "email", "-");
+                    String phone = getStr(userObj, "phone", "-");
 
-        if (tvOverviewTeacherId != null) tvOverviewTeacherId.setText("ID: TCH-001");
-        if (tvOverviewDepartment != null) tvOverviewDepartment.setText("College of Computer Studies");
-        if (tvOverviewQualifications != null) tvOverviewQualifications.setText("M.Sc. Computer Science & Software Engineering");
-        if (tvOverviewPositionDept != null) tvOverviewPositionDept.setText("Senior Lecturer • Computer Science Dept");
+                    JsonObject teacherObj = userObj.has("teacher") && userObj.get("teacher").isJsonObject()
+                            ? userObj.getAsJsonObject("teacher") : null;
+
+                    String tCode = teacherObj != null ? getStr(teacherObj, "teacher_code", "-") : "-";
+                    String gender = teacherObj != null ? getStr(teacherObj, "gender", "-") : "-";
+                    String dob = teacherObj != null ? getStr(teacherObj, "date_of_birth", "-") : "-";
+                    String spec = teacherObj != null ? getStr(teacherObj, "specialization", "-") : "-";
+                    String pos = teacherObj != null ? getStr(teacherObj, "position", "Lecturer") : "Lecturer";
+                    if (teacherObj != null && phone.equals("-")) {
+                        phone = getStr(teacherObj, "phone", "-");
+                    }
+
+                    String dept = "Academic Department";
+                    if (teacherObj != null && teacherObj.has("department") && teacherObj.get("department").isJsonObject()) {
+                        dept = getStr(teacherObj.getAsJsonObject("department"), "name", dept);
+                    }
+
+                    if (!fullName.isEmpty() && tvOverviewAvatar != null) {
+                        tvOverviewAvatar.setText(String.valueOf(fullName.charAt(0)).toUpperCase(Locale.ROOT));
+                    }
+                    if (tvOverviewFullName != null) tvOverviewFullName.setText(fullName);
+                    if (tvOverviewEmail != null) tvOverviewEmail.setText(email);
+                    if (tvOverviewPhone != null) tvOverviewPhone.setText(phone);
+                    if (tvOverviewGender != null) tvOverviewGender.setText(gender);
+                    if (tvOverviewDob != null) tvOverviewDob.setText(dob);
+                    if (tvOverviewTeacherId != null) tvOverviewTeacherId.setText("ID: " + tCode);
+                    if (tvOverviewDepartment != null) tvOverviewDepartment.setText(dept);
+                    if (tvOverviewQualifications != null) tvOverviewQualifications.setText(spec);
+                    if (tvOverviewPositionDept != null) tvOverviewPositionDept.setText(pos + " • " + dept);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading profile", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupListeners(View view) {
@@ -105,13 +157,15 @@ public class TeacherProfileOverviewFragment extends Fragment {
                 startActivity(intent);
             });
         }
+    }
 
-        View cardTeacherAppearance = view.findViewById(R.id.cardTeacherAppearance);
-        if (cardTeacherAppearance != null) {
-            cardTeacherAppearance.setOnClickListener(v -> {
-                Intent intent = new Intent(requireActivity(), com.social7.studentlearnanalytics.admin.AdminAppearanceActivity.class);
-                startActivity(intent);
-            });
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
         }
     }
 }

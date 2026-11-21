@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.storage.SessionManager;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -70,6 +71,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         etProfileEmail = findViewById(R.id.etProfileEmail);
         etProfilePhone = findViewById(R.id.etProfilePhone);
         etProfileDob = findViewById(R.id.etProfileDob);
+        DatePickerHelper.attachDatePicker(null, etProfileDob, true);
 
         etAdminId = findViewById(R.id.etAdminId);
         etAdminDept = findViewById(R.id.etAdminDept);
@@ -202,6 +204,11 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             if (tilProfileEmail != null) tilProfileEmail.setError(null);
         }
 
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (etProfileDob != null) etProfileDob.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        }
+
         if (isValid) {
             String gender = "Male";
             if (rbGenderFemale != null && rbGenderFemale.isChecked()) {
@@ -212,7 +219,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             body.addProperty("name", name);
             body.addProperty("email", email);
             if (!phone.isEmpty()) body.addProperty("phone", phone);
-            if (!dob.isEmpty()) body.addProperty("date_of_birth", dob);
+            body.addProperty("date_of_birth", dob);
             body.addProperty("gender", gender);
 
             if (btnSaveProfileSettings != null) btnSaveProfileSettings.setEnabled(false);

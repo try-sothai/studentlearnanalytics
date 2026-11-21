@@ -1,6 +1,5 @@
 package com.social7.studentlearnanalytics.teacher;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +18,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.adapter.CourseAdapter;
 import com.social7.studentlearnanalytics.model.Course;
-import com.social7.studentlearnanalytics.student.CourseDetailActivity;
+import com.social7.studentlearnanalytics.network.ApiClient;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CourseManagementFragment extends Fragment {
 
@@ -34,11 +42,15 @@ public class CourseManagementFragment extends Fragment {
     private TextView tvSelectedSemester, tvSelectedDepartment, tvSelectedSort;
     private TextView tabActiveCourses, tabArchivedCourses;
 
-    private String selectedSemester = "Semester 1, 2024";
+    private String selectedSemester = "All Semesters";
     private String selectedDepartment = "All Depts";
     private String selectedSort = "Code";
     private String searchQuery = "";
     private boolean isArchivedTab = false;
+
+    private final List<Course> loadedCourses = new ArrayList<>();
+    private final Set<String> availableSemesters = new LinkedHashSet<>();
+    private final Set<String> availableDepartments = new LinkedHashSet<>();
 
     public CourseManagementFragment() {
     }
@@ -73,6 +85,7 @@ public class CourseManagementFragment extends Fragment {
         }
 
         tvSelectedSemester = view.findViewById(R.id.tvSelectedSemester);
+        if (tvSelectedSemester != null) tvSelectedSemester.setText(selectedSemester);
         LinearLayout btnSemesterSelector = view.findViewById(R.id.btnSemesterSelector);
         if (btnSemesterSelector != null) {
             btnSemesterSelector.setOnClickListener(this::showSemesterDropdown);
@@ -110,20 +123,15 @@ public class CourseManagementFragment extends Fragment {
         RecyclerView rvCourses = view.findViewById(R.id.rvCourseManagement);
         if (rvCourses != null) {
             rvCourses.setLayoutManager(new LinearLayoutManager(requireContext()));
-            List<Course> list = getSampleCourses();
-            adapter = new CourseAdapter(requireContext(), list, new CourseAdapter.OnCourseClickListener() {
+            adapter = new CourseAdapter(requireContext(), loadedCourses, new CourseAdapter.OnCourseClickListener() {
                 @Override
                 public void onCourseClick(Course course) {
-                    Intent intent = new Intent(requireContext(), CourseDetailActivity.class);
-                    intent.putExtra("course", course);
-                    startActivity(intent);
+                    showCourseDetailsDialog(course);
                 }
 
                 @Override
                 public void onStudentsClick(Course course) {
-                    if (getActivity() instanceof TeacherMainActivity) {
-                        ((TeacherMainActivity) getActivity()).openFragment(new StudentListFragment());
-                    }
+                    openStudentsForCourse(course);
                 }
 
                 @Override
@@ -133,9 +141,7 @@ public class CourseManagementFragment extends Fragment {
 
                 @Override
                 public void onAnalyticsClick(Course course) {
-                    if (getActivity() instanceof TeacherMainActivity) {
-                        ((TeacherMainActivity) getActivity()).openFragment(new ClassAnalyticsFragment());
-                    }
+                    openAnalyticsForCourse(course);
                 }
 
                 @Override
@@ -144,10 +150,149 @@ public class CourseManagementFragment extends Fragment {
                 }
             });
             rvCourses.setAdapter(adapter);
-            applyFilter();
         }
 
+        fetchAssignedCourses();
+
         return view;
+    }
+
+    private void fetchAssignedCourses() {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherCourseOfferings().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                loadedCourses.clear();
+                availableSemesters.clear();
+                availableDepartments.clear();
+
+                if (response.isSuccessful() && response.body() != null && response.body().has("data") && response.body().get("data").isJsonArray()) {
+                    JsonArray arr = response.body().getAsJsonArray("data");
+                    int[] bgs = new int[]{R.drawable.bg_course_icon_blue, R.drawable.bg_course_icon_purple, R.drawable.bg_course_icon_green, R.drawable.bg_course_icon_orange};
+                    int[] icons = new int[]{R.drawable.ic_book, R.drawable.ic_database_symbol, R.drawable.ic_network_symbol, R.drawable.ic_desktop_symbol};
+
+                    int idx = 0;
+                    for (JsonElement el : arr) {
+                        if (!el.isJsonObject()) continue;
+                        JsonObject off = el.getAsJsonObject();
+
+                        JsonObject courseObj = off.has("course") && off.get("course").isJsonObject()
+                                ? off.getAsJsonObject("course") : null;
+                        JsonObject classObj = off.has("class_room") && off.get("class_room").isJsonObject()
+                                ? off.getAsJsonObject("class_room") : null;
+                        JsonObject semObj = off.has("semester") && off.get("semester").isJsonObject()
+                                ? off.getAsJsonObject("semester") : null;
+
+                        String courseId = courseObj != null && courseObj.has("id") && !courseObj.get("id").isJsonNull()
+                                ? courseObj.get("id").getAsString()
+                                : (off.has("course_id") && !off.get("course_id").isJsonNull() ? off.get("course_id").getAsString() : "0");
+
+                        String code = courseObj != null ? getStr(courseObj, "code", getStr(courseObj, "course_code", "COURSE")) : "COURSE";
+                        String name = courseObj != null ? getStr(courseObj, "name", getStr(courseObj, "course_name", "Course")) : "Course";
+
+                        String deptName = "Academic Department";
+                        if (courseObj != null) {
+                            if (courseObj.has("department") && courseObj.get("department").isJsonObject()) {
+                                deptName = getStr(courseObj.getAsJsonObject("department"), "name", deptName);
+                            } else {
+                                deptName = getStr(courseObj, "department", deptName);
+                            }
+                        }
+
+                        String day = classObj != null ? getStr(classObj, "day_of_week", "") : (courseObj != null ? getStr(courseObj, "day_of_week", "") : "");
+                        String start = classObj != null ? getStr(classObj, "start_time", "") : (courseObj != null ? getStr(courseObj, "start_time", "") : "");
+                        String end = classObj != null ? getStr(classObj, "end_time", "") : (courseObj != null ? getStr(courseObj, "end_time", "") : "");
+                        String schedule = (!day.isEmpty() ? day + " " : "") + (!start.isEmpty() ? start : "Scheduled") + (!end.isEmpty() ? "–" + end : "");
+                        String room = classObj != null ? getStr(classObj, "room", "Room TBA") : (courseObj != null ? getStr(courseObj, "room", "Room TBA") : "Room TBA");
+
+                        int enrolled = off.has("enrollments_count") && !off.get("enrollments_count").isJsonNull()
+                                ? off.get("enrollments_count").getAsInt() : 0;
+
+                        String semName = semObj != null ? getStr(semObj, "name", "Active Semester") : "Active Semester";
+                        availableSemesters.add(semName);
+                        availableDepartments.add(deptName);
+
+                        Course c = new Course(
+                                courseId,
+                                code,
+                                name,
+                                deptName,
+                                schedule.trim(),
+                                room,
+                                enrolled,
+                                0,
+                                0,
+                                bgs[idx % bgs.length],
+                                icons[idx % icons.length],
+                                semName
+                        );
+                        String status = getStr(off, "status", "active");
+                        c.setStatus(("archived".equalsIgnoreCase(status) || "completed".equalsIgnoreCase(status)) ? "Archived" : "Active");
+                        loadedCourses.add(c);
+                        idx++;
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Unable to load assigned courses", Toast.LENGTH_SHORT).show();
+                }
+
+                if (adapter != null) {
+                    adapter.setCourses(loadedCourses);
+                }
+                applyFilter();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading courses", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showCourseDetailsDialog(Course course) {
+        if (getContext() == null || course == null) return;
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(course.getCode() + " — " + course.getName())
+                .setMessage("Department: " + course.getDepartment() + "\n"
+                        + "Semester: " + course.getSemester() + "\n"
+                        + "Schedule: " + course.getSchedule() + "\n"
+                        + "Room: " + course.getRoom() + "\n"
+                        + "Enrolled Students: " + course.getStudentCount())
+                .setPositiveButton("View Students", (d, w) -> openStudentsForCourse(course))
+                .setNeutralButton("Class Analytics", (d, w) -> openAnalyticsForCourse(course))
+                .setNegativeButton(R.string.close, null)
+                .show();
+    }
+
+    private void openStudentsForCourse(Course course) {
+        if (!(getActivity() instanceof TeacherMainActivity)) return;
+        StudentListFragment frag = new StudentListFragment();
+        if (course != null && course.getId() != null) {
+            try {
+                Bundle args = new Bundle();
+                args.putInt("course_id", Integer.parseInt(course.getId()));
+                frag.setArguments(args);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        ((TeacherMainActivity) getActivity()).openFragment(frag);
+    }
+
+    private void openAnalyticsForCourse(Course course) {
+        if (!(getActivity() instanceof TeacherMainActivity)) return;
+        ClassAnalyticsFragment frag = new ClassAnalyticsFragment();
+        if (course != null && course.getId() != null) {
+            try {
+                Bundle args = new Bundle();
+                args.putInt("course_id", Integer.parseInt(course.getId()));
+                args.putString("course_title", course.getCode() + " - " + course.getName());
+                frag.setArguments(args);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        ((TeacherMainActivity) getActivity()).openFragment(frag);
     }
 
     private void selectTab(boolean isArchived) {
@@ -170,15 +315,15 @@ public class CourseManagementFragment extends Fragment {
 
     private void showSemesterDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "Semester 1, 2024");
-        popup.getMenu().add(0, 2, 1, "Semester 2, 2023");
-        popup.getMenu().add(0, 3, 2, "Semester 1, 2023");
+        popup.getMenu().add(0, 0, 0, "All Semesters");
+        int i = 1;
+        for (String sem : availableSemesters) {
+            popup.getMenu().add(0, i, i, sem);
+            i++;
+        }
 
         popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == 1) selectedSemester = "Semester 1, 2024";
-            else if (item.getItemId() == 2) selectedSemester = "Semester 2, 2023";
-            else if (item.getItemId() == 3) selectedSemester = "Semester 1, 2023";
-
+            selectedSemester = item.getTitle().toString();
             if (tvSelectedSemester != null) tvSelectedSemester.setText(selectedSemester);
             applyFilter();
             return true;
@@ -188,17 +333,15 @@ public class CourseManagementFragment extends Fragment {
 
     private void showDepartmentDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "All Departments");
-        popup.getMenu().add(0, 2, 1, "Computer Science");
-        popup.getMenu().add(0, 3, 2, "Data Science");
-        popup.getMenu().add(0, 4, 3, "Software Engineering");
+        popup.getMenu().add(0, 0, 0, "All Depts");
+        int i = 1;
+        for (String dept : availableDepartments) {
+            popup.getMenu().add(0, i, i, dept);
+            i++;
+        }
 
         popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == 1) selectedDepartment = "All Depts";
-            else if (item.getItemId() == 2) selectedDepartment = "Computer Science";
-            else if (item.getItemId() == 3) selectedDepartment = "Data Science";
-            else if (item.getItemId() == 4) selectedDepartment = "Software Eng";
-
+            selectedDepartment = item.getTitle().toString();
             if (tvSelectedDepartment != null) tvSelectedDepartment.setText(selectedDepartment);
             applyFilter();
             return true;
@@ -233,19 +376,13 @@ public class CourseManagementFragment extends Fragment {
 
         popup.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == 1) {
-                Intent intent = new Intent(requireContext(), CourseDetailActivity.class);
-                intent.putExtra("course", course);
-                startActivity(intent);
+                showCourseDetailsDialog(course);
             } else if (item.getItemId() == 2) {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openFragment(new StudentListFragment());
-                }
+                openStudentsForCourse(course);
             } else if (item.getItemId() == 3) {
                 Toast.makeText(requireContext(), course.getCode() + ": " + course.getSchedule() + " (" + course.getRoom() + ")", Toast.LENGTH_SHORT).show();
             } else if (item.getItemId() == 4) {
-                if (getActivity() instanceof TeacherMainActivity) {
-                    ((TeacherMainActivity) getActivity()).openFragment(new ClassAnalyticsFragment());
-                }
+                openAnalyticsForCourse(course);
             }
             return true;
         });
@@ -254,30 +391,18 @@ public class CourseManagementFragment extends Fragment {
 
     private void applyFilter() {
         if (adapter != null) {
-            adapter.filter(searchQuery, selectedSemester, selectedDepartment, selectedSort, isArchivedTab);
+            String semFilter = "All Semesters".equalsIgnoreCase(selectedSemester) ? "" : selectedSemester;
+            adapter.filter(searchQuery, semFilter, selectedDepartment, selectedSort, isArchivedTab);
         }
     }
 
-    private List<Course> getSampleCourses() {
-        List<Course> list = new ArrayList<>();
-
-        // 4 active assigned courses for Mr. Chan matching Figma AI spec
-        list.add(new Course("1", "CS101", "Data Structures", "Computer Science Department",
-                "Mon, Wed 08:00–09:30", "Room A101", 35, 5, 12,
-                R.drawable.bg_course_icon_blue, R.drawable.ic_book, "Semester 1, 2024"));
-
-        list.add(new Course("2", "CS102", "Database Systems", "Computer Science Department",
-                "Tue, Thu 13:00–14:30", "Room A102", 28, 3, 8,
-                R.drawable.bg_course_icon_purple, R.drawable.ic_database_symbol, "Semester 1, 2024"));
-
-        list.add(new Course("3", "CS201", "Computer Networks", "Computer Science Department",
-                "Mon, Wed 10:00–11:30", "Room B201", 32, 4, 10,
-                R.drawable.bg_course_icon_green, R.drawable.ic_network_symbol, "Semester 1, 2024"));
-
-        list.add(new Course("4", "CS301", "Mobile App Development", "Computer Science Department",
-                "Tue, Thu 10:00–11:30", "Room B202", 27, 2, 6,
-                R.drawable.bg_course_icon_orange, R.drawable.ic_desktop_symbol, "Semester 1, 2024"));
-
-        return list;
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 }

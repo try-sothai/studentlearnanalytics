@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -43,13 +44,23 @@ import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.admin.reports.CourseReportListAdapter;
 import com.social7.studentlearnanalytics.admin.reports.GenerateReportActivity;
 import com.social7.studentlearnanalytics.admin.reports.StudentReportListAdapter;
+import com.social7.studentlearnanalytics.utils.UiUtils;
 import com.social7.studentlearnanalytics.admin.reports.TeacherAssignmentReportAdapter;
 import com.social7.studentlearnanalytics.admin.reports.TeacherPerformanceAdapter;
 import com.social7.studentlearnanalytics.admin.reports.TeacherReportAdapter;
 import com.social7.studentlearnanalytics.admin.reports.TeacherWorkloadAdapter;
+import com.social7.studentlearnanalytics.network.ApiClient;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReportsFragment extends Fragment {
 
@@ -58,6 +69,13 @@ public class ReportsFragment extends Fragment {
 
     // Primary Containers
     private View layoutOverviewContainer, layoutStudentsReportContainer, layoutTeachersReportContainer, layoutCoursesReportContainer;
+    private TextView tvOverviewTotalStudents, tvOverviewTotalTeachers, tvOverviewTotalCourses, tvOverviewTotalUsers;
+    private TextView tvStatTotalStudents, tvStatActiveStudents, tvStatNewEnrollments, tvStatGraduated;
+    private TextView tvAttOverallRate, tvAttPresentCount, tvAttAbsentCount, tvAttLateCount;
+    private TextView tvStatTotalTeachers, tvStatActiveTeachers, tvStatAssignedCourses, tvStatPendingReviews;
+    private TextView tvStatTotalCourses, tvStatActiveCourses, tvStatTotalEnrollments, tvStatAvgClassSize;
+    private TextView tvCourseEnrollStatTotal, tvCourseEnrollStatStudents, tvCourseEnrollStatCohorts, tvCourseEnrollStatUtilization;
+    private TextView tvCourseCompletionRate, tvCourseCompletedCount, tvCourseIncompleteCount;
 
     // ==========================================
     // STUDENTS SECTION VIEWS & ADAPTERS
@@ -97,6 +115,17 @@ public class ReportsFragment extends Fragment {
 
     // Current State Flags
     private int selectedPrimaryTab = 0; // 0=Overview, 1=Students, 2=Teachers, 3=Courses
+    private JsonObject cachedOverviewData = null;
+    private JsonObject cachedAttendanceData = null;
+    private JsonObject cachedTeachersData = null;
+    private JsonObject cachedCoursesData = null;
+    private final List<String> apiYearLabels = new ArrayList<>();
+    private final List<Integer> apiYearIds = new ArrayList<>();
+    private final List<String> apiSemLabels = new ArrayList<>();
+    private final List<Integer> apiSemIds = new ArrayList<>();
+    private Integer selectedStudentAyId = null, selectedStudentSemId = null;
+    private Integer selectedTeacherAyId = null, selectedTeacherSemId = null;
+    private Integer selectedCourseAyId = null, selectedCourseSemId = null;
 
     public ReportsFragment() {
     }
@@ -138,6 +167,30 @@ public class ReportsFragment extends Fragment {
         layoutTeachersReportContainer = view.findViewById(R.id.layoutTeachersReportContainer);
         layoutCoursesReportContainer = view.findViewById(R.id.layoutCoursesReportContainer);
 
+        tvOverviewTotalStudents = view.findViewById(R.id.tvOverviewTotalStudents);
+        tvOverviewTotalTeachers = view.findViewById(R.id.tvOverviewTotalTeachers);
+        tvOverviewTotalCourses = view.findViewById(R.id.tvOverviewTotalCourses);
+        tvOverviewTotalUsers = view.findViewById(R.id.tvOverviewTotalUsers);
+        tvStatTotalStudents = view.findViewById(R.id.tvStatTotalStudents);
+        tvStatActiveStudents = view.findViewById(R.id.tvStatActiveStudents);
+        tvStatNewEnrollments = view.findViewById(R.id.tvStatNewEnrollments);
+        tvStatGraduated = view.findViewById(R.id.tvStatGraduated);
+        tvStatTotalTeachers = view.findViewById(R.id.tvStatTotalTeachers);
+        tvStatActiveTeachers = view.findViewById(R.id.tvStatActiveTeachers);
+        tvStatAssignedCourses = view.findViewById(R.id.tvStatAssignedCourses);
+        tvStatPendingReviews = view.findViewById(R.id.tvStatPendingReviews);
+        tvStatTotalCourses = view.findViewById(R.id.tvStatTotalCourses);
+        tvStatActiveCourses = view.findViewById(R.id.tvStatActiveCourses);
+        tvStatTotalEnrollments = view.findViewById(R.id.tvStatTotalEnrollments);
+        tvStatAvgClassSize = view.findViewById(R.id.tvStatAvgClassSize);
+        tvCourseEnrollStatTotal = view.findViewById(R.id.tvCourseEnrollStatTotal);
+        tvCourseEnrollStatStudents = view.findViewById(R.id.tvCourseEnrollStatStudents);
+        tvCourseEnrollStatCohorts = view.findViewById(R.id.tvCourseEnrollStatCohorts);
+        tvCourseEnrollStatUtilization = view.findViewById(R.id.tvCourseEnrollStatUtilization);
+        tvCourseCompletionRate = view.findViewById(R.id.tvCourseCompletionRate);
+        tvCourseCompletedCount = view.findViewById(R.id.tvCourseCompletedCount);
+        tvCourseIncompleteCount = view.findViewById(R.id.tvCourseIncompleteCount);
+
         setupPrimaryTabs();
         setupOverviewCategoryRows(view);
 
@@ -147,6 +200,9 @@ public class ReportsFragment extends Fragment {
         bindCoursesSectionViews(view);
 
         selectReportTab(selectedPrimaryTab);
+        fetchRealReportLookups();
+        fetchRealOverviewAnalytics(null, null);
+        fetchRealAttendanceAnalytics(null, null);
 
         return view;
     }
@@ -169,10 +225,14 @@ public class ReportsFragment extends Fragment {
 
         if (tabIndex == 1) {
             selectStudentSubTab(0);
+            fetchRealOverviewAnalytics(selectedStudentAyId, selectedStudentSemId);
+            fetchRealAttendanceAnalytics(selectedStudentAyId, selectedStudentSemId);
         } else if (tabIndex == 2) {
             selectTeacherSubTab(0);
+            fetchRealTeachersAnalytics(selectedTeacherAyId, selectedTeacherSemId);
         } else if (tabIndex == 3) {
             selectCourseSubTab(0);
+            fetchRealCoursesAnalytics(selectedCourseAyId, selectedCourseSemId);
         }
     }
 
@@ -190,6 +250,7 @@ public class ReportsFragment extends Fragment {
             if (i == activeIndex) {
                 btn.setBackgroundTintList(ColorStateList.valueOf(activeColor));
                 btn.setTextColor(Color.WHITE);
+                UiUtils.scrollToTab(btn);
             } else {
                 btn.setBackgroundTintList(ColorStateList.valueOf(inactiveBg));
                 btn.setTextColor(textSecondary);
@@ -207,17 +268,38 @@ public class ReportsFragment extends Fragment {
         if (rowTeacher != null) rowTeacher.setOnClickListener(v -> selectReportTab(2));
         if (rowCourse != null) rowCourse.setOnClickListener(v -> selectReportTab(3));
         if (rowAcademic != null) {
-            rowAcademic.setOnClickListener(v ->
-                    new MaterialAlertDialogBuilder(requireContext())
+            rowAcademic.setOnClickListener(v -> {
+                    if (!isAdded() || getContext() == null) return;
+                    String msg = "Loading real-time university analytics...";
+                    if (cachedOverviewData != null && cachedOverviewData.has("metrics") && cachedOverviewData.get("metrics").isJsonObject()) {
+                        JsonObject m = cachedOverviewData.getAsJsonObject("metrics");
+                        int totalStu = UiUtils.optInt(m, "total_students", 0);
+                        int activeStu = UiUtils.optInt(m, "active_students", 0);
+                        int totalCourses = UiUtils.optInt(m, "total_courses", 0);
+                        int totalTeachers = UiUtils.optInt(m, "total_teachers", 0);
+                        float avgGpa = UiUtils.optFloat(m, "average_gpa", 0f);
+                        float attRate = UiUtils.optFloat(m, "attendance_rate", 0f);
+                        msg = String.format(Locale.US,
+                                "• Total Students: %d (%d Active)\n" +
+                                "• Total Teachers: %d\n" +
+                                "• Total Courses: %d\n" +
+                                "• Average University GPA: %s / 4.0\n" +
+                                "• Overall Attendance Rate: %s",
+                                totalStu, activeStu, totalTeachers, totalCourses,
+                                avgGpa > 0f ? String.format(Locale.US, "%.2f", avgGpa) : "N/A",
+                                attRate > 0f ? String.format(Locale.US, "%.1f%%", attRate) : "N/A");
+                    }
+                    new MaterialAlertDialogBuilder(getContext())
                             .setTitle(R.string.academic_performance_report)
-                            .setMessage("Summary Statistics for AY 2024-2025:\n\n" +
-                                    "• Total Enrolled Students: 2,845\n" +
-                                    "• Average University GPA: 3.42 / 4.0\n" +
-                                    "• Course Completion Rate: 94.8%\n" +
-                                    "• Academic Honor Roll: 412 Students")
+                            .setMessage(msg)
                             .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                            .show()
-            );
+                            .setNeutralButton(R.string.reports_analytics, (d, w) -> {
+                                Intent i = new Intent(getContext(), GenerateReportActivity.class);
+                                i.putExtra("selected_report_type", "Academic");
+                                startActivity(i);
+                            })
+                            .show();
+            });
         }
     }
 
@@ -249,6 +331,10 @@ public class ReportsFragment extends Fragment {
         rvStudentEnrollmentList = layout.findViewById(R.id.rvStudentEnrollmentList);
         rvStudentPerformanceList = layout.findViewById(R.id.rvStudentPerformanceList);
         rvStudentAttendanceList = layout.findViewById(R.id.rvStudentAttendanceList);
+        tvAttOverallRate = layout.findViewById(R.id.tvAttOverallRate);
+        tvAttPresentCount = layout.findViewById(R.id.tvAttPresentCount);
+        tvAttAbsentCount = layout.findViewById(R.id.tvAttAbsentCount);
+        tvAttLateCount = layout.findViewById(R.id.tvAttLateCount);
 
         setupFilters(spStudentReportYear, spStudentReportSemester);
 
@@ -290,183 +376,72 @@ public class ReportsFragment extends Fragment {
     }
 
     private void setupStudentOverviewCharts() {
-        if (chartEnrollmentTrend != null && chartEnrollmentTrend.getData() == null) {
-            List<Entry> entries = new ArrayList<>();
-            entries.add(new Entry(0, 2400f));
-            entries.add(new Entry(1, 2550f));
-            entries.add(new Entry(2, 2620f));
-            entries.add(new Entry(3, 2700f));
-            entries.add(new Entry(4, 2780f));
-            entries.add(new Entry(5, 2845f));
-
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.enrollment));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setLineWidth(3f);
-            dataSet.setCircleColor(Color.parseColor("#3155F5"));
-            dataSet.setCircleRadius(5f);
-            dataSet.setDrawValues(false);
-
-            chartEnrollmentTrend.setData(new LineData(dataSet));
+        if (chartEnrollmentTrend != null) {
             XAxis xAxis = chartEnrollmentTrend.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Sep", "Oct", "Nov", "Dec", "Jan", "Feb"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartEnrollmentTrend.getAxisRight().setEnabled(false);
             chartEnrollmentTrend.getDescription().setEnabled(false);
+            chartEnrollmentTrend.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartEnrollmentTrend.getContext(), chartEnrollmentTrend);
-            chartEnrollmentTrend.invalidate();
         }
 
-        if (chartStudentDistribution != null && chartStudentDistribution.getData() == null) {
-            List<PieEntry> entries = new ArrayList<>();
-            entries.add(new PieEntry(35f, "Computer Studies"));
-            entries.add(new PieEntry(25f, "Business"));
-            entries.add(new PieEntry(20f, "Engineering"));
-            entries.add(new PieEntry(12f, "Education"));
-            entries.add(new PieEntry(8f, "Other"));
-
-            PieDataSet dataSet = new PieDataSet(entries, "");
-            dataSet.setColors(new int[]{
-                    Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#6546F5"), Color.parseColor("#16A34A"), Color.parseColor("#F59E0B")
-            });
-            dataSet.setSliceSpace(2f);
-            PieData pieData = new PieData(dataSet);
-            pieData.setDrawValues(false);
-
-            chartStudentDistribution.setData(pieData);
+        if (chartStudentDistribution != null) {
             chartStudentDistribution.setHoleRadius(50f);
-            chartStudentDistribution.setCenterText("2,845\nStudents");
+            chartStudentDistribution.setCenterText("--\nStudents");
             chartStudentDistribution.setCenterTextSize(14f);
             chartStudentDistribution.getDescription().setEnabled(false);
+            chartStudentDistribution.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartStudentDistribution.getContext(), chartStudentDistribution);
-            chartStudentDistribution.invalidate();
         }
     }
 
     private void setupStudentEnrollmentChartsAndList() {
-        if (chartStudentEnrollmentBar != null && chartStudentEnrollmentBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 480f));
-            entries.add(new BarEntry(1, 520f));
-            entries.add(new BarEntry(2, 590f));
-            entries.add(new BarEntry(3, 610f));
-            entries.add(new BarEntry(4, 645f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.enrollments));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartStudentEnrollmentBar.setData(barData);
-
+        if (chartStudentEnrollmentBar != null) {
             XAxis xAxis = chartStudentEnrollmentBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"2021", "2022", "2023", "2024", "2025"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartStudentEnrollmentBar.getAxisRight().setEnabled(false);
             chartStudentEnrollmentBar.getDescription().setEnabled(false);
+            chartStudentEnrollmentBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartStudentEnrollmentBar.getContext(), chartStudentEnrollmentBar);
-            chartStudentEnrollmentBar.invalidate();
         }
-
-        if (rvStudentEnrollmentList != null) {
-            List<StudentReportListAdapter.StudentReportItem> list = new ArrayList<>();
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23001", "Sophea", "BSIT 4-A • College of Computer Studies", "Enrolled: AY 2024-2025 Sem 1", "Active"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23002", "Dara Miller", "BSIT 4-B • College of Computer Studies", "Enrolled: AY 2024-2025 Sem 1", "Active"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23003", "Channary", "BSCS 3-A • College of Computer Studies", "Enrolled: AY 2024-2025 Sem 1", "Active"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23004", "Sokha", "BSCS 3-B • College of Computer Studies", "Enrolled: AY 2024-2025 Sem 1", "Active"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23005", "Bopha", "BSIS 2-A • College of Computer Studies", "Enrolled: AY 2024-2025 Sem 1", "Active"));
-
-            studentEnrollmentAdapter = new StudentReportListAdapter(getContext(), list, null);
-            rvStudentEnrollmentList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvStudentEnrollmentList.setAdapter(studentEnrollmentAdapter);
+        if (cachedOverviewData != null) {
+            bindOverviewToStudentViews(cachedOverviewData);
         }
     }
 
     private void setupStudentPerformanceChartsAndList() {
-        if (chartStudentPerformanceGpaBar != null && chartStudentPerformanceGpaBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 412f)); // 3.75 - 4.0
-            entries.add(new BarEntry(1, 1250f)); // 3.25 - 3.74
-            entries.add(new BarEntry(2, 980f));  // 2.75 - 3.24
-            entries.add(new BarEntry(3, 158f));  // 2.25 - 2.74
-            entries.add(new BarEntry(4, 45f));   // Below 2.25
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.nav_students));
-            dataSet.setColors(new int[]{
-                    Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")
-            });
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartStudentPerformanceGpaBar.setData(barData);
-
+        if (chartStudentPerformanceGpaBar != null) {
             XAxis xAxis = chartStudentPerformanceGpaBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"3.75-4.0", "3.25-3.74", "2.75-3.24", "2.25-2.74", "<2.25"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartStudentPerformanceGpaBar.getAxisRight().setEnabled(false);
             chartStudentPerformanceGpaBar.getDescription().setEnabled(false);
+            chartStudentPerformanceGpaBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartStudentPerformanceGpaBar.getContext(), chartStudentPerformanceGpaBar);
-            chartStudentPerformanceGpaBar.invalidate();
         }
-
-        if (rvStudentPerformanceList != null) {
-            List<StudentReportListAdapter.StudentReportItem> list = new ArrayList<>();
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23001", "Sophea", "BSIT 4-A • College of Computer Studies", "GPA: 3.92 / 4.0 • Honor Roll", "Honors"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23002", "Dara Miller", "BSIT 4-B • College of Computer Studies", "GPA: 3.85 / 4.0 • Honor Roll", "Honors"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23003", "Channary", "BSCS 3-A • College of Computer Studies", "GPA: 3.78 / 4.0 • Honor Roll", "Honors"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23004", "Sokha", "BSCS 3-B • College of Computer Studies", "GPA: 3.45 / 4.0 • Good Standing", "Active"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23005", "Bopha", "BSIS 2-A • College of Computer Studies", "GPA: 2.15 / 4.0 • Tutoring Advised", "Needs Support"));
-
-            studentPerformanceAdapter = new StudentReportListAdapter(getContext(), list, null);
-            rvStudentPerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvStudentPerformanceList.setAdapter(studentPerformanceAdapter);
+        if (cachedOverviewData != null) {
+            bindOverviewToStudentViews(cachedOverviewData);
         }
     }
 
     private void setupStudentAttendanceChartsAndList() {
-        if (chartStudentAttendanceTrendLine != null && chartStudentAttendanceTrendLine.getData() == null) {
-            List<Entry> entries = new ArrayList<>();
-            entries.add(new Entry(0, 94.5f));
-            entries.add(new Entry(1, 93.2f));
-            entries.add(new Entry(2, 91.8f));
-            entries.add(new Entry(3, 92.5f));
-            entries.add(new Entry(4, 94.0f));
-
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.attendance_7266c9));
-            dataSet.setColor(Color.parseColor("#10B981"));
-            dataSet.setLineWidth(3f);
-            dataSet.setCircleColor(Color.parseColor("#10B981"));
-            dataSet.setCircleRadius(5f);
-            dataSet.setDrawValues(false);
-
-            chartStudentAttendanceTrendLine.setData(new LineData(dataSet));
+        if (chartStudentAttendanceTrendLine != null) {
             XAxis xAxis = chartStudentAttendanceTrendLine.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Oct", "Nov", "Dec", "Jan", "Feb"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartStudentAttendanceTrendLine.getAxisRight().setEnabled(false);
             chartStudentAttendanceTrendLine.getDescription().setEnabled(false);
+            chartStudentAttendanceTrendLine.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartStudentAttendanceTrendLine.getContext(), chartStudentAttendanceTrendLine);
-            chartStudentAttendanceTrendLine.invalidate();
         }
-
-        if (rvStudentAttendanceList != null) {
-            List<StudentReportListAdapter.StudentReportItem> list = new ArrayList<>();
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23001", "Sophea", "BSIT 4-A • College of Computer Studies", "Attendance Rate: 98.5% (118/120 Days)", "Present"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23002", "Dara Miller", "BSIT 4-B • College of Computer Studies", "Attendance Rate: 96.0% (115/120 Days)", "Present"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23003", "Channary", "BSCS 3-A • College of Computer Studies", "Attendance Rate: 95.0% (114/120 Days)", "Present"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23004", "Sokha", "BSCS 3-B • College of Computer Studies", "Attendance Rate: 91.2% (109/120 Days)", "Present"));
-            list.add(new StudentReportListAdapter.StudentReportItem("STU23005", "Bopha", "BSIS 2-A • College of Computer Studies", "Attendance Rate: 81.5% (98/120 Days)", "Absent"));
-
-            studentAttendanceAdapter = new StudentReportListAdapter(getContext(), list, null);
-            rvStudentAttendanceList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvStudentAttendanceList.setAdapter(studentAttendanceAdapter);
+        if (cachedAttendanceData != null) {
+            bindAttendanceToViews(cachedAttendanceData);
         }
     }
 
@@ -538,141 +513,49 @@ public class ReportsFragment extends Fragment {
     }
 
     private void setupTeacherOverviewChartsAndList() {
-        if (chartTeacherWorkloadBar != null && chartTeacherWorkloadBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 18f));
-            entries.add(new BarEntry(1, 21f));
-            entries.add(new BarEntry(2, 15f));
-            entries.add(new BarEntry(3, 24f));
-            entries.add(new BarEntry(4, 19f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.teaching_hours_wk));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartTeacherWorkloadBar.setData(barData);
-
+        if (chartTeacherWorkloadBar != null) {
             XAxis xAxis = chartTeacherWorkloadBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"CCS", "CBA", "COE", "CAS", "CED"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartTeacherWorkloadBar.getAxisRight().setEnabled(false);
             chartTeacherWorkloadBar.getDescription().setEnabled(false);
+            chartTeacherWorkloadBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartTeacherWorkloadBar.getContext(), chartTeacherWorkloadBar);
-            chartTeacherWorkloadBar.invalidate();
         }
-
-        if (rvTeacherReport != null) {
-            List<TeacherReportAdapter.TeacherReportItem> list = new ArrayList<>();
-            list.add(new TeacherReportAdapter.TeacherReportItem("TCH001", "Prof. Alan Santos", "Computer Studies", "CS101, IT402", "BSIT 4-A, BSIT 4-B", "18 Hrs/Wk", "94.2% Rating"));
-            list.add(new TeacherReportAdapter.TeacherReportItem("TCH002", "Dr. Maria Cruz", "Computer Studies", "SE301, CS204", "BSCS 3-A", "21 Hrs/Wk", "96.5% Rating"));
-            list.add(new TeacherReportAdapter.TeacherReportItem("TCH003", "Engr. John Reyes", "Engineering", "EE101, CS102", "BSCS 3-B", "15 Hrs/Wk", "91.0% Rating"));
-            list.add(new TeacherReportAdapter.TeacherReportItem("TCH004", "Prof. Sarah Jenkins", "Business Admin", "BUS201, MGT101", "BSIS 2-A", "24 Hrs/Wk", "89.8% Rating"));
-            list.add(new TeacherReportAdapter.TeacherReportItem("TCH005", "Prof. Robert Lim", "Computer Studies", "IS201, SEC301", "ACT 1-A", "19 Hrs/Wk", "93.4% Rating"));
-
-            teacherOverviewAdapter = new TeacherReportAdapter(getContext(), list, null);
-            rvTeacherReport.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvTeacherReport.setAdapter(teacherOverviewAdapter);
-        }
+        if (cachedTeachersData != null) bindTeachersToViews(cachedTeachersData);
     }
 
     private void setupTeacherWorkloadChartsAndList() {
-        if (chartTeacherWorkloadBarChart != null && chartTeacherWorkloadBarChart.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 320f));
-            entries.add(new BarEntry(1, 280f));
-            entries.add(new BarEntry(2, 240f));
-            entries.add(new BarEntry(3, 150f));
-            entries.add(new BarEntry(4, 90f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.hours));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartTeacherWorkloadBarChart.setData(barData);
-
+        if (chartTeacherWorkloadBarChart != null) {
             XAxis xAxis = chartTeacherWorkloadBarChart.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"CCS", "CBA", "COE", "CAS", "CED"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartTeacherWorkloadBarChart.getAxisRight().setEnabled(false);
             chartTeacherWorkloadBarChart.getDescription().setEnabled(false);
+            chartTeacherWorkloadBarChart.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartTeacherWorkloadBarChart.getContext(), chartTeacherWorkloadBarChart);
-            chartTeacherWorkloadBarChart.invalidate();
         }
-
-        if (rvTeacherWorkloadList != null) {
-            List<TeacherWorkloadAdapter.WorkloadItem> list = new ArrayList<>();
-            list.add(new TeacherWorkloadAdapter.WorkloadItem("TCH001", "Prof. Alan Santos", "College of Computer Studies", "18 Hrs/Wk (2 Courses, 2 Classes)", "Normal Workload"));
-            list.add(new TeacherWorkloadAdapter.WorkloadItem("TCH002", "Dr. Maria Cruz", "College of Computer Studies", "24 Hrs/Wk (3 Courses, 3 Classes)", "High Workload"));
-            list.add(new TeacherWorkloadAdapter.WorkloadItem("TCH003", "Engr. John Reyes", "College of Engineering", "15 Hrs/Wk (2 Courses, 1 Class)", "Normal Workload"));
-            list.add(new TeacherWorkloadAdapter.WorkloadItem("TCH004", "Prof. Sarah Jenkins", "College of Business", "12 Hrs/Wk (1 Course, 1 Class)", "Capacity Available"));
-            list.add(new TeacherWorkloadAdapter.WorkloadItem("TCH005", "Prof. Robert Lim", "College of Computer Studies", "19 Hrs/Wk (2 Courses, 2 Classes)", "Normal Workload"));
-
-            teacherWorkloadAdapter = new TeacherWorkloadAdapter(getContext(), list, null);
-            rvTeacherWorkloadList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvTeacherWorkloadList.setAdapter(teacherWorkloadAdapter);
-        }
+        if (cachedTeachersData != null) bindTeachersToViews(cachedTeachersData);
     }
 
     private void setupTeacherAssignmentsList() {
-        if (rvTeacherAssignmentsList != null) {
-            List<TeacherAssignmentReportAdapter.AssignmentReportItem> list = new ArrayList<>();
-            list.add(new TeacherAssignmentReportAdapter.AssignmentReportItem("BSIT 4-A", "CS101 — Intro to Computer Science", "Prof. Alan Santos", "College of Computer Studies • AY 2024-2025 Sem 1", "Assigned"));
-            list.add(new TeacherAssignmentReportAdapter.AssignmentReportItem("BSIT 4-B", "IT402 — Web Development Systems", "Prof. Alan Santos", "College of Computer Studies • AY 2024-2025 Sem 1", "Assigned"));
-            list.add(new TeacherAssignmentReportAdapter.AssignmentReportItem("BSCS 3-A", "SE301 — Software Engineering", "Dr. Maria Cruz", "College of Computer Studies • AY 2024-2025 Sem 1", "Assigned"));
-            list.add(new TeacherAssignmentReportAdapter.AssignmentReportItem("BSCS 3-B", "CS204 — Data Structures & Algorithms", "Engr. John Reyes", "College of Engineering • AY 2024-2025 Sem 1", "Assigned"));
-            list.add(new TeacherAssignmentReportAdapter.AssignmentReportItem("BSIS 2-A", "IS201 — Enterprise Architecture", "Prof. Robert Lim", "College of Computer Studies • AY 2024-2025 Sem 1", "Assigned"));
-
-            teacherAssignmentAdapter = new TeacherAssignmentReportAdapter(getContext(), list, null);
-            rvTeacherAssignmentsList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvTeacherAssignmentsList.setAdapter(teacherAssignmentAdapter);
-        }
+        if (cachedTeachersData != null) bindTeachersToViews(cachedTeachersData);
     }
 
     private void setupTeacherPerformanceChartsAndList() {
-        if (chartTeacherPerformanceBar != null && chartTeacherPerformanceBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 95.2f));
-            entries.add(new BarEntry(1, 92.8f));
-            entries.add(new BarEntry(2, 94.0f));
-            entries.add(new BarEntry(3, 91.5f));
-            entries.add(new BarEntry(4, 96.0f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.pass_rate_2646b3));
-            dataSet.setColor(Color.parseColor("#10B981"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartTeacherPerformanceBar.setData(barData);
-
+        if (chartTeacherPerformanceBar != null) {
             XAxis xAxis = chartTeacherPerformanceBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"CCS", "CBA", "COE", "CAS", "CED"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartTeacherPerformanceBar.getAxisRight().setEnabled(false);
             chartTeacherPerformanceBar.getDescription().setEnabled(false);
+            chartTeacherPerformanceBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartTeacherPerformanceBar.getContext(), chartTeacherPerformanceBar);
-            chartTeacherPerformanceBar.invalidate();
         }
-
-        if (rvTeacherPerformanceList != null) {
-            List<TeacherPerformanceAdapter.PerformanceItem> list = new ArrayList<>();
-            list.add(new TeacherPerformanceAdapter.PerformanceItem("TCH001", "Prof. Alan Santos", "College of Computer Studies", "96.5% Pass Rate • 4.9/5.0 Student Rating", "95.2% Score"));
-            list.add(new TeacherPerformanceAdapter.PerformanceItem("TCH002", "Dr. Maria Cruz", "College of Computer Studies", "98.0% Pass Rate • 4.9/5.0 Student Rating", "97.1% Score"));
-            list.add(new TeacherPerformanceAdapter.PerformanceItem("TCH003", "Engr. John Reyes", "College of Engineering", "92.0% Pass Rate • 4.7/5.0 Student Rating", "91.8% Score"));
-            list.add(new TeacherPerformanceAdapter.PerformanceItem("TCH004", "Prof. Sarah Jenkins", "College of Business", "89.5% Pass Rate • 4.5/5.0 Student Rating", "89.2% Score"));
-            list.add(new TeacherPerformanceAdapter.PerformanceItem("TCH005", "Prof. Robert Lim", "College of Computer Studies", "94.5% Pass Rate • 4.8/5.0 Student Rating", "94.0% Score"));
-
-            teacherPerformanceAdapter = new TeacherPerformanceAdapter(getContext(), list, null);
-            rvTeacherPerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvTeacherPerformanceList.setAdapter(teacherPerformanceAdapter);
-        }
+        if (cachedTeachersData != null) bindTeachersToViews(cachedTeachersData);
     }
 
     // =========================================================================
@@ -742,130 +625,48 @@ public class ReportsFragment extends Fragment {
     }
 
     private void setupCourseOverviewCharts() {
-        if (chartCourseTrendBar != null && chartCourseTrendBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 980f));
-            entries.add(new BarEntry(1, 1050f));
-            entries.add(new BarEntry(2, 1120f));
-            entries.add(new BarEntry(3, 1180f));
-            entries.add(new BarEntry(4, 1220f));
-            entries.add(new BarEntry(5, 1245f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.enrollments));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartCourseTrendBar.setData(barData);
-
+        if (chartCourseTrendBar != null) {
             XAxis xAxis = chartCourseTrendBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Sep", "Oct", "Nov", "Dec", "Jan", "Feb"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartCourseTrendBar.getAxisRight().setEnabled(false);
             chartCourseTrendBar.getDescription().setEnabled(false);
+            chartCourseTrendBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartCourseTrendBar.getContext(), chartCourseTrendBar);
-            chartCourseTrendBar.invalidate();
         }
     }
 
     private void setupCourseEnrollmentChartsAndList() {
-        if (chartCourseEnrollmentLine != null && chartCourseEnrollmentLine.getData() == null) {
-            List<Entry> entries = new ArrayList<>();
-            entries.add(new Entry(0, 5100f));
-            entries.add(new Entry(1, 5400f));
-            entries.add(new Entry(2, 5800f));
-            entries.add(new Entry(3, 6100f));
-            entries.add(new Entry(4, 6245f));
-
-            LineDataSet dataSet = new LineDataSet(entries, getString(R.string.enrollments));
-            dataSet.setColor(Color.parseColor("#3155F5"));
-            dataSet.setLineWidth(3f);
-            dataSet.setCircleColor(Color.parseColor("#3155F5"));
-            dataSet.setCircleRadius(5f);
-            dataSet.setDrawValues(false);
-
-            chartCourseEnrollmentLine.setData(new LineData(dataSet));
+        if (chartCourseEnrollmentLine != null) {
             XAxis xAxis = chartCourseEnrollmentLine.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"2021", "2022", "2023", "2024", "2025"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartCourseEnrollmentLine.getAxisRight().setEnabled(false);
             chartCourseEnrollmentLine.getDescription().setEnabled(false);
+            chartCourseEnrollmentLine.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartCourseEnrollmentLine.getContext(), chartCourseEnrollmentLine);
-            chartCourseEnrollmentLine.invalidate();
         }
-
-        if (rvCourseEnrollmentList != null) {
-            List<CourseReportListAdapter.CourseReportItem> list = new ArrayList<>();
-            list.add(new CourseReportListAdapter.CourseReportItem("CS101", "Intro to Computer Science", "College of Computer Studies", "1,240 Enrolled • 98.2% Active Utilization", "Active"));
-            list.add(new CourseReportListAdapter.CourseReportItem("MA101", "Calculus I for Engineers", "College of Engineering", "1,150 Enrolled • 95.0% Active Utilization", "Active"));
-            list.add(new CourseReportListAdapter.CourseReportItem("IT201", "Web Development Systems", "College of Computer Studies", "980 Enrolled • 92.4% Active Utilization", "Active"));
-            list.add(new CourseReportListAdapter.CourseReportItem("BUS101", "Principles of Business Management", "College of Business", "850 Enrolled • 89.0% Active Utilization", "Active"));
-            list.add(new CourseReportListAdapter.CourseReportItem("EN101", "English Communication & Writing", "College of Arts & Sciences", "720 Enrolled • 86.5% Active Utilization", "Active"));
-
-            courseEnrollmentAdapter = new CourseReportListAdapter(getContext(), list, null);
-            rvCourseEnrollmentList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvCourseEnrollmentList.setAdapter(courseEnrollmentAdapter);
-        }
+        if (cachedCoursesData != null) bindCoursesToViews(cachedCoursesData);
     }
 
     private void setupCourseCompletionList() {
-        if (rvCourseCompletionList != null) {
-            List<CourseReportListAdapter.CourseReportItem> list = new ArrayList<>();
-            list.add(new CourseReportListAdapter.CourseReportItem("CS101", "Intro to Computer Science", "College of Computer Studies", "98.5% Completion Rate • 1,221 Completed", "Completed"));
-            list.add(new CourseReportListAdapter.CourseReportItem("MA101", "Calculus I for Engineers", "College of Engineering", "94.2% Completion Rate • 1,083 Completed", "Completed"));
-            list.add(new CourseReportListAdapter.CourseReportItem("IT201", "Web Development Systems", "College of Computer Studies", "92.8% Completion Rate • 909 Completed", "Completed"));
-            list.add(new CourseReportListAdapter.CourseReportItem("BUS101", "Principles of Business Management", "College of Business", "91.5% Completion Rate • 778 Completed", "Completed"));
-            list.add(new CourseReportListAdapter.CourseReportItem("EN101", "English Communication & Writing", "College of Arts & Sciences", "90.0% Completion Rate • 648 Completed", "Completed"));
-
-            courseCompletionAdapter = new CourseReportListAdapter(getContext(), list, null);
-            rvCourseCompletionList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvCourseCompletionList.setAdapter(courseCompletionAdapter);
-        }
+        if (cachedCoursesData != null) bindCoursesToViews(cachedCoursesData);
     }
 
     private void setupCoursePerformanceChartsAndList() {
-        if (chartCoursePerformanceBar != null && chartCoursePerformanceBar.getData() == null) {
-            List<BarEntry> entries = new ArrayList<>();
-            entries.add(new BarEntry(0, 96f));
-            entries.add(new BarEntry(1, 91f));
-            entries.add(new BarEntry(2, 93f));
-            entries.add(new BarEntry(3, 88f));
-            entries.add(new BarEntry(4, 94f));
-
-            BarDataSet dataSet = new BarDataSet(entries, getString(R.string.pass_rate_2646b3));
-            dataSet.setColor(Color.parseColor("#10B981"));
-            dataSet.setDrawValues(false);
-            BarData barData = new BarData(dataSet);
-            barData.setBarWidth(0.5f);
-            chartCoursePerformanceBar.setData(barData);
-
+        if (chartCoursePerformanceBar != null) {
             XAxis xAxis = chartCoursePerformanceBar.getXAxis();
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"CS101", "MA101", "IT201", "BUS101", "EN101"}));
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1f);
             xAxis.setDrawGridLines(false);
             chartCoursePerformanceBar.getAxisRight().setEnabled(false);
             chartCoursePerformanceBar.getDescription().setEnabled(false);
+            chartCoursePerformanceBar.setNoDataText(getString(R.string.empty_state_no_data));
             ChartFontHelper.applyKhmerFont(chartCoursePerformanceBar.getContext(), chartCoursePerformanceBar);
-            chartCoursePerformanceBar.invalidate();
         }
-
-        if (rvCoursePerformanceList != null) {
-            List<CourseReportListAdapter.CourseReportItem> list = new ArrayList<>();
-            list.add(new CourseReportListAdapter.CourseReportItem("CS101", "Intro to Computer Science", "College of Computer Studies", "96.0% Pass Rate • Avg Score: 88.5%", "High Pass Rate"));
-            list.add(new CourseReportListAdapter.CourseReportItem("MA101", "Calculus I for Engineers", "College of Engineering", "78.0% Pass Rate • Avg Score: 74.2%", "Needs Review"));
-            list.add(new CourseReportListAdapter.CourseReportItem("IT201", "Web Development Systems", "College of Computer Studies", "93.0% Pass Rate • Avg Score: 85.0%", "High Pass Rate"));
-            list.add(new CourseReportListAdapter.CourseReportItem("BUS101", "Principles of Business Management", "College of Business", "88.0% Pass Rate • Avg Score: 81.4%", "Active"));
-            list.add(new CourseReportListAdapter.CourseReportItem("EN101", "English Communication & Writing", "College of Arts & Sciences", "94.0% Pass Rate • Avg Score: 86.8%", "High Pass Rate"));
-
-            coursePerformanceAdapter = new CourseReportListAdapter(getContext(), list, null);
-            rvCoursePerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvCoursePerformanceList.setAdapter(coursePerformanceAdapter);
-        }
+        if (cachedCoursesData != null) bindCoursesToViews(cachedCoursesData);
     }
 
     // Helper method to toggle sub-tab styles
@@ -886,8 +687,12 @@ public class ReportsFragment extends Fragment {
 
     private void setupFilters(Spinner spYear, Spinner spSem) {
         if (!isAdded() || getContext() == null) return;
-        String[] years = {"2024 - 2025", "2023 - 2024", "2022 - 2023"};
-        String[] semesters = {"Semester 1", "Semester 2", "All Semesters"};
+        String[] years = apiYearLabels.isEmpty()
+                ? new String[]{"All Academic Years"}
+                : apiYearLabels.toArray(new String[0]);
+        String[] semesters = apiSemLabels.isEmpty()
+                ? new String[]{"All Semesters"}
+                : apiSemLabels.toArray(new String[0]);
 
         setSpinnerAdapter(spYear, years);
         setSpinnerAdapter(spSem, semesters);
@@ -898,5 +703,629 @@ public class ReportsFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    private void fetchRealReportLookups() {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(getContext()).getReportsAnalyticsLookups().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                JsonObject data = response.body().getAsJsonObject("data");
+                apiYearLabels.clear();
+                apiYearIds.clear();
+                apiYearLabels.add("All Academic Years");
+                apiYearIds.add(null);
+                if (data.has("academic_years") && data.get("academic_years").isJsonArray()) {
+                    for (JsonElement el : data.getAsJsonArray("academic_years")) {
+                        if (el.isJsonObject()) {
+                            JsonObject obj = el.getAsJsonObject();
+                            apiYearLabels.add(UiUtils.optString(obj, "name", ""));
+                            apiYearIds.add(UiUtils.optInt(obj, "id", 0));
+                        }
+                    }
+                }
+                apiSemLabels.clear();
+                apiSemIds.clear();
+                apiSemLabels.add("All Semesters");
+                apiSemIds.add(null);
+                if (data.has("semesters") && data.get("semesters").isJsonArray()) {
+                    for (JsonElement el : data.getAsJsonArray("semesters")) {
+                        if (el.isJsonObject()) {
+                            JsonObject obj = el.getAsJsonObject();
+                            apiSemLabels.add(UiUtils.optString(obj, "name", ""));
+                            apiSemIds.add(UiUtils.optInt(obj, "id", 0));
+                        }
+                    }
+                }
+                setupFilters(spStudentReportYear, spStudentReportSemester);
+                setupFilters(spTeacherReportYear, spTeacherReportSemester);
+                setupFilters(spCourseReportYear, spCourseReportSemester);
+                attachFilterListeners(spStudentReportYear, spStudentReportSemester, 0);
+                attachFilterListeners(spTeacherReportYear, spTeacherReportSemester, 1);
+                attachFilterListeners(spCourseReportYear, spCourseReportSemester, 2);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void attachFilterListeners(Spinner spYear, Spinner spSem, int section) {
+        if (spYear == null && spSem == null) return;
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            private boolean firstCall = true;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (firstCall) {
+                    firstCall = false;
+                    return;
+                }
+                Integer ayId = (spYear != null && spYear.getSelectedItemPosition() >= 0 && spYear.getSelectedItemPosition() < apiYearIds.size())
+                        ? apiYearIds.get(spYear.getSelectedItemPosition()) : null;
+                Integer semId = (spSem != null && spSem.getSelectedItemPosition() >= 0 && spSem.getSelectedItemPosition() < apiSemIds.size())
+                        ? apiSemIds.get(spSem.getSelectedItemPosition()) : null;
+                if (section == 0) {
+                    selectedStudentAyId = ayId;
+                    selectedStudentSemId = semId;
+                    fetchRealOverviewAnalytics(ayId, semId);
+                    fetchRealAttendanceAnalytics(ayId, semId);
+                } else if (section == 1) {
+                    selectedTeacherAyId = ayId;
+                    selectedTeacherSemId = semId;
+                    fetchRealTeachersAnalytics(ayId, semId);
+                } else if (section == 2) {
+                    selectedCourseAyId = ayId;
+                    selectedCourseSemId = semId;
+                    fetchRealCoursesAnalytics(ayId, semId);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
+        if (spYear != null) spYear.setOnItemSelectedListener(listener);
+        if (spSem != null) spSem.setOnItemSelectedListener(listener);
+    }
+
+    private void fetchRealOverviewAnalytics(Integer ayId, Integer semId) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(getContext()).getReportsAnalyticsOverview(ayId, semId, null).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                JsonObject data = response.body().getAsJsonObject("data");
+                cachedOverviewData = data;
+                bindOverviewToStudentViews(data);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void bindOverviewToStudentViews(JsonObject data) {
+        if (data == null || !isAdded() || getContext() == null) return;
+
+        if (data.has("metrics") && data.get("metrics").isJsonObject()) {
+            JsonObject m = data.getAsJsonObject("metrics");
+            String stuCount = String.valueOf(UiUtils.optInt(m, "total_students", 0));
+            String activeStu = String.valueOf(UiUtils.optInt(m, "active_students", 0));
+            String teacherCount = String.valueOf(UiUtils.optInt(m, "total_teachers", 0));
+            String courseCount = String.valueOf(UiUtils.optInt(m, "total_courses", 0));
+            String userCount = String.valueOf(UiUtils.optInt(m, "total_users", 0));
+
+            if (tvOverviewTotalStudents != null) tvOverviewTotalStudents.setText(stuCount);
+            if (tvOverviewTotalTeachers != null) tvOverviewTotalTeachers.setText(teacherCount);
+            if (tvOverviewTotalCourses != null) tvOverviewTotalCourses.setText(courseCount);
+            if (tvOverviewTotalUsers != null) tvOverviewTotalUsers.setText(userCount);
+            if (tvStatTotalStudents != null) tvStatTotalStudents.setText(stuCount);
+            if (tvStatActiveStudents != null) tvStatActiveStudents.setText(activeStu);
+            if (tvStatNewEnrollments != null) tvStatNewEnrollments.setText(activeStu);
+            if (tvStatGraduated != null) tvStatGraduated.setText("0");
+            if (chartStudentDistribution != null) {
+                chartStudentDistribution.setCenterText(stuCount + "\nStudents");
+            }
+        }
+
+        if (data.has("enrollment_trend") && data.get("enrollment_trend").isJsonArray()) {
+            JsonArray trend = data.getAsJsonArray("enrollment_trend");
+            List<Entry> entries = new ArrayList<>();
+            List<BarEntry> barEntries = new ArrayList<>();
+            List<String> labels = new ArrayList<>();
+            for (int i = 0; i < trend.size(); i++) {
+                JsonObject item = trend.get(i).getAsJsonObject();
+                float cnt = UiUtils.optFloat(item, "count", 0f);
+                entries.add(new Entry(i, cnt));
+                barEntries.add(new BarEntry(i, cnt));
+                labels.add(UiUtils.optString(item, "label", ""));
+            }
+            if (chartEnrollmentTrend != null) {
+                if (!entries.isEmpty()) {
+                    LineDataSet ds = new LineDataSet(entries, getString(R.string.enrollment));
+                    ds.setColor(Color.parseColor("#3155F5"));
+                    ds.setLineWidth(3f);
+                    ds.setCircleColor(Color.parseColor("#3155F5"));
+                    ds.setDrawValues(false);
+                    chartEnrollmentTrend.setData(new LineData(ds));
+                    chartEnrollmentTrend.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels.toArray(new String[0])));
+                } else {
+                    chartEnrollmentTrend.clear();
+                }
+                chartEnrollmentTrend.invalidate();
+            }
+            if (chartStudentEnrollmentBar != null) {
+                if (!barEntries.isEmpty()) {
+                    BarDataSet ds = new BarDataSet(barEntries, getString(R.string.enrollments));
+                    ds.setColor(Color.parseColor("#3155F5"));
+                    ds.setDrawValues(false);
+                    BarData bd = new BarData(ds);
+                    bd.setBarWidth(0.5f);
+                    chartStudentEnrollmentBar.setData(bd);
+                    chartStudentEnrollmentBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels.toArray(new String[0])));
+                } else {
+                    chartStudentEnrollmentBar.clear();
+                }
+                chartStudentEnrollmentBar.invalidate();
+            }
+        }
+
+        if (chartStudentDistribution != null && data.has("department_distribution") && data.get("department_distribution").isJsonArray()) {
+            JsonArray depts = data.getAsJsonArray("department_distribution");
+            List<PieEntry> entries = new ArrayList<>();
+            for (JsonElement el : depts) {
+                if (!el.isJsonObject()) continue;
+                JsonObject item = el.getAsJsonObject();
+                float cnt = UiUtils.optFloat(item, "count", 0f);
+                if (cnt > 0f) entries.add(new PieEntry(cnt, UiUtils.optString(item, "label", "")));
+            }
+            if (!entries.isEmpty()) {
+                PieDataSet ds = new PieDataSet(entries, "");
+                ds.setColors(new int[]{Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#6546F5"), Color.parseColor("#16A34A"), Color.parseColor("#F59E0B")});
+                PieData pd = new PieData(ds);
+                pd.setDrawValues(false);
+                chartStudentDistribution.setData(pd);
+            } else {
+                chartStudentDistribution.clear();
+            }
+            chartStudentDistribution.invalidate();
+        }
+
+        if (chartStudentPerformanceGpaBar != null && data.has("gpa_distribution") && data.get("gpa_distribution").isJsonArray()) {
+            JsonArray buckets = data.getAsJsonArray("gpa_distribution");
+            List<BarEntry> gpaEntries = new ArrayList<>();
+            List<String> gpaLabels = new ArrayList<>();
+            for (int i = 0; i < buckets.size(); i++) {
+                JsonObject b = buckets.get(i).getAsJsonObject();
+                gpaEntries.add(new BarEntry(i, UiUtils.optFloat(b, "count", 0f)));
+                gpaLabels.add(UiUtils.optString(b, "label", ""));
+            }
+            if (!gpaEntries.isEmpty()) {
+                BarDataSet ds = new BarDataSet(gpaEntries, getString(R.string.nav_students));
+                ds.setColors(new int[]{Color.parseColor("#10B981"), Color.parseColor("#3155F5"), Color.parseColor("#1260FF"), Color.parseColor("#F59E0B"), Color.parseColor("#EF4444")});
+                ds.setDrawValues(false);
+                BarData bd = new BarData(ds);
+                bd.setBarWidth(0.5f);
+                chartStudentPerformanceGpaBar.setData(bd);
+                chartStudentPerformanceGpaBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(gpaLabels.toArray(new String[0])));
+            } else {
+                chartStudentPerformanceGpaBar.clear();
+            }
+            chartStudentPerformanceGpaBar.invalidate();
+        }
+
+        if (rvStudentEnrollmentList != null && data.has("student_enrollment_roster") && data.get("student_enrollment_roster").isJsonArray()) {
+            List<StudentReportListAdapter.StudentReportItem> rosterList = new ArrayList<>();
+            for (JsonElement el : data.getAsJsonArray("student_enrollment_roster")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject s = el.getAsJsonObject();
+                String code = UiUtils.optString(s, "student_code", "");
+                String name = UiUtils.optString(s, "student_name", "");
+                String dept = UiUtils.optString(s, "department", "");
+                String cls = UiUtils.optString(s, "class_code", "");
+                String status = UiUtils.optString(s, "status", "Active");
+                int cnt = UiUtils.optInt(s, "enrollment_count", 0);
+                rosterList.add(new StudentReportListAdapter.StudentReportItem(
+                        code, name,
+                        (cls.isEmpty() ? "" : cls + " • ") + dept,
+                        cnt + " Course Enrollments",
+                        status));
+            }
+            studentEnrollmentAdapter = new StudentReportListAdapter(getContext(), rosterList, null);
+            rvStudentEnrollmentList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvStudentEnrollmentList.setAdapter(studentEnrollmentAdapter);
+        }
+
+        if (rvStudentPerformanceList != null && data.has("top_students") && data.get("top_students").isJsonArray()) {
+            List<StudentReportListAdapter.StudentReportItem> list = new ArrayList<>();
+            for (JsonElement el : data.getAsJsonArray("top_students")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject s = el.getAsJsonObject();
+                String code = UiUtils.optString(s, "student_code", "");
+                String name = UiUtils.optString(s, "student_name", "");
+                String dept = UiUtils.optString(s, "department", "");
+                String cls = UiUtils.optString(s, "class_code", "");
+                float gpa = UiUtils.optFloat(s, "gpa", 0f);
+                list.add(new StudentReportListAdapter.StudentReportItem(
+                        code, name,
+                        (cls.isEmpty() ? "" : cls + " • ") + dept,
+                        String.format(Locale.US, "GPA: %.2f / 4.0", gpa),
+                        gpa >= 3.5f ? "Honors" : "Active"));
+            }
+            studentPerformanceAdapter = new StudentReportListAdapter(getContext(), list, null);
+            rvStudentPerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvStudentPerformanceList.setAdapter(studentPerformanceAdapter);
+        }
+    }
+
+    private void fetchRealAttendanceAnalytics(Integer ayId, Integer semId) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(getContext()).getReportsAnalyticsAttendance(ayId, semId, null, null, null).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                JsonObject data = response.body().getAsJsonObject("data");
+                cachedAttendanceData = data;
+                bindAttendanceToViews(data);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void bindAttendanceToViews(JsonObject data) {
+        if (data == null || !isAdded() || getContext() == null) return;
+
+        if (data.has("summary") && data.get("summary").isJsonObject()) {
+            JsonObject s = data.getAsJsonObject("summary");
+            float rate = UiUtils.optFloat(s, "overall_rate", -1f);
+            int present = UiUtils.optInt(s, "present_count", 0);
+            int absent = UiUtils.optInt(s, "absent_count", 0);
+            int late = UiUtils.optInt(s, "late_count", 0);
+            if (tvAttOverallRate != null) tvAttOverallRate.setText(rate >= 0f ? String.format(Locale.US, "%.1f%%", rate) : "--");
+            if (tvAttPresentCount != null) tvAttPresentCount.setText(String.valueOf(present));
+            if (tvAttAbsentCount != null) tvAttAbsentCount.setText(String.valueOf(absent));
+            if (tvAttLateCount != null) tvAttLateCount.setText(String.valueOf(late));
+        }
+
+        if (chartStudentAttendanceTrendLine != null && data.has("monthly_trend") && data.get("monthly_trend").isJsonArray()) {
+            JsonArray arr = data.getAsJsonArray("monthly_trend");
+            List<Entry> entries = new ArrayList<>();
+            List<String> labels = new ArrayList<>();
+            for (int i = 0; i < arr.size(); i++) {
+                JsonObject item = arr.get(i).getAsJsonObject();
+                entries.add(new Entry(i, UiUtils.optFloat(item, "rate", 0f)));
+                labels.add(UiUtils.optString(item, "label", ""));
+            }
+            if (!entries.isEmpty()) {
+                LineDataSet ds = new LineDataSet(entries, getString(R.string.attendance_7266c9));
+                ds.setColor(Color.parseColor("#10B981"));
+                ds.setLineWidth(3f);
+                ds.setCircleColor(Color.parseColor("#10B981"));
+                ds.setCircleRadius(4f);
+                ds.setDrawValues(false);
+                chartStudentAttendanceTrendLine.setData(new LineData(ds));
+                chartStudentAttendanceTrendLine.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels.toArray(new String[0])));
+            } else {
+                chartStudentAttendanceTrendLine.clear();
+            }
+            chartStudentAttendanceTrendLine.invalidate();
+        }
+
+        if (rvStudentAttendanceList != null && data.has("student_attendance_roster") && data.get("student_attendance_roster").isJsonArray()) {
+            List<StudentReportListAdapter.StudentReportItem> list = new ArrayList<>();
+            for (JsonElement el : data.getAsJsonArray("student_attendance_roster")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject s = el.getAsJsonObject();
+                String code = UiUtils.optString(s, "student_code", "");
+                String name = UiUtils.optString(s, "student_name", "");
+                String dept = UiUtils.optString(s, "department", "");
+                String cls = UiUtils.optString(s, "class_code", "");
+                int present = UiUtils.optInt(s, "present_days", 0);
+                int late = UiUtils.optInt(s, "late_days", 0);
+                int total = UiUtils.optInt(s, "total_days", 0);
+                float rate = UiUtils.optFloat(s, "attendance_rate", 0f);
+                list.add(new StudentReportListAdapter.StudentReportItem(
+                        code, name,
+                        (cls.isEmpty() ? "" : cls + " • ") + dept,
+                        String.format(Locale.US, "Attendance: %.1f%% (%d/%d Sessions)", rate, present + late, total),
+                        rate >= 75f ? "Present" : "At Risk"));
+            }
+            studentAttendanceAdapter = new StudentReportListAdapter(getContext(), list, null);
+            rvStudentAttendanceList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvStudentAttendanceList.setAdapter(studentAttendanceAdapter);
+        }
+    }
+
+    private void fetchRealTeachersAnalytics(Integer ayId, Integer semId) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(getContext()).getReportsAnalyticsTeachers(ayId, semId, null, null, null, null).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                JsonObject data = response.body().getAsJsonObject("data");
+                cachedTeachersData = data;
+                bindTeachersToViews(data);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void bindTeachersToViews(JsonObject data) {
+        if (data == null || !isAdded() || getContext() == null) return;
+        if (data.has("summary") && data.get("summary").isJsonObject()) {
+            JsonObject sum = data.getAsJsonObject("summary");
+            String totalT = String.valueOf(UiUtils.optInt(sum, "total_teachers", 0));
+            if (tvStatTotalTeachers != null) tvStatTotalTeachers.setText(totalT);
+            if (tvStatActiveTeachers != null) tvStatActiveTeachers.setText(totalT);
+        }
+        if (!data.has("teachers") || !data.get("teachers").isJsonArray()) return;
+
+        JsonArray teachers = data.getAsJsonArray("teachers");
+        List<TeacherReportAdapter.TeacherReportItem> overviewList = new ArrayList<>();
+        List<TeacherWorkloadAdapter.WorkloadItem> workloadList = new ArrayList<>();
+        List<TeacherAssignmentReportAdapter.AssignmentReportItem> assignmentList = new ArrayList<>();
+        List<TeacherPerformanceAdapter.PerformanceItem> perfList = new ArrayList<>();
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<BarEntry> perfEntries = new ArrayList<>();
+        List<String> barLabels = new ArrayList<>();
+        List<String> perfLabels = new ArrayList<>();
+
+        for (int i = 0; i < teachers.size(); i++) {
+            JsonObject t = teachers.get(i).getAsJsonObject();
+            String code = UiUtils.optString(t, "teacher_code", "");
+            String name = UiUtils.optString(t, "name", "");
+            String dept = UiUtils.optString(t, "department", "");
+            int courses = UiUtils.optInt(t, "assigned_courses", 0);
+            int classes = UiUtils.optInt(t, "assigned_classes", 0);
+            float hrs = UiUtils.optFloat(t, "weekly_hours", 0f);
+            String status = UiUtils.optString(t, "workload_status", "Normal Workload");
+            float rating = UiUtils.optFloat(t, "rating", -1f);
+            float passRate = UiUtils.optFloat(t, "pass_rate", -1f);
+
+            String ratingText = rating >= 0 ? String.format(Locale.US, "%.1f/5.0", rating) : "No Ratings";
+            overviewList.add(new TeacherReportAdapter.TeacherReportItem(
+                    code, name, dept,
+                    courses + " Courses", classes + " Classes",
+                    String.format(Locale.US, "%.1f Hrs/Wk", hrs), ratingText));
+
+            workloadList.add(new TeacherWorkloadAdapter.WorkloadItem(
+                    code, name, dept,
+                    String.format(Locale.US, "%.1f Hrs/Wk", hrs), status));
+
+            assignmentList.add(new TeacherAssignmentReportAdapter.AssignmentReportItem(
+                    code, courses + " Courses • " + classes + " Classes", name, dept,
+                    (courses > 0 || classes > 0) ? "Assigned" : "Unassigned"));
+
+            perfList.add(new TeacherPerformanceAdapter.PerformanceItem(
+                    code, name, dept,
+                    passRate >= 0 ? String.format(Locale.US, "%.1f%% Pass", passRate) : "N/A",
+                    ratingText));
+
+            if (i < 8) {
+                barEntries.add(new BarEntry(i, hrs));
+                barLabels.add(code.isEmpty() ? name : code);
+                if (passRate >= 0f) {
+                    perfEntries.add(new BarEntry(perfEntries.size(), passRate));
+                    perfLabels.add(code.isEmpty() ? name : code);
+                }
+            }
+        }
+
+        if (chartTeacherWorkloadBar != null) {
+            if (!barEntries.isEmpty()) {
+                BarDataSet ds = new BarDataSet(barEntries, getString(R.string.teaching_hours_wk));
+                ds.setColor(Color.parseColor("#3155F5"));
+                ds.setDrawValues(false);
+                BarData bd = new BarData(ds);
+                bd.setBarWidth(0.5f);
+                chartTeacherWorkloadBar.setData(bd);
+                chartTeacherWorkloadBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(barLabels.toArray(new String[0])));
+            } else {
+                chartTeacherWorkloadBar.clear();
+            }
+            chartTeacherWorkloadBar.invalidate();
+        }
+        if (chartTeacherWorkloadBarChart != null) {
+            if (!barEntries.isEmpty()) {
+                BarDataSet ds = new BarDataSet(barEntries, getString(R.string.hours));
+                ds.setColor(Color.parseColor("#3155F5"));
+                ds.setDrawValues(false);
+                BarData bd = new BarData(ds);
+                bd.setBarWidth(0.5f);
+                chartTeacherWorkloadBarChart.setData(bd);
+                chartTeacherWorkloadBarChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(barLabels.toArray(new String[0])));
+            } else {
+                chartTeacherWorkloadBarChart.clear();
+            }
+            chartTeacherWorkloadBarChart.invalidate();
+        }
+        if (chartTeacherPerformanceBar != null) {
+            if (!perfEntries.isEmpty()) {
+                BarDataSet ds = new BarDataSet(perfEntries, getString(R.string.pass_rate_2646b3));
+                ds.setColor(Color.parseColor("#10B981"));
+                ds.setDrawValues(false);
+                BarData bd = new BarData(ds);
+                bd.setBarWidth(0.5f);
+                chartTeacherPerformanceBar.setData(bd);
+                chartTeacherPerformanceBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(perfLabels.toArray(new String[0])));
+            } else {
+                chartTeacherPerformanceBar.clear();
+            }
+            chartTeacherPerformanceBar.invalidate();
+        }
+
+        if (rvTeacherReport != null) {
+            teacherOverviewAdapter = new TeacherReportAdapter(getContext(), overviewList, null);
+            rvTeacherReport.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvTeacherReport.setAdapter(teacherOverviewAdapter);
+        }
+        if (rvTeacherWorkloadList != null) {
+            teacherWorkloadAdapter = new TeacherWorkloadAdapter(getContext(), workloadList, null);
+            rvTeacherWorkloadList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvTeacherWorkloadList.setAdapter(teacherWorkloadAdapter);
+        }
+        if (rvTeacherAssignmentsList != null) {
+            teacherAssignmentAdapter = new TeacherAssignmentReportAdapter(getContext(), assignmentList, null);
+            rvTeacherAssignmentsList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvTeacherAssignmentsList.setAdapter(teacherAssignmentAdapter);
+        }
+        if (rvTeacherPerformanceList != null) {
+            teacherPerformanceAdapter = new TeacherPerformanceAdapter(getContext(), perfList, null);
+            rvTeacherPerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvTeacherPerformanceList.setAdapter(teacherPerformanceAdapter);
+        }
+    }
+
+    private void fetchRealCoursesAnalytics(Integer ayId, Integer semId) {
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(getContext()).getReportsAnalyticsCourses(ayId, semId, null, null).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) return;
+                JsonObject data = response.body().getAsJsonObject("data");
+                cachedCoursesData = data;
+                bindCoursesToViews(data);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void bindCoursesToViews(JsonObject data) {
+        if (data == null || !isAdded() || getContext() == null) return;
+        if (data.has("enrollment_summary") && data.get("enrollment_summary").isJsonObject()) {
+            JsonObject es = data.getAsJsonObject("enrollment_summary");
+            int totalCourses = UiUtils.optInt(es, "total_courses", 0);
+            int activeCourses = UiUtils.optInt(es, "active_courses", 0);
+            int totalEnr = UiUtils.optInt(es, "total_enrollments", 0);
+            int enrStudents = UiUtils.optInt(es, "enrolled_students", 0);
+            int completedEnr = UiUtils.optInt(es, "completed_enrollments", 0);
+            int incompleteEnr = UiUtils.optInt(es, "incomplete_enrollments", 0);
+            int activeCohorts = UiUtils.optInt(es, "active_cohorts", 0);
+            float avgClassSize = UiUtils.optFloat(es, "average_class_size", 0f);
+            float compRate = UiUtils.optFloat(es, "completion_rate", 0f);
+
+            if (tvStatTotalCourses != null) tvStatTotalCourses.setText(String.valueOf(totalCourses));
+            if (tvStatActiveCourses != null) tvStatActiveCourses.setText(String.valueOf(activeCourses));
+            if (tvStatTotalEnrollments != null) tvStatTotalEnrollments.setText(String.valueOf(totalEnr));
+            if (tvStatAvgClassSize != null) tvStatAvgClassSize.setText(String.format(Locale.US, "%.1f", avgClassSize));
+            if (tvCourseEnrollStatTotal != null) tvCourseEnrollStatTotal.setText(String.valueOf(totalEnr));
+            if (tvCourseEnrollStatStudents != null) tvCourseEnrollStatStudents.setText(String.valueOf(enrStudents));
+            if (tvCourseEnrollStatCohorts != null) tvCourseEnrollStatCohorts.setText(String.valueOf(activeCohorts));
+            if (tvCourseEnrollStatUtilization != null) tvCourseEnrollStatUtilization.setText("--");
+            if (tvCourseCompletionRate != null) tvCourseCompletionRate.setText(String.format(Locale.US, "%.1f%%", compRate));
+            if (tvCourseCompletedCount != null) tvCourseCompletedCount.setText(String.valueOf(completedEnr));
+            if (tvCourseIncompleteCount != null) tvCourseIncompleteCount.setText(String.valueOf(incompleteEnr));
+        }
+
+        if (chartCourseEnrollmentLine != null && data.has("enrollment_by_semester") && data.get("enrollment_by_semester").isJsonArray()) {
+            JsonArray arr = data.getAsJsonArray("enrollment_by_semester");
+            List<Entry> lineEntries = new ArrayList<>();
+            List<String> lineLabels = new ArrayList<>();
+            for (int i = 0; i < arr.size(); i++) {
+                JsonObject item = arr.get(i).getAsJsonObject();
+                lineEntries.add(new Entry(i, UiUtils.optFloat(item, "count", 0f)));
+                lineLabels.add(UiUtils.optString(item, "label", ""));
+            }
+            if (!lineEntries.isEmpty()) {
+                LineDataSet ds = new LineDataSet(lineEntries, getString(R.string.enrollments));
+                ds.setColor(Color.parseColor("#3155F5"));
+                ds.setLineWidth(3f);
+                ds.setCircleColor(Color.parseColor("#3155F5"));
+                ds.setCircleRadius(4f);
+                ds.setDrawValues(false);
+                chartCourseEnrollmentLine.setData(new LineData(ds));
+                chartCourseEnrollmentLine.getXAxis().setValueFormatter(new IndexAxisValueFormatter(lineLabels.toArray(new String[0])));
+            } else {
+                chartCourseEnrollmentLine.clear();
+            }
+            chartCourseEnrollmentLine.invalidate();
+        }
+
+        if (!data.has("courses") || !data.get("courses").isJsonArray()) return;
+
+        JsonArray courses = data.getAsJsonArray("courses");
+        List<CourseReportListAdapter.CourseReportItem> enrollList = new ArrayList<>();
+        List<CourseReportListAdapter.CourseReportItem> completionList = new ArrayList<>();
+        List<CourseReportListAdapter.CourseReportItem> perfList = new ArrayList<>();
+        List<BarEntry> passEntries = new ArrayList<>();
+        List<String> passLabels = new ArrayList<>();
+
+        for (int i = 0; i < courses.size(); i++) {
+            JsonObject c = courses.get(i).getAsJsonObject();
+            String code = UiUtils.optString(c, "code", "");
+            String name = UiUtils.optString(c, "name", "");
+            String dept = UiUtils.optString(c, "department", "");
+            String status = UiUtils.optString(c, "status", "Active");
+            int enrolled = UiUtils.optInt(c, "enrollment_count", 0);
+            int completed = UiUtils.optInt(c, "completed_count", 0);
+            float compPct = UiUtils.optFloat(c, "completion_percentage", 0f);
+            float passRate = UiUtils.optFloat(c, "pass_rate", -1f);
+            float avgScore = UiUtils.optFloat(c, "average_score", -1f);
+
+            enrollList.add(new CourseReportListAdapter.CourseReportItem(
+                    code, name, dept, enrolled + " Enrolled", status));
+            completionList.add(new CourseReportListAdapter.CourseReportItem(
+                    code, name, dept,
+                    String.format(Locale.US, "%d/%d Completed (%.1f%%)", completed, enrolled, compPct),
+                    status));
+            perfList.add(new CourseReportListAdapter.CourseReportItem(
+                    code, name, dept,
+                    passRate >= 0
+                            ? String.format(Locale.US, "%.1f%% Pass • Avg %.1f", passRate, avgScore)
+                            : "No Graded Records",
+                    passRate >= 80f ? "High Pass Rate" : status));
+
+            if (i < 8 && passRate >= 0) {
+                passEntries.add(new BarEntry(passEntries.size(), passRate));
+                passLabels.add(code);
+            }
+        }
+
+        if (chartCoursePerformanceBar != null) {
+            if (!passEntries.isEmpty()) {
+                BarDataSet ds = new BarDataSet(passEntries, getString(R.string.pass_rate));
+                ds.setColor(Color.parseColor("#3155F5"));
+                ds.setDrawValues(false);
+                BarData bd = new BarData(ds);
+                bd.setBarWidth(0.5f);
+                chartCoursePerformanceBar.setData(bd);
+                chartCoursePerformanceBar.getXAxis().setValueFormatter(new IndexAxisValueFormatter(passLabels.toArray(new String[0])));
+            } else {
+                chartCoursePerformanceBar.clear();
+            }
+            chartCoursePerformanceBar.invalidate();
+        }
+
+        if (rvCourseEnrollmentList != null) {
+            courseEnrollmentAdapter = new CourseReportListAdapter(getContext(), enrollList, null);
+            rvCourseEnrollmentList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvCourseEnrollmentList.setAdapter(courseEnrollmentAdapter);
+        }
+        if (rvCourseCompletionList != null) {
+            courseCompletionAdapter = new CourseReportListAdapter(getContext(), completionList, null);
+            rvCourseCompletionList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvCourseCompletionList.setAdapter(courseCompletionAdapter);
+        }
+        if (rvCoursePerformanceList != null) {
+            coursePerformanceAdapter = new CourseReportListAdapter(getContext(), perfList, null);
+            rvCoursePerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvCoursePerformanceList.setAdapter(coursePerformanceAdapter);
+        }
     }
 }

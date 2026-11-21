@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,7 +137,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -166,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dara V. (STD042) • IT-4A" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Level: HIGH • Reason: Low Attendance (58%) &amp; Failed Quiz 2" android:textColor="@color/admin_inactive_red" android:textSize="12sp" android:layout_marginTop="4dp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Intervention Status: Action Plan Assigned • Staff: Mr. Chan" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
@@ -185,7 +184,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sokha K. (STD089) • CS-3B" android:textStyle="bold" android:textColor="@color/admin_text_primary" android:textSize="15sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Risk Level: MEDIUM • Reason: Missing Assignment 3" android:textColor="@color/warning_orange" android:textSize="12sp" android:layout_marginTop="4dp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/intervention_status_pending_review_staff_u" android:textColor="@color/admin_text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>

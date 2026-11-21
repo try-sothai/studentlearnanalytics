@@ -13,121 +13,208 @@
         android:id="@+id/headerStudentAssessment"
         layout="@layout/layout_student_header" />
 
-    <!-- Sub-Navigation Bar (4 Internal Tabs: Assignments, Homework, Quizzes, Exams) -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:paddingHorizontal="16dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_notif_tab_inactive"
-            android:orientation="horizontal"
-            android:padding="2dp">
-
-            <TextView
-                android:id="@+id/tabStudentAssignments"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_notif_tab_active"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:text="@string/assignments"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tabStudentHomework"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:text="@string/homework"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tabStudentQuizzes"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:text="@string/quizzes"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tabStudentExams"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:text="@string/exams"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none">
+        android:layout_weight="1">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@color/teacher_bg"
+            app:elevation="0dp">
 
-            <!-- Search Input Bar -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
-                app:boxStrokeColor="@color/admin_primary_blue"
-                app:hintEnabled="false"
-                app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="6dp"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtSearchStudentAssessments"
+                <!-- Sub-Navigation Bar (4 Internal Tabs: Assignments, Homework, Quizzes, Exams) -->
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:hint="@string/search_assessment_title_or_course"
-                    android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="12dp"
+                    android:scrollbars="none">
 
-            <!-- Assessments Roster -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_notif_tab_inactive"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <TextView
+                            android:id="@+id/tabStudentAssignments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_notif_tab_active"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/assignments"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tabStudentHomework"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/homework"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tabStudentQuizzes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/quizzes"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tabStudentExams"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/exams"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tabStudentSubmissions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/my_submissions"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- Search Input Bar -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search"
+                    app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchStudentAssessments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:hint="@string/search_assessment_title_or_course"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary"
+                        android:textSize="12.5sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvStudentAssessmentList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:nestedScrollingEnabled="false" />
+                android:padding="12dp" />
 
-            <TextView
-                android:id="@+id/tvEmptyStudentAssessments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="24dp"
-                android:text="@string/no_assessments_found"
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="14sp"
+            <ProgressBar
+                android:id="@+id/pbStudentAssessmentsLoading"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
                 android:visibility="gone" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            <!-- Structured Empty / Error State -->
+            <LinearLayout
+                android:id="@+id/layoutStudentAssessmentsState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ivStateIcon"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_circle_soft_blue"
+                    android:backgroundTint="@color/slas_light_purple"
+                    android:contentDescription="@string/assessment_icon"
+                    android:padding="14dp"
+                    android:src="@drawable/ic_assignment"
+                    app:tint="@color/slas_primary_purple" />
+
+                <TextView
+                    android:id="@+id/tvStateTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="@string/no_assessments_found"
+                    android:textColor="@color/slas_text_primary"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmptyStudentAssessments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12.5sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetryStudentAssessments"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Retry"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    app:cornerRadius="10dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

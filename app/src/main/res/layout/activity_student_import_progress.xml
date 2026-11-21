@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/btnBackProgress"
@@ -40,125 +40,244 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_weight="1">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/card_white"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:strokeColor="@color/admin_border"
-            app:strokeWidth="1dp">
+            android:orientation="vertical"
+            android:padding="12dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                app:cardBackgroundColor="@color/card_white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/admin_border"
+                app:strokeWidth="1dp">
 
-                <TextView
-                    android:id="@+id/tvImportStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/processing"
-                    android:textColor="@color/admin_primary_blue"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvImportFilename"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="students.xlsx"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="13sp" />
-
-                <ProgressBar
-                    android:id="@+id/pbImportProgress"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="12dp"
-                    android:layout_marginTop="20dp"
-                    android:max="100"
-                    android:progress="0"
-                    android:progressTint="@color/admin_primary_blue" />
-
-                <TextView
-                    android:id="@+id/tvProgressPercent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="6dp"
-                    android:text="0%"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@color/admin_border" />
-
-                <!-- Counters -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="14dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tvImportStatus"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Processed" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
-                        <TextView android:id="@+id/tvProcessedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 / 0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_text_primary"/>
+                        android:text="@string/processing"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvImportFilename"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="students.xlsx"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvImportSummaryBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/slas_soft_blue"
+                        android:padding="10dp"
+                        android:text="Processing student import..."
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/pbImportProgress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:layout_marginTop="16dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressTint="@color/admin_primary_blue" />
+
+                    <TextView
+                        android:id="@+id/tvProgressPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="6dp"
+                        android:text="0%"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="14dp"
+                        android:background="@color/admin_border" />
+
+                    <!-- Counters Row 1 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Processed" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvProcessedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 / 0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_text_primary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Imported Students" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvSuccessCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_active_green"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Failed Records" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvFailedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red"/>
+                        </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Counters Row 2: Created User Accounts & Skipped -->
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/success" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
-                        <TextView android:id="@+id/tvSuccessCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_active_green"/>
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Created User Accounts" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvCreatedAccountsCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 (Role: Student)" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Skipped / Duplicates" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
+                            <TextView android:id="@+id/tvSkippedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/warning_orange"/>
+                        </LinearLayout>
                     </LinearLayout>
 
+                    <!-- One-time Credential Delivery Section -->
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:id="@+id/layoutCredentialsSection"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/failed" android:textSize="11sp" android:textColor="@color/admin_text_secondary"/>
-                        <TextView android:id="@+id/tvFailedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red"/>
+                        android:layout_marginTop="16dp"
+                        android:background="@color/slas_soft_blue"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Initial Student Login Credentials"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvCredentialsHint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Students log in using their Student ID as username and initial password STD@12345 (Role: student). Save the CSV roster below."
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDownloadCredentials"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="@color/admin_active_green"
+                            android:text="View &amp; Save Initial Credentials (CSV)"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="8dp" />
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDownloadImportErrors"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Download Error Report (CSV)"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_inactive_red"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/admin_inactive_red" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDoneOrCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="@color/admin_border"
+                        android:text="@string/cancel_import"
+                        android:textAllCaps="false"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp" />
+
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDoneOrCancel"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="24dp"
-                    android:backgroundTint="@color/admin_border"
-                    android:text="@string/cancel_import"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvResultRowsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Imported &amp; Processed Records"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
-        </com.google.android.material.card.MaterialCardView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvImportResultRows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

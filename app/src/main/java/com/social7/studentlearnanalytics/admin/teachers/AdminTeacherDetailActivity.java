@@ -42,9 +42,10 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
 
     private TextView tvDetailTeacherAvatar, tvDetailTeacherName, tvDetailTeacherId, tvDetailTeacherStatusBadge;
     private TextView tvValTeacherFullName, tvValTeacherId, tvValTeacherEmail, tvValTeacherPhone, tvValTeacherGender, tvValTeacherDob;
-    private TextView tvValTeacherDept, tvValTeacherPosition, tvValTeacherHireDate, tvValTeacherWorkType, tvValTeacherOffice, tvValTeacherBio;
+    private TextView tvValTeacherDept, tvValTeacherPosition, tvValTeacherHireDate, tvValTeacherWorkType, tvValTeacherOffice, tvValTeacherSpecialization, tvValTeacherBio;
     private TextView tvValTeacherAccountStatus, tvValTeacherCreatedAt, tvValTeacherLastLogin;
-    private MaterialButton btnDeactivateTeacherAccount, btnEditTeacher;
+    private TextView tvValTeacherLoginId, tvValTeacherProfileStatus, tvValTeacherAccountLink;
+    private MaterialButton btnDeactivateTeacherAccount, btnEditTeacher, btnRepairTeacherAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,14 +104,19 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         tvValTeacherHireDate = findViewById(R.id.tvValTeacherHireDate);
         tvValTeacherWorkType = findViewById(R.id.tvValTeacherWorkType);
         tvValTeacherOffice = findViewById(R.id.tvValTeacherOffice);
+        tvValTeacherSpecialization = findViewById(R.id.tvValTeacherSpecialization);
         tvValTeacherBio = findViewById(R.id.tvValTeacherBio);
 
+        tvValTeacherLoginId = findViewById(R.id.tvValTeacherLoginId);
+        tvValTeacherProfileStatus = findViewById(R.id.tvValTeacherProfileStatus);
         tvValTeacherAccountStatus = findViewById(R.id.tvValTeacherAccountStatus);
+        tvValTeacherAccountLink = findViewById(R.id.tvValTeacherAccountLink);
         tvValTeacherCreatedAt = findViewById(R.id.tvValTeacherCreatedAt);
         tvValTeacherLastLogin = findViewById(R.id.tvValTeacherLastLogin);
 
         btnDeactivateTeacherAccount = findViewById(R.id.btnDeactivateTeacherAccount);
         btnEditTeacher = findViewById(R.id.btnEditTeacher);
+        btnRepairTeacherAccount = findViewById(R.id.btnRepairTeacherAccount);
     }
 
     private String getTeacherIdentifier() {
@@ -122,8 +128,11 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
     }
 
     private void fetchTeacherDetails() {
-        String identifier = getTeacherIdentifier();
-        ApiClient.getApiService(this).getUser(identifier).enqueue(new Callback<JsonObject>() {
+        Call<JsonObject> detailCall = (currentTeacher != null && currentTeacher.getDbId() != null && currentTeacher.getDbId() > 0)
+                ? ApiClient.getApiService(this).getTeacher(String.valueOf(currentTeacher.getDbId()))
+                : ApiClient.getApiService(this).getUser(getTeacherIdentifier());
+
+        detailCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -132,20 +141,79 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
                         JsonObject data = root.has("data") && root.get("data").isJsonObject()
                                 ? root.getAsJsonObject("data") : root;
 
-                        if (data.has("id") && !data.get("id").isJsonNull()) {
-                            currentTeacher.setUserId(data.get("id").getAsLong());
+                        // Both /teachers/{id} and /admin/users/{id} populate user/teacher fields safely:
+                        if (data.has("user_id") && !data.get("user_id").isJsonNull()) {
+                            currentTeacher.setUserId(data.get("user_id").getAsLong());
+                            currentTeacher.setDbId(data.has("id") && !data.get("id").isJsonNull() ? data.get("id").getAsLong() : currentTeacher.getDbId());
+                        } else if (data.has("id") && !data.get("id").isJsonNull()) {
+                            if (data.has("teacher_code") || data.has("teacher_id")) {
+                                currentTeacher.setDbId(data.get("id").getAsLong());
+                            } else {
+                                currentTeacher.setUserId(data.get("id").getAsLong());
+                            }
                         }
-                        if (data.has("name") && !data.get("name").isJsonNull()) {
-                            currentTeacher.setName(data.get("name").getAsString());
+
+                        if (data.has("teacher_code") && !data.get("teacher_code").isJsonNull()) {
+                            String tc = data.get("teacher_code").getAsString();
+                            if (!tc.isEmpty()) currentTeacher.setId(tc);
+                        }
+                        if (data.has("login_id") && !data.get("login_id").isJsonNull()) {
+                            currentTeacher.setLoginId(data.get("login_id").getAsString());
+                        }
+                        if (data.has("teacher_profile_status") && !data.get("teacher_profile_status").isJsonNull()) {
+                            currentTeacher.setProfileStatus(capitalize(data.get("teacher_profile_status").getAsString()));
+                        }
+                        if (data.has("login_account_status") && !data.get("login_account_status").isJsonNull()) {
+                            currentTeacher.setLoginAccountStatus(data.get("login_account_status").getAsString());
+                        }
+                        if (data.has("account_created") && !data.get("account_created").isJsonNull()) {
+                            currentTeacher.setAccountCreated(data.get("account_created").getAsBoolean());
+                        }
+                        if (data.has("account_linked") && !data.get("account_linked").isJsonNull()) {
+                            currentTeacher.setAccountLinked(data.get("account_linked").getAsBoolean());
+                        }
+                        if (data.has("can_login") && !data.get("can_login").isJsonNull()) {
+                            currentTeacher.setCanLogin(data.get("can_login").getAsBoolean());
+                        }
+
+                        String khmerName = (data.has("khmer_name") && !data.get("khmer_name").isJsonNull())
+                                ? data.get("khmer_name").getAsString() : "";
+                        String englishName = (data.has("english_name") && !data.get("english_name").isJsonNull())
+                                ? data.get("english_name").getAsString() : "";
+                        String rawName = (data.has("name") && !data.get("name").isJsonNull())
+                                ? data.get("name").getAsString() : currentTeacher.getName();
+                        currentTeacher.setKhmerName(khmerName);
+                        currentTeacher.setEnglishName(englishName);
+                        currentTeacher.setName(com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(
+                                englishName, khmerName, rawName));
+                        if (data.has("hire_date") && !data.get("hire_date").isJsonNull()) {
+                            currentTeacher.setHireDate(data.get("hire_date").getAsString());
                         }
                         if (data.has("email") && !data.get("email").isJsonNull()) {
                             currentTeacher.setEmail(data.get("email").getAsString());
+                        } else if (data.has("user") && data.get("user").isJsonObject()) {
+                            JsonObject uObj = data.getAsJsonObject("user");
+                            currentTeacher.setEmail(uObj.has("email") && !uObj.get("email").isJsonNull()
+                                    ? uObj.get("email").getAsString() : "");
+                        } else {
+                            currentTeacher.setEmail("");
                         }
-                        if (data.has("phone") && !data.get("phone").isJsonNull()) {
-                            currentTeacher.setPhone(data.get("phone").getAsString());
+                        if (data.has("department_name") && !data.get("department_name").isJsonNull() && !data.get("department_name").getAsString().isEmpty()) {
+                            currentTeacher.setDepartment(data.get("department_name").getAsString());
+                        } else if (data.has("department") && data.get("department").isJsonObject()) {
+                            JsonObject dObj = data.getAsJsonObject("department");
+                            if (dObj.has("name") && !dObj.get("name").isJsonNull()) {
+                                currentTeacher.setDepartment(dObj.get("name").getAsString());
+                            }
+                        }
+                        if (data.has("position") && !data.get("position").isJsonNull()) {
+                            currentTeacher.setPosition(data.get("position").getAsString());
                         }
                         if (data.has("gender") && !data.get("gender").isJsonNull()) {
                             currentTeacher.setGender(data.get("gender").getAsString());
+                        }
+                        if (data.has("phone") && !data.get("phone").isJsonNull()) {
+                            currentTeacher.setPhone(data.get("phone").getAsString());
                         }
                         if (data.has("date_of_birth") && !data.get("date_of_birth").isJsonNull()) {
                             currentTeacher.setDob(data.get("date_of_birth").getAsString());
@@ -159,33 +227,88 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
                         if (data.has("last_login_at") && !data.get("last_login_at").isJsonNull()) {
                             currentTeacher.setLastLogin(data.get("last_login_at").getAsString());
                         }
+                        if (data.has("office_location_id") && !data.get("office_location_id").isJsonNull()) {
+                            currentTeacher.setOfficeLocationId(data.get("office_location_id").getAsInt());
+                        } else {
+                            currentTeacher.setOfficeLocationId(null);
+                        }
+                        if (data.has("office_location") && !data.get("office_location").isJsonNull()) {
+                            currentTeacher.setOfficeLocation(data.get("office_location").getAsString());
+                        }
+                        if (data.has("work_type") && !data.get("work_type").isJsonNull()) {
+                            currentTeacher.setWorkType(data.get("work_type").getAsString());
+                        }
+                        if (data.has("biography") && !data.get("biography").isJsonNull()) {
+                            currentTeacher.setBio(data.get("biography").getAsString());
+                        } else if (data.has("bio") && !data.get("bio").isJsonNull()) {
+                            currentTeacher.setBio(data.get("bio").getAsString());
+                        }
+                        if (data.has("specializations") && data.get("specializations").isJsonArray()) {
+                            java.util.List<String> specs = new java.util.ArrayList<>();
+                            for (JsonElement se : data.getAsJsonArray("specializations")) {
+                                if (!se.isJsonNull()) specs.add(se.getAsString());
+                            }
+                            currentTeacher.setSpecializations(specs);
+                        } else if (data.has("specialization") && !data.get("specialization").isJsonNull()) {
+                            currentTeacher.setSpecialization(data.get("specialization").getAsString());
+                        }
 
-                        if (data.has("teacher") && data.get("teacher").isJsonObject()) {
-                            JsonObject tObj = data.getAsJsonObject("teacher");
-                            if (tObj.has("id") && !tObj.get("id").isJsonNull()) {
-                                currentTeacher.setDbId(tObj.get("id").getAsLong());
+                        JsonObject nestedSource = (data.has("teacher") && data.get("teacher").isJsonObject())
+                                ? data.getAsJsonObject("teacher")
+                                : data;
+
+                        if (nestedSource != null) {
+                            if (nestedSource.has("id") && !nestedSource.get("id").isJsonNull()) {
+                                currentTeacher.setDbId(nestedSource.get("id").getAsLong());
                             }
-                            if (tObj.has("department_name") && !tObj.get("department_name").isJsonNull()) {
-                                currentTeacher.setDepartment(tObj.get("department_name").getAsString());
-                            } else if (tObj.has("department") && !tObj.get("department").isJsonNull()) {
-                                currentTeacher.setDepartment(tObj.get("department").getAsString());
+                            if (nestedSource.has("khmer_name") && !nestedSource.get("khmer_name").isJsonNull()
+                                    && !nestedSource.get("khmer_name").getAsString().trim().isEmpty()) {
+                                currentTeacher.setKhmerName(nestedSource.get("khmer_name").getAsString());
                             }
-                            if (tObj.has("position") && !tObj.get("position").isJsonNull()) {
-                                currentTeacher.setPosition(tObj.get("position").getAsString());
+                            if (nestedSource.has("english_name") && !nestedSource.get("english_name").isJsonNull()
+                                    && !nestedSource.get("english_name").getAsString().trim().isEmpty()) {
+                                currentTeacher.setEnglishName(nestedSource.get("english_name").getAsString());
                             }
-                            if (tObj.has("work_type") && !tObj.get("work_type").isJsonNull()) {
-                                currentTeacher.setWorkType(tObj.get("work_type").getAsString());
+                            currentTeacher.setName(com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(
+                                    currentTeacher.getEnglishName(), currentTeacher.getKhmerName(), currentTeacher.getName()));
+                            if (nestedSource.has("hire_date") && !nestedSource.get("hire_date").isJsonNull()) {
+                                currentTeacher.setHireDate(nestedSource.get("hire_date").getAsString());
                             }
-                            if (tObj.has("office_location") && !tObj.get("office_location").isJsonNull()) {
-                                currentTeacher.setOfficeLocation(tObj.get("office_location").getAsString());
+                            if (nestedSource.has("department_name") && !nestedSource.get("department_name").isJsonNull() && !nestedSource.get("department_name").getAsString().isEmpty()) {
+                                currentTeacher.setDepartment(nestedSource.get("department_name").getAsString());
+                            } else if (nestedSource.has("department") && nestedSource.get("department").isJsonPrimitive()) {
+                                currentTeacher.setDepartment(nestedSource.get("department").getAsString());
                             }
-                            if (tObj.has("bio") && !tObj.get("bio").isJsonNull()) {
-                                currentTeacher.setBio(tObj.get("bio").getAsString());
+                            if (nestedSource.has("position") && !nestedSource.get("position").isJsonNull()) {
+                                currentTeacher.setPosition(nestedSource.get("position").getAsString());
+                            }
+                            if (nestedSource.has("work_type") && !nestedSource.get("work_type").isJsonNull()) {
+                                currentTeacher.setWorkType(nestedSource.get("work_type").getAsString());
+                            }
+                            if (nestedSource.has("office_location_id") && !nestedSource.get("office_location_id").isJsonNull()) {
+                                currentTeacher.setOfficeLocationId(nestedSource.get("office_location_id").getAsInt());
+                            }
+                            if (nestedSource.has("office_location") && !nestedSource.get("office_location").isJsonNull()) {
+                                currentTeacher.setOfficeLocation(nestedSource.get("office_location").getAsString());
+                            }
+                            if (nestedSource.has("biography") && !nestedSource.get("biography").isJsonNull()) {
+                                currentTeacher.setBio(nestedSource.get("biography").getAsString());
+                            } else if (nestedSource.has("bio") && !nestedSource.get("bio").isJsonNull()) {
+                                currentTeacher.setBio(nestedSource.get("bio").getAsString());
+                            }
+                            if (nestedSource.has("specializations") && nestedSource.get("specializations").isJsonArray()) {
+                                java.util.List<String> specs = new java.util.ArrayList<>();
+                                for (JsonElement se : nestedSource.getAsJsonArray("specializations")) {
+                                    if (!se.isJsonNull()) specs.add(se.getAsString());
+                                }
+                                currentTeacher.setSpecializations(specs);
+                            } else if (nestedSource.has("specialization") && !nestedSource.get("specialization").isJsonNull()) {
+                                currentTeacher.setSpecialization(nestedSource.get("specialization").getAsString());
                             }
 
                             // Courses summary
-                            if (tObj.has("courses") && tObj.get("courses").isJsonArray()) {
-                                JsonArray coursesArr = tObj.getAsJsonArray("courses");
+                            if (nestedSource.has("courses") && nestedSource.get("courses").isJsonArray()) {
+                                JsonArray coursesArr = nestedSource.getAsJsonArray("courses");
                                 StringBuilder sbCourses = new StringBuilder();
                                 for (JsonElement ce : coursesArr) {
                                     if (ce.isJsonObject()) {
@@ -201,8 +324,8 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
                             }
 
                             // Classes summary
-                            if (tObj.has("classes") && tObj.get("classes").isJsonArray()) {
-                                JsonArray classesArr = tObj.getAsJsonArray("classes");
+                            if (nestedSource.has("classes") && nestedSource.get("classes").isJsonArray()) {
+                                JsonArray classesArr = nestedSource.getAsJsonArray("classes");
                                 StringBuilder sbClasses = new StringBuilder();
                                 for (JsonElement cl : classesArr) {
                                     if (cl.isJsonObject()) {
@@ -234,19 +357,28 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
     private void bindData() {
         if (currentTeacher == null) return;
 
-        String name = currentTeacher.getName();
-        String initial = (name != null && !name.isEmpty()) ? name.substring(0, 1).toUpperCase() : "T";
+        String engName = currentTeacher.getEnglishName();
+        String khmName = currentTeacher.getKhmerName();
+        String primaryName = com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper.resolveDisplayName(
+                engName, khmName, currentTeacher.getName());
+        String displayName = (!engName.isEmpty() && !khmName.isEmpty() && !khmName.equals(engName))
+                ? engName + " (" + khmName + ")"
+                : primaryName;
+        String initial = !primaryName.isEmpty() ? primaryName.substring(0, 1).toUpperCase() : "T";
 
         if (tvDetailTeacherAvatar != null) tvDetailTeacherAvatar.setText(initial);
-        if (tvDetailTeacherName != null) tvDetailTeacherName.setText(name);
+        if (tvDetailTeacherName != null) tvDetailTeacherName.setText(displayName);
         if (tvDetailTeacherId != null) tvDetailTeacherId.setText(currentTeacher.getId());
 
         boolean isActive = "Active".equalsIgnoreCase(currentTeacher.getStatus());
         updateStatusDisplay(isActive);
 
-        if (tvValTeacherFullName != null) tvValTeacherFullName.setText(name);
+        if (tvValTeacherFullName != null) tvValTeacherFullName.setText(displayName);
         if (tvValTeacherId != null) tvValTeacherId.setText(currentTeacher.getId());
-        if (tvValTeacherEmail != null) tvValTeacherEmail.setText(currentTeacher.getEmail());
+        if (tvValTeacherEmail != null) {
+            String em = currentTeacher.getEmail();
+            tvValTeacherEmail.setText(em != null && !em.isEmpty() ? em : getString(R.string.login_via_id_format, currentTeacher.getId()));
+        }
         if (tvValTeacherPhone != null) tvValTeacherPhone.setText(currentTeacher.getPhone());
         if (tvValTeacherGender != null) tvValTeacherGender.setText(currentTeacher.getGender());
         if (tvValTeacherDob != null) tvValTeacherDob.setText(currentTeacher.getDob());
@@ -256,6 +388,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         if (tvValTeacherHireDate != null) tvValTeacherHireDate.setText(currentTeacher.getHireDate());
         if (tvValTeacherWorkType != null) tvValTeacherWorkType.setText(currentTeacher.getWorkType());
         if (tvValTeacherOffice != null) tvValTeacherOffice.setText(currentTeacher.getOfficeLocation());
+        if (tvValTeacherSpecialization != null) tvValTeacherSpecialization.setText(currentTeacher.getSpecializationDisplay());
         if (tvValTeacherBio != null) tvValTeacherBio.setText(currentTeacher.getBio());
 
         if (tvValTeacherCreatedAt != null) tvValTeacherCreatedAt.setText(currentTeacher.getCreatedAt());
@@ -263,20 +396,62 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
     }
 
     private void updateStatusDisplay(boolean isActive) {
-        String statusText = isActive ? "Active" : "Inactive";
-        int color = Color.parseColor(isActive ? "#16A34A" : "#EF4444");
+        String profileStatusText = capitalize(currentTeacher.getProfileStatus());
+        if (profileStatusText.isEmpty()) profileStatusText = isActive ? "Active" : "Inactive";
+        boolean profileActive = "Active".equalsIgnoreCase(profileStatusText);
+        int green = Color.parseColor("#16A34A");
+        int red = Color.parseColor("#EF4444");
+        int amber = Color.parseColor("#D97706");
 
         if (tvDetailTeacherStatusBadge != null) {
-            tvDetailTeacherStatusBadge.setText(statusText);
-            tvDetailTeacherStatusBadge.setTextColor(color);
-            tvDetailTeacherStatusBadge.setBackgroundResource(isActive ? R.drawable.bg_badge_core : R.drawable.bg_badge_credit);
+            tvDetailTeacherStatusBadge.setText(profileStatusText);
+            tvDetailTeacherStatusBadge.setTextColor(profileActive ? green : red);
+            tvDetailTeacherStatusBadge.setBackgroundResource(profileActive ? R.drawable.bg_badge_core : R.drawable.bg_badge_credit);
         }
+        if (tvValTeacherLoginId != null) {
+            tvValTeacherLoginId.setText(currentTeacher.getLoginId());
+        }
+        if (tvValTeacherProfileStatus != null) {
+            tvValTeacherProfileStatus.setText(profileStatusText);
+            tvValTeacherProfileStatus.setTextColor(profileActive ? green : red);
+        }
+
+        String rawLoginStatus = currentTeacher.getLoginAccountStatus();
+        String loginLabel;
+        int loginColor;
+        if (!currentTeacher.isAccountCreated() || "not_created".equalsIgnoreCase(rawLoginStatus)) {
+            loginLabel = getString(R.string.account_not_created);
+            loginColor = red;
+        } else if ("role_mismatch".equalsIgnoreCase(rawLoginStatus)) {
+            loginLabel = getString(R.string.account_role_mismatch);
+            loginColor = amber;
+        } else if ("no_password".equalsIgnoreCase(rawLoginStatus)) {
+            loginLabel = getString(R.string.account_no_password);
+            loginColor = amber;
+        } else if ("active".equalsIgnoreCase(rawLoginStatus)) {
+            loginLabel = getString(R.string.account_created_active);
+            loginColor = green;
+        } else {
+            loginLabel = getString(R.string.account_created_inactive);
+            loginColor = red;
+        }
+
         if (tvValTeacherAccountStatus != null) {
-            tvValTeacherAccountStatus.setText(statusText);
-            tvValTeacherAccountStatus.setTextColor(color);
+            tvValTeacherAccountStatus.setText(loginLabel);
+            tvValTeacherAccountStatus.setTextColor(loginColor);
+        }
+        if (tvValTeacherAccountLink != null) {
+            boolean linked = currentTeacher.isAccountLinked();
+            tvValTeacherAccountLink.setText(linked ? R.string.account_linked_label : R.string.account_not_linked_label);
+            tvValTeacherAccountLink.setTextColor(linked ? green : red);
+        }
+        if (btnRepairTeacherAccount != null) {
+            boolean needsRepair = !currentTeacher.isAccountCreated() || !currentTeacher.isAccountLinked();
+            btnRepairTeacherAccount.setVisibility(needsRepair && currentTeacher.getDbId() != null ? View.VISIBLE : View.GONE);
         }
         if (btnDeactivateTeacherAccount != null) {
             btnDeactivateTeacherAccount.setText(isActive ? "Deactivate Account" : "Activate Account");
+            btnDeactivateTeacherAccount.setVisibility(currentTeacher.getUserId() != null && currentTeacher.getUserId() > 0 ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -298,6 +473,64 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         if (btnDeactivateTeacherAccount != null) {
             btnDeactivateTeacherAccount.setOnClickListener(v -> confirmToggleAccountStatus());
         }
+
+        if (btnRepairTeacherAccount != null) {
+            btnRepairTeacherAccount.setOnClickListener(v -> confirmProvisionOrRepairAccount());
+        }
+    }
+
+    private void confirmProvisionOrRepairAccount() {
+        if (currentTeacher == null || currentTeacher.getDbId() == null) return;
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.confirm_repair_login_title)
+                .setMessage(getString(R.string.confirm_repair_login_msg) + "\n\nLogin ID: " + currentTeacher.getLoginId())
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    JsonObject body = new JsonObject();
+                    String email = currentTeacher.getEmail();
+                    if (email != null && !email.trim().isEmpty()) {
+                        body.addProperty("email", email.trim());
+                    }
+                    btnRepairTeacherAccount.setEnabled(false);
+                    ApiClient.getApiService(AdminTeacherDetailActivity.this)
+                            .provisionTeacherAccount(String.valueOf(currentTeacher.getDbId()), body)
+                            .enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                    btnRepairTeacherAccount.setEnabled(true);
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        JsonObject res = response.body();
+                                        StringBuilder msg = new StringBuilder();
+                                        msg.append(res.has("message") ? res.get("message").getAsString() : "Login account ready.");
+                                        if (res.has("login_id") && !res.get("login_id").isJsonNull()) {
+                                            msg.append("\n\nLogin ID: ").append(res.get("login_id").getAsString());
+                                        }
+                                        if (res.has("initial_password") && !res.get("initial_password").isJsonNull()) {
+                                            msg.append("\nInitial Password: ").append(res.get("initial_password").getAsString());
+                                        }
+                                        new AlertDialog.Builder(AdminTeacherDetailActivity.this)
+                                                .setTitle("Teacher Login Account")
+                                                .setMessage(msg.toString())
+                                                .setPositiveButton(R.string.ok, null)
+                                                .show();
+                                        fetchTeacherDetails();
+                                    } else {
+                                        Toast.makeText(AdminTeacherDetailActivity.this,
+                                                "Failed to provision account (HTTP " + response.code() + ")",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                    btnRepairTeacherAccount.setEnabled(true);
+                                    Toast.makeText(AdminTeacherDetailActivity.this,
+                                            "Network error provisioning account: " + t.getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void openEditScreen() {

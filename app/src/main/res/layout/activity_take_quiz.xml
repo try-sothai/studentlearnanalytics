@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -32,44 +32,87 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="14dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/quiz_assessment"
             android:textColor="@color/text_primary"
-            android:textSize="18sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTimer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#FEF2F2"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
             android:text="30:00"
             android:textColor="@color/danger_red"
-            android:textSize="16sp"
+            android:textSize="13.5sp"
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/pbLoading"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:visibility="gone" />
+
+    <!-- Error state -->
+    <LinearLayout
+        android:id="@+id/layoutQuizError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvQuizErrorTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unable to load quiz"
+            android:textColor="@color/text_primary"
+            android:textSize="14.5sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvQuizErrorMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="12.5sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetryQuizLoad"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:text="Retry"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollQuizContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="20dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- STATE A: INSTRUCTIONS -->
+            <!-- STATE A: INSTRUCTIONS & PRE-START / STATUS -->
             <LinearLayout
                 android:id="@+id/layoutInstructions"
                 android:layout_width="match_parent"
@@ -80,22 +123,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:padding="14dp">
 
                         <TextView
                             android:id="@+id/tvInstructionsTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quiz 1: Computer Science Fundamentals"
+                            android:text="Quiz"
                             android:textColor="@color/text_primary"
-                            android:textSize="18sp"
+                            android:textSize="15.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -103,45 +146,118 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="CS101 • Data Structures"
+                            android:text="Course"
                             android:textColor="@color/primary"
-                            android:textSize="13sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginVertical="16dp"
+                            android:layout_marginVertical="8dp"
                             android:background="@color/divider_color" />
 
                         <TextView
                             android:id="@+id/tvQuizMetaDetails"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Questions: 5 • Total Marks: 100 • Time Limit: 30 Mins"
+                            android:text="Questions: 0 • Total Marks: 0 • Duration: 30 mins"
                             android:textColor="@color/text_secondary"
-                            android:textSize="13sp" />
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvQuizDueDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvInstructionsBody"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="Instructions:\n1. Read each question carefully before answering.\n2. You can navigate between questions using Previous and Next.\n3. Your progress is saved automatically.\n4. Ensure you click 'Submit Quiz' before time expires."
+                            android:layout_marginTop="10dp"
+                            android:lineSpacingExtra="3dp"
+                            android:text="Read each question carefully. Your answers are saved automatically as you navigate."
                             android:textColor="@color/text_primary"
-                            android:textSize="13sp" />
+                            android:textSize="12.5sp" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Previous Attempt Card (when submitted/completed) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAttemptSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
+                    app:strokeColor="@color/slas_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:id="@+id/tvAttemptStatusTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quiz Completed"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAttemptStatusDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12.5sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnReviewFromSummary"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Review Answers"
+                            android:textAllCaps="false"
+                            android:visibility="gone"
+                            app:cornerRadius="10dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tvCannotStartReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#FFFBEB"
+                    android:padding="10dp"
+                    android:textColor="@color/warning_orange"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnStartQuiz"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="12dp"
                     android:text="Start Quiz Now"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="13.5sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp" />
 
@@ -155,50 +271,102 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/tvQuestionProgress"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/question_1_of_5"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/tvQuestionProgress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Question 1 of 20"
+                        android:textColor="@color/primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvAnsweredCounter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Answered: 0 / 20"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Question Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:padding="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvQuestionTypeTag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_badge_core"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="2dp"
+                                android:text="Multiple Choice"
+                                android:textColor="@color/primary"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvQuestionMarksTag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1 mark"
+                                android:textColor="@color/success_green"
+                                android:textSize="11.5sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tvQuestionText"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="What is the worst-case time complexity of QuickSort?"
+                            android:layout_marginTop="8dp"
+                            android:text="Question text"
                             android:textColor="@color/text_primary"
-                            android:textSize="16sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
+                        <!-- Choice options (MC / True-False) -->
                         <RadioGroup
                             android:id="@+id/rgAnswers"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp">
+                            android:layout_marginTop="10dp">
 
                             <RadioButton
                                 android:id="@+id/rbOptionA"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="8dp"
-                                android:text="Option A: O(n log n)"
                                 android:textColor="@color/text_primary" />
 
                             <RadioButton
@@ -206,7 +374,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="8dp"
-                                android:text="Option B: O(n^2)"
                                 android:textColor="@color/text_primary" />
 
                             <RadioButton
@@ -214,7 +381,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="8dp"
-                                android:text="Option C: O(n)"
                                 android:textColor="@color/text_primary" />
 
                             <RadioButton
@@ -222,50 +388,106 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="8dp"
-                                android:text="Option D: O(1)"
                                 android:textColor="@color/text_primary" />
-
                         </RadioGroup>
+
+                        <!-- Short Answer Input -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilShortAnswer"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:hint="Type your answer here..."
+                            android:visibility="gone"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etShortAnswerInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|start"
+                                android:inputType="textMultiLine"
+                                android:minLines="3" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Previous / Next -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPrevQuestion"
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="46dp"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:text="@string/previous"
+                        android:textAllCaps="false"
                         app:cornerRadius="12dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnNextQuestion"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="46dp"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:text="@string/next"
+                        android:textAllCaps="false"
                         app:cornerRadius="12dp" />
-
                 </LinearLayout>
+
+                <!-- Question Navigation Grid -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Question Navigation (Green = Answered)"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="11.5sp"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvQuestionNav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:nestedScrollingEnabled="false" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSubmitQuiz"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="12dp"
                     android:backgroundTint="@color/success_green"
                     android:text="@string/submit_quiz"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="13.5sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp" />
 
@@ -278,14 +500,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingTop="32dp"
+                android:paddingTop="28dp"
                 android:visibility="gone">
 
                 <ImageView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:background="@drawable/bg_circle_soft_blue"
-                    android:padding="16dp"
+                    android:padding="14dp"
                     android:src="@drawable/ic_analytics"
                     app:tint="@color/primary" />
 
@@ -293,10 +515,11 @@
                     android:id="@+id/tvResultTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
                     android:text="@string/quiz_submitted_successfully"
                     android:textColor="@color/text_primary"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -305,16 +528,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Your attempt has been recorded. Results will be released by your instructor."
+                    android:text="Your attempt has been recorded."
                     android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
+                    android:textSize="12.5sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReviewFromResult"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Review Answers"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReturnHub"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="32dp"
-                    android:text="Return to Assessment Hub"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Return to My Assessments"
+                    android:textAllCaps="false"
                     app:cornerRadius="12dp" />
 
             </LinearLayout>

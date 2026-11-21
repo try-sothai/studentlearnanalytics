@@ -1,14 +1,12 @@
 package com.social7.studentlearnanalytics.teacher;
 
-
-import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +26,21 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.teacher.attendance.AttendanceFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ClassAnalyticsFragment extends Fragment {
 
@@ -44,9 +51,22 @@ public class ClassAnalyticsFragment extends Fragment {
     private static final String ARG_OPENED_FROM_REPORTS = "opened_from_reports";
 
     private TextView tvSelectedCourseName, tvSelectedSemester;
-    private TextView tvClassAvgScore, tvClassPassRate, tvAtRiskCount, tvTopPerformerCount;
     private BarChart barChartScoreDist;
     private LineChart lineChartAnalyticsTrend;
+    private Integer selectedCourseId = null;
+    private final List<CourseOption> availableCourses = new ArrayList<>();
+
+    private static class CourseOption {
+        final int id;
+        final String code;
+        final String name;
+
+        CourseOption(int id, String code, String name) {
+            this.id = id;
+            this.code = code;
+            this.name = name;
+        }
+    }
 
     public static ClassAnalyticsFragment newInstance(String courseCode, String courseName, String className, String semester, boolean openedFromReports) {
         ClassAnalyticsFragment fragment = new ClassAnalyticsFragment();
@@ -74,8 +94,6 @@ public class ClassAnalyticsFragment extends Fragment {
 
         tvSelectedCourseName = view.findViewById(R.id.tvSelectedCourseName);
         tvSelectedSemester = view.findViewById(R.id.tvSelectedSemester);
-
-        boolean openedFromReports = getArguments() != null && getArguments().getBoolean(ARG_OPENED_FROM_REPORTS, false);
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
@@ -115,6 +133,9 @@ public class ClassAnalyticsFragment extends Fragment {
         barChartScoreDist = view.findViewById(R.id.barChartScoreDist);
         lineChartAnalyticsTrend = view.findViewById(R.id.lineChartAnalyticsTrend);
 
+        if (barChartScoreDist != null) barChartScoreDist.setNoDataText("Loading grade distribution...");
+        if (lineChartAnalyticsTrend != null) lineChartAnalyticsTrend.setNoDataText("Loading performance trend...");
+
         applySelectedCourseArguments();
         fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
 
@@ -124,16 +145,24 @@ public class ClassAnalyticsFragment extends Fragment {
     private void applySelectedCourseArguments() {
         if (getArguments() == null) return;
 
+        if (getArguments().containsKey("course_id")) {
+            int cid = getArguments().getInt("course_id", -1);
+            if (cid > 0) selectedCourseId = cid;
+        }
+        String courseTitle = getArguments().getString("course_title");
         String courseCode = getArguments().getString(ARG_COURSE_CODE);
         String courseName = getArguments().getString(ARG_COURSE_NAME);
-        String className = getArguments().getString(ARG_CLASS_NAME);
         String semester = getArguments().getString(ARG_SEMESTER);
 
-        if (tvSelectedCourseName != null && courseCode != null && courseName != null) {
-            tvSelectedCourseName.setText(courseCode + " - " + courseName);
+        if (tvSelectedCourseName != null) {
+            if (courseTitle != null && !courseTitle.isEmpty()) {
+                tvSelectedCourseName.setText(courseTitle);
+            } else if (courseCode != null && courseName != null) {
+                tvSelectedCourseName.setText(courseCode + " - " + courseName);
+            }
         }
 
-        if (tvSelectedSemester != null && semester != null) {
+        if (tvSelectedSemester != null && semester != null && !semester.isEmpty()) {
             tvSelectedSemester.setText(semester);
         }
     }
@@ -141,88 +170,130 @@ public class ClassAnalyticsFragment extends Fragment {
     private void fetchTeacherAnalytics(BarChart barChart, LineChart lineChart) {
         if (getContext() == null) return;
 
-        com.social7.studentlearnanalytics.network.ApiClient.getApiService(requireContext()).getTeacherDashboard().enqueue(
-                new retrofit2.Callback<com.google.gson.JsonObject>() {
+        ApiClient.getApiService(requireContext()).getTeacherDashboardFiltered(selectedCourseId, null).enqueue(
+                new Callback<JsonObject>() {
                     @Override
-                    public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {
-                        if (!isAdded()) return;
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
                         if (response.isSuccessful() && response.body() != null) {
-                            try {
-                                com.google.gson.JsonObject root = response.body();
-                                com.google.gson.JsonObject data = root.has("data") && root.get("data").isJsonObject()
-                                        ? root.getAsJsonObject("data") : root;
+                            JsonObject root = response.body();
+                            JsonObject data = root.has("data") && root.get("data").isJsonObject()
+                                    ? root.getAsJsonObject("data") : root;
 
-                                bindBarChartFromApi(barChart, data);
-                                bindLineChartFromApi(lineChart, data);
-                            } catch (Exception e) {
-                                setupBarChart(barChart, null);
-                                setupLineChart(lineChart, null, null, null);
+                            if (data.has("courses") && data.get("courses").isJsonArray()) {
+                                availableCourses.clear();
+                                for (JsonElement cel : data.getAsJsonArray("courses")) {
+                                    if (!cel.isJsonObject()) continue;
+                                    JsonObject co = cel.getAsJsonObject();
+                                    int cid = co.has("id") && !co.get("id").isJsonNull() ? co.get("id").getAsInt() : 0;
+                                    String cCode = co.has("code") && !co.get("code").isJsonNull() ? co.get("code").getAsString()
+                                            : (co.has("course_code") && !co.get("course_code").isJsonNull() ? co.get("course_code").getAsString() : "COURSE");
+                                    String cName = co.has("name") && !co.get("name").isJsonNull() ? co.get("name").getAsString()
+                                            : (co.has("course_name") && !co.get("course_name").isJsonNull() ? co.get("course_name").getAsString() : "Course");
+                                    if (cid > 0) availableCourses.add(new CourseOption(cid, cCode, cName));
+                                }
                             }
+
+                            bindBarChartFromApi(barChart, data);
+                            bindLineChartFromApi(lineChart, data);
                         } else {
-                            setupBarChart(barChart, null);
-                            setupLineChart(lineChart, null, null, null);
+                            clearChartsWithMessage("Unable to load analytics (" + response.code() + ")");
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {
-                        if (!isAdded()) return;
-                        setupBarChart(barChart, null);
-                        setupLineChart(lineChart, null, null, null);
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        clearChartsWithMessage("Network error loading analytics");
                     }
                 }
         );
     }
 
-    private void bindBarChartFromApi(BarChart barChart, com.google.gson.JsonObject data) {
-        if (barChart == null) return;
-        List<Float> dist = new ArrayList<>();
-        if (data != null && data.has("grade_distribution") && data.get("grade_distribution").isJsonObject()) {
-            com.google.gson.JsonObject gd = data.getAsJsonObject("grade_distribution");
-            dist.add(gd.has("A") ? gd.get("A").getAsFloat() : 28f);
-            dist.add(gd.has("B") ? gd.get("B").getAsFloat() : 32f);
-            dist.add(gd.has("C") ? gd.get("C").getAsFloat() : 22f);
-            dist.add(gd.has("D") ? gd.get("D").getAsFloat() : 12f);
-            dist.add(gd.has("F") ? gd.get("F").getAsFloat() : 6f);
-        } else {
-            dist.add(28f); dist.add(32f); dist.add(22f); dist.add(12f); dist.add(6f);
+    private void clearChartsWithMessage(String msg) {
+        if (barChartScoreDist != null) {
+            barChartScoreDist.clear();
+            barChartScoreDist.setNoDataText(msg);
+            barChartScoreDist.invalidate();
         }
+        if (lineChartAnalyticsTrend != null) {
+            lineChartAnalyticsTrend.clear();
+            lineChartAnalyticsTrend.setNoDataText(msg);
+            lineChartAnalyticsTrend.invalidate();
+        }
+        if (getContext() != null) {
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void bindBarChartFromApi(BarChart barChart, JsonObject data) {
+        if (barChart == null) return;
+        int totalGraded = data != null && data.has("total_graded_records") && !data.get("total_graded_records").isJsonNull()
+                ? data.get("total_graded_records").getAsInt() : 0;
+
+        if (data == null || !data.has("grade_distribution") || !data.get("grade_distribution").isJsonObject() || totalGraded == 0) {
+            barChart.clear();
+            barChart.setNoDataText("No graded records available");
+            barChart.invalidate();
+            return;
+        }
+
+        JsonObject gd = data.getAsJsonObject("grade_distribution");
+        List<Float> dist = new ArrayList<>();
+        dist.add(gd.has("A") && !gd.get("A").isJsonNull() ? gd.get("A").getAsFloat() : 0f);
+        dist.add(gd.has("B") && !gd.get("B").isJsonNull() ? gd.get("B").getAsFloat() : 0f);
+        dist.add(gd.has("C") && !gd.get("C").isJsonNull() ? gd.get("C").getAsFloat() : 0f);
+        dist.add(gd.has("D") && !gd.get("D").isJsonNull() ? gd.get("D").getAsFloat() : 0f);
+        dist.add(gd.has("F") && !gd.get("F").isJsonNull() ? gd.get("F").getAsFloat() : 0f);
         setupBarChart(barChart, dist);
     }
 
-    private void bindLineChartFromApi(LineChart lineChart, com.google.gson.JsonObject data) {
+    private void bindLineChartFromApi(LineChart lineChart, JsonObject data) {
         if (lineChart == null) return;
         List<Float> classData = new ArrayList<>();
         List<Float> targetData = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
         if (data != null && data.has("class_trend_data") && data.get("class_trend_data").isJsonArray()) {
-            com.google.gson.JsonArray arr = data.getAsJsonArray("class_trend_data");
-            for (com.google.gson.JsonElement el : arr) classData.add(el.getAsFloat());
+            JsonArray arr = data.getAsJsonArray("class_trend_data");
+            for (JsonElement el : arr) {
+                if (el != null && !el.isJsonNull()) classData.add(el.getAsFloat());
+            }
         }
         if (data != null && data.has("target_trend_data") && data.get("target_trend_data").isJsonArray()) {
-            com.google.gson.JsonArray arr = data.getAsJsonArray("target_trend_data");
-            for (com.google.gson.JsonElement el : arr) targetData.add(el.getAsFloat());
+            JsonArray arr = data.getAsJsonArray("target_trend_data");
+            for (JsonElement el : arr) {
+                if (el != null && !el.isJsonNull()) targetData.add(el.getAsFloat());
+            }
         }
         if (data != null && data.has("class_trend_labels") && data.get("class_trend_labels").isJsonArray()) {
-            com.google.gson.JsonArray arr = data.getAsJsonArray("class_trend_labels");
-            for (com.google.gson.JsonElement el : arr) labels.add(el.getAsString());
+            JsonArray arr = data.getAsJsonArray("class_trend_labels");
+            for (JsonElement el : arr) {
+                if (el != null && !el.isJsonNull()) labels.add(el.getAsString());
+            }
         }
 
         setupLineChart(lineChart, classData, targetData, labels);
     }
 
     private void showCourseDropdown(View anchor) {
+        if (getContext() == null) return;
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "CS101 - Intro to Computer Science");
-        popup.getMenu().add(0, 2, 1, "IT201 - Web Development Systems");
-        popup.getMenu().add(0, 3, 2, "MA101 - Calculus I for Engineers");
-        popup.getMenu().add(0, 4, 3, "BUS101 - Principles of Business");
-        popup.getMenu().add(0, 5, 4, "EN101 - English Communication");
+        popup.getMenu().add(0, 0, 0, "All Assigned Courses");
+        for (int i = 0; i < availableCourses.size(); i++) {
+            CourseOption opt = availableCourses.get(i);
+            popup.getMenu().add(0, i + 1, i + 1, opt.code + " - " + opt.name);
+        }
 
         popup.setOnMenuItemClickListener(item -> {
-            if (tvSelectedCourseName != null) {
-                tvSelectedCourseName.setText(item.getTitle());
+            int idx = item.getItemId();
+            if (idx == 0) {
+                selectedCourseId = null;
+                if (tvSelectedCourseName != null) tvSelectedCourseName.setText("All Assigned Courses");
+            } else if (idx - 1 < availableCourses.size()) {
+                CourseOption opt = availableCourses.get(idx - 1);
+                selectedCourseId = opt.id;
+                if (tvSelectedCourseName != null) tvSelectedCourseName.setText(opt.code + " - " + opt.name);
             }
             fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
             return true;
@@ -233,10 +304,7 @@ public class ClassAnalyticsFragment extends Fragment {
 
     private void showSemesterDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "Semester 1, 2024-2025");
-        popup.getMenu().add(0, 2, 1, "Semester 2, 2023-2024");
-        popup.getMenu().add(0, 3, 2, "Semester 1, 2023-2024");
-
+        popup.getMenu().add(0, 1, 0, "All Semesters");
         popup.setOnMenuItemClickListener(item -> {
             if (tvSelectedSemester != null) {
                 tvSelectedSemester.setText(item.getTitle());
@@ -244,7 +312,6 @@ public class ClassAnalyticsFragment extends Fragment {
             fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
             return true;
         });
-
         popup.show();
     }
 
@@ -256,17 +323,15 @@ public class ClassAnalyticsFragment extends Fragment {
 
     private void setupBarChart(BarChart chart, List<Float> dist) {
         if (chart == null) return;
+        if (dist == null || dist.size() < 5) {
+            chart.clear();
+            chart.setNoDataText("No grade distribution data available");
+            chart.invalidate();
+            return;
+        }
         List<BarEntry> entries = new ArrayList<>();
-        if (dist != null && dist.size() >= 5) {
-            for (int i = 0; i < 5; i++) {
-                entries.add(new BarEntry(i, dist.get(i)));
-            }
-        } else {
-            entries.add(new BarEntry(0, 28f));
-            entries.add(new BarEntry(1, 32f));
-            entries.add(new BarEntry(2, 22f));
-            entries.add(new BarEntry(3, 12f));
-            entries.add(new BarEntry(4, 6f));
+        for (int i = 0; i < 5; i++) {
+            entries.add(new BarEntry(i, dist.get(i)));
         }
 
         BarDataSet dataSet = new BarDataSet(entries, getString(R.string.grade_distribution_5b81da));
@@ -312,36 +377,23 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.getAxisRight().setEnabled(false);
         chart.getDescription().setEnabled(false);
         chart.getLegend().setEnabled(false);
-        chart.animateY(800);
+        chart.animateY(600);
         ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }
 
     private void setupLineChart(LineChart chart, List<Float> classData, List<Float> targetData, List<String> labels) {
         if (chart == null) return;
-
-        List<Entry> classEntries = new ArrayList<>();
-        if (classData != null && !classData.isEmpty()) {
-            for (int i = 0; i < classData.size(); i++) {
-                classEntries.add(new Entry(i, classData.get(i)));
-            }
-        } else {
-            classEntries.add(new Entry(0, 63f));
-            classEntries.add(new Entry(1, 70f));
-            classEntries.add(new Entry(2, 81f));
-            classEntries.add(new Entry(3, 87f));
+        if (classData == null || classData.isEmpty()) {
+            chart.clear();
+            chart.setNoDataText("No trend data available yet");
+            chart.invalidate();
+            return;
         }
 
-        List<Entry> targetEntries = new ArrayList<>();
-        if (targetData != null && !targetData.isEmpty()) {
-            for (int i = 0; i < targetData.size(); i++) {
-                targetEntries.add(new Entry(i, targetData.get(i)));
-            }
-        } else {
-            targetEntries.add(new Entry(0, 54f));
-            targetEntries.add(new Entry(1, 60f));
-            targetEntries.add(new Entry(2, 68f));
-            targetEntries.add(new Entry(3, 77f));
+        List<Entry> classEntries = new ArrayList<>();
+        for (int i = 0; i < classData.size(); i++) {
+            classEntries.add(new Entry(i, classData.get(i)));
         }
 
         LineDataSet classSet = new LineDataSet(classEntries, getString(R.string.class_average));
@@ -351,24 +403,31 @@ public class ClassAnalyticsFragment extends Fragment {
         classSet.setCircleRadius(4f);
         classSet.setDrawValues(false);
 
-        LineDataSet targetSet = new LineDataSet(targetEntries, "Target");
-        targetSet.setColor(Color.parseColor("#9333EA"));
-        targetSet.setLineWidth(2f);
-        targetSet.enableDashedLine(10f, 5f, 0f);
-        targetSet.setCircleColor(Color.parseColor("#9333EA"));
-        targetSet.setCircleRadius(3.5f);
-        targetSet.setDrawValues(false);
+        LineData lineData = new LineData(classSet);
 
-        LineData lineData = new LineData(classSet, targetSet);
+        if (targetData != null && !targetData.isEmpty()) {
+            List<Entry> targetEntries = new ArrayList<>();
+            for (int i = 0; i < targetData.size(); i++) {
+                targetEntries.add(new Entry(i, targetData.get(i)));
+            }
+            LineDataSet targetSet = new LineDataSet(targetEntries, "Target");
+            targetSet.setColor(Color.parseColor("#9333EA"));
+            targetSet.setLineWidth(2f);
+            targetSet.enableDashedLine(10f, 5f, 0f);
+            targetSet.setCircleColor(Color.parseColor("#9333EA"));
+            targetSet.setCircleRadius(3.5f);
+            targetSet.setDrawValues(false);
+            lineData.addDataSet(targetSet);
+        }
+
         chart.setData(lineData);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        String[] xAxisLabels = (labels != null && !labels.isEmpty())
-                ? labels.toArray(new String[0])
-                : new String[]{"Sep", "Oct", "Nov", "Dec"};
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabels));
+        if (labels != null && !labels.isEmpty()) {
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(labels.toArray(new String[0])));
+        }
         xAxis.setTextColor(Color.parseColor("#10165C"));
         xAxis.setTextSize(11f);
 
@@ -382,7 +441,7 @@ public class ClassAnalyticsFragment extends Fragment {
         chart.getAxisRight().setEnabled(false);
         chart.getDescription().setEnabled(false);
         chart.getLegend().setTextColor(Color.parseColor("#10165C"));
-        chart.animateX(800);
+        chart.animateX(600);
         ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
         chart.invalidate();
     }

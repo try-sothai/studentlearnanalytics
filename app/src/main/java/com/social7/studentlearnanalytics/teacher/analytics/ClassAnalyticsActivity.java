@@ -1,4 +1,6 @@
 package com.social7.studentlearnanalytics.teacher.analytics;
 
-public class ClassAnalyticsActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ClassAnalyticsActivity extends AppCompatActivity {
 }

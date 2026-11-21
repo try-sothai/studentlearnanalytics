@@ -53,20 +53,6 @@ public class ExamDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_detail);
 
-        View headerContainer = findViewById(R.id.headerContainer);
-        if (headerContainer != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(headerContainer, (v, insets) -> {
-                Insets statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars());
-                v.setPadding(
-                        v.getPaddingLeft(),
-                        statusBarInsets.top + 24,
-                        v.getPaddingRight(),
-                        v.getPaddingBottom()
-                );
-                return insets;
-            });
-        }
-
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         tabUpcoming = findViewById(R.id.tabUpcoming);

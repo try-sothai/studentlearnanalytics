@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -74,6 +75,7 @@ public class AddAdminActivity extends AppCompatActivity {
         etAddAdminPhone = findViewById(R.id.etAddAdminPhone);
         etAddAdminDob = findViewById(R.id.etAddAdminDob);
         etAddAdminDesc = findViewById(R.id.etAddAdminDesc);
+        DatePickerHelper.attachDatePicker(tilAddAdminDob, etAddAdminDob, true);
 
         spAddAdminRole = findViewById(R.id.spAddAdminRole);
         spAddAdminAccessLevel = findViewById(R.id.spAddAdminAccessLevel);
@@ -143,6 +145,13 @@ public class AddAdminActivity extends AppCompatActivity {
             isValid = false;
         } else {
             if (tilAddAdminEmail != null) tilAddAdminEmail.setError(null);
+        }
+
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (tilAddAdminDob != null) tilAddAdminDob.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        } else {
+            if (tilAddAdminDob != null) tilAddAdminDob.setError(null);
         }
 
         if (spAddAdminRole != null && spAddAdminRole.getSelectedItemPosition() == 0) {

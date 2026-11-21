@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@color/slas_surface"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="1dp"
     app:strokeColor="@color/slas_border"
     app:strokeWidth="1dp">
 
@@ -16,67 +17,103 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="14dp">
+        android:padding="12dp">
 
         <View
             android:id="@+id/indicator_view"
             android:layout_width="4dp"
-            android:layout_height="36dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/bg_score_label"
-            android:backgroundTint="@color/slas_primary_purple"
-            android:layout_marginEnd="12dp" />
+            android:backgroundTint="@color/slas_primary_purple" />
 
         <ImageView
             android:id="@+id/assessment_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:padding="9dp"
             android:background="@drawable/bg_circle_soft_blue"
             android:backgroundTint="@color/slas_light_purple"
+            android:contentDescription="@string/assessment_icon"
+            android:padding="9dp"
             android:src="@drawable/ic_assignment"
-            app:tint="@color/slas_primary_purple"
-            android:contentDescription="@string/assessment_icon" />
+            app:tint="@color/slas_primary_purple" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="8dp"
+            android:layout_weight="1"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/assessment_course_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/slas_primary_purple"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="CS101 • Programming Fundamentals"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/assessment_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Assignment 1"
-                android:textColor="@color/slas_text_primary"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
                 android:maxLines="2"
-                android:ellipsize="end" />
+                android:textColor="@color/slas_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="Assignment 1" />
 
             <TextView
                 android:id="@+id/assessment_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                tools:text="Sep 15, 2024"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/slas_text_secondary"
-                android:textSize="12sp"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:textSize="11.5sp"
+                tools:text="Due: Sep 15, 2024 • 100 pts" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/assessment_score"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="85 / 100"
-            android:textColor="@color/slas_text_primary"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/assessment_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge_core"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:textColor="@color/slas_text_primary"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                tools:text="85 / 100" />
+
+            <TextView
+                android:id="@+id/assessment_action_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/slas_primary_purple"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="Submit ›"
+                tools:visibility="visible" />
+        </LinearLayout>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

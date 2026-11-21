@@ -125,6 +125,8 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
             }
 
             if (btnPublishQuiz != null) {
+                boolean isPublished = "Published".equalsIgnoreCase(item.status) || "Active".equalsIgnoreCase(item.status);
+                btnPublishQuiz.setVisibility(isPublished ? View.GONE : View.VISIBLE);
                 btnPublishQuiz.setOnClickListener(v -> {
                     if (listener != null) listener.onPublishClick(item);
                 });

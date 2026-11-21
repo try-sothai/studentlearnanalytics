@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,7 @@
         android:background="@color/card_white"
         android:elevation="2dp"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="12dp"
         android:paddingBottom="16dp">
 
         <LinearLayout
@@ -42,11 +41,19 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSearchEnrollment"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:hint="Search student name, ID, class cohort..."
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search_enrollment_hint"
                     android:inputType="text"
                     android:textColor="@color/admin_text_primary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" 
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -140,6 +147,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:padding="16dp" />
+        android:padding="12dp" />
 
 </LinearLayout>

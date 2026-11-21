@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/btnBackEditStudent"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- Student Identity Card -->
             <com.google.android.material.card.MaterialCardView
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvEditAvatarChar"
@@ -136,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -152,17 +152,26 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
-                    <!-- Full Name -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/full_name_d9bc75"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/name_rule_hint"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+
+                    <!-- Khmer Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/khmer_name_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEditStudentName"
+                        android:id="@+id/tilEditStudentKhmerName"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -176,10 +185,45 @@
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEditStudentName"
+                            android:id="@+id/etEditStudentKhmerName"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="@string/enter_full_name"
+                            android:hint="e.g. សុខ ចាន់"
+                            android:inputType="textPersonName"
+                            android:paddingVertical="8dp"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- English Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/english_name_optional"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEditStudentEnglishName"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxBackgroundColor="@color/card_white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEditStudentEnglishName"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:hint="e.g. Sok Chan"
                             android:inputType="textPersonName"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -227,7 +271,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="@string/email_address"
+                        android:text="@string/email_address_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -250,7 +294,7 @@
                             android:id="@+id/etEditStudentEmail"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
-                            android:hint="@string/enter_email_address"
+                            android:hint="@string/enter_email_optional"
                             android:inputType="textEmailAddress"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
@@ -320,8 +364,10 @@
                             android:id="@+id/etEditStudentDob"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:focusable="false"
                             android:hint="@string/select_date_of_birth"
-                            android:inputType="date"
                             android:paddingVertical="8dp"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="14sp" />
@@ -345,7 +391,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -446,7 +492,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -508,7 +554,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancelEditStudent"

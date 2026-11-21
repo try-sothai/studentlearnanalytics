@@ -16,14 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Teacher;
 import com.social7.studentlearnanalytics.network.ApiClient;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
+import com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper;
+import com.social7.studentlearnanalytics.utils.RoleGuard;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,17 +37,21 @@ public class EditTeacherActivity extends AppCompatActivity {
     private Teacher currentTeacher;
 
     private TextView tvEditTeacherAvatarChar, tvEditTeacherHeaderName, tvEditTeacherHeaderId, tvEditTeacherHeaderStatus;
-    private TextInputLayout tilEditTeacherName, tilEditTeacherEmail, tilEditTeacherPhone, tilEditTeacherDob, tilEditTeacherOffice, tilEditTeacherBio;
-    private EditText etEditTeacherName, etEditTeacherId, etEditTeacherEmail, etEditTeacherPhone, etEditTeacherDob, etEditTeacherOffice, etEditTeacherBio;
+    private TextInputLayout tilEditTeacherKhmerName, tilEditTeacherEnglishName, tilEditTeacherEmail, tilEditTeacherPhone, tilEditTeacherDob, tilEditTeacherHireDate, tilEditTeacherOffice, tilEditTeacherBio;
+    private EditText etEditTeacherKhmerName, etEditTeacherEnglishName, etEditTeacherId, etEditTeacherEmail, etEditTeacherPhone, etEditTeacherDob, etEditTeacherHireDate, etEditTeacherOffice, etEditTeacherBio;
 
     private Spinner spEditTeacherDept, spEditTeacherPosition, spEditTeacherWorkType;
     private RadioGroup rgEditTeacherAccountStatus;
     private RadioButton rbEditTeacherActive, rbEditTeacherInactive;
-    private MaterialButton btnUpdateTeacher, btnCancelEditTeacher;
+    private ChipGroup chipGroupEditTeacherSpecializations;
+    private TextView tvEditTeacherSpecEmptyHint;
+    private MaterialButton btnSelectEditTeacherSpecializations, btnUpdateTeacher, btnCancelEditTeacher;
+    private TeacherProfileFormHelper profileFormHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!RoleGuard.checkAccess(this, "Admin")) return;
         setContentView(R.layout.activity_edit_teacher);
 
         if (getIntent() != null && getIntent().hasExtra("teacher")) {
@@ -58,8 +64,18 @@ public class EditTeacherActivity extends AppCompatActivity {
 
         initViews();
         setupSpinners();
+        profileFormHelper = new TeacherProfileFormHelper(
+                this, etEditTeacherOffice, chipGroupEditTeacherSpecializations, tvEditTeacherSpecEmptyHint);
+        profileFormHelper.loadLookups(spEditTeacherDept, currentTeacher.getDepartment());
         prepopulateFields();
+        fetchLatestTeacherDetails();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RoleGuard.checkAccess(this, "Admin");
     }
 
     private void initViews() {
@@ -73,20 +89,26 @@ public class EditTeacherActivity extends AppCompatActivity {
         tvEditTeacherHeaderId = findViewById(R.id.tvEditTeacherHeaderId);
         tvEditTeacherHeaderStatus = findViewById(R.id.tvEditTeacherHeaderStatus);
 
-        tilEditTeacherName = findViewById(R.id.tilEditTeacherName);
+        tilEditTeacherKhmerName = findViewById(R.id.tilEditTeacherKhmerName);
+        tilEditTeacherEnglishName = findViewById(R.id.tilEditTeacherEnglishName);
         tilEditTeacherEmail = findViewById(R.id.tilEditTeacherEmail);
         tilEditTeacherPhone = findViewById(R.id.tilEditTeacherPhone);
         tilEditTeacherDob = findViewById(R.id.tilEditTeacherDob);
+        tilEditTeacherHireDate = findViewById(R.id.tilEditTeacherHireDate);
         tilEditTeacherOffice = findViewById(R.id.tilEditTeacherOffice);
         tilEditTeacherBio = findViewById(R.id.tilEditTeacherBio);
 
-        etEditTeacherName = findViewById(R.id.etEditTeacherName);
+        etEditTeacherKhmerName = findViewById(R.id.etEditTeacherKhmerName);
+        etEditTeacherEnglishName = findViewById(R.id.etEditTeacherEnglishName);
         etEditTeacherId = findViewById(R.id.etEditTeacherId);
         etEditTeacherEmail = findViewById(R.id.etEditTeacherEmail);
         etEditTeacherPhone = findViewById(R.id.etEditTeacherPhone);
         etEditTeacherDob = findViewById(R.id.etEditTeacherDob);
+        etEditTeacherHireDate = findViewById(R.id.etEditTeacherHireDate);
         etEditTeacherOffice = findViewById(R.id.etEditTeacherOffice);
         etEditTeacherBio = findViewById(R.id.etEditTeacherBio);
+        DatePickerHelper.attachDatePicker(tilEditTeacherDob, etEditTeacherDob, true);
+        DatePickerHelper.attachDatePicker(tilEditTeacherHireDate, etEditTeacherHireDate, true);
 
         spEditTeacherDept = findViewById(R.id.spEditTeacherDept);
         spEditTeacherPosition = findViewById(R.id.spEditTeacherPosition);
@@ -96,13 +118,17 @@ public class EditTeacherActivity extends AppCompatActivity {
         rbEditTeacherActive = findViewById(R.id.rbEditTeacherActive);
         rbEditTeacherInactive = findViewById(R.id.rbEditTeacherInactive);
 
+        chipGroupEditTeacherSpecializations = findViewById(R.id.chipGroupEditTeacherSpecializations);
+        tvEditTeacherSpecEmptyHint = findViewById(R.id.tvEditTeacherSpecEmptyHint);
+        btnSelectEditTeacherSpecializations = findViewById(R.id.btnSelectEditTeacherSpecializations);
+
         btnUpdateTeacher = findViewById(R.id.btnUpdateTeacher);
         btnCancelEditTeacher = findViewById(R.id.btnCancelEditTeacher);
     }
 
     private void setupSpinners() {
         String[] departments = {"Computer Science", "Information Technology", "Software Engineering", "Business Administration", "Data Science"};
-        String[] positions = {"Lecturer", "Assistant Lecturer", "Senior Lecturer", "Professor", "Associate Professor"};
+        String[] positions = {"Lecturer", "Assistant Lecturer", "Senior Lecturer", "Associate Professor", "Professor"};
         String[] workTypes = {"Full-time", "Part-time"};
 
         setSpinnerAdapter(spEditTeacherDept, departments);
@@ -117,10 +143,64 @@ public class EditTeacherActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
+    private void fetchLatestTeacherDetails() {
+        if (currentTeacher == null) return;
+        Call<JsonObject> call;
+        if (currentTeacher.getDbId() != null && currentTeacher.getDbId() > 0) {
+            call = ApiClient.getApiService(this).getTeacher(String.valueOf(currentTeacher.getDbId()));
+        } else if (currentTeacher.getUserId() != null && currentTeacher.getUserId() > 0) {
+            call = ApiClient.getApiService(this).getUser(String.valueOf(currentTeacher.getUserId()));
+        } else {
+            return;
+        }
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed() || !response.isSuccessful() || response.body() == null) return;
+                JsonObject root = response.body();
+                JsonObject data = root.has("data") && root.get("data").isJsonObject() ? root.getAsJsonObject("data") : root;
+                JsonObject nested = data.has("teacher") && data.get("teacher").isJsonObject() ? data.getAsJsonObject("teacher") : data;
+
+                String kh = getOptStr(nested, "khmer_name", getOptStr(data, "khmer_name", ""));
+                String en = getOptStr(nested, "english_name", getOptStr(data, "english_name", ""));
+                String rawName = getOptStr(data, "name", currentTeacher.getName());
+                currentTeacher.setKhmerName(kh);
+                currentTeacher.setEnglishName(en);
+                currentTeacher.setName(PersonNameDisplayHelper.resolveDisplayName(en, kh, rawName));
+
+                String em = getOptStr(data, "email", "");
+                if (em.isEmpty() && data.has("user") && data.get("user").isJsonObject()) {
+                    em = getOptStr(data.getAsJsonObject("user"), "email", "");
+                }
+                currentTeacher.setEmail(em);
+                String dob = getOptStr(data, "date_of_birth", getOptStr(nested, "date_of_birth", ""));
+                if (!dob.isEmpty()) currentTeacher.setDob(dob);
+                String hireDate = getOptStr(nested, "hire_date", getOptStr(data, "hire_date", ""));
+                if (!hireDate.isEmpty()) currentTeacher.setHireDate(hireDate);
+                String phone = getOptStr(data, "phone", "");
+                if (!phone.isEmpty()) currentTeacher.setPhone(phone);
+
+                prepopulateFields();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+        });
+    }
+
+    private String getOptStr(JsonObject obj, String key, String fallback) {
+        if (obj != null && obj.has(key) && !obj.get(key).isJsonNull()) {
+            return obj.get(key).getAsString();
+        }
+        return fallback;
+    }
+
     private void prepopulateFields() {
         if (currentTeacher == null) return;
 
-        String name = currentTeacher.getName();
+        String khmerName = PersonNameDisplayHelper.clean(currentTeacher.getKhmerName());
+        String englishName = PersonNameDisplayHelper.clean(currentTeacher.getEnglishName());
+        String name = PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, currentTeacher.getName());
         String initial = (name != null && !name.isEmpty()) ? name.substring(0, 1).toUpperCase() : "T";
 
         if (tvEditTeacherAvatarChar != null) tvEditTeacherAvatarChar.setText(initial);
@@ -134,13 +214,23 @@ public class EditTeacherActivity extends AppCompatActivity {
             tvEditTeacherHeaderStatus.setBackgroundResource(isActive ? R.drawable.bg_badge_core : R.drawable.bg_badge_credit);
         }
 
-        if (etEditTeacherName != null) etEditTeacherName.setText(name);
+        if (etEditTeacherKhmerName != null) etEditTeacherKhmerName.setText(khmerName);
+        if (etEditTeacherEnglishName != null) etEditTeacherEnglishName.setText(englishName);
         if (etEditTeacherId != null) etEditTeacherId.setText(currentTeacher.getId());
-        if (etEditTeacherEmail != null) etEditTeacherEmail.setText(currentTeacher.getEmail());
+        if (etEditTeacherEmail != null) {
+            String em = currentTeacher.getEmail();
+            etEditTeacherEmail.setText(em != null && em.contains("@") ? em : "");
+        }
         if (etEditTeacherPhone != null) etEditTeacherPhone.setText("N/A".equals(currentTeacher.getPhone()) ? "" : currentTeacher.getPhone());
         if (etEditTeacherDob != null) etEditTeacherDob.setText("N/A".equals(currentTeacher.getDob()) ? "" : currentTeacher.getDob());
-        if (etEditTeacherOffice != null) etEditTeacherOffice.setText(currentTeacher.getOfficeLocation());
-        if (etEditTeacherBio != null) etEditTeacherBio.setText(currentTeacher.getBio());
+        if (etEditTeacherHireDate != null) etEditTeacherHireDate.setText("N/A".equals(currentTeacher.getHireDate()) ? "" : currentTeacher.getHireDate());
+        if (etEditTeacherBio != null) etEditTeacherBio.setText(currentTeacher.getRawBio());
+
+        profileFormHelper.setInitialValues(
+                currentTeacher.getOfficeLocationId(),
+                currentTeacher.getRawOfficeLocation(),
+                currentTeacher.getSpecializations()
+        );
 
         setSpinnerSelection(spEditTeacherDept, currentTeacher.getDepartment());
         setSpinnerSelection(spEditTeacherPosition, currentTeacher.getPosition());
@@ -164,6 +254,16 @@ public class EditTeacherActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        if (etEditTeacherOffice != null) {
+            etEditTeacherOffice.setOnClickListener(v -> profileFormHelper.showOfficeLocationPickerDialog());
+        }
+        if (tilEditTeacherOffice != null) {
+            tilEditTeacherOffice.setEndIconOnClickListener(v -> profileFormHelper.showOfficeLocationPickerDialog());
+        }
+        if (btnSelectEditTeacherSpecializations != null) {
+            btnSelectEditTeacherSpecializations.setOnClickListener(v -> profileFormHelper.showSpecializationPickerDialog());
+        }
+
         if (btnCancelEditTeacher != null) {
             btnCancelEditTeacher.setOnClickListener(v -> finish());
         }
@@ -174,32 +274,55 @@ public class EditTeacherActivity extends AppCompatActivity {
     }
 
     private void attemptUpdateTeacher() {
-        if (etEditTeacherName == null || etEditTeacherEmail == null) return;
+        if (etEditTeacherKhmerName == null && etEditTeacherEnglishName == null) return;
 
-        String name = etEditTeacherName.getText().toString().trim();
-        String email = etEditTeacherEmail.getText().toString().trim();
+        String khmerName = etEditTeacherKhmerName != null
+                ? PersonNameDisplayHelper.clean(etEditTeacherKhmerName.getText().toString()) : "";
+        String englishName = etEditTeacherEnglishName != null
+                ? PersonNameDisplayHelper.clean(etEditTeacherEnglishName.getText().toString()) : "";
+        String email = etEditTeacherEmail != null ? etEditTeacherEmail.getText().toString().trim() : "";
         String phone = etEditTeacherPhone != null ? etEditTeacherPhone.getText().toString().trim() : "";
         String dob = etEditTeacherDob != null ? etEditTeacherDob.getText().toString().trim() : "";
-        String office = etEditTeacherOffice != null ? etEditTeacherOffice.getText().toString().trim() : "";
+        String hireDate = etEditTeacherHireDate != null ? etEditTeacherHireDate.getText().toString().trim() : "";
+        String office = profileFormHelper.getSelectedOfficeLabel();
+        Integer officeId = profileFormHelper.getSelectedOfficeId();
         String bio = etEditTeacherBio != null ? etEditTeacherBio.getText().toString().trim() : "";
 
         boolean isValid = true;
 
-        if (name.isEmpty()) {
-            if (tilEditTeacherName != null) tilEditTeacherName.setError("Full name is required");
+        if (!PersonNameDisplayHelper.hasAtLeastOneName(khmerName, englishName)) {
+            String msg = getString(R.string.err_name_one_required);
+            if (tilEditTeacherKhmerName != null) tilEditTeacherKhmerName.setError(msg);
+            if (tilEditTeacherEnglishName != null) tilEditTeacherEnglishName.setError(msg);
             isValid = false;
         } else {
-            if (tilEditTeacherName != null) tilEditTeacherName.setError(null);
+            if (tilEditTeacherKhmerName != null) tilEditTeacherKhmerName.setError(null);
+            if (tilEditTeacherEnglishName != null) tilEditTeacherEnglishName.setError(null);
         }
 
-        if (email.isEmpty()) {
-            if (tilEditTeacherEmail != null) tilEditTeacherEmail.setError("Email address is required");
+        if (!email.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            if (tilEditTeacherEmail != null) tilEditTeacherEmail.setError(getString(R.string.err_invalid_email));
             isValid = false;
         } else {
             if (tilEditTeacherEmail != null) tilEditTeacherEmail.setError(null);
         }
 
+        if (!dob.isEmpty() && !DatePickerHelper.isValidIsoDate(dob)) {
+            if (tilEditTeacherDob != null) tilEditTeacherDob.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        } else {
+            if (tilEditTeacherDob != null) tilEditTeacherDob.setError(null);
+        }
+
+        if (!hireDate.isEmpty() && !DatePickerHelper.isValidIsoDate(hireDate)) {
+            if (tilEditTeacherHireDate != null) tilEditTeacherHireDate.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        } else {
+            if (tilEditTeacherHireDate != null) tilEditTeacherHireDate.setError(null);
+        }
+
         if (isValid) {
+            String displayName = PersonNameDisplayHelper.resolveDisplayName(englishName, khmerName, "Teacher");
             String dept = spEditTeacherDept != null && spEditTeacherDept.getSelectedItem() != null ? spEditTeacherDept.getSelectedItem().toString() : currentTeacher.getDepartment();
             String pos = spEditTeacherPosition != null && spEditTeacherPosition.getSelectedItem() != null ? spEditTeacherPosition.getSelectedItem().toString() : currentTeacher.getPosition();
             String workType = spEditTeacherWorkType != null && spEditTeacherWorkType.getSelectedItem() != null ? spEditTeacherWorkType.getSelectedItem().toString() : currentTeacher.getWorkType();
@@ -207,21 +330,36 @@ public class EditTeacherActivity extends AppCompatActivity {
             String status = isCheckedActive ? "active" : "inactive";
 
             JsonObject payload = new JsonObject();
-            payload.addProperty("name", name);
+            payload.addProperty("khmer_name", khmerName);
+            payload.addProperty("english_name", englishName);
+            payload.addProperty("name", displayName);
             payload.addProperty("email", email);
-            if (!phone.isEmpty()) payload.addProperty("phone", phone);
-            if (!dob.isEmpty()) payload.addProperty("date_of_birth", dob);
-            if (!office.isEmpty()) payload.addProperty("office_location", office);
-            if (!bio.isEmpty()) payload.addProperty("bio", bio);
+            payload.addProperty("phone", phone);
+            payload.addProperty("date_of_birth", dob);
+            payload.addProperty("hire_date", hireDate);
+            if (officeId != null) {
+                payload.addProperty("office_location_id", officeId);
+            } else {
+                payload.add("office_location_id", JsonNull.INSTANCE);
+            }
+            payload.addProperty("office_location", office);
+            payload.add("specializations", profileFormHelper.getSelectedSpecializationsJson());
+            payload.addProperty("biography", bio);
+            payload.addProperty("bio", bio);
+            payload.addProperty("department", dept);
             payload.addProperty("department_name", dept);
             payload.addProperty("position", pos);
             payload.addProperty("work_type", workType);
             payload.addProperty("status", status);
 
             String identifier = "1";
+            boolean useTeacherEndpoint = false;
             if (currentTeacher != null) {
                 if (currentTeacher.getUserId() != null && currentTeacher.getUserId() > 0) {
                     identifier = String.valueOf(currentTeacher.getUserId());
+                } else if (currentTeacher.getDbId() != null && currentTeacher.getDbId() > 0) {
+                    identifier = String.valueOf(currentTeacher.getDbId());
+                    useTeacherEndpoint = true;
                 } else if (currentTeacher.getId() != null) {
                     identifier = currentTeacher.getId();
                 }
@@ -229,17 +367,25 @@ public class EditTeacherActivity extends AppCompatActivity {
 
             if (btnUpdateTeacher != null) btnUpdateTeacher.setEnabled(false);
 
-            ApiClient.getApiService(this).updateUser(identifier, payload).enqueue(new Callback<JsonObject>() {
+            Call<JsonObject> call = useTeacherEndpoint
+                    ? ApiClient.getApiService(this).updateTeacher(identifier, payload)
+                    : ApiClient.getApiService(this).updateUser(identifier, payload);
+            call.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                     if (btnUpdateTeacher != null) btnUpdateTeacher.setEnabled(true);
                     if (response.isSuccessful()) {
-                        currentTeacher.setName(name);
+                        currentTeacher.setKhmerName(khmerName);
+                        currentTeacher.setEnglishName(englishName);
+                        currentTeacher.setName(displayName);
                         currentTeacher.setEmail(email);
-                        if (!phone.isEmpty()) currentTeacher.setPhone(phone);
-                        if (!dob.isEmpty()) currentTeacher.setDob(dob);
-                        if (!office.isEmpty()) currentTeacher.setOfficeLocation(office);
-                        if (!bio.isEmpty()) currentTeacher.setBio(bio);
+                        currentTeacher.setPhone(phone);
+                        currentTeacher.setDob(dob);
+                        currentTeacher.setHireDate(hireDate);
+                        currentTeacher.setOfficeLocationId(officeId);
+                        currentTeacher.setOfficeLocation(office);
+                        currentTeacher.setSpecializations(profileFormHelper.getSelectedSpecializations());
+                        currentTeacher.setBio(bio);
                         currentTeacher.setDepartment(dept);
                         currentTeacher.setPosition(pos);
                         currentTeacher.setWorkType(workType);
@@ -248,7 +394,16 @@ public class EditTeacherActivity extends AppCompatActivity {
                         Toast.makeText(EditTeacherActivity.this, R.string.teacher_account_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
-                        Toast.makeText(EditTeacherActivity.this, "Failed to update teacher: HTTP " + response.code(), Toast.LENGTH_LONG).show();
+                        String errMsg = "Failed to update teacher: HTTP " + response.code();
+                        try (okhttp3.ResponseBody eb = response.errorBody()) {
+                            if (eb != null) {
+                                JsonObject errObj = com.google.gson.JsonParser.parseString(eb.string()).getAsJsonObject();
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errMsg = errObj.get("message").getAsString();
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                        Toast.makeText(EditTeacherActivity.this, errMsg, Toast.LENGTH_LONG).show();
                     }
                 }
 

@@ -16,7 +16,7 @@
         android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/btnBackAddStudent"
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- 01. PERSONAL INFORMATION -->
             <com.google.android.material.card.MaterialCardView
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -83,11 +83,20 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/name_rule_hint"
+                        android:textColor="@color/admin_primary_blue"
+                        android:textSize="11.5sp"
+                        android:textStyle="bold" />
+
                     <!-- Khmer Name -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/khmer_name"
+                        android:text="@string/khmer_name_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -110,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="@string/english_name"
+                        android:text="@string/english_name_optional"
                         android:textColor="@color/admin_text_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -165,7 +174,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/date_of_birth_8cd760"
+                                android:text="@string/date_of_birth"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -179,7 +188,10 @@
                                     android:id="@+id/etAddStudentDob"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="YYYY-MM-DD"
+                                    android:clickable="true"
+                                    android:cursorVisible="false"
+                                    android:focusable="false"
+                                    android:hint="@string/select_date_of_birth"
                                     android:textSize="14sp" />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
@@ -249,7 +261,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -364,7 +376,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -438,7 +450,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -518,7 +530,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -620,7 +632,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton

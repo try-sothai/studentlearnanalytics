@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,21 +14,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.adapter.NotificationAdapter;
 import com.social7.studentlearnanalytics.model.Notification;
+import com.social7.studentlearnanalytics.network.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationFragment extends Fragment {
 
     private TextView tabAll, tabUnread, tabImportant;
     private RecyclerView rvTeacherNotifications;
     private NotificationAdapter adapter;
-    private List<Notification> allNotifications = new ArrayList<>();
-    private List<Notification> displayedNotifications = new ArrayList<>();
-    private String currentFilter = "ALL"; // ALL, UNREAD, IMPORTANT
+    private final List<Notification> allNotifications = new ArrayList<>();
+    private final List<Notification> displayedNotifications = new ArrayList<>();
+    private String currentFilter = "ALL";
 
     public NotificationFragment() {
     }
@@ -55,13 +62,7 @@ public class NotificationFragment extends Fragment {
 
         TextView btnMarkAllRead = view.findViewById(R.id.btnMarkAllRead);
         if (btnMarkAllRead != null) {
-            btnMarkAllRead.setOnClickListener(v -> {
-                for (Notification n : allNotifications) {
-                    n.setRead(true);
-                }
-                filterNotifications(currentFilter);
-                Toast.makeText(requireContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
-            });
+            btnMarkAllRead.setOnClickListener(v -> markAllReadOnApi());
         }
 
         tabAll = view.findViewById(R.id.tabNotifAll);
@@ -75,16 +76,83 @@ public class NotificationFragment extends Fragment {
         rvTeacherNotifications = view.findViewById(R.id.rvTeacherNotifications);
         if (rvTeacherNotifications != null) {
             rvTeacherNotifications.setLayoutManager(new LinearLayoutManager(requireContext()));
-            loadSampleNotifications();
-            adapter = new NotificationAdapter(requireContext(), displayedNotifications, notification -> {
-                notification.setRead(!notification.isRead());
-                filterNotifications(currentFilter);
-                Toast.makeText(requireContext(), notification.isRead() ? "Marked as read" : "Marked as unread", Toast.LENGTH_SHORT).show();
-            });
+            adapter = new NotificationAdapter(requireContext(), displayedNotifications, this::markSingleReadOnApi);
             rvTeacherNotifications.setAdapter(adapter);
         }
 
+        fetchNotificationsFromApi();
+
         return view;
+    }
+
+    private void fetchNotificationsFromApi() {
+        if (getContext() == null) return;
+        ApiClient.getApiService(requireContext()).getNotifications().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                allNotifications.clear();
+                if (response.isSuccessful() && response.body() != null && response.body().has("data") && response.body().get("data").isJsonArray()) {
+                    JsonArray arr = response.body().getAsJsonArray("data");
+                    for (JsonElement el : arr) {
+                        if (!el.isJsonObject()) continue;
+                        JsonObject obj = el.getAsJsonObject();
+                        String id = getStr(obj, "id", "0");
+                        String title = getStr(obj, "title", "Notification");
+                        String msg = getStr(obj, "message", "");
+                        String time = getStr(obj, "created_at", "Recent");
+                        String type = getStr(obj, "type", "System");
+                        boolean isRead = (obj.has("is_read") && !obj.get("is_read").isJsonNull() && obj.get("is_read").getAsBoolean())
+                                || (obj.has("read_at") && !obj.get("read_at").isJsonNull());
+                        boolean isImp = "high".equalsIgnoreCase(getStr(obj, "priority", "")) || "alert".equalsIgnoreCase(type);
+                        allNotifications.add(new Notification(id, title, msg, time, type, "RECENT", isRead, isImp));
+                    }
+                }
+                filterNotifications(currentFilter);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading notifications", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void markSingleReadOnApi(Notification notification) {
+        if (getContext() == null || notification == null || notification.getId() == null) return;
+        ApiClient.getApiService(requireContext()).markNotificationRead(notification.getId()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                notification.setRead(true);
+                filterNotifications(currentFilter);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+        });
+    }
+
+    private void markAllReadOnApi() {
+        if (getContext() == null) return;
+        ApiClient.getApiService(requireContext()).markAllNotificationsRead().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                for (Notification n : allNotifications) {
+                    n.setRead(true);
+                }
+                filterNotifications(currentFilter);
+                Toast.makeText(requireContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error marking notifications read", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setFilter(String filter) {
@@ -128,22 +196,13 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    private void loadSampleNotifications() {
-        allNotifications.clear();
-        // Assignments
-        allNotifications.add(new Notification("1", "Student Assignment Submitted", "Sophea submitted Assignment 1 for Data Structures (IT-4A).", "10 mins ago", "Course", "TODAY", false, true));
-        allNotifications.add(new Notification("2", "Assignment Deadline Approaching", "Assignment 2 for Network Administration closes in 24 hours.", "2 hours ago", "Course", "TODAY", false, false));
-        // Quizzes
-        allNotifications.add(new Notification("3", "Quiz Results Ready", "Quiz 1 evaluation completed for CS101. Average score: 84.5%.", "Yesterday", "Report", "YESTERDAY", true, true));
-        // Homework
-        allNotifications.add(new Notification("4", "New Homework Submission", "Dara submitted Homework 3 for Database Systems.", "Yesterday", "Course", "YESTERDAY", false, false));
-        // Classes & Students
-        allNotifications.add(new Notification("5", "At-Risk Student Alert", "Student Dara has dropped below 70% in performance and requires intervention.", "2 days ago", "Security", "EARLIER", false, true));
-        // Academic Schedule
-        allNotifications.add(new Notification("6", "Upcoming Class Schedule", "Lecture for IT-4A starts in 30 minutes in Room B-204.", "2 days ago", "System", "EARLIER", true, false));
-        // System
-        allNotifications.add(new Notification("7", "System Maintenance Notice", "Scheduled server maintenance tonight at 12:00 AM.", "3 days ago", "System", "EARLIER", true, false));
-
-        filterNotifications(currentFilter);
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 }

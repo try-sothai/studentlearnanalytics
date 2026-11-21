@@ -23,14 +23,30 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Vi
         public String studentId;
         public String studentName;
         public String assessmentTitle;
+        public String rawAssessmentTitle;
+        public String assessmentType = "Assignment";
+        public String courseCode = "";
+        public String courseName = "";
+        public String submittedAt = "";
         public String details;
         public String status;
+        public double maxScore = 100.0;
+        public Double score = null;
+        public String feedback = "";
+        public String fileName = "";
+        public String fileType = "";
+        public String fileSizeLabel = "";
+        public String mimeType = "";
+        public String previewType = "";
+        public boolean hasFile = false;
+        public boolean fileExists = false;
 
         public SubmissionCardItem(String id, String studentId, String studentName, String assessmentTitle, String details, String status) {
             this.id = id;
             this.studentId = studentId;
             this.studentName = studentName;
             this.assessmentTitle = assessmentTitle;
+            this.rawAssessmentTitle = assessmentTitle;
             this.details = details;
             this.status = status;
         }
@@ -39,6 +55,9 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Vi
     public interface OnSubmissionActionClickListener {
         void onViewFileClick(SubmissionCardItem item);
         void onGradeClick(SubmissionCardItem item);
+        default void onDetailClick(SubmissionCardItem item) {
+            onViewFileClick(item);
+        }
     }
 
     private final Context context;
@@ -129,6 +148,10 @@ public class SubmissionAdapter extends RecyclerView.Adapter<SubmissionAdapter.Vi
                     if (listener != null) listener.onGradeClick(item);
                 });
             }
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onDetailClick(item);
+            });
         }
     }
 }

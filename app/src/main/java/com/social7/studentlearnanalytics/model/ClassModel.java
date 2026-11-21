@@ -12,6 +12,15 @@ public class ClassModel implements Serializable {
     private String teacher;
     private String status;
     private int studentCount;
+    private int departmentId;
+    private int academicYearId;
+    private int buildingId;
+    private int floorId;
+    private int yearLevel = 1;
+    private int capacity = 40;
+    private String buildingName;
+    private String floorName;
+    private String locationLabel;
 
     public ClassModel() {
     }
@@ -54,4 +63,31 @@ public class ClassModel implements Serializable {
 
     public int getStudentCount() { return studentCount; }
     public void setStudentCount(int studentCount) { this.studentCount = studentCount; }
+
+    public int getDepartmentId() { return departmentId; }
+    public void setDepartmentId(int departmentId) { this.departmentId = departmentId; }
+
+    public int getAcademicYearId() { return academicYearId; }
+    public void setAcademicYearId(int academicYearId) { this.academicYearId = academicYearId; }
+
+    public int getBuildingId() { return buildingId; }
+    public void setBuildingId(int buildingId) { this.buildingId = buildingId; }
+
+    public int getFloorId() { return floorId; }
+    public void setFloorId(int floorId) { this.floorId = floorId; }
+
+    public int getYearLevel() { return yearLevel; }
+    public void setYearLevel(int yearLevel) { this.yearLevel = yearLevel; }
+
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+
+    public String getBuildingName() { return buildingName; }
+    public void setBuildingName(String buildingName) { this.buildingName = buildingName; }
+
+    public String getFloorName() { return floorName; }
+    public void setFloorName(String floorName) { this.floorName = floorName; }
+
+    public String getLocationLabel() { return locationLabel; }
+    public void setLocationLabel(String locationLabel) { this.locationLabel = locationLabel; }
 }

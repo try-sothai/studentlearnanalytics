@@ -9,7 +9,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/teacher_card_bg"
-    app:cardCornerRadius="14dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="1dp"
     app:strokeColor="@color/teacher_border"
     app:strokeWidth="1dp">
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="10dp"
         android:gravity="center_vertical">
 
         <!-- Column 1: Left Section (Type Icon, Title, Points, Due Date & Badge) -->
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:text="Assignment 2: Linked Lists"
                     android:textColor="@color/teacher_dark_navy"
-                    android:textSize="14sp"
+                    android:textSize="12.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:text="18 / 35"
                 android:textColor="@color/teacher_dark_navy"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <ProgressBar
@@ -172,7 +172,10 @@
                 android:id="@+id/btnEnterScores"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:text="@string/enter_scores"
                 android:textAllCaps="false"
                 android:textSize="11sp"

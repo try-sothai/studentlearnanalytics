@@ -109,7 +109,11 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
             if (tvDetails != null) {
                 StringBuilder details = new StringBuilder();
+                if (classModel.getLocationLabel() != null && !classModel.getLocationLabel().isEmpty()) {
+                    details.append(classModel.getLocationLabel());
+                }
                 if (classModel.getCourse() != null && !classModel.getCourse().isEmpty()) {
+                    if (details.length() > 0) details.append(" • ");
                     details.append(classModel.getCourse());
                 }
                 if (classModel.getTeacher() != null && !classModel.getTeacher().isEmpty()) {
@@ -120,10 +124,8 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
                     if (details.length() > 0) details.append(" • ");
                     details.append(classModel.getDepartment());
                 }
-                if (classModel.getStudentCount() > 0) {
-                    if (details.length() > 0) details.append(" • ");
-                    details.append(classModel.getStudentCount()).append(" Students");
-                }
+                if (details.length() > 0) details.append(" • ");
+                details.append(classModel.getStudentCount()).append(" Students");
                 tvDetails.setText(details.toString());
             }
 

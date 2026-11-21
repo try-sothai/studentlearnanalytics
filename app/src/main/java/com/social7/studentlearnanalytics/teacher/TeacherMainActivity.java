@@ -29,6 +29,7 @@ public class TeacherMainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
     private SessionManager sessionManager;
     private final View[] drawerItems = new View[12];
+    private boolean isNavigating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +71,19 @@ public class TeacherMainActivity extends AppCompatActivity {
             }
         }
 
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Fragment current = getSupportFragmentManager().findFragmentById(R.id.teacher_fragment_container);
+            if (current != null) {
+                syncBottomNavState(current);
+                syncDrawerSelectionState(current);
+            }
+        });
+
         if (bottomNavigation != null) {
             bottomNavigation.setOnItemSelectedListener(item -> {
+                if (isNavigating) {
+                    return true;
+                }
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.nav_teacher_home) {
@@ -203,11 +215,12 @@ public class TeacherMainActivity extends AppCompatActivity {
                 if (tvSubtitle != null) tvSubtitle.setTextColor(primaryBlue);
                 if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(primaryBlue));
             } else {
+                int mutedSlate = Color.parseColor("#64748B");
                 root.setBackground(null);
-                if (imgIcon != null) imgIcon.setImageTintList(ColorStateList.valueOf(primaryBlue));
+                if (imgIcon != null) imgIcon.setImageTintList(ColorStateList.valueOf(mutedSlate));
                 if (tvTitle != null) tvTitle.setTextColor(darkNavy);
-                if (tvSubtitle != null) tvSubtitle.setTextColor(Color.parseColor("#64748B"));
-                if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(primaryBlue));
+                if (tvSubtitle != null) tvSubtitle.setTextColor(mutedSlate);
+                if (imgChevron != null) imgChevron.setImageTintList(ColorStateList.valueOf(mutedSlate));
             }
         }
     }
@@ -229,16 +242,22 @@ public class TeacherMainActivity extends AppCompatActivity {
     }
 
     public void openFragment(@NonNull Fragment fragment) {
+        boolean isTopLevel = (fragment instanceof TeacherDashboardFragment ||
+                fragment instanceof StudentListFragment ||
+                fragment instanceof CourseManagementFragment ||
+                fragment instanceof ReportsFragment ||
+                fragment instanceof TeacherProfileOverviewFragment);
+
+        if (isTopLevel && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
         androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.teacher_fragment_container, fragment);
 
-        if (!(fragment instanceof TeacherDashboardFragment || 
-              fragment instanceof StudentListFragment || 
-              fragment instanceof CourseManagementFragment || 
-              fragment instanceof ReportsFragment || 
-              fragment instanceof TeacherProfileOverviewFragment)) {
+        if (!isTopLevel) {
             transaction.addToBackStack(null);
         }
 
@@ -265,20 +284,38 @@ public class TeacherMainActivity extends AppCompatActivity {
 
     private void syncBottomNavState(Fragment fragment) {
         if (bottomNavigation == null) return;
+        int targetId = -1;
         if (fragment instanceof TeacherDashboardFragment) {
-            bottomNavigation.getMenu().findItem(R.id.nav_teacher_home).setChecked(true);
+            targetId = R.id.nav_teacher_home;
         } else if (fragment instanceof StudentListFragment) {
-            bottomNavigation.getMenu().findItem(R.id.nav_teacher_students).setChecked(true);
+            targetId = R.id.nav_teacher_students;
         } else if (fragment instanceof CourseManagementFragment) {
-            bottomNavigation.getMenu().findItem(R.id.nav_teacher_courses).setChecked(true);
+            targetId = R.id.nav_teacher_courses;
         } else if (fragment instanceof ReportsFragment) {
-            bottomNavigation.getMenu().findItem(R.id.nav_teacher_reports).setChecked(true);
+            targetId = R.id.nav_teacher_reports;
         } else if (fragment instanceof TeacherProfileOverviewFragment || fragment instanceof TeacherProfileFragment) {
-            bottomNavigation.getMenu().findItem(R.id.nav_teacher_profile).setChecked(true);
+            targetId = R.id.nav_teacher_profile;
+        }
+        if (targetId != -1 && bottomNavigation.getSelectedItemId() != targetId) {
+            isNavigating = true;
+            bottomNavigation.setSelectedItemId(targetId);
+            isNavigating = false;
         }
     }
 
     public void logout() {
+        try {
+            com.social7.studentlearnanalytics.network.ApiClient.getApiService(this).logout().enqueue(
+                    new retrofit2.Callback<com.google.gson.JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {}
+
+                        @Override
+                        public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {}
+                    }
+            );
+        } catch (Exception ignored) {
+        }
         if (sessionManager != null) {
             sessionManager.clearSession();
         }

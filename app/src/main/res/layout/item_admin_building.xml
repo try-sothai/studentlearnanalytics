@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,36 +27,41 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvRoomNumber"
+                android:id="@+id/tvBuildingCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
-                android:text="Lab 101"
+                android:maxLines="1"
+                android:text="BLDG-A"
                 android:textColor="@color/admin_primary_blue"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvRoomName"
+                android:id="@+id/tvBuildingName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Computer Lab 1"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Building A"
                 android:textColor="@color/admin_text_primary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvAvailabilityStatus"
+                android:id="@+id/tvBuildingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_badge_core"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
-                android:text="@string/available"
+                android:maxLines="1"
+                android:text="@string/status_active"
                 android:textColor="@color/admin_active_green"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -64,23 +69,23 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvBuildingFloor"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvBuildingSummary"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="CCS Building • 1st Floor • Computer Lab"
+            android:text="4 Floors • 0 Classes"
             android:textColor="@color/admin_text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvCapacityEquipment"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvBuildingHierarchy"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Capacity: 40 PCs • Projector, AC, High-Speed LAN"
+            android:text="Tap to configure floors and assign classes"
             android:textColor="@color/admin_text_secondary"
-            android:textSize="13sp" />
+            android:textSize="12.5sp" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

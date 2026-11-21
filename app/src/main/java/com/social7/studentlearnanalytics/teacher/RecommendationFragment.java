@@ -1,8 +1,5 @@
 package com.social7.studentlearnanalytics.teacher;
 
-
-import com.social7.studentlearnanalytics.localization.ChartFontHelper;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -28,50 +25,49 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
-import com.social7.studentlearnanalytics.model.Student;
-import com.social7.studentlearnanalytics.teacher.student.StudentDetailActivity;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
+import com.social7.studentlearnanalytics.network.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RecommendationFragment extends Fragment {
 
-    // Sub-Tab Buttons
     private TextView tabRecOverview, tabRecStudent, tabRecPriority, tabRecIntervention, tabRecHistory;
-
-    // Sub-Tab Containers
     private View secRecOverviewContainer, secRecStudentContainer, secRecPriorityContainer, secRecInterventionContainer, secRecHistoryContainer;
 
-    // Sub-Tab 0: Overview
     private PieChart chartRecommendationPriorityPie;
     private MaterialButton btnGenerateRecs;
 
-    // Sub-Tab 1: Student Recommendations
     private RecyclerView rvStudentRecsList;
     private StudentRecommendationAdapter studentRecAdapter;
     private final List<StudentRecommendationAdapter.StudentRecommendationItem> studentRecList = new ArrayList<>();
     private EditText edtSearchStudentRecs;
 
-    // Sub-Tab 2: Priority Recommendations
     private RecyclerView rvPriorityRecsList;
     private StudentRecommendationAdapter priorityRecAdapter;
     private final List<StudentRecommendationAdapter.StudentRecommendationItem> priorityRecList = new ArrayList<>();
 
-    // Sub-Tab 3: Intervention Plans
     private RecyclerView rvInterventionPlansList;
     private InterventionPlanAdapter interventionAdapter;
     private final List<InterventionPlanAdapter.InterventionPlanItem> interventionList = new ArrayList<>();
     private MaterialButton btnCreateInterventionPlan;
 
-    // Sub-Tab 4: Recommendation History
     private RecyclerView rvRecommendationHistoryList;
     private RecommendationHistoryAdapter historyAdapter;
     private final List<RecommendationHistoryAdapter.RecommendationHistoryItem> historyList = new ArrayList<>();
     private EditText edtSearchRecHistory;
 
-    // Selected Sub-Tab Flag (0=Overview, 1=StudentRecs, 2=PriorityRecs, 3=Interventions, 4=History)
     private int selectedSubTab = 0;
+    private int defaultStudentDbId = 0;
 
     public RecommendationFragment() {
     }
@@ -85,28 +81,24 @@ public class RecommendationFragment extends Fragment {
     ) {
         View view = inflater.inflate(R.layout.fragment_recommendations, container, false);
 
-        // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
-                    view, getString(R.string.recommendations_management), "AI academic guidance & student support plans"
+                    view, getString(R.string.recommendations_management), "Academic guidance & student support plans"
             );
         }
 
-        // Sub-Tab Buttons
         tabRecOverview = view.findViewById(R.id.tabRecOverview);
         tabRecStudent = view.findViewById(R.id.tabRecStudent);
         tabRecPriority = view.findViewById(R.id.tabRecPriority);
         tabRecIntervention = view.findViewById(R.id.tabRecIntervention);
         tabRecHistory = view.findViewById(R.id.tabRecHistory);
 
-        // Containers
         secRecOverviewContainer = view.findViewById(R.id.secRecOverviewContainer);
         secRecStudentContainer = view.findViewById(R.id.secRecStudentContainer);
         secRecPriorityContainer = view.findViewById(R.id.secRecPriorityContainer);
         secRecInterventionContainer = view.findViewById(R.id.secRecInterventionContainer);
         secRecHistoryContainer = view.findViewById(R.id.secRecHistoryContainer);
 
-        // Bind Sub-views
         bindOverviewViews(view);
         bindStudentRecsViews(view);
         bindPriorityRecsViews(view);
@@ -115,6 +107,7 @@ public class RecommendationFragment extends Fragment {
 
         setupSubTabListeners();
         selectSubTab(selectedSubTab);
+        fetchRecommendationsFromApi();
 
         return view;
     }
@@ -136,18 +129,6 @@ public class RecommendationFragment extends Fragment {
         if (secRecPriorityContainer != null) secRecPriorityContainer.setVisibility(subIndex == 2 ? View.VISIBLE : View.GONE);
         if (secRecInterventionContainer != null) secRecInterventionContainer.setVisibility(subIndex == 3 ? View.VISIBLE : View.GONE);
         if (secRecHistoryContainer != null) secRecHistoryContainer.setVisibility(subIndex == 4 ? View.VISIBLE : View.GONE);
-
-        if (subIndex == 0) {
-            setupOverviewPieChart();
-        } else if (subIndex == 1) {
-            setupStudentRecsList();
-        } else if (subIndex == 2) {
-            setupPriorityRecsList();
-        } else if (subIndex == 3) {
-            setupInterventionList();
-        } else if (subIndex == 4) {
-            setupHistoryList();
-        }
     }
 
     private void updateSubTabButtonStyles(int activeIndex) {
@@ -167,33 +148,130 @@ public class RecommendationFragment extends Fragment {
         }
     }
 
-    // ==========================================
-    // 0. OVERVIEW SUB-TAB
-    // ==========================================
+    private void fetchRecommendationsFromApi() {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherRiskPredictions().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                studentRecList.clear();
+                priorityRecList.clear();
+                interventionList.clear();
+                historyList.clear();
+
+                int highCnt = 0, medCnt = 0, lowCnt = 0;
+
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                    JsonObject data = response.body().getAsJsonObject("data");
+
+                    if (data.has("at_risk_students") && data.get("at_risk_students").isJsonArray()) {
+                        JsonArray riskArr = data.getAsJsonArray("at_risk_students");
+                        for (JsonElement el : riskArr) {
+                            if (el.isJsonObject()) {
+                                JsonObject ro = el.getAsJsonObject();
+                                if (defaultStudentDbId == 0 && ro.has("student_id") && !ro.get("student_id").isJsonNull()) {
+                                    defaultStudentDbId = ro.get("student_id").getAsInt();
+                                }
+                            }
+                        }
+                    }
+
+                    if (data.has("recommendations") && data.get("recommendations").isJsonArray()) {
+                        JsonArray arr = data.getAsJsonArray("recommendations");
+                        for (JsonElement el : arr) {
+                            if (!el.isJsonObject()) continue;
+                            JsonObject o = el.getAsJsonObject();
+                            String code = getStr(o, "student_code", "STU");
+                            String name = getStr(o, "student_name", "Student");
+                            String cCode = getStr(o, "course_code", "COURSE");
+                            String title = getStr(o, "title", "Recommendation");
+                            String msg = getStr(o, "message", "");
+                            String prio = getStr(o, "priority", "Medium");
+                            String status = getStr(o, "status", "Pending");
+                            String date = getStr(o, "date", "-");
+
+                            if ("High".equalsIgnoreCase(prio)) highCnt++;
+                            else if ("Low".equalsIgnoreCase(prio)) lowCnt++;
+                            else medCnt++;
+
+                            StudentRecommendationAdapter.StudentRecommendationItem sr = new StudentRecommendationAdapter.StudentRecommendationItem(
+                                    code, name, cCode, title, msg, prio + " Priority"
+                            );
+                            studentRecList.add(sr);
+                            if ("High".equalsIgnoreCase(prio)) {
+                                priorityRecList.add(sr);
+                            }
+
+                            interventionList.add(new InterventionPlanAdapter.InterventionPlanItem(
+                                    code, name, "Support Plan: " + title, msg + " • " + date, status
+                            ));
+
+                            if ("Completed".equalsIgnoreCase(status)) {
+                                historyList.add(new RecommendationHistoryAdapter.RecommendationHistoryItem(
+                                        code, name, title, "Completed: " + date + " • Priority: " + prio, "Completed"
+                                ));
+                            }
+                        }
+                    }
+                }
+
+                bindOverviewPie(highCnt, medCnt, lowCnt);
+                if (studentRecAdapter != null) studentRecAdapter.filter("");
+                if (priorityRecAdapter != null) priorityRecAdapter.notifyDataSetChanged();
+                if (interventionAdapter != null) interventionAdapter.notifyDataSetChanged();
+                if (historyAdapter != null) historyAdapter.filter("");
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                bindOverviewPie(0, 0, 0);
+                Toast.makeText(getContext(), "Network error loading recommendations", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void bindOverviewViews(View root) {
         chartRecommendationPriorityPie = root.findViewById(R.id.chartRecommendationPriorityPie);
         btnGenerateRecs = root.findViewById(R.id.btnGenerateRecs);
 
+        if (chartRecommendationPriorityPie != null) {
+            chartRecommendationPriorityPie.setNoDataText("Loading recommendations...");
+        }
+
         if (btnGenerateRecs != null) {
-            btnGenerateRecs.setOnClickListener(v -> {
-                Toast.makeText(requireContext(), "Generated 4 new AI recommendations for assigned classes!", Toast.LENGTH_LONG).show();
-                selectSubTab(1); // Open Student Recs
-            });
+            btnGenerateRecs.setOnClickListener(v -> showCreateInterventionPlanDialog());
         }
     }
 
-    private void setupOverviewPieChart() {
-        if (chartRecommendationPriorityPie == null || chartRecommendationPriorityPie.getData() != null) return;
+    private void bindOverviewPie(int high, int med, int low) {
+        if (chartRecommendationPriorityPie == null) return;
+        int tot = high + med + low;
+        if (tot == 0) {
+            chartRecommendationPriorityPie.clear();
+            chartRecommendationPriorityPie.setNoDataText("No academic recommendations recorded yet");
+            chartRecommendationPriorityPie.invalidate();
+            return;
+        }
 
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(8f, "High Priority"));
-        entries.add(new PieEntry(15f, "Medium Priority"));
-        entries.add(new PieEntry(19f, "Low Priority"));
+        List<Integer> colors = new ArrayList<>();
+        if (high > 0) {
+            entries.add(new PieEntry(high, "High Priority"));
+            colors.add(Color.parseColor("#EF4444"));
+        }
+        if (med > 0) {
+            entries.add(new PieEntry(med, "Medium Priority"));
+            colors.add(Color.parseColor("#F59E0B"));
+        }
+        if (low > 0) {
+            entries.add(new PieEntry(low, "Low Priority"));
+            colors.add(Color.parseColor("#10B981"));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(new int[]{
-                Color.parseColor("#EF4444"), Color.parseColor("#F59E0B"), Color.parseColor("#10B981")
-        });
+        dataSet.setColors(colors);
         dataSet.setSliceSpace(3f);
         dataSet.setDrawValues(false);
 
@@ -203,22 +281,25 @@ public class RecommendationFragment extends Fragment {
         chartRecommendationPriorityPie.setHoleColor(Color.WHITE);
         chartRecommendationPriorityPie.setHoleRadius(65f);
         chartRecommendationPriorityPie.setTransparentCircleRadius(70f);
-        chartRecommendationPriorityPie.setCenterText("42\nRecs");
+        chartRecommendationPriorityPie.setCenterText(tot + "\nRecs");
         chartRecommendationPriorityPie.setCenterTextColor(Color.parseColor("#10165C"));
         chartRecommendationPriorityPie.setCenterTextSize(18f);
         chartRecommendationPriorityPie.getDescription().setEnabled(false);
         chartRecommendationPriorityPie.getLegend().setEnabled(false);
-        chartRecommendationPriorityPie.animateY(800);
+        chartRecommendationPriorityPie.animateY(600);
         ChartFontHelper.applyKhmerFont(chartRecommendationPriorityPie.getContext(), chartRecommendationPriorityPie);
         chartRecommendationPriorityPie.invalidate();
     }
 
-    // ==========================================
-    // 1. STUDENT RECOMMENDATIONS SUB-TAB
-    // ==========================================
     private void bindStudentRecsViews(View root) {
         rvStudentRecsList = root.findViewById(R.id.rvStudentRecsList);
         edtSearchStudentRecs = root.findViewById(R.id.edtSearchStudentRecs);
+
+        if (rvStudentRecsList != null && getContext() != null) {
+            studentRecAdapter = new StudentRecommendationAdapter(requireContext(), studentRecList, this::showStudentRecommendationDetailDialog);
+            rvStudentRecsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvStudentRecsList.setAdapter(studentRecAdapter);
+        }
 
         if (edtSearchStudentRecs != null) {
             edtSearchStudentRecs.addTextChangedListener(new TextWatcher() {
@@ -238,116 +319,58 @@ public class RecommendationFragment extends Fragment {
         }
     }
 
-    private void setupStudentRecsList() {
-        if (rvStudentRecsList == null || studentRecAdapter != null) return;
-
-        studentRecList.clear();
-        studentRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23001", "Dara", "CS101 - Intro to CS • BSIT 4-A", "AI Rec: Schedule 1-on-1 Tutoring in Data Structures", "GPA: 2.10 • Attendance: 58% • Assignment Avg: 62% • Quiz Avg: 55%", "High Priority"));
-        studentRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23002", "Rathana", "IT402 - Web Systems • BSIT 4-B", "AI Rec: Assign Practice Exercises on JavaScript Promises", "GPA: 2.75 • Attendance: 62% • Assignment Avg: 65% • Quiz Avg: 60%", "High Priority"));
-        studentRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23003", "Sreyneang", "CS204 - Algorithms • BSCS 3-A", "AI Rec: Issue Attendance Warning & Review Module 3", "GPA: 2.30 • Attendance: 60% • Assignment Avg: 68% • Quiz Avg: 58%", "High Priority"));
-        studentRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23004", "Chenda", "CS101 - Intro to CS • BSCS 3-B", "AI Rec: Group Study Session for Recursion & Sorting", "GPA: 3.10 • Attendance: 85% • Assignment Avg: 78% • Quiz Avg: 72%", "Medium Priority"));
-        studentRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23005", "Kimsan", "IS201 - Enterprise Arch • BSIS 2-A", "AI Rec: Advisory Review for Midterm Preparation", "GPA: 3.45 • Attendance: 92% • Assignment Avg: 88% • Quiz Avg: 84%", "Low Priority"));
-
-        studentRecAdapter = new StudentRecommendationAdapter(requireContext(), studentRecList, item -> {
-            showStudentRecommendationDetailDialog(item);
-        });
-
-        rvStudentRecsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvStudentRecsList.setAdapter(studentRecAdapter);
-    }
-
     private void showStudentRecommendationDetailDialog(StudentRecommendationAdapter.StudentRecommendationItem item) {
         if (!isAdded() || getContext() == null) return;
 
         String details = "Student Name: " + item.studentName + " (" + item.studentId + ")\n" +
-                "Course & Cohort: " + item.courseClass + "\n" +
+                "Course: " + item.courseClass + "\n" +
                 "Priority Status: " + item.priorityBadge + "\n\n" +
-                "Academic Diagnosis:\n" +
-                item.academicStats + "\n\n" +
-                "AI Recommendation Strategy:\n" +
+                "Recommendation:\n" +
                 item.recommendationTitle + "\n\n" +
-                "Suggested Interventions:\n" +
-                "1. Assign targeted remedial exercises on weak topics\n" +
-                "2. Conduct weekly 1-on-1 check-in consultation\n" +
-                "3. Track assignment recovery submission deadline";
+                item.academicStats;
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.student_recommendation_detail)
                 .setMessage(details)
-                .setPositiveButton(R.string.assign_support_plan, (dialog, which) -> {
-                    Toast.makeText(requireContext(), "Assigned support plan for " + item.studentName, Toast.LENGTH_SHORT).show();
-                    selectSubTab(3); // Open Intervention Plans
-                })
                 .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    // ==========================================
-    // 2. PRIORITY RECOMMENDATIONS SUB-TAB
-    // ==========================================
     private void bindPriorityRecsViews(View root) {
         rvPriorityRecsList = root.findViewById(R.id.rvPriorityRecsList);
+        if (rvPriorityRecsList != null && getContext() != null) {
+            priorityRecAdapter = new StudentRecommendationAdapter(requireContext(), priorityRecList, this::showStudentRecommendationDetailDialog);
+            rvPriorityRecsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvPriorityRecsList.setAdapter(priorityRecAdapter);
+        }
     }
 
-    private void setupPriorityRecsList() {
-        if (rvPriorityRecsList == null || priorityRecAdapter != null) return;
-
-        priorityRecList.clear();
-        priorityRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23001", "Dara", "CS101 - Intro to CS • BSIT 4-A", "URGENT: GPA < 2.20 & Attendance < 60% Warning", "GPA: 2.10 • Attendance: 58% • Assignment Avg: 62%", "High Priority"));
-        priorityRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23002", "Rathana", "IT402 - Web Systems • BSIT 4-B", "URGENT: Multiple Failed Quizzes in Web Security", "GPA: 2.75 • Attendance: 62% • Quiz Avg: 60%", "High Priority"));
-        priorityRecList.add(new StudentRecommendationAdapter.StudentRecommendationItem("STU23003", "Sreyneang", "CS204 - Algorithms • BSCS 3-A", "URGENT: Consecutive Absences & Missed Submissions", "GPA: 2.30 • Attendance: 60% • Quiz Avg: 58%", "High Priority"));
-
-        priorityRecAdapter = new StudentRecommendationAdapter(requireContext(), priorityRecList, item -> {
-            showStudentRecommendationDetailDialog(item);
-        });
-
-        rvPriorityRecsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvPriorityRecsList.setAdapter(priorityRecAdapter);
-    }
-
-    // ==========================================
-    // 3. INTERVENTION PLANS SUB-TAB
-    // ==========================================
     private void bindInterventionViews(View root) {
         rvInterventionPlansList = root.findViewById(R.id.rvInterventionPlansList);
         btnCreateInterventionPlan = root.findViewById(R.id.btnCreateInterventionPlan);
+
+        if (rvInterventionPlansList != null && getContext() != null) {
+            interventionAdapter = new InterventionPlanAdapter(requireContext(), interventionList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.intervention_plan_status)
+                        .setMessage(getString(R.string.student_name_4f287a) + item.studentName + " (" + item.studentId + ")\n" +
+                                item.activityTitle + "\n" +
+                                item.timeline + "\n\n" +
+                                "Current Status: " + item.statusBadge)
+                        .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvInterventionPlansList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvInterventionPlansList.setAdapter(interventionAdapter);
+        }
 
         if (btnCreateInterventionPlan != null) {
             btnCreateInterventionPlan.setOnClickListener(v -> showCreateInterventionPlanDialog());
         }
     }
 
-    private void setupInterventionList() {
-        if (rvInterventionPlansList == null || interventionAdapter != null) return;
-
-        interventionList.clear();
-        interventionList.add(new InterventionPlanAdapter.InterventionPlanItem("STU23001", "Dara", "Support Plan: 1-on-1 Academic Tutoring & Remedial Quizzes", "Target Goal: Raise GPA to 2.50 • Timeline: May 12 - Jun 30, 2026", "In Progress"));
-        interventionList.add(new InterventionPlanAdapter.InterventionPlanItem("STU23002", "Rathana", "Support Plan: Attendance Warning & Weekly Consultation", "Target Goal: Attendance > 80% • Timeline: May 01 - May 31, 2026", "In Progress"));
-        interventionList.add(new InterventionPlanAdapter.InterventionPlanItem("STU23003", "Sreyneang", "Support Plan: Practice Exercises in Algorithms", "Target Goal: Score > 75% • Timeline: Apr 15 - May 15, 2026", "Completed"));
-
-        interventionAdapter = new InterventionPlanAdapter(requireContext(), interventionList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.intervention_plan_status)
-                    .setMessage(getString(R.string.student_name_4f287a) + item.studentName + " (" + item.studentId + ")\n" +
-                            item.activityTitle + "\n" +
-                            item.timeline + "\n\n" +
-                            "Current Status: " + item.statusBadge)
-                    .setPositiveButton(R.string.mark_completed, (dialog, which) -> {
-                        item.statusBadge = "Completed";
-                        interventionAdapter.notifyDataSetChanged();
-                        Toast.makeText(requireContext(), "Intervention plan marked as completed!", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvInterventionPlansList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvInterventionPlansList.setAdapter(interventionAdapter);
-    }
-
     private void showCreateInterventionPlanDialog() {
-        View layout = LayoutInflater.from(requireContext()).inflate(R.layout.item_admin_student_recommendation_row, null);
-
+        if (getContext() == null) return;
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(R.string.create_academic_support_plan);
 
@@ -356,13 +379,15 @@ public class RecommendationFragment extends Fragment {
         container.setPadding(40, 20, 40, 20);
 
         TextInputLayout tilStudent = new TextInputLayout(requireContext());
-        tilStudent.setHint("Student Name or ID (e.g. Dara - STU23001)");
+        tilStudent.setHint("Student Database ID");
         TextInputEditText edtStudent = new TextInputEditText(tilStudent.getContext());
+        if (defaultStudentDbId > 0) edtStudent.setText(String.valueOf(defaultStudentDbId));
+        edtStudent.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         tilStudent.addView(edtStudent);
         container.addView(tilStudent);
 
         TextInputLayout tilActivity = new TextInputLayout(requireContext());
-        tilActivity.setHint("Support Activity (e.g. Peer Tutoring in CS101)");
+        tilActivity.setHint("Support Plan Title");
         TextInputEditText edtActivity = new TextInputEditText(tilActivity.getContext());
         tilActivity.addView(edtActivity);
         container.addView(tilActivity);
@@ -370,29 +395,58 @@ public class RecommendationFragment extends Fragment {
         builder.setView(container);
 
         builder.setPositiveButton(R.string.create_plan_4c7cd7, (dialog, which) -> {
-            String name = edtStudent.getText() != null ? edtStudent.getText().toString().trim() : "";
+            String sidStr = edtStudent.getText() != null ? edtStudent.getText().toString().trim() : "";
             String act = edtActivity.getText() != null ? edtActivity.getText().toString().trim() : "";
+            if (sidStr.isEmpty() || act.isEmpty()) {
+                Toast.makeText(requireContext(), "Student ID and support plan title are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int sid;
+            try {
+                sid = Integer.parseInt(sidStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Invalid student ID", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            JsonObject body = new JsonObject();
+            body.addProperty("student_id", sid);
+            body.addProperty("title", act);
+            body.addProperty("message", "Teacher academic support plan");
+            body.addProperty("priority", "high");
 
-            if (name.isEmpty()) name = "Dara";
-            if (act.isEmpty()) act = "1-on-1 Academic Counseling";
+            ApiClient.getApiService(requireContext()).createTeacherRecommendation(body).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (!isAdded() || getContext() == null) return;
+                    if (response.isSuccessful()) {
+                        Toast.makeText(requireContext(), R.string.academic_support_plan_created_successfully, Toast.LENGTH_SHORT).show();
+                        fetchRecommendationsFromApi();
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to create support plan (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-            interventionList.add(0, new InterventionPlanAdapter.InterventionPlanItem(
-                    "STU23001", name, "Support Plan: " + act, "Target Goal: Score > 75% • Timeline: May - Jun 2026", "In Progress"
-            ));
-            if (interventionAdapter != null) interventionAdapter.notifyDataSetChanged();
-            Toast.makeText(requireContext(), R.string.academic_support_plan_created_successfully, Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    if (!isAdded() || getContext() == null) return;
+                    Toast.makeText(requireContext(), "Network error creating support plan", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
-    // ==========================================
-    // 4. RECOMMENDATION HISTORY SUB-TAB
-    // ==========================================
     private void bindHistoryViews(View root) {
         rvRecommendationHistoryList = root.findViewById(R.id.rvRecommendationHistoryList);
         edtSearchRecHistory = root.findViewById(R.id.edtSearchRecHistory);
+
+        if (rvRecommendationHistoryList != null && getContext() != null) {
+            historyAdapter = new RecommendationHistoryAdapter(requireContext(), historyList, item -> {});
+            rvRecommendationHistoryList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvRecommendationHistoryList.setAdapter(historyAdapter);
+        }
 
         if (edtSearchRecHistory != null) {
             edtSearchRecHistory.addTextChangedListener(new TextWatcher() {
@@ -412,27 +466,13 @@ public class RecommendationFragment extends Fragment {
         }
     }
 
-    private void setupHistoryList() {
-        if (rvRecommendationHistoryList == null || historyAdapter != null) return;
-
-        historyList.clear();
-        historyList.add(new RecommendationHistoryAdapter.RecommendationHistoryItem("STU23001", "Dara", "Rec: Additional Tutoring in CS101 Data Structures", "Generated: Jan 10, 2026 • Completed: Mar 15, 2026 • Priority: High", "+12.5% GPA Increase"));
-        historyList.add(new RecommendationHistoryAdapter.RecommendationHistoryItem("STU23002", "Rathana", "Rec: Attendance Advisory Warning Agreement", "Generated: Feb 01, 2026 • Completed: Apr 10, 2026 • Priority: High", "+18.0% Attendance Boost"));
-        historyList.add(new RecommendationHistoryAdapter.RecommendationHistoryItem("STU23003", "Sreyneang", "Rec: Remedial Practice Exercises in Web Systems", "Generated: Jan 20, 2026 • Completed: Mar 01, 2026 • Priority: Medium", "+15.0% Quiz Score Boost"));
-
-        historyAdapter = new RecommendationHistoryAdapter(requireContext(), historyList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.recommendation_history_detail)
-                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
-                            "Student Name: " + item.studentName + "\n" +
-                            item.recTitle + "\n\n" +
-                            item.recDates + "\n\n" +
-                            "Academic Impact Result: " + item.impactBadge)
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvRecommendationHistoryList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvRecommendationHistoryList.setAdapter(historyAdapter);
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 }

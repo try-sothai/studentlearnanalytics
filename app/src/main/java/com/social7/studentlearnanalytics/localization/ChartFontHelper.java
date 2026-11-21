@@ -34,7 +34,7 @@ public final class ChartFontHelper {
         if (chart.getDescription() != null) {
             chart.getDescription().setTypeface(tf);
         }
-        if (chart.getXAxis() != null) {
+        if (!(chart instanceof PieChart) && chart.getXAxis() != null) {
             chart.getXAxis().setTypeface(tf);
         }
         if (chart instanceof BarLineChartBase) {

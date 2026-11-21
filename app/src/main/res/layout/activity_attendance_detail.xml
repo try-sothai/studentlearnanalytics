@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="12dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp">
 
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/attendance"
                 android:textColor="@color/slas_text_primary"
-                android:textSize="20sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -64,8 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="10dp">
 
             <!-- Semester Selector Dropdown Card -->
             <com.google.android.material.card.MaterialCardView
@@ -76,8 +76,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp">
 
@@ -86,7 +86,7 @@
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="12dp">
 
                     <TextView
                         android:id="@+id/tvSemesterLabel"
@@ -95,7 +95,7 @@
                         android:layout_weight="1"
                         android:text="@string/all_semesters"
                         android:textColor="@color/slas_text_primary"
-                        android:textSize="14sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -113,24 +113,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/empty_state_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/slas_text_secondary"
-                android:textSize="14sp"
+                android:textSize="12.5sp"
                 android:visibility="gone" />
 
             <!-- 3 Summary Statistics Cards -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <!-- 1. Total Classes -->
@@ -140,8 +140,8 @@
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp">
 
@@ -151,7 +151,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingHorizontal="8dp"
-                        android:paddingVertical="16dp">
+                        android:paddingVertical="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                             android:layout_marginTop="6dp"
                             android:text="0"
                             android:textColor="@color/slas_primary_purple"
-                            android:textSize="22sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -179,8 +179,8 @@
                     android:layout_marginHorizontal="3dp"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp">
 
@@ -190,7 +190,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingHorizontal="8dp"
-                        android:paddingVertical="16dp">
+                        android:paddingVertical="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
                             android:layout_marginTop="6dp"
                             android:text="0"
                             android:textColor="@color/slas_success"
-                            android:textSize="22sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -218,8 +218,8 @@
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/slas_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="1dp"
                     app:strokeColor="@color/slas_border"
                     app:strokeWidth="1dp">
 
@@ -229,7 +229,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingHorizontal="8dp"
-                        android:paddingVertical="16dp">
+                        android:paddingVertical="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -245,7 +245,7 @@
                             android:layout_marginTop="6dp"
                             android:text="0"
                             android:textColor="@color/slas_danger"
-                            android:textSize="22sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -256,10 +256,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp">
 
@@ -267,20 +267,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/attendance_rate"
                         android:textColor="@color/slas_text_primary"
-                        android:textSize="16sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -317,7 +317,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="@string/status_present"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvPresentLegend"
@@ -326,7 +326,7 @@
                                     android:layout_marginStart="16dp"
                                     android:text="0 (0%)"
                                     android:textColor="@color/slas_success"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -334,7 +334,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -350,7 +350,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="@string/status_late"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvLateLegend"
@@ -359,7 +359,7 @@
                                     android:layout_marginStart="16dp"
                                     android:text="0 (0%)"
                                     android:textColor="@color/slas_warning"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -367,7 +367,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -383,7 +383,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="@string/status_excused"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvExcusedLegend"
@@ -392,7 +392,7 @@
                                     android:layout_marginStart="16dp"
                                     android:text="0 (0%)"
                                     android:textColor="#6366F1"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -400,7 +400,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -416,7 +416,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="@string/status_absent"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvAbsentLegend"
@@ -425,7 +425,7 @@
                                     android:layout_marginStart="20dp"
                                     android:text="0 (0%)"
                                     android:textColor="@color/slas_danger"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -434,7 +434,7 @@
                                 android:id="@+id/rowOtherLegend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
+                                android:layout_marginTop="8dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
                                 android:visibility="gone">
@@ -451,7 +451,7 @@
                                     android:layout_marginStart="8dp"
                                     android:text="@string/other"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp" />
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvOtherLegend"
@@ -460,7 +460,7 @@
                                     android:layout_marginStart="16dp"
                                     android:text="0 (0%)"
                                     android:textColor="@color/slas_text_secondary"
-                                    android:textSize="13sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
 
@@ -473,10 +473,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp">
 
@@ -484,14 +484,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/monthly_attendance_trend"
                         android:textColor="@color/slas_text_primary"
-                        android:textSize="16sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <!-- Stacked Bar Chart -->
@@ -499,14 +499,14 @@
                         android:id="@+id/barChartMonthly"
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
-                        android:layout_marginTop="12dp" />
+                        android:layout_marginTop="8dp" />
 
                     <!-- Custom Bottom Legend -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -578,10 +578,10 @@
                 android:id="@+id/cardAttendanceRecords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/slas_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/slas_border"
                 app:strokeWidth="1dp">
 
@@ -589,21 +589,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/course_breakdown_session_history"
                         android:textColor="@color/slas_text_primary"
-                        android:textSize="16sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/layoutAttendanceRecordsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:orientation="vertical" />
 
                 </LinearLayout>
@@ -618,7 +618,7 @@
         android:layout_height="64dp"
         app:cardBackgroundColor="@color/slas_surface"
         app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
+        app:cardElevation="1dp"
         app:strokeWidth="0dp">
 
         <LinearLayout

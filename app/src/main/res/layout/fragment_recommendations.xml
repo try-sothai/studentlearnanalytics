@@ -18,8 +18,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:paddingHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="12dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_notif_tab_active"
                 android:gravity="center"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="12dp"
                 android:text="@string/overview"
                 android:textColor="@color/white"
                 android:textSize="12sp"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="12dp"
                 android:text="Student Recs"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="12dp"
                 android:text="Priority Recs"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="12dp"
                 android:text="Intervention Plans"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:paddingHorizontal="14dp"
+                android:paddingHorizontal="12dp"
                 android:text="@string/history"
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp"
@@ -105,14 +105,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Summary Cards Grid (2x3) -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -121,20 +121,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/recommendations_summary_overview"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginVertical="10dp"
+                            android:layout_marginVertical="6dp"
                             android:background="@color/admin_border" />
 
                         <GridLayout
@@ -143,34 +143,34 @@
                             android:columnCount="3"
                             android:rowCount="2">
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total AI Recs" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_42_active" android:textColor="@color/admin_primary_blue" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_42_active" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Urgent" android:textColor="@color/admin_inactive_red" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Urgent" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
-                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Medium Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_15_active" android:textColor="@color/warning_orange" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_15_active" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="19 Advisory" android:textColor="@color/admin_active_green" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="19 Advisory" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/needs_support" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_purple_accent" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Plans" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Plans" android:textColor="@color/admin_active_green" android:textSize="16sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Plans" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -180,9 +180,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -191,21 +191,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Recommendation Priority Ratio"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/chartRecommendationPriorityPie"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
-                            android:layout_marginTop="12dp" />
+                            android:layout_marginTop="8dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -213,9 +213,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@color/card_white"
-                    app:cardCornerRadius="16dp"
+                    app:cardCornerRadius="14dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/admin_border"
                     app:strokeWidth="1dp">
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -238,7 +238,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Run AI Recommendation Engine"
                                 android:textColor="@color/admin_text_primary"
-                                android:textSize="15sp"
+                                android:textSize="13.5sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -279,14 +279,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Search Input Bar -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="8dp"
                     app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
@@ -297,9 +297,17 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtSearchStudentRecs"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="wrap_content"
                         android:hint="@string/search_student_name_or_recommendation"
-                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Student Recommendations Roster -->
@@ -324,9 +332,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High &amp; Urgent Priority Academic Recommendations" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High &amp; Urgent Priority Academic Recommendations" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPriorityRecsList"
@@ -349,16 +357,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="8dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Academic Support &amp; Intervention Plans" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Academic Support &amp; Intervention Plans" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCreateInterventionPlan"
@@ -393,14 +401,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Search Input Bar for History -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="8dp"
                     app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
@@ -411,12 +419,20 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtSearchRecHistory"
                         android:layout_width="match_parent"
-                        android:layout_height="44dp"
+                        android:layout_height="wrap_content"
                         android:hint="@string/search_recommendation_history"
-                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="14sp"/>
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Support Archives &amp; Impact" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="12dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Support Archives &amp; Impact" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvRecommendationHistoryList"

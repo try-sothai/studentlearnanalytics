@@ -29,11 +29,23 @@ public class StudentImportItem implements Serializable {
     @SerializedName("duplicate_rows")
     public int duplicateRows;
 
+    @SerializedName("missing_required_rows")
+    public int missingRequiredRows;
+
+    @SerializedName("invalid_department_program_rows")
+    public int invalidDepartmentProgramRows;
+
+    @SerializedName("new_students")
+    public int newStudents;
+
     @SerializedName("processed_rows")
     public int processedRows;
 
     @SerializedName("success_rows")
     public int successRows;
+
+    @SerializedName("created_user_accounts")
+    public int createdUserAccounts;
 
     @SerializedName("failed_rows")
     public int failedRows;
@@ -46,6 +58,9 @@ public class StudentImportItem implements Serializable {
 
     @SerializedName("duration_seconds")
     public Integer durationSeconds;
+
+    @SerializedName("has_generated_credentials")
+    public boolean hasGeneratedCredentials;
 
     @SerializedName("failure_message")
     public String failureMessage;
@@ -63,6 +78,15 @@ public class StudentImportItem implements Serializable {
         @SerializedName("student_identifier")
         public String studentIdentifier;
 
+        @SerializedName("username")
+        public String username;
+
+        @SerializedName("student_id")
+        public Integer studentId;
+
+        @SerializedName("role")
+        public String role;
+
         @SerializedName("english_name")
         public String englishName;
 
@@ -77,6 +101,9 @@ public class StudentImportItem implements Serializable {
 
         @SerializedName("status")
         public String status;
+
+        @SerializedName("has_generated_password")
+        public boolean hasGeneratedPassword;
 
         @SerializedName("errors")
         public List<String> errors;

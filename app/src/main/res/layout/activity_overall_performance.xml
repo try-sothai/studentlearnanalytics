@@ -11,8 +11,8 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="16dp"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="10dp"
         android:paddingBottom="8dp">
 
         <ImageButton
@@ -31,7 +31,7 @@
             android:layout_centerInParent="true"
             android:text="@string/performance_details"
             android:textColor="@color/text_primary"
-            android:textSize="18sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -52,10 +52,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:text="@string/loading_performance_data"
             android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <!-- Error State -->
@@ -66,7 +66,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="12dp"
         android:visibility="gone">
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:text="Unable to load performance details"
             android:textColor="@color/text_primary"
-            android:textSize="16sp"
+            android:textSize="14.5sp"
             android:textStyle="bold" />
 
         <TextView
@@ -92,9 +92,9 @@
             style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:text="@string/retry"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:cornerRadius="12dp" />
     </LinearLayout>
 
@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                 android:id="@+id/cardSemester"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="@color/white" app:cardElevation="0dp"
                 app:strokeColor="@color/divider_color"
@@ -141,15 +141,15 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="24dp"
-                app:cardBackgroundColor="@color/white" app:cardElevation="8dp">
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="14dp"
+                app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_header_gradient"
-                    android:padding="20dp">
+                    android:padding="12dp">
 
                     <FrameLayout
                         android:id="@+id/progressFrame"
@@ -175,7 +175,7 @@
                             android:layout_gravity="center"
                             android:text="N/A"
                             android:textColor="@color/white"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </FrameLayout>
 
@@ -194,7 +194,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/overall_performance"
                             android:textColor="@color/text_hint"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvPerfTrendTag"
@@ -215,7 +215,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -237,7 +237,7 @@
                         android:layout_height="wrap_content"
                         android:text="Detailed Breakdown"
                         android:textColor="@color/text_primary"
-                        android:textSize="16sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -253,7 +253,7 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -270,14 +270,14 @@
                         android:layout_marginEnd="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
-                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                        app:cardCornerRadius="14dp"
+                        app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="14dp">
+                            android:padding="12dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -312,7 +312,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="N/A"
                                         android:textColor="@color/text_primary"
-                                        android:textSize="15sp"
+                                        android:textSize="13.5sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -333,7 +333,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginVertical="10dp"
+                                android:layout_marginVertical="6dp"
                                 android:background="@color/divider_color" />
 
                             <TextView
@@ -354,14 +354,14 @@
                         android:layout_marginEnd="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
-                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                        app:cardCornerRadius="14dp"
+                        app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="14dp">
+                            android:padding="12dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -396,7 +396,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="N/A"
                                         android:textColor="@color/text_primary"
-                                        android:textSize="15sp"
+                                        android:textSize="13.5sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -417,7 +417,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginVertical="10dp"
+                                android:layout_marginVertical="6dp"
                                 android:background="@color/divider_color" />
 
                             <TextView
@@ -438,14 +438,14 @@
                         android:layout_marginEnd="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="16dp"
-                        app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                        app:cardCornerRadius="14dp"
+                        app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="14dp">
+                            android:padding="12dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -480,7 +480,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="N/A"
                                         android:textColor="@color/text_primary"
-                                        android:textSize="15sp"
+                                        android:textSize="13.5sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -501,7 +501,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginVertical="10dp"
+                                android:layout_marginVertical="6dp"
                                 android:background="@color/divider_color" />
 
                             <TextView
@@ -521,24 +521,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/performance_trend"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="14dp"
+                app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChartPerformance"
@@ -551,25 +551,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/key_insights_recommendations"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardKeyInsights"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="14dp"
+                app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvKeyInsightText"
@@ -584,7 +584,7 @@
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/view_recommendations"
                         android:textSize="12sp"
                         app:cornerRadius="12dp" />
@@ -595,7 +595,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -604,7 +604,7 @@
                     android:layout_weight="1"
                     android:text="@string/subject_performance"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -621,17 +621,17 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="32dp"
-                app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/white" app:cardElevation="2dp">
+                app:cardCornerRadius="14dp"
+                app:cardBackgroundColor="@color/white" app:cardElevation="1dp">
 
                 <LinearLayout
                     android:id="@+id/layoutSubjectList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp" />
+                    android:padding="12dp" />
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>

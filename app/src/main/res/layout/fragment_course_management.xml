@@ -6,433 +6,788 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
-    <!-- Top Header Bar -->
+    <!-- Essential Fixed Top Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_white"
-        android:elevation="2dp"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp">
+
+        <ImageView
+            android:id="@+id/btnCourseMenu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/menu"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
+            app:tint="@color/admin_text_primary" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/btnCourseMenu"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="12dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:contentDescription="@string/menu"
-                android:focusable="true"
-                android:padding="4dp"
-                android:src="@drawable/ic_menu"
-                app:tint="@color/admin_text_primary" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/course_management"
-                    android:textColor="@color/admin_text_primary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Browse, audit &amp; manage university course curriculum"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imgNotifBell"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/bg_circle_soft_blue"
-                android:contentDescription="@string/nav_notifications"
-                android:padding="8dp"
-                android:src="@drawable/ic_notifications"
-                app:tint="@color/admin_primary_blue" />
-        </LinearLayout>
-
-        <!-- Section Tabs -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:scrollbars="none">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/course_management"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="19sp"
+                android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTabCourseList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="4dp"
-                    android:backgroundTint="@color/admin_primary_blue"
-                    android:text="@string/course_list"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/course_management_subtitle"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTabCategories"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="@string/course_categories"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTabCurriculum"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginHorizontal="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="Curriculum Audit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTabAssignments"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="4dp"
-                    android:backgroundTint="#F4F7FF"
-                    android:text="@string/course_assignments"
-                    android:textAllCaps="false"
-                    android:textColor="@color/admin_text_secondary"
-                    android:textSize="12sp"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/admin_border"
-                    app:strokeWidth="1dp" />
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
+        <ImageView
+            android:id="@+id/imgNotifBell"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_soft_blue"
+            android:contentDescription="@string/nav_notifications"
+            android:padding="8dp"
+            android:src="@drawable/ic_notifications"
+            app:tint="@color/admin_primary_blue" />
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/layoutCourseListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/card_white"
-            android:elevation="2dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingBottom="16dp">
-
-        <!-- Summary Statistics Row -->
-        <LinearLayout
-            android:id="@+id/layoutSummaryCards"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                app:cardBackgroundColor="@color/card_white"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_courses" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                    <TextView android:id="@+id/tvStatTotalCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="18" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_primary_blue" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                app:cardBackgroundColor="@color/card_white"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/active_courses" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                    <TextView android:id="@+id/tvStatActiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="15" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_active_green" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="2dp"
-                app:cardBackgroundColor="@color/card_white"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_inactive" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                    <TextView android:id="@+id/tvStatInactiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/admin_inactive_red" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                app:cardBackgroundColor="@color/card_white"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/admin_border"
-                app:strokeWidth="1dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/missing_syllabus" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
-                    <TextView android:id="@+id/tvStatMissingSyllabus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/warning_orange" android:layout_marginTop="2dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <!-- Search & Filter Controls -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxStrokeColor="@color/admin_primary_blue"
-                app:hintEnabled="false"
-                app:startIconDrawable="@drawable/ic_search"
-                app:startIconTint="@color/admin_text_secondary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearchCourse"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:hint="@string/search_courses_by_code_name_or_department"
-                    android:inputType="text"
-                    android:paddingVertical="8dp"
-                    android:textColor="@color/admin_text_primary"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddCourse"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/admin_primary_blue"
-                android:text="@string/add_course"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:cornerRadius="10dp"
-                app:icon="@drawable/ic_add"
-                app:iconGravity="textStart"
-                app:iconPadding="4dp"
-                app:iconTint="@color/white" />
-        </LinearLayout>
-
-        <!-- Status Filter Pills Row -->
-        <HorizontalScrollView
-            android:id="@+id/scrollFilterPills"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/pillFilterAllCourses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_notif_tab_active"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="All Statuses (18)"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/pillFilterActiveCourses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginHorizontal="6dp"
-                    android:background="@drawable/bg_notif_tab_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="@string/active_15"
-                    android:textColor="@color/admin_active_green"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/pillFilterInactiveCourses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="6dp"
-                    android:background="@drawable/bg_notif_tab_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:text="@string/inactive_3"
-                    android:textColor="@color/admin_inactive_red"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
-    </LinearLayout>
-
-    <!-- Main Content Frame (Course List / Categories / Assignments / Empty State) -->
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- Course List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCourses"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarCourses"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="16dp"
-            tools:listitem="@layout/item_admin_course" />
-
-        <!-- Empty State Container -->
-        <LinearLayout
-            android:id="@+id/layoutEmptyState"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="32dp"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/ic_open_book"
-                app:tint="@color/admin_text_secondary"
-                android:contentDescription="@string/no_courses_found" />
-
-            <TextView
-                android:id="@+id/tvEmptyTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/no_courses_found_c50c1b"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvEmptyMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:text="No courses match the selected search or status filters."
-                android:textColor="@color/admin_text_secondary"
-                android:textSize="13sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnResetFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/admin_primary_blue"
-                android:text="@string/reset_search_filters"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:cornerRadius="10dp" />
-        </LinearLayout>
-
-        <!-- Loading Progress Bar -->
-        <ProgressBar
-            android:id="@+id/pbLoadingCourses"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+            android:background="@color/card_white"
+            app:elevation="2dp">
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="10dp"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+                <!-- Section Tabs -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="12dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabCourseList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/course_list"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabCategories"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/course_categories"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabCurriculum"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/curriculum_audit_tab"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabAssignments"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/course_assignments"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- TAB 0 CONTROLS: COURSE LIST -->
+                <LinearLayout
+                    android:id="@+id/layoutCourseListControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutSummaryCards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/total_courses" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatTotalCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/active_courses" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatActiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/status_inactive" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatInactiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_inactive_red" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/missing_syllabus" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvStatMissingSyllabus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/warning_orange" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchCourse"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_courses_by_code_name_or_department"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddCourse"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/add_course"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <HorizontalScrollView
+                        android:id="@+id/scrollFilterPills"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/pillFilterAllCourses"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_active"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="@string/all_statuses_18"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterActiveCourses"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="@string/active_15"
+                                android:textColor="@color/admin_active_green"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterInactiveCourses"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Inactive (0)"
+                                android:textColor="@color/admin_inactive_red"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterDepartment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Dept: All"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterProgram"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Program: All"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterAcademicYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Year: All"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterSemester"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Semester: All"
+                                android:textColor="@color/admin_text_primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pillFilterClear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="32dp"
+                                android:background="@drawable/bg_notif_tab_inactive"
+                                android:gravity="center"
+                                android:paddingHorizontal="14dp"
+                                android:text="Clear Filters"
+                                android:textColor="@color/admin_primary_blue"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <!-- TAB 1 CONTROLS: COURSE CATEGORIES -->
+                <LinearLayout
+                    android:id="@+id/layoutCategoriesControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchCategory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_categories"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddCategory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/add_category"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Colleges" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvTotalColleges" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="3" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/departments" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvTotalDepartments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="6" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- TAB 2 CONTROLS: CURRICULUM AUDIT -->
+                <LinearLayout
+                    android:id="@+id/layoutCurriculumControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="Reviewed" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvAuditReviewed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="42" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/assigned" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvAuditAssigned" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="38" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="@string/missing_syllabus" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvAuditMissing" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="4" android:textColor="@color/warning_orange" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:maxLines="1" android:text="Issues Found" android:textColor="@color/admin_text_secondary" android:textSize="10sp" />
+                                <TextView android:id="@+id/tvAuditIssues" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="2" android:textColor="@color/admin_inactive_red" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        app:boxStrokeColor="@color/admin_primary_blue"
+                        app:hintEnabled="false"
+                        app:startIconDrawable="@drawable/ic_search"
+                        app:startIconTint="@color/admin_text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchCurriculum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:hint="@string/search_course_code_name_class_or_teacher"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:minHeight="44dp"
+                            android:paddingVertical="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/admin_text_primary"
+                            android:textColorHint="@color/admin_text_secondary"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- TAB 3 CONTROLS: COURSE ASSIGNMENTS -->
+                <LinearLayout
+                    android:id="@+id/layoutAssignmentsControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/white"
+                            app:boxCornerRadiusBottomEnd="10dp"
+                            app:boxCornerRadiusBottomStart="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp"
+                            app:boxStrokeColor="@color/admin_primary_blue"
+                            app:hintEnabled="false"
+                            app:startIconDrawable="@drawable/ic_search"
+                            app:startIconTint="@color/admin_text_secondary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchAssignment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:hint="@string/search_course_assignments"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:minHeight="44dp"
+                                android:paddingVertical="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="@color/admin_text_secondary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddAssignment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:backgroundTint="@color/admin_primary_blue"
+                            android:minHeight="44dp"
+                            android:text="@string/assign"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            app:iconPadding="4dp"
+                            app:iconTint="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_classes" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvTotalClasses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="6" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="2dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fully Assigned" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvFullyAssigned" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="5" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
+                            app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/missing_teacher" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvMissingTeacher" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="1" android:textColor="@color/admin_inactive_red" android:textSize="15sp" android:textStyle="bold" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- Full-Height Scrolling Course Content -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/layoutCourseListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCourses"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="12dp"
+                    tools:listitem="@layout/item_admin_course" />
+
+                <LinearLayout
+                    android:id="@+id/layoutEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:contentDescription="@string/no_courses_found"
+                        android:src="@drawable/ic_open_book"
+                        app:tint="@color/admin_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/no_courses_found_c50c1b"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvEmptyMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="@string/search_no_results"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnResetFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:minHeight="40dp"
+                        android:text="@string/reset_search_filters"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/pbLoadingCourses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategories"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCurriculumAudit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAssignments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="12dp"
+                android:visibility="gone" />
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Pagination Controls Bar -->
     <LinearLayout
@@ -443,13 +798,13 @@
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingVertical="8dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPrevPage"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -457,7 +812,7 @@
             android:padding="0dp"
             android:text="&lt;"
             android:textColor="@color/admin_text_primary"
-            app:cornerRadius="18dp"
+            app:cornerRadius="17dp"
             app:strokeColor="@color/admin_border" />
 
         <TextView
@@ -465,7 +820,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:text="Page 1 of 2"
+            android:text="1 / 1"
             android:textColor="@color/admin_text_primary"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -473,8 +828,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNextPage"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -482,23 +837,8 @@
             android:padding="0dp"
             android:text="&gt;"
             android:textColor="@color/admin_text_primary"
-            app:cornerRadius="18dp"
+            app:cornerRadius="17dp"
             app:strokeColor="@color/admin_border" />
     </LinearLayout>
 
-    </LinearLayout>
-
-    <include layout="@layout/fragment_admin_curriculum_audit"
-             android:id="@+id/layoutCurriculumAuditContainer"
-             android:visibility="gone" />
-
-    <include layout="@layout/fragment_admin_course_categories"
-             android:id="@+id/layoutCategoriesContainer"
-             android:visibility="gone" />
-
-    <include layout="@layout/fragment_admin_course_assignments"
-             android:id="@+id/layoutAssignmentsContainer"
-             android:visibility="gone" />
-
-    </FrameLayout>
 </LinearLayout>

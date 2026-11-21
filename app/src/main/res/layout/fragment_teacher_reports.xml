@@ -22,16 +22,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="12dp"
             android:paddingTop="4dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="10dp">
 
             <!-- Summary Metrics Row (4 Cards) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="8dp">
 
                 <!-- Card 1: Total Courses -->
                 <com.google.android.material.card.MaterialCardView
@@ -81,7 +81,7 @@
                             android:layout_marginTop="2dp"
                             android:text="4"
                             android:textColor="@color/teacher_dark_navy"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -134,7 +134,7 @@
                             android:layout_marginTop="2dp"
                             android:text="2"
                             android:textColor="@color/status_good_text"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -187,7 +187,7 @@
                             android:layout_marginTop="2dp"
                             android:text="2"
                             android:textColor="@color/status_attention_text"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -240,7 +240,7 @@
                             android:layout_marginTop="2dp"
                             android:text="80.3"
                             android:textColor="@color/primary_purple"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -254,8 +254,8 @@
                 android:background="@drawable/bg_search_input"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingHorizontal="14dp"
-                android:layout_marginBottom="12dp">
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="8dp">
 
                 <ImageView
                     android:layout_width="18dp"
@@ -275,7 +275,11 @@
                     android:inputType="text"
                     android:textColor="@color/teacher_dark_navy"
                     android:textColorHint="@color/teacher_secondary_text"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" 
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end" />
             </LinearLayout>
 
             <!-- Performance Filter Chips Row -->
@@ -283,7 +287,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -302,7 +306,7 @@
                         android:textColor="@color/white"
                         app:backgroundTint="@color/teacher_primary_blue"
                         app:cornerRadius="18dp"
-                        android:paddingHorizontal="14dp"
+                        android:paddingHorizontal="12dp"
                         android:insetTop="0dp"
                         android:insetBottom="0dp" />
 
@@ -318,7 +322,7 @@
                         android:textColor="@color/status_good_text"
                         app:backgroundTint="@color/status_good_bg"
                         app:cornerRadius="18dp"
-                        android:paddingHorizontal="14dp"
+                        android:paddingHorizontal="12dp"
                         android:insetTop="0dp"
                         android:insetBottom="0dp" />
 
@@ -334,7 +338,7 @@
                         android:textColor="@color/status_attention_text"
                         app:backgroundTint="@color/status_attention_bg"
                         app:cornerRadius="18dp"
-                        android:paddingHorizontal="14dp"
+                        android:paddingHorizontal="12dp"
                         android:insetTop="0dp"
                         android:insetBottom="0dp" />
 
@@ -350,7 +354,7 @@
                         android:textColor="@color/status_at_risk_text"
                         app:backgroundTint="@color/status_at_risk_bg"
                         app:cornerRadius="18dp"
-                        android:paddingHorizontal="14dp"
+                        android:paddingHorizontal="12dp"
                         android:insetTop="0dp"
                         android:insetBottom="0dp" />
 
@@ -398,10 +402,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/teacher_card_bg"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/teacher_border"
                 app:strokeWidth="1dp">
 
@@ -409,7 +413,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -430,7 +434,7 @@
                             android:layout_marginStart="8dp"
                             android:text="@string/average_score_by_course"
                             android:textColor="@color/teacher_dark_navy"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -438,7 +442,7 @@
                         android:id="@+id/barChartAvgByCourse"
                         android:layout_width="match_parent"
                         android:layout_height="170dp"
-                        android:layout_marginTop="12dp" />
+                        android:layout_marginTop="8dp" />
 
                 </LinearLayout>
 
@@ -448,10 +452,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/teacher_card_bg"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1dp"
                 app:strokeColor="@color/teacher_border"
                 app:strokeWidth="1dp">
 
@@ -459,7 +463,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -480,7 +484,7 @@
                             android:layout_marginStart="8dp"
                             android:text="@string/course_performance_status"
                             android:textColor="@color/teacher_dark_navy"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -488,7 +492,7 @@
                         android:id="@+id/pieChartStatusDoughnut"
                         android:layout_width="match_parent"
                         android:layout_height="170dp"
-                        android:layout_marginTop="12dp" />
+                        android:layout_marginTop="8dp" />
 
                 </LinearLayout>
 
@@ -500,7 +504,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="8dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -521,7 +525,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/course_analytics"
                         android:textColor="@color/teacher_dark_navy"
-                        android:textSize="17sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <TextView

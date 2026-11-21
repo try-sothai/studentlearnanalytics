@@ -118,6 +118,28 @@ public class StudentMainActivity extends AppCompatActivity {
             });
         }
 
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Fragment current = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (current != null) {
+                if (current instanceof StudentDashboardFragment) {
+                    updateDrawerActiveItem(0);
+                    selectBottomNav(R.id.nav_home);
+                } else if (current instanceof StudentCoursesFragment) {
+                    updateDrawerActiveItem(1);
+                    selectBottomNav(R.id.nav_courses);
+                } else if (current instanceof LearningAnalyticsFragment) {
+                    updateDrawerActiveItem(2);
+                    selectBottomNav(R.id.nav_analytics);
+                } else if (current instanceof NotificationFragment) {
+                    updateDrawerActiveItem(6);
+                    selectBottomNav(R.id.nav_notifications);
+                } else if (current instanceof ProfileFragment) {
+                    updateDrawerActiveItem(8);
+                    selectBottomNav(R.id.nav_profile);
+                }
+            }
+        });
+
         handleIntent(getIntent());
     }
 
@@ -532,16 +554,22 @@ public class StudentMainActivity extends AppCompatActivity {
     }
 
     public void openFragment(@NonNull Fragment fragment) {
+        boolean isTopLevel = (fragment instanceof StudentDashboardFragment ||
+                fragment instanceof StudentCoursesFragment ||
+                fragment instanceof LearningAnalyticsFragment ||
+                fragment instanceof NotificationFragment ||
+                fragment instanceof ProfileFragment);
+
+        if (isTopLevel && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
         androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container, fragment);
 
-        if (!(fragment instanceof StudentDashboardFragment ||
-              fragment instanceof StudentCoursesFragment ||
-              fragment instanceof LearningAnalyticsFragment ||
-              fragment instanceof NotificationFragment ||
-              fragment instanceof ProfileFragment)) {
+        if (!isTopLevel) {
             transaction.addToBackStack(null);
         }
 

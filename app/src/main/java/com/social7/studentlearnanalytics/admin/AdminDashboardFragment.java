@@ -487,19 +487,20 @@ public class AdminDashboardFragment extends Fragment {
         
         JsonArray newArr = new JsonArray();
         for (int i = 0; i < seriesArray.size(); i++) {
+            if (!seriesArray.get(i).isJsonObject()) continue;
             JsonObject item = seriesArray.get(i).getAsJsonObject();
             JsonObject fakeAy = new JsonObject();
-            fakeAy.addProperty("academic_year_name", item.has("academic_year") ? item.get("academic_year").getAsString() : "Year");
+            fakeAy.addProperty("academic_year_name", com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "academic_year", "Year"));
             fakeAy.addProperty("has_data", true);
             JsonObject regUsers = new JsonObject();
-            regUsers.addProperty("total", item.has("total_students") ? item.get("total_students").getAsInt() : 0);
+            regUsers.addProperty("total", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0));
             fakeAy.add("registered_users", regUsers);
             
             JsonObject activeUsers = new JsonObject();
-            activeUsers.addProperty("total", item.has("active_learners") ? item.get("active_learners").getAsInt() : 0);
+            activeUsers.addProperty("total", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "active_learners", 0));
             fakeAy.add("active_users", activeUsers);
             
-            fakeAy.addProperty("enrolled_students", item.has("total_students") ? item.get("total_students").getAsInt() : 0);
+            fakeAy.addProperty("enrolled_students", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0));
             fakeAy.addProperty("user_growth_percentage", 5.0);
             newArr.add(fakeAy);
         }
@@ -512,11 +513,12 @@ public class AdminDashboardFragment extends Fragment {
         List<Entry> atRiskList = new ArrayList<>();
 
         for (int i = 0; i < seriesArray.size(); i++) {
+            if (!seriesArray.get(i).isJsonObject()) continue;
             JsonObject item = seriesArray.get(i).getAsJsonObject();
-            xLabels.add(item.has("academic_year") ? item.get("academic_year").getAsString() : "Year");
-            totalStudentsList.add(new Entry(i, item.has("total_students") ? item.get("total_students").getAsInt() : 0));
-            activeLearnersList.add(new Entry(i, item.has("active_learners") ? item.get("active_learners").getAsInt() : 0));
-            atRiskList.add(new Entry(i, item.has("at_risk_students") ? item.get("at_risk_students").getAsInt() : 0));
+            xLabels.add(com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "academic_year", "Year"));
+            totalStudentsList.add(new Entry(i, com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0)));
+            activeLearnersList.add(new Entry(i, com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "active_learners", 0)));
+            atRiskList.add(new Entry(i, com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "at_risk_students", 0)));
         }
 
         if (xLabels.isEmpty()) {
@@ -601,14 +603,13 @@ public class AdminDashboardFragment extends Fragment {
         List<BarEntry> examList = new ArrayList<>();
 
         for (int i = 0; i < seriesArray.size(); i++) {
+            if (!seriesArray.get(i).isJsonObject()) continue;
             JsonObject item = seriesArray.get(i).getAsJsonObject();
-            xLabels.add(item.has("semester") ? item.get("semester").getAsString() : "Sem");
-            // Multiply GPA by 25 to scale 0-4 to 0-100? No, prompt says: "Do not misleadingly plot GPA... on an identical numerical scale."
-            // But BarChart can have right axis!
-            gpaList.add(new BarEntry(i, item.has("avg_gpa") ? item.get("avg_gpa").getAsFloat() : 0));
-            assignmentList.add(new BarEntry(i, item.has("avg_assignment") ? item.get("avg_assignment").getAsFloat() : 0));
-            quizList.add(new BarEntry(i, item.has("avg_quiz") ? item.get("avg_quiz").getAsFloat() : 0));
-            examList.add(new BarEntry(i, item.has("avg_exam") ? item.get("avg_exam").getAsFloat() : 0));
+            xLabels.add(com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "semester", "Sem"));
+            gpaList.add(new BarEntry(i, com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "avg_gpa", 0f)));
+            assignmentList.add(new BarEntry(i, com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "avg_assignment", 0f)));
+            quizList.add(new BarEntry(i, com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "avg_quiz", 0f)));
+            examList.add(new BarEntry(i, com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "avg_exam", 0f)));
         }
 
         if (xLabels.isEmpty()) {
@@ -676,16 +677,17 @@ public class AdminDashboardFragment extends Fragment {
         List<BarEntry> rateList = new ArrayList<>();
 
         for (int i = 0; i < seriesArray.size(); i++) {
+            if (!seriesArray.get(i).isJsonObject()) continue;
             JsonObject item = seriesArray.get(i).getAsJsonObject();
-            xLabels.add(item.has("semester") ? item.get("semester").getAsString() : "Sem");
+            xLabels.add(com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "semester", "Sem"));
 
-            float present = item.has("present") ? item.get("present").getAsFloat() : 0;
-            float absent = item.has("absent") ? item.get("absent").getAsFloat() : 0;
-            float late = item.has("late") ? item.get("late").getAsFloat() : 0;
+            float present = com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "present", 0f);
+            float absent = com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "absent", 0f);
+            float late = com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "late", 0f);
 
             stackedList.add(new BarEntry(i, new float[]{present, late, absent}));
 
-            float rate = item.has("rate") ? item.get("rate").getAsFloat() : 0;
+            float rate = com.social7.studentlearnanalytics.utils.UiUtils.optFloat(item, "rate", 0f);
             rateList.add(new BarEntry(i, rate));
         }
 
@@ -942,7 +944,7 @@ public class AdminDashboardFragment extends Fragment {
 
         if (statusObj.has("api_server") && statusObj.get("api_server").isJsonObject()) {
             JsonObject apiObj = statusObj.getAsJsonObject("api_server");
-            String status = apiObj.has("status") ? apiObj.get("status").getAsString() : "online";
+            String status = com.social7.studentlearnanalytics.utils.UiUtils.optString(apiObj, "status", "online");
             setServiceStatus(tvApiServerDot, tvApiServerText, status);
         } else {
             setServiceStatus(tvApiServerDot, tvApiServerText, "online");
@@ -950,7 +952,7 @@ public class AdminDashboardFragment extends Fragment {
 
         if (statusObj.has("database") && statusObj.get("database").isJsonObject()) {
             JsonObject dbObj = statusObj.getAsJsonObject("database");
-            String status = dbObj.has("status") ? dbObj.get("status").getAsString() : "online";
+            String status = com.social7.studentlearnanalytics.utils.UiUtils.optString(dbObj, "status", "online");
             setServiceStatus(tvDbDot, tvDbText, status);
         } else {
             setServiceStatus(tvDbDot, tvDbText, "online");
@@ -958,7 +960,7 @@ public class AdminDashboardFragment extends Fragment {
 
         if (statusObj.has("ml_service") && statusObj.get("ml_service").isJsonObject()) {
             JsonObject mlObj = statusObj.getAsJsonObject("ml_service");
-            String status = mlObj.has("status") ? mlObj.get("status").getAsString() : "online";
+            String status = com.social7.studentlearnanalytics.utils.UiUtils.optString(mlObj, "status", "online");
             setServiceStatus(tvMlDot, tvMlText, status);
         } else {
             setServiceStatus(tvMlDot, tvMlText, "online");

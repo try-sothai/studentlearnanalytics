@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@color/card_white"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="1dp"
     app:strokeColor="@color/admin_border"
     app:strokeWidth="1dp">
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:text="Assignment 1: Linked Lists &amp; Pointers"
                 android:textColor="@color/admin_text_primary"
-                android:textSize="15sp"
+                android:textSize="13.5sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -82,7 +82,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginVertical="12dp"
+            android:layout_marginVertical="6dp"
             android:background="@color/admin_border" />
 
         <!-- Card Action Buttons Row -->
@@ -96,7 +96,12 @@
                 android:id="@+id/btnDeleteAssignment"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:layout_marginEnd="6dp"
                 android:text="@string/delete"
                 android:textAllCaps="false"
@@ -106,7 +111,12 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGradeAssignment"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:backgroundTint="@color/admin_primary_blue"
                 android:text="@string/grade_submissions"
                 android:textAllCaps="false"

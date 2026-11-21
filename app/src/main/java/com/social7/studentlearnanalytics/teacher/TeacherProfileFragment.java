@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -18,9 +17,17 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.auth.ChangePasswordActivity;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.storage.SessionManager;
+
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TeacherProfileFragment extends Fragment {
 
@@ -74,6 +81,7 @@ public class TeacherProfileFragment extends Fragment {
         etTeacherEmail = view.findViewById(R.id.etTeacherEmail);
         etTeacherPhone = view.findViewById(R.id.etTeacherPhone);
         etTeacherDob = view.findViewById(R.id.etTeacherDob);
+        com.social7.studentlearnanalytics.utils.DatePickerHelper.attachDatePicker(null, etTeacherDob, true);
 
         etTeacherId = view.findViewById(R.id.etTeacherId);
         etTeacherDepartment = view.findViewById(R.id.etTeacherDepartment);
@@ -89,36 +97,70 @@ public class TeacherProfileFragment extends Fragment {
     }
 
     private void prepopulateData() {
-        String name = sessionManager != null && sessionManager.getUserName() != null && !sessionManager.getUserName().trim().isEmpty() ? sessionManager.getUserName() : "Mr. Chan";
-        String email = "chan@university.edu";
+        if (getContext() == null) return;
+        ApiClient.getApiService(requireContext()).getProfile().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject root = response.body();
+                    JsonObject userObj = root.has("data") && root.get("data").isJsonObject()
+                            ? root.getAsJsonObject("data") : root;
+                    if (userObj.has("user") && userObj.get("user").isJsonObject()) {
+                        userObj = userObj.getAsJsonObject("user");
+                    }
 
-        String initial = !name.isEmpty() ? String.valueOf(name.charAt(0)).toUpperCase() : "T";
+                    String name = getStr(userObj, "name", "");
+                    String email = getStr(userObj, "email", "");
+                    String phone = getStr(userObj, "phone", "");
 
-        if (tvTeacherAvatar != null) tvTeacherAvatar.setText(initial);
-        if (tvTeacherNameSummary != null) tvTeacherNameSummary.setText(name);
-        if (tvTeacherRoleDept != null) tvTeacherRoleDept.setText("Senior Lecturer • Computer Science Department");
-        if (tvTeacherAccountStatus != null) tvTeacherAccountStatus.setText(R.string.status_active);
+                    JsonObject teacherObj = userObj.has("teacher") && userObj.get("teacher").isJsonObject()
+                            ? userObj.getAsJsonObject("teacher") : null;
+                    String tCode = teacherObj != null ? getStr(teacherObj, "teacher_code", "") : "";
+                    String dob = teacherObj != null ? getStr(teacherObj, "date_of_birth", "") : "";
+                    String spec = teacherObj != null ? getStr(teacherObj, "specialization", "") : "";
+                    String pos = teacherObj != null ? getStr(teacherObj, "position", "Lecturer") : "Lecturer";
+                    String gender = teacherObj != null ? getStr(teacherObj, "gender", "male") : "male";
+                    if (teacherObj != null && phone.isEmpty()) {
+                        phone = getStr(teacherObj, "phone", "");
+                    }
+                    String dept = "Academic Department";
+                    if (teacherObj != null && teacherObj.has("department") && teacherObj.get("department").isJsonObject()) {
+                        dept = getStr(teacherObj.getAsJsonObject("department"), "name", dept);
+                    }
 
-        if (etTeacherName != null) etTeacherName.setText(name);
-        if (etTeacherEmail != null) etTeacherEmail.setText(email);
-        if (etTeacherPhone != null) etTeacherPhone.setText("+855 12 345 678");
-        if (etTeacherDob != null) etTeacherDob.setText("Mar 10, 1990");
+                    if (!name.isEmpty() && tvTeacherAvatar != null) {
+                        tvTeacherAvatar.setText(String.valueOf(name.charAt(0)).toUpperCase(Locale.ROOT));
+                    }
+                    if (tvTeacherNameSummary != null) tvTeacherNameSummary.setText(name);
+                    if (tvTeacherRoleDept != null) tvTeacherRoleDept.setText(pos + " • " + dept);
+                    if (tvTeacherAccountStatus != null) tvTeacherAccountStatus.setText(R.string.status_active);
 
-        if (etTeacherId != null) etTeacherId.setText("TCH-001");
-        if (etTeacherDepartment != null) etTeacherDepartment.setText("College of Computer Studies");
-        if (etTeacherQualifications != null) etTeacherQualifications.setText("M.Sc. Computer Science");
+                    if (etTeacherName != null) etTeacherName.setText(name);
+                    if (etTeacherEmail != null) etTeacherEmail.setText(email);
+                    if (etTeacherPhone != null) etTeacherPhone.setText(phone);
+                    if (etTeacherDob != null) etTeacherDob.setText(dob);
+                    if (etTeacherId != null) etTeacherId.setText(tCode);
+                    if (etTeacherDepartment != null) etTeacherDepartment.setText(dept);
+                    if (etTeacherQualifications != null) etTeacherQualifications.setText(spec);
 
-        if (rbTeacherMale != null) rbTeacherMale.setChecked(true);
+                    if ("female".equalsIgnoreCase(gender) && rbTeacherFemale != null) {
+                        rbTeacherFemale.setChecked(true);
+                    } else if (rbTeacherMale != null) {
+                        rbTeacherMale.setChecked(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading profile", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupListeners(View view) {
-        View btnUpload = view.findViewById(R.id.btnTeacherUploadPhoto);
-        if (btnUpload != null) {
-            btnUpload.setOnClickListener(v ->
-                    Toast.makeText(getContext(), "Teacher profile photo selection opened", Toast.LENGTH_SHORT).show()
-            );
-        }
-
         if (btnTeacherCancelProfile != null) {
             btnTeacherCancelProfile.setOnClickListener(v -> {
                 if (getActivity() instanceof TeacherMainActivity) {
@@ -140,13 +182,14 @@ public class TeacherProfileFragment extends Fragment {
     }
 
     private void attemptSaveProfile() {
-        if (etTeacherName == null || etTeacherEmail == null) return;
+        if (etTeacherName == null || etTeacherEmail == null || getContext() == null) return;
 
         String name = etTeacherName.getText().toString().trim();
         String email = etTeacherEmail.getText().toString().trim();
+        String phone = etTeacherPhone != null ? etTeacherPhone.getText().toString().trim() : "";
+        String dob = etTeacherDob != null ? etTeacherDob.getText().toString().trim() : "";
 
         boolean isValid = true;
-
         if (name.isEmpty()) {
             if (tilTeacherName != null) tilTeacherName.setError("Full name is required");
             isValid = false;
@@ -154,26 +197,63 @@ public class TeacherProfileFragment extends Fragment {
             if (tilTeacherName != null) tilTeacherName.setError(null);
         }
 
-        if (email.isEmpty()) {
-            if (tilTeacherEmail != null) tilTeacherEmail.setError("Email address is required");
+        if (!email.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            if (tilTeacherEmail != null) tilTeacherEmail.setError(getString(R.string.err_invalid_email));
             isValid = false;
         } else {
             if (tilTeacherEmail != null) tilTeacherEmail.setError(null);
         }
 
-        if (isValid) {
-            if (sessionManager != null) {
-                sessionManager.saveSession(
-                        sessionManager.getUserId() != null ? sessionManager.getUserId() : "TCH-001",
-                        sessionManager.getToken() != null ? sessionManager.getToken() : "token",
-                        "Teacher",
-                        name
-                );
+        if (!dob.isEmpty() && !com.social7.studentlearnanalytics.utils.DatePickerHelper.isValidIsoDate(dob)) {
+            if (etTeacherDob != null) etTeacherDob.setError(getString(R.string.err_invalid_date));
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        JsonObject body = new JsonObject();
+        body.addProperty("name", name);
+        body.addProperty("email", email);
+        if (!phone.isEmpty()) body.addProperty("phone", phone);
+        body.addProperty("date_of_birth", dob);
+
+        ApiClient.getApiService(requireContext()).updateProfile(body).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful()) {
+                    if (sessionManager != null) {
+                        sessionManager.saveSession(
+                                sessionManager.getUserId() != null ? sessionManager.getUserId() : "",
+                                sessionManager.getToken() != null ? sessionManager.getToken() : "",
+                                "Teacher",
+                                name
+                        );
+                    }
+                    Toast.makeText(getContext(), "Teacher profile updated and saved successfully!", Toast.LENGTH_LONG).show();
+                    if (getActivity() instanceof TeacherMainActivity) {
+                        ((TeacherMainActivity) getActivity()).openFragment(new TeacherProfileOverviewFragment());
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Failed to update profile (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                }
             }
-            Toast.makeText(getContext(), "Teacher profile updated and saved successfully!", Toast.LENGTH_LONG).show();
-            if (getActivity() instanceof TeacherMainActivity) {
-                ((TeacherMainActivity) getActivity()).openFragment(new TeacherProfileOverviewFragment());
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error updating profile", Toast.LENGTH_SHORT).show();
             }
+        });
+    }
+
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
         }
     }
 }

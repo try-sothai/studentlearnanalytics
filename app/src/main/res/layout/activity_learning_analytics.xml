@@ -24,28 +24,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="12dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/overall_performance"
                     android:textColor="#757575"
-                    android:textSize="14sp" />
+                    android:textSize="12.5sp" />
 
                 <TextView
                     android:id="@+id/tvPerformance"
@@ -54,7 +54,7 @@
                     android:layout_marginTop="8dp"
                     android:text="--"
                     android:textColor="?attr/colorPrimary"
-                    android:textSize="32sp"
+                    android:textSize="21sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -64,22 +64,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Engagement Averages"
                     android:textColor="#333333"
-                    android:textSize="18sp"
+                    android:textSize="14.5sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/attendance_rate"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
 
                     <TextView
                         android:id="@+id/tvAttendanceAverage"
@@ -99,13 +99,13 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textStyle="bold"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -113,7 +113,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/assignment_avg"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
 
                     <TextView
                         android:id="@+id/tvAssignmentAverage"
@@ -121,13 +121,13 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textStyle="bold"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/quiz_avg"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
 
                     <TextView
                         android:id="@+id/tvQuizAverage"
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textStyle="bold"
-                        android:textSize="16sp" />
+                        android:textSize="14.5sp" />
                 </LinearLayout>
 
             </LinearLayout>

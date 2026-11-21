@@ -348,8 +348,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             courseAssignments.clear();
                             JsonObject body = response.body();
-                            if (body.has("assignments") && body.get("assignments").isJsonArray()) {
-                                JsonArray arr = body.getAsJsonArray("assignments");
+                            JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "assignments");
+                            if (arr.size() > 0) {
                                 for (JsonElement el : arr) {
                                     if (!el.isJsonObject()) continue;
                                     JsonObject obj = el.getAsJsonObject();
@@ -400,8 +400,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             courseQuizzes.clear();
                             JsonObject body = response.body();
-                            if (body.has("quizzes") && body.get("quizzes").isJsonArray()) {
-                                JsonArray arr = body.getAsJsonArray("quizzes");
+                            JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "quizzes");
+                            if (arr.size() > 0) {
                                 for (JsonElement el : arr) {
                                     if (!el.isJsonObject()) continue;
                                     JsonObject obj = el.getAsJsonObject();
@@ -454,8 +454,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             courseExams.clear();
                             JsonObject body = response.body();
-                            if (body.has("exams") && body.get("exams").isJsonArray()) {
-                                JsonArray arr = body.getAsJsonArray("exams");
+                            JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "exams");
+                            if (arr.size() > 0) {
                                 for (JsonElement el : arr) {
                                     if (!el.isJsonObject()) continue;
                                     JsonObject obj = el.getAsJsonObject();

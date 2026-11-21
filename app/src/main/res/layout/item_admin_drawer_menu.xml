@@ -32,8 +32,10 @@
 
         <TextView
             android:id="@+id/tvDrawerItemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/dashboard"
             android:textColor="@color/drawer_dark_navy"
             android:textSize="14sp"
@@ -41,12 +43,14 @@
 
         <TextView
             android:id="@+id/tvDrawerItemSubtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:text="@string/overview_and_statistics"
             android:textColor="@color/drawer_secondary_text"
-            android:textSize="12sp"
+            android:textSize="11.5sp"
             android:visibility="gone" />
     </LinearLayout>
 

@@ -22,48 +22,67 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.teacher.assessment.EnterScoreActivity;
 import com.social7.studentlearnanalytics.teacher.assessment.PendingAssessmentAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ManageScoresFragment extends Fragment {
 
-    // Sub-Tab Buttons
     private TextView tabScoreOverview, tabScorePending, tabScoreAssignments, tabScoreQuizzes, tabScoreExams, tabScoreGradebook;
-
-    // Sub-Tab Containers
     private View secScoreOverviewContainer, secScorePendingContainer, secScoreAssignmentsContainer, secScoreQuizzesContainer, secScoreExamsContainer, secScoreGradebookContainer;
 
-    // Sub-Tab 1: Pending Scores
     private PendingAssessmentAdapter pendingAdapter;
     private RecyclerView rvPendingAssessments;
     private TextView tvSelectedCourseName, tvTotalPendingCount, tvTotalPendingSubtext, tvCountAssignments, tvCountQuizzes, tvCountExams;
     private MaterialButton btnFilterAllPending, btnFilterAssignments, btnFilterQuizzes, btnFilterExams, btnFilterOverdue;
     private String selectedCategory = "All";
     private String searchQuery = "";
+    private Integer selectedCourseId = null;
 
-    // Sub-Tab 2: Assignment Scores
     private RecyclerView rvAssignmentScoresList;
     private PendingAssessmentAdapter assignmentAdapter;
+    private final List<PendingAssessmentAdapter.PendingItem> assignmentItems = new ArrayList<>();
 
-    // Sub-Tab 3: Quiz Scores
     private RecyclerView rvQuizScoresList;
     private PendingAssessmentAdapter quizAdapter;
+    private final List<PendingAssessmentAdapter.PendingItem> quizItems = new ArrayList<>();
 
-    // Sub-Tab 4: Exam Scores
     private RecyclerView rvExamScoresList;
     private PendingAssessmentAdapter examAdapter;
+    private final List<PendingAssessmentAdapter.PendingItem> examItems = new ArrayList<>();
 
-    // Sub-Tab 5: Gradebook
+    private final List<PendingAssessmentAdapter.PendingItem> pendingItems = new ArrayList<>();
+
     private RecyclerView rvGradebookRosterList;
     private GradebookAdapter gradebookAdapter;
     private final List<GradebookAdapter.GradebookItem> gradebookList = new ArrayList<>();
 
-    // Current Selected Sub-Tab Flag (0=Overview, 1=Pending, 2=Assignments, 3=Quizzes, 4=Exams, 5=Gradebook)
+    private final List<CourseOption> availableCourses = new ArrayList<>();
     private int selectedSubTab = 0;
+
+    private static class CourseOption {
+        final int id;
+        final String code;
+        final String name;
+
+        CourseOption(int id, String code, String name) {
+            this.id = id;
+            this.code = code;
+            this.name = name;
+        }
+    }
 
     public ManageScoresFragment() {
     }
@@ -77,14 +96,12 @@ public class ManageScoresFragment extends Fragment {
     ) {
         View view = inflater.inflate(R.layout.fragment_manage_scores, container, false);
 
-        // Header Integration
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
                     view, getString(R.string.score_management), "Manage student grades, assessments, and gradebook"
             );
         }
 
-        // Sub-Tab Buttons
         tabScoreOverview = view.findViewById(R.id.tabScoreOverview);
         tabScorePending = view.findViewById(R.id.tabScorePending);
         tabScoreAssignments = view.findViewById(R.id.tabScoreAssignments);
@@ -92,7 +109,6 @@ public class ManageScoresFragment extends Fragment {
         tabScoreExams = view.findViewById(R.id.tabScoreExams);
         tabScoreGradebook = view.findViewById(R.id.tabScoreGradebook);
 
-        // Sub-Tab Containers
         secScoreOverviewContainer = view.findViewById(R.id.secScoreOverviewContainer);
         secScorePendingContainer = view.findViewById(R.id.secScorePendingContainer);
         secScoreAssignmentsContainer = view.findViewById(R.id.secScoreAssignmentsContainer);
@@ -100,7 +116,6 @@ public class ManageScoresFragment extends Fragment {
         secScoreExamsContainer = view.findViewById(R.id.secScoreExamsContainer);
         secScoreGradebookContainer = view.findViewById(R.id.secScoreGradebookContainer);
 
-        // Bind Sub-views
         bindPendingScoresViews(view);
         bindAssignmentScoresViews(view);
         bindQuizScoresViews(view);
@@ -109,6 +124,7 @@ public class ManageScoresFragment extends Fragment {
 
         setupSubTabListeners();
         selectSubTab(selectedSubTab);
+        fetchManageScoresData();
 
         return view;
     }
@@ -132,18 +148,6 @@ public class ManageScoresFragment extends Fragment {
         if (secScoreQuizzesContainer != null) secScoreQuizzesContainer.setVisibility(subIndex == 3 ? View.VISIBLE : View.GONE);
         if (secScoreExamsContainer != null) secScoreExamsContainer.setVisibility(subIndex == 4 ? View.VISIBLE : View.GONE);
         if (secScoreGradebookContainer != null) secScoreGradebookContainer.setVisibility(subIndex == 5 ? View.VISIBLE : View.GONE);
-
-        if (subIndex == 1) {
-            setupPendingScoresList();
-        } else if (subIndex == 2) {
-            setupAssignmentScoresList();
-        } else if (subIndex == 3) {
-            setupQuizScoresList();
-        } else if (subIndex == 4) {
-            setupExamScoresList();
-        } else if (subIndex == 5) {
-            setupGradebookList();
-        }
     }
 
     private void updateSubTabButtonStyles(int activeIndex) {
@@ -163,9 +167,179 @@ public class ManageScoresFragment extends Fragment {
         }
     }
 
-    // ==========================================
-    // 1. PENDING SCORES SUB-TAB
-    // ==========================================
+    private void fetchManageScoresData() {
+        if (getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getTeacherAssessmentsOverview(selectedCourseId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                    JsonObject data = response.body().getAsJsonObject("data");
+
+                    if (data.has("courses") && data.get("courses").isJsonArray()) {
+                        availableCourses.clear();
+                        for (JsonElement cel : data.getAsJsonArray("courses")) {
+                            if (!cel.isJsonObject()) continue;
+                            JsonObject co = cel.getAsJsonObject();
+                            availableCourses.add(new CourseOption(
+                                    getInt(co, "course_id"),
+                                    getStr(co, "code", "COURSE"),
+                                    getStr(co, "name", "Course")
+                            ));
+                        }
+                        if (selectedCourseId == null && tvSelectedCourseName != null) {
+                            tvSelectedCourseName.setText("All Assigned Courses");
+                        }
+                    }
+
+                    if (data.has("summary") && data.get("summary").isJsonObject()) {
+                        JsonObject sum = data.getAsJsonObject("summary");
+                        int totAsn = getInt(sum, "total_assignments");
+                        int totQz = getInt(sum, "total_quizzes");
+                        int totEx = getInt(sum, "total_exams");
+                        int pend = getInt(sum, "pending_submissions");
+                        if (tvTotalPendingCount != null) tvTotalPendingCount.setText(String.valueOf(pend));
+                        if (tvTotalPendingSubtext != null) tvTotalPendingSubtext.setText("out of " + (totAsn + totQz + totEx) + " assessments");
+                        if (tvCountAssignments != null) tvCountAssignments.setText(String.valueOf(totAsn));
+                        if (tvCountQuizzes != null) tvCountQuizzes.setText(String.valueOf(totQz));
+                        if (tvCountExams != null) tvCountExams.setText(String.valueOf(totEx));
+                    }
+
+                    pendingItems.clear();
+                    assignmentItems.clear();
+                    quizItems.clear();
+                    examItems.clear();
+
+                    if (data.has("assignments") && data.get("assignments").isJsonArray()) {
+                        for (JsonElement el : data.getAsJsonArray("assignments")) {
+                            if (!el.isJsonObject()) continue;
+                            JsonObject o = el.getAsJsonObject();
+                            PendingAssessmentAdapter.PendingItem pi = new PendingAssessmentAdapter.PendingItem(
+                                    getStr(o, "code", "ASN"),
+                                    getStr(o, "course_code", "COURSE"),
+                                    getStr(o, "title", "Assignment"),
+                                    "Assignment",
+                                    (int) getDouble(o, "total_score"),
+                                    getStr(o, "due_date", "-"),
+                                    getStr(o, "status", "Published"),
+                                    false,
+                                    getInt(o, "graded_submissions"),
+                                    Math.max(1, getInt(o, "total_submissions"))
+                            );
+                            assignmentItems.add(pi);
+                            pendingItems.add(pi);
+                        }
+                    }
+
+                    if (data.has("quizzes") && data.get("quizzes").isJsonArray()) {
+                        for (JsonElement el : data.getAsJsonArray("quizzes")) {
+                            if (!el.isJsonObject()) continue;
+                            JsonObject o = el.getAsJsonObject();
+                            PendingAssessmentAdapter.PendingItem pi = new PendingAssessmentAdapter.PendingItem(
+                                    getStr(o, "code", "QZ"),
+                                    getStr(o, "course_code", "COURSE"),
+                                    getStr(o, "title", "Quiz"),
+                                    "Quiz",
+                                    (int) getDouble(o, "total_score"),
+                                    "-",
+                                    getStr(o, "status", "Published"),
+                                    false,
+                                    getInt(o, "attempts_count"),
+                                    Math.max(1, getInt(o, "attempts_count"))
+                            );
+                            quizItems.add(pi);
+                            pendingItems.add(pi);
+                        }
+                    }
+
+                    if (data.has("exams") && data.get("exams").isJsonArray()) {
+                        for (JsonElement el : data.getAsJsonArray("exams")) {
+                            if (!el.isJsonObject()) continue;
+                            JsonObject o = el.getAsJsonObject();
+                            PendingAssessmentAdapter.PendingItem pi = new PendingAssessmentAdapter.PendingItem(
+                                    getStr(o, "code", "EX"),
+                                    getStr(o, "course_code", "COURSE"),
+                                    getStr(o, "title", "Exam"),
+                                    "Exam",
+                                    (int) getDouble(o, "total_score"),
+                                    getStr(o, "exam_date", "-"),
+                                    "Scheduled",
+                                    false,
+                                    getInt(o, "results_count"),
+                                    Math.max(1, getInt(o, "results_count"))
+                            );
+                            examItems.add(pi);
+                            pendingItems.add(pi);
+                        }
+                    }
+
+                    gradebookList.clear();
+                    if (data.has("gradebook") && data.get("gradebook").isJsonArray()) {
+                        for (JsonElement el : data.getAsJsonArray("gradebook")) {
+                            if (!el.isJsonObject()) continue;
+                            JsonObject g = el.getAsJsonObject();
+                            String stCode = getStr(g, "student_code", "STU");
+                            String stName = getStr(g, "student_name", "Student");
+                            String cCode = getStr(g, "course_code", "COURSE");
+                            String breakdown = String.format(Locale.US,
+                                    "Assignments: %.0f%% • Quizzes: %.0f%% • Midterm: %.0f%% • Final: %.0f%%",
+                                    getDouble(g, "assignment_score"),
+                                    getDouble(g, "quiz_score"),
+                                    getDouble(g, "midterm_score"),
+                                    getDouble(g, "final_exam_score"));
+                            String badge = String.format(Locale.US, "Grade: %s (%.1f%%)",
+                                    getStr(g, "letter_grade", "N/A"),
+                                    getDouble(g, "total_score"));
+                            gradebookList.add(new GradebookAdapter.GradebookItem(stCode, stName, cCode, breakdown, badge));
+                        }
+                    }
+
+                    refreshAdapters();
+                } else {
+                    Toast.makeText(getContext(), "Unable to load scores data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), "Network error loading scores", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void refreshAdapters() {
+        if (getContext() == null) return;
+        PendingAssessmentAdapter.OnPendingAssessmentClickListener listener = item -> {
+            Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
+            intent.putExtra("assessment_id", item.id);
+            intent.putExtra("assessment_title", item.title);
+            intent.putExtra("course_code", item.courseCode);
+            startActivity(intent);
+        };
+        if (rvPendingAssessments != null) {
+            pendingAdapter = new PendingAssessmentAdapter(requireContext(), pendingItems, listener);
+            rvPendingAssessments.setAdapter(pendingAdapter);
+            pendingAdapter.filter(searchQuery, selectedCategory);
+        }
+        if (rvAssignmentScoresList != null) {
+            assignmentAdapter = new PendingAssessmentAdapter(requireContext(), assignmentItems, listener);
+            rvAssignmentScoresList.setAdapter(assignmentAdapter);
+        }
+        if (rvQuizScoresList != null) {
+            quizAdapter = new PendingAssessmentAdapter(requireContext(), quizItems, listener);
+            rvQuizScoresList.setAdapter(quizAdapter);
+        }
+        if (rvExamScoresList != null) {
+            examAdapter = new PendingAssessmentAdapter(requireContext(), examItems, listener);
+            rvExamScoresList.setAdapter(examAdapter);
+        }
+        if (gradebookAdapter != null) {
+            gradebookAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void bindPendingScoresViews(View root) {
         tvSelectedCourseName = root.findViewById(R.id.tvSelectedCourseName);
         LinearLayout btnCourseSelector = root.findViewById(R.id.btnCourseSelector);
@@ -199,265 +373,102 @@ public class ManageScoresFragment extends Fragment {
         }
 
         rvPendingAssessments = root.findViewById(R.id.rvPendingAssessments);
+        if (rvPendingAssessments != null && getContext() != null) {
+            rvPendingAssessments.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
     }
 
-    private void setupPendingScoresList() {
-        if (rvPendingAssessments == null || pendingAdapter != null) return;
-
-        rvPendingAssessments.setLayoutManager(new LinearLayoutManager(requireContext()));
-        List<PendingAssessmentAdapter.PendingItem> items = getSamplePendingItems("CS101");
-        pendingAdapter = new PendingAssessmentAdapter(requireContext(), items, item -> {
-            Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
-            intent.putExtra("assessment_id", item.id);
-            intent.putExtra("assessment_title", item.title);
-            intent.putExtra("course_code", item.courseCode);
-            startActivity(intent);
-        });
-        rvPendingAssessments.setAdapter(pendingAdapter);
-        loadCoursePendingData("CS101");
-    }
-
-    // ==========================================
-    // 2. ASSIGNMENT SCORES SUB-TAB
-    // ==========================================
     private void bindAssignmentScoresViews(View root) {
         rvAssignmentScoresList = root.findViewById(R.id.rvAssignmentScoresList);
+        if (rvAssignmentScoresList != null && getContext() != null) {
+            rvAssignmentScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
     }
 
-    private void setupAssignmentScoresList() {
-        if (rvAssignmentScoresList == null || assignmentAdapter != null) return;
-
-        rvAssignmentScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        List<PendingAssessmentAdapter.PendingItem> items = new ArrayList<>();
-        items.add(new PendingAssessmentAdapter.PendingItem("A101", "CS101", "Assignment 1: Linked Lists & Pointers", "Assignment", 100, "Oct 10, 2024", "Graded", false, 35, 35));
-        items.add(new PendingAssessmentAdapter.PendingItem("A102", "CS101", "Assignment 2: Binary Search Trees", "Assignment", 100, "Oct 20, 2024", "Overdue", true, 18, 35));
-
-        assignmentAdapter = new PendingAssessmentAdapter(requireContext(), items, item -> {
-            Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
-            intent.putExtra("assessment_id", item.id);
-            intent.putExtra("assessment_title", item.title);
-            startActivity(intent);
-        });
-        rvAssignmentScoresList.setAdapter(assignmentAdapter);
-    }
-
-    // ==========================================
-    // 3. QUIZ SCORES SUB-TAB
-    // ==========================================
     private void bindQuizScoresViews(View root) {
         rvQuizScoresList = root.findViewById(R.id.rvQuizScoresList);
+        if (rvQuizScoresList != null && getContext() != null) {
+            rvQuizScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
     }
 
-    private void setupQuizScoresList() {
-        if (rvQuizScoresList == null || quizAdapter != null) return;
-
-        rvQuizScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        List<PendingAssessmentAdapter.PendingItem> items = new ArrayList<>();
-        items.add(new PendingAssessmentAdapter.PendingItem("Q101", "CS101", "Quiz 1: Arrays and Big-O Notation", "Quiz", 50, "Oct 15, 2024", "Due in 2 days", false, 25, 35));
-        items.add(new PendingAssessmentAdapter.PendingItem("Q102", "IT402", "Quiz 2: REST APIs & JSON Parsing", "Quiz", 50, "Oct 22, 2024", "Pending", false, 15, 32));
-
-        quizAdapter = new PendingAssessmentAdapter(requireContext(), items, item -> {
-            Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
-            intent.putExtra("assessment_id", item.id);
-            intent.putExtra("assessment_title", item.title);
-            startActivity(intent);
-        });
-        rvQuizScoresList.setAdapter(quizAdapter);
-    }
-
-    // ==========================================
-    // 4. EXAM SCORES SUB-TAB
-    // ==========================================
     private void bindExamScoresViews(View root) {
         rvExamScoresList = root.findViewById(R.id.rvExamScoresList);
+        if (rvExamScoresList != null && getContext() != null) {
+            rvExamScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
     }
 
-    private void setupExamScoresList() {
-        if (rvExamScoresList == null || examAdapter != null) return;
-
-        rvExamScoresList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        List<PendingAssessmentAdapter.PendingItem> items = new ArrayList<>();
-        items.add(new PendingAssessmentAdapter.PendingItem("E101", "CS101", "Midterm Exam — Data Structures", "Exam", 100, "Oct 25, 2024", "Due in 12 days", false, 12, 35));
-        items.add(new PendingAssessmentAdapter.PendingItem("E102", "IT402", "Final Exam — Mobile Systems", "Exam", 100, "Nov 15, 2024", "Pending", false, 0, 32));
-
-        examAdapter = new PendingAssessmentAdapter(requireContext(), items, item -> {
-            Intent intent = new Intent(requireContext(), EnterScoreActivity.class);
-            intent.putExtra("assessment_id", item.id);
-            intent.putExtra("assessment_title", item.title);
-            startActivity(intent);
-        });
-        rvExamScoresList.setAdapter(examAdapter);
-    }
-
-    // ==========================================
-    // 5. GRADEBOOK SUB-TAB
-    // ==========================================
     private void bindGradebookViews(View root) {
         rvGradebookRosterList = root.findViewById(R.id.rvGradebookRosterList);
-    }
-
-    private void setupGradebookList() {
-        if (rvGradebookRosterList == null || gradebookAdapter != null) return;
-
-        gradebookList.clear();
-        gradebookList.add(new GradebookAdapter.GradebookItem("STU23001", "Sophea", "CS101 - Intro to CS • BSIT 4-A", "Assignments: 90% • Quizzes: 88% • Midterm: 85% • Final: 92%", "Grade: A (88.8%)"));
-        gradebookList.add(new GradebookAdapter.GradebookItem("STU23002", "Dara", "IT402 - Web Systems • BSIT 4-B", "Assignments: 58% • Quizzes: 52% • Midterm: 54% • Final: 58%", "Grade: F (55.5%)"));
-        gradebookList.add(new GradebookAdapter.GradebookItem("STU23003", "Rathana", "CS204 - Algorithms • BSCS 3-A", "Assignments: 68% • Quizzes: 62% • Midterm: 65% • Final: 68%", "Grade: C (65.8%)"));
-        gradebookList.add(new GradebookAdapter.GradebookItem("STU23004", "Sokha", "CS101 - Intro to CS • BSCS 3-B", "Assignments: 85% • Quizzes: 82% • Midterm: 84% • Final: 86%", "Grade: B+ (84.2%)"));
-        gradebookList.add(new GradebookAdapter.GradebookItem("STU23005", "Bopha", "IS201 - Enterprise Arch • BSIS 2-A", "Assignments: 78% • Quizzes: 75% • Midterm: 72% • Final: 78%", "Grade: B (75.8%)"));
-
-        gradebookAdapter = new GradebookAdapter(requireContext(), gradebookList, item -> {
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Student Gradebook Breakdown")
-                    .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
-                            "Student Name: " + item.studentName + "\n" +
-                            "Course & Class: " + item.courseClass + "\n\n" +
-                            "Academic Score Breakdown:\n" +
-                            item.gradeBreakdown + "\n\n" +
-                            "Composite Final Result: " + item.gradeBadge)
-                    .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
-
-        rvGradebookRosterList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvGradebookRosterList.setAdapter(gradebookAdapter);
+        if (rvGradebookRosterList != null && getContext() != null) {
+            gradebookAdapter = new GradebookAdapter(requireContext(), gradebookList, item -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Student Gradebook Breakdown")
+                        .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
+                                "Student Name: " + item.studentName + "\n" +
+                                "Course & Class: " + item.courseClass + "\n\n" +
+                                "Academic Score Breakdown:\n" +
+                                item.gradeBreakdown + "\n\n" +
+                                "Composite Final Result: " + item.gradeBadge)
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
+                        .show();
+            });
+            rvGradebookRosterList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            rvGradebookRosterList.setAdapter(gradebookAdapter);
+        }
     }
 
     private void showCourseDropdown(View anchor) {
+        if (getContext() == null) return;
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "CS101 - Data Structures");
-        popup.getMenu().add(0, 2, 1, "CS201 - Computer Networks");
-        popup.getMenu().add(0, 3, 2, "CS301 - Mobile App Development");
+        popup.getMenu().add(0, 0, 0, "All Assigned Courses");
+        for (int i = 0; i < availableCourses.size(); i++) {
+            CourseOption opt = availableCourses.get(i);
+            popup.getMenu().add(0, i + 1, i + 1, opt.code + " - " + opt.name);
+        }
 
         popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == 1) loadCoursePendingData("CS101");
-            else if (item.getItemId() == 2) loadCoursePendingData("CS201");
-            else if (item.getItemId() == 3) loadCoursePendingData("CS301");
+            int idx = item.getItemId();
+            if (idx == 0) {
+                selectedCourseId = null;
+                if (tvSelectedCourseName != null) tvSelectedCourseName.setText("All Assigned Courses");
+            } else if (idx - 1 < availableCourses.size()) {
+                CourseOption opt = availableCourses.get(idx - 1);
+                selectedCourseId = opt.id;
+                if (tvSelectedCourseName != null) tvSelectedCourseName.setText(opt.code + " - " + opt.name);
+            }
+            fetchManageScoresData();
             return true;
         });
         popup.show();
     }
 
-    private void showFilterDropdown(View anchor) {
-        PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "All Pending Categories");
-        popup.getMenu().add(0, 2, 1, "Assignments");
-        popup.getMenu().add(0, 3, 2, "Quizzes");
-        popup.getMenu().add(0, 4, 3, "Exams");
-        popup.getMenu().add(0, 5, 4, "Overdue");
-
-        popup.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == 1) setFilterCategory("All");
-            else if (item.getItemId() == 2) setFilterCategory("Assignments");
-            else if (item.getItemId() == 3) setFilterCategory("Quizzes");
-            else if (item.getItemId() == 4) setFilterCategory("Exams");
-            else if (item.getItemId() == 5) setFilterCategory("Overdue");
-            return true;
-        });
-        popup.show();
-    }
-
-    private void loadCoursePendingData(String courseCode) {
-        String courseTitle;
-        if ("CS201".equalsIgnoreCase(courseCode)) {
-            courseTitle = "CS201 - Computer Networks";
-        } else if ("CS301".equalsIgnoreCase(courseCode)) {
-            courseTitle = "CS301 - Mobile App Development";
-        } else {
-            courseTitle = "CS101 - Data Structures";
-        }
-
-        if (tvSelectedCourseName != null) tvSelectedCourseName.setText(courseTitle);
-
-        if (pendingAdapter != null) {
-            pendingAdapter.filter(searchQuery, selectedCategory);
-        }
-
-        if (tvTotalPendingCount != null) tvTotalPendingCount.setText("12");
-        if (tvTotalPendingSubtext != null) tvTotalPendingSubtext.setText("out of 28 assessments");
-        if (tvCountAssignments != null) tvCountAssignments.setText("6");
-        if (tvCountQuizzes != null) tvCountQuizzes.setText("4");
-        if (tvCountExams != null) tvCountExams.setText("2");
-    }
-
-    private void setFilterCategory(String category) {
-        this.selectedCategory = category;
-        updateFilterButtonStyles();
-        if (pendingAdapter != null) {
-            pendingAdapter.filter(searchQuery, selectedCategory);
+    private String getStr(JsonObject obj, String key, String fallback) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return fallback;
+        try {
+            String v = obj.get(key).getAsString();
+            return v != null && !v.isEmpty() ? v : fallback;
+        } catch (Exception e) {
+            return fallback;
         }
     }
 
-    private void updateFilterButtonStyles() {
-        int primaryBlue = Color.parseColor("#2563FF");
-        int white = Color.WHITE;
-
-        if (btnFilterAllPending != null) {
-            if ("All".equalsIgnoreCase(selectedCategory)) {
-                btnFilterAllPending.setBackgroundColor(primaryBlue);
-                btnFilterAllPending.setTextColor(white);
-            } else {
-                btnFilterAllPending.setBackgroundColor(Color.parseColor("#EAF0FF"));
-                btnFilterAllPending.setTextColor(primaryBlue);
-            }
-        }
-
-        if (btnFilterAssignments != null) {
-            if ("Assignments".equalsIgnoreCase(selectedCategory)) {
-                btnFilterAssignments.setBackgroundColor(primaryBlue);
-                btnFilterAssignments.setTextColor(white);
-            } else {
-                btnFilterAssignments.setBackgroundColor(Color.parseColor("#FFEBEF"));
-                btnFilterAssignments.setTextColor(Color.parseColor("#FF4055"));
-            }
-        }
-
-        if (btnFilterQuizzes != null) {
-            if ("Quizzes".equalsIgnoreCase(selectedCategory)) {
-                btnFilterQuizzes.setBackgroundColor(primaryBlue);
-                btnFilterQuizzes.setTextColor(white);
-            } else {
-                btnFilterQuizzes.setBackgroundColor(Color.parseColor("#FFF5E6"));
-                btnFilterQuizzes.setTextColor(Color.parseColor("#FF9B16"));
-            }
-        }
-
-        if (btnFilterExams != null) {
-            if ("Exams".equalsIgnoreCase(selectedCategory)) {
-                btnFilterExams.setBackgroundColor(primaryBlue);
-                btnFilterExams.setTextColor(white);
-            } else {
-                btnFilterExams.setBackgroundColor(Color.parseColor("#EAF0FF"));
-                btnFilterExams.setTextColor(primaryBlue);
-            }
-        }
-
-        if (btnFilterOverdue != null) {
-            if ("Overdue".equalsIgnoreCase(selectedCategory)) {
-                btnFilterOverdue.setBackgroundColor(primaryBlue);
-                btnFilterOverdue.setTextColor(white);
-            } else {
-                btnFilterOverdue.setBackgroundColor(Color.parseColor("#FFEBEF"));
-                btnFilterOverdue.setTextColor(Color.parseColor("#FF4055"));
-            }
+    private int getInt(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return 0;
+        try {
+            return obj.get(key).getAsInt();
+        } catch (Exception e) {
+            return 0;
         }
     }
 
-    private List<PendingAssessmentAdapter.PendingItem> getSamplePendingItems(String filterCourse) {
-        List<PendingAssessmentAdapter.PendingItem> items = new ArrayList<>();
-
-        items.add(new PendingAssessmentAdapter.PendingItem("CS101", "Data Structures", "Computer Science Department", 5, R.drawable.bg_course_icon_blue));
-        items.add(new PendingAssessmentAdapter.PendingItem("A101", "CS101", "Assignment 2: Linked Lists", "Assignment", 100, "Oct 10, 2024", "Overdue", true, 18, 35));
-        items.add(new PendingAssessmentAdapter.PendingItem("Q101", "CS101", "Quiz 1: Arrays and Complexity", "Quiz", 50, "Oct 15, 2024", "Due in 2 days", false, 25, 35));
-        items.add(new PendingAssessmentAdapter.PendingItem("E101", "CS101", "Midterm Exam", "Exam", 100, "Oct 25, 2024", "Due in 12 days", false, 12, 35));
-
-        items.add(new PendingAssessmentAdapter.PendingItem("CS201", "Computer Networks", "Computer Science Department", 4, R.drawable.bg_course_icon_green));
-        items.add(new PendingAssessmentAdapter.PendingItem("Q201", "CS201", "Quiz 2: Network Protocols", "Quiz", 50, "Oct 12, 2024", "Overdue", true, 20, 32));
-        items.add(new PendingAssessmentAdapter.PendingItem("A201", "CS201", "Assignment 3: Network Security", "Assignment", 100, "Oct 18, 2024", "Due in 5 days", false, 28, 32));
-
-        items.add(new PendingAssessmentAdapter.PendingItem("CS301", "Mobile App Development", "Computer Science Department", 3, R.drawable.bg_course_icon_orange));
-        items.add(new PendingAssessmentAdapter.PendingItem("P301", "CS301", "Final Project", "Project", 100, "Oct 28, 2024", "Due in 15 days", false, 20, 27));
-
-        return items;
+    private double getDouble(JsonObject obj, String key) {
+        if (obj == null || !obj.has(key) || obj.get(key).isJsonNull()) return 0.0;
+        try {
+            return obj.get(key).getAsDouble();
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 }

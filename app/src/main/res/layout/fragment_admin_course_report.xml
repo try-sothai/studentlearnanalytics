@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/admin_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <!-- Secondary Navigation Bar for Course Reports -->
     <com.google.android.material.card.MaterialCardView
@@ -89,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <!-- Academic Filters Row -->
                 <LinearLayout
@@ -129,7 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -153,22 +152,22 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_courses" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatTotalCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="89" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatTotalCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/active_courses" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatActiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="78" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatActiveCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_enrollments" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatTotalEnrollments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="6,245" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatTotalEnrollments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Avg Class Size" android:textColor="@color/admin_text_secondary" android:textSize="12sp" />
-                                <TextView android:id="@+id/tvStatAvgClassSize" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="28" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvStatAvgClassSize" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="--" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold" />
                             </LinearLayout>
                         </GridLayout>
 
@@ -190,7 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -269,7 +268,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -303,7 +302,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -318,7 +317,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/course_enrollment_summary" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -326,19 +325,19 @@
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_enrollments" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6,245" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseEnrollStatTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/new_enrollments" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,240" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseEnrollStatStudents" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Cohorts" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="78" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseEnrollStatCohorts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Avg Utilization" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88.5%" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseEnrollStatUtilization" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/warning_orange" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -359,7 +358,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Monthly Course Enrollment Line Chart" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
 
@@ -371,7 +370,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Enrollment Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Enrollment Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCourseEnrollmentList"
@@ -394,7 +393,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -409,7 +408,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/course_completion_analytics" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -417,15 +416,15 @@
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completion Rate" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.8%" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseCompletionRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/completed_count" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5,920" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseCompletedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/incomplete" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="325" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvCourseIncompleteCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_inactive_red" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dropout Rate" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
@@ -435,7 +434,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Completion Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Completion Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCourseCompletionList"
@@ -458,7 +457,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -473,7 +472,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/course_performance_summary" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="10dp" android:background="@color/admin_border"/>
@@ -514,7 +513,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Average Pass Rates Bar Chart" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
 
@@ -526,7 +525,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Performance Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="8dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Course Performance Roster" android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCoursePerformanceList"
@@ -546,7 +545,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnExportCourseReport"

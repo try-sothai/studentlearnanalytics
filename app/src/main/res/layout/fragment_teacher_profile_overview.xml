@@ -22,14 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <!-- Profile Summary Header Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:id="@+id/tvOverviewAvatar"
@@ -49,7 +49,7 @@
                         android:gravity="center"
                         android:text="C"
                         android:textColor="@color/admin_primary_blue"
-                        android:textSize="24sp"
+                        android:textSize="14.5sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -65,7 +65,7 @@
                             android:layout_height="wrap_content"
                             android:text="Mr. Chan"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="18sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -75,7 +75,7 @@
                             android:layout_marginTop="2dp"
                             android:text="Senior Lecturer • CS Department"
                             android:textColor="@color/admin_text_secondary"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvOverviewTeacherId"
@@ -106,9 +106,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -117,43 +117,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/personal_information"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <!-- Item: Email -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/email_address_643a86" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                        <TextView android:id="@+id/tvOverviewEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="chan@univ.edu" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvOverviewEmail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="chan@univ.edu" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                     </LinearLayout>
 
                     <!-- Item: Phone -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/phone_number" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                        <TextView android:id="@+id/tvOverviewPhone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="+855 12 345 678" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvOverviewPhone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="+855 12 345 678" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                     </LinearLayout>
 
                     <!-- Item: Gender & DOB -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gender_019ec3" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvOverviewGender" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/gender_male" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvOverviewGender" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/gender_male" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                         </LinearLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/date_of_birth" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvOverviewDob" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Mar 10, 1990" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvOverviewDob" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Mar 10, 1990" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -164,9 +164,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -175,38 +175,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/professional_information"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <!-- Department -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/department" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                        <TextView android:id="@+id/tvOverviewDepartment" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="College of Computer Studies" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvOverviewDepartment" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="College of Computer Studies" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                     </LinearLayout>
 
                     <!-- Qualifications -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/academic_qualifications" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                        <TextView android:id="@+id/tvOverviewQualifications" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="M.Sc. Computer Science &amp; Software Engineering" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvOverviewQualifications" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="M.Sc. Computer Science &amp; Software Engineering" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                     </LinearLayout>
 
                     <!-- Assigned Courses & Classes -->
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/assigned_courses_classes" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                        <TextView android:id="@+id/tvOverviewAssignedCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Courses: CS101, IT402 • Classes: BSIT 4-A, BSIT 4-B" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvOverviewAssignedCourses" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Courses: CS101, IT402 • Classes: BSIT 4-A, BSIT 4-B" android:textColor="@color/admin_primary_blue" android:textSize="12sp" android:textStyle="bold"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -216,9 +216,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -227,30 +227,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/account_security_73386a"
                         android:textColor="@color/admin_text_primary"
-                        android:textSize="15sp"
+                        android:textSize="13.5sp"
                         android:textStyle="bold" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="6dp"
                         android:background="@color/admin_border" />
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Account Created" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvOverviewCreatedDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Jan 15, 2024" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvOverviewCreatedDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Jan 15, 2024" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                         </LinearLayout>
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/last_login" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvOverviewLastLogin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Today at 08:30 AM" android:textColor="@color/admin_text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvOverviewLastLogin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Today at 08:30 AM" android:textColor="@color/admin_text_primary" android:textSize="12.5sp" android:textStyle="bold"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -262,12 +262,12 @@
                 android:id="@+id/cardTeacherAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/card_white"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="14dp"
                 app:cardElevation="1dp"
                 app:strokeColor="@color/admin_border"
                 app:strokeWidth="1dp">
@@ -277,7 +277,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -298,7 +298,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/appearance_settings"
                             android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp"
+                            android:textSize="13.5sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -329,7 +329,7 @@
         android:background="@color/card_white"
         android:elevation="6dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnChangePassword"
@@ -341,7 +341,7 @@
             android:text="@string/change_password"
             android:textAllCaps="false"
             android:textColor="@color/admin_primary_blue"
-            android:textSize="14sp"
+            android:textSize="12.5sp"
             android:textStyle="bold"
             app:cornerRadius="10dp"
             app:strokeColor="@color/admin_primary_blue"
@@ -357,7 +357,7 @@
             android:text="@string/edit_profile"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="12.5sp"
             android:textStyle="bold"
             app:cornerRadius="10dp" />
     </LinearLayout>
