@@ -145,32 +145,32 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/overall_rate" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="92.8%" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_present" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="780" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewPresent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_absent" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="38" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewAbsent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_late" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="15" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewLate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status_excused" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewExcused" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Roster" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="840" android:textColor="@color/admin_text_primary" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAttOverviewTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_text_primary" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -264,10 +264,10 @@
                     android:orientation="horizontal"
                     android:padding="10dp">
 
-                    <TextView android:id="@+id/tvTakeCountPresent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="P: 3" android:textColor="@color/admin_active_green" android:textSize="12sp" android:textStyle="bold"/>
-                    <TextView android:id="@+id/tvTakeCountAbsent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/a_1" android:textColor="@color/admin_inactive_red" android:textSize="12sp" android:textStyle="bold"/>
-                    <TextView android:id="@+id/tvTakeCountLate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="L: 1" android:textColor="@color/warning_orange" android:textSize="12sp" android:textStyle="bold"/>
-                    <TextView android:id="@+id/tvTakeCountExcused" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="E: 1" android:textColor="@color/admin_purple_accent" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountPresent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="P: 0" android:textColor="@color/admin_active_green" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountAbsent" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="A: 0" android:textColor="@color/admin_inactive_red" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountLate" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="L: 0" android:textColor="@color/warning_orange" android:textSize="12sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/tvTakeCountExcused" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="E: 0" android:textColor="@color/admin_purple_accent" android:textSize="12sp" android:textStyle="bold"/>
                 </LinearLayout>
 
                 <!-- Actions Header Row (Date Picker + Mark All Present) -->
@@ -452,6 +452,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/tvAttStudentEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="No student attendance records available yet."
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

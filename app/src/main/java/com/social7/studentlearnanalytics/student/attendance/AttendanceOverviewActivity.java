@@ -24,10 +24,15 @@ public class AttendanceOverviewActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView tvAttendanceRate;
     private RecyclerView rvCourses;
+    private View layoutEmptyState, btnRetryAttendance;
+    private TextView tvEmptyMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Student")) {
+            return;
+        }
         setContentView(R.layout.activity_attendance_overview);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -41,43 +46,71 @@ public class AttendanceOverviewActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvAttendanceRate = findViewById(R.id.tvAttendanceRate);
         rvCourses = findViewById(R.id.rvCourses);
+        layoutEmptyState = findViewById(R.id.layoutEmptyState);
+        tvEmptyMessage = findViewById(R.id.tvEmptyMessage);
+        btnRetryAttendance = findViewById(R.id.btnRetryAttendance);
         rvCourses.setLayoutManager(new LinearLayoutManager(this));
+
+        if (btnRetryAttendance != null) {
+            btnRetryAttendance.setOnClickListener(v -> loadAttendanceOverview());
+        }
 
         loadAttendanceOverview();
     }
 
     private void loadAttendanceOverview() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (layoutEmptyState != null) layoutEmptyState.setVisibility(View.GONE);
         ApiService apiService = ApiClient.getApiService(this);
         apiService.getStudentModuleAttendanceOverview(null).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                progressBar.setVisibility(View.GONE);
+                if (isFinishing() || isDestroyed()) return;
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject body = response.body();
-                    if (body.has("data") && !body.get("data").isJsonNull()) {
+                    if (body.has("data") && body.get("data").isJsonObject()) {
                         JsonObject data = body.getAsJsonObject("data");
-                        if (data.has("summary")) {
+                        if (data.has("summary") && data.get("summary").isJsonObject()) {
                             JsonObject summary = data.getAsJsonObject("summary");
-                            String rate = summary.get("percentage").getAsString() + "%";
-                            tvAttendanceRate.setText(rate);
+                            int total = summary.has("total") && !summary.get("total").isJsonNull()
+                                    ? summary.get("total").getAsInt() : 0;
+                            String rate = "N/A";
+                            if (total > 0 && summary.has("percentage") && !summary.get("percentage").isJsonNull()) {
+                                rate = summary.get("percentage").getAsString() + "%";
+                            }
+                            if (tvAttendanceRate != null) tvAttendanceRate.setText(rate);
                         }
-                        if (data.has("courses") && !data.get("courses").isJsonNull()) {
-                            com.google.gson.JsonArray courses = data.getAsJsonArray("courses");
-                            CourseAttendanceAdapter adapter = new CourseAttendanceAdapter(courses);
-                            rvCourses.setAdapter(adapter);
+                        com.google.gson.JsonArray courses = (data.has("courses") && data.get("courses").isJsonArray())
+                                ? data.getAsJsonArray("courses") : new com.google.gson.JsonArray();
+                        if (courses.size() > 0) {
+                            rvCourses.setAdapter(new CourseAttendanceAdapter(courses));
+                            rvCourses.setVisibility(View.VISIBLE);
+                            if (layoutEmptyState != null) layoutEmptyState.setVisibility(View.GONE);
+                        } else {
+                            showState("No attendance records recorded yet.", false);
                         }
+                        return;
                     }
-                } else {
-                    Toast.makeText(AttendanceOverviewActivity.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
                 }
+                Toast.makeText(AttendanceOverviewActivity.this, "Failed to load data.", Toast.LENGTH_SHORT).show();
+                showState("Unable to load attendance overview (HTTP " + response.code() + ").", true);
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                if (isFinishing() || isDestroyed()) return;
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
                 Toast.makeText(AttendanceOverviewActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                showState("Network error loading attendance. Please retry.", true);
             }
         });
+    }
+
+    private void showState(String message, boolean showRetry) {
+        if (rvCourses != null) rvCourses.setVisibility(View.GONE);
+        if (layoutEmptyState != null) layoutEmptyState.setVisibility(View.VISIBLE);
+        if (tvEmptyMessage != null) tvEmptyMessage.setText(message);
+        if (btnRetryAttendance != null) btnRetryAttendance.setVisibility(showRetry ? View.VISIBLE : View.GONE);
     }
 }

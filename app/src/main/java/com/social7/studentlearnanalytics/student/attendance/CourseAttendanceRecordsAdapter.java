@@ -32,11 +32,12 @@ public class CourseAttendanceRecordsAdapter extends RecyclerView.Adapter<CourseA
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
 
-        holder.tvDate.setText(item.has("date") && !item.get("date").isJsonNull() ? item.get("date").getAsString() : "Unknown");
+        String rawDate = item.has("date") && !item.get("date").isJsonNull() ? item.get("date").getAsString() : "Unknown";
+        holder.tvDate.setText(com.social7.studentlearnanalytics.utils.AssessmentUiHelper.formatDateShort(rawDate));
         holder.tvTopic.setText(item.has("topic") && !item.get("topic").isJsonNull() ? item.get("topic").getAsString() : "Session");
 
         String status = item.has("status") && !item.get("status").isJsonNull() ? item.get("status").getAsString() : "Unknown";
-        holder.tvStatusBadge.setText(status.substring(0, 1).toUpperCase() + status.substring(1));
+        holder.tvStatusBadge.setText(status.isEmpty() ? "Unknown" : status.substring(0, 1).toUpperCase() + status.substring(1));
 
         if ("present".equalsIgnoreCase(status)) {
             holder.tvStatusBadge.setBackgroundColor(Color.parseColor("#10B981"));

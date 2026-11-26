@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.teacher;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -43,7 +47,7 @@ public class CourseManagementFragment extends Fragment {
     private TextView tabActiveCourses, tabArchivedCourses;
 
     private String selectedSemester = "All Semesters";
-    private String selectedDepartment = "All Depts";
+    private String selectedDepartment = "All Faculties";
     private String selectedSort = "Code";
     private String searchQuery = "";
     private boolean isArchivedTab = false;
@@ -51,6 +55,22 @@ public class CourseManagementFragment extends Fragment {
     private final List<Course> loadedCourses = new ArrayList<>();
     private final Set<String> availableSemesters = new LinkedHashSet<>();
     private final Set<String> availableDepartments = new LinkedHashSet<>();
+
+    private final ActivityResultLauncher<Intent> courseDetailLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    String action = result.getData().getStringExtra(TeacherCourseDetailActivity.EXTRA_ACTION);
+                    Course c = (Course) result.getData().getSerializableExtra(TeacherCourseDetailActivity.EXTRA_COURSE);
+                    if (c == null) return;
+                    if (TeacherCourseDetailActivity.ACTION_VIEW_STUDENTS.equals(action)) {
+                        openStudentsForCourse(c);
+                    } else if (TeacherCourseDetailActivity.ACTION_VIEW_ANALYTICS.equals(action)) {
+                        openAnalyticsForCourse(c);
+                    }
+                }
+            }
+    );
 
     public CourseManagementFragment() {
     }
@@ -192,7 +212,7 @@ public class CourseManagementFragment extends Fragment {
                         String code = courseObj != null ? getStr(courseObj, "code", getStr(courseObj, "course_code", "COURSE")) : "COURSE";
                         String name = courseObj != null ? getStr(courseObj, "name", getStr(courseObj, "course_name", "Course")) : "Course";
 
-                        String deptName = "Academic Department";
+                        String deptName = "Academic Faculty";
                         if (courseObj != null) {
                             if (courseObj.has("department") && courseObj.get("department").isJsonObject()) {
                                 deptName = getStr(courseObj.getAsJsonObject("department"), "name", deptName);
@@ -252,18 +272,10 @@ public class CourseManagementFragment extends Fragment {
     }
 
     private void showCourseDetailsDialog(Course course) {
-        if (getContext() == null || course == null) return;
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(course.getCode() + " — " + course.getName())
-                .setMessage("Department: " + course.getDepartment() + "\n"
-                        + "Semester: " + course.getSemester() + "\n"
-                        + "Schedule: " + course.getSchedule() + "\n"
-                        + "Room: " + course.getRoom() + "\n"
-                        + "Enrolled Students: " + course.getStudentCount())
-                .setPositiveButton("View Students", (d, w) -> openStudentsForCourse(course))
-                .setNeutralButton("Class Analytics", (d, w) -> openAnalyticsForCourse(course))
-                .setNegativeButton(R.string.close, null)
-                .show();
+        if (!isAdded() || getContext() == null || course == null) return;
+        Intent intent = new Intent(requireContext(), TeacherCourseDetailActivity.class);
+        intent.putExtra(TeacherCourseDetailActivity.EXTRA_COURSE, course);
+        courseDetailLauncher.launch(intent);
     }
 
     private void openStudentsForCourse(Course course) {
@@ -333,7 +345,7 @@ public class CourseManagementFragment extends Fragment {
 
     private void showDepartmentDropdown(View anchor) {
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 0, 0, "All Depts");
+        popup.getMenu().add(0, 0, 0, "All Faculties");
         int i = 1;
         for (String dept : availableDepartments) {
             popup.getMenu().add(0, i, i, dept);

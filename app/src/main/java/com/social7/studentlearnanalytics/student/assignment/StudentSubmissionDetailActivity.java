@@ -74,6 +74,8 @@ public class StudentSubmissionDetailActivity extends AppCompatActivity {
     private String previewType = "";
     private boolean hasFile = false;
     private boolean fileExists = false;
+    private int versionNumber = 1;
+    private boolean isLatest = true;
     private File cachedFile = null;
     private Call<ResponseBody> activeFileCall = null;
 
@@ -157,6 +159,8 @@ public class StudentSubmissionDetailActivity extends AppCompatActivity {
         previewType = nonNull(i.getStringExtra("preview_type"));
         hasFile = i.getBooleanExtra("has_file", false);
         fileExists = i.getBooleanExtra("file_exists", false);
+        versionNumber = Math.max(1, i.getIntExtra("version_number", 1));
+        isLatest = i.getBooleanExtra("is_latest", true);
     }
 
     private void renderMetadata() {
@@ -173,7 +177,10 @@ public class StudentSubmissionDetailActivity extends AppCompatActivity {
 
         if (tvDetailStudentCode != null) tvDetailStudentCode.setText(studentCode.isEmpty() ? "STU" : studentCode);
         if (tvDetailStudentName != null) tvDetailStudentName.setText(studentName.isEmpty() ? "Student" : studentName);
-        if (tvDetailSubmittedAt != null) tvDetailSubmittedAt.setText("Submitted: " + (submittedAt.isEmpty() ? "-" : submittedAt));
+        if (tvDetailSubmittedAt != null) {
+            String verSuffix = " • v" + versionNumber + (isLatest ? " (Latest)" : " (Previous Version)");
+            tvDetailSubmittedAt.setText("Submitted: " + (submittedAt.isEmpty() ? "-" : submittedAt) + verSuffix);
+        }
 
         if (tvDetailSubmissionStatus != null) {
             tvDetailSubmissionStatus.setText(submissionStatus.isEmpty() ? "Submitted" : submissionStatus);
@@ -307,6 +314,12 @@ public class StudentSubmissionDetailActivity extends AppCompatActivity {
                 previewType = getStr(d, "preview_type", previewType);
                 hasFile = d.has("has_file") && !d.get("has_file").isJsonNull() && d.get("has_file").getAsBoolean();
                 fileExists = d.has("file_exists") && !d.get("file_exists").isJsonNull() && d.get("file_exists").getAsBoolean();
+                if (d.has("version_number") && !d.get("version_number").isJsonNull()) {
+                    versionNumber = Math.max(1, d.get("version_number").getAsInt());
+                }
+                if (d.has("is_latest") && !d.get("is_latest").isJsonNull()) {
+                    isLatest = d.get("is_latest").getAsBoolean();
+                }
 
                 renderMetadata();
                 if (hasFile && fileExists) {

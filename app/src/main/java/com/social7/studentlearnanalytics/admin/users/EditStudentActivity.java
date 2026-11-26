@@ -26,6 +26,7 @@ import com.social7.studentlearnanalytics.model.User;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 import com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,10 +53,14 @@ public class EditStudentActivity extends AppCompatActivity {
     private final List<AddStudentActivity.IdNameItem> allProgramList = new ArrayList<>();
     private final List<AddStudentActivity.IdNameItem> filteredProgramList = new ArrayList<>();
     private final List<AddStudentActivity.IdNameItem> academicYearList = new ArrayList<>();
+    private boolean isSyncingStudentSpinners = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_edit_student);
 
         if (getIntent() != null) {
@@ -83,6 +88,17 @@ public class EditStudentActivity extends AppCompatActivity {
         prepopulateFields();
         setupListeners();
         fetchLookupsAndStudentDetails();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
+        if (departmentList.isEmpty()) {
+            fetchLookupsAndStudentDetails();
+        }
     }
 
     private void initViews() {
@@ -124,7 +140,7 @@ public class EditStudentActivity extends AppCompatActivity {
     }
 
     private void setupDefaultSpinners() {
-        String[] yearLevels = {"Year 1", "Year 2", "Year 3", "Year 4", "Year 5"};
+        List<String> yearLevels = YearLevelHelper.getFormDropdownOptions(this);
         if (spEditYearLevel != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearLevels);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -135,8 +151,9 @@ public class EditStudentActivity extends AppCompatActivity {
             spEditDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isSyncingStudentSpinners) return;
                     if (position >= 0 && position < departmentList.size()) {
-                        filterProgramsForDepartment(departmentList.get(position));
+                        filterProgramsForDepartment(departmentList.get(position), false);
                     }
                 }
 
@@ -147,6 +164,10 @@ public class EditStudentActivity extends AppCompatActivity {
     }
 
     private void filterProgramsForDepartment(AddStudentActivity.IdNameItem dept) {
+        filterProgramsForDepartment(dept, false);
+    }
+
+    private void filterProgramsForDepartment(AddStudentActivity.IdNameItem dept, boolean preserveSavedMajor) {
         filteredProgramList.clear();
         if (dept == null) {
             filteredProgramList.addAll(allProgramList);
@@ -162,15 +183,19 @@ public class EditStudentActivity extends AppCompatActivity {
                 }
             }
             if (filteredProgramList.isEmpty()) {
-                filteredProgramList.addAll(allProgramList);
+                filteredProgramList.add(new AddStudentActivity.IdNameItem(0, getString(R.string.no_majors_for_faculty), "", 0));
             }
         }
         if (spEditProgram != null) {
             ArrayAdapter<AddStudentActivity.IdNameItem> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, filteredProgramList);
+                    android.R.layout.simple_spinner_item, new ArrayList<>(filteredProgramList));
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spEditProgram.setAdapter(adapter);
-            selectProgramInSpinner();
+            if (preserveSavedMajor) {
+                selectProgramInSpinner();
+            } else if (!filteredProgramList.isEmpty()) {
+                spEditProgram.setSelection(0);
+            }
         }
     }
 
@@ -179,56 +204,26 @@ public class EditStudentActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
-                    JsonObject d = response.body().getAsJsonObject("data");
+                if (response.isSuccessful() && response.body() != null) {
+                    AcademicDropdownHelper.LookupData parsed = AcademicDropdownHelper.parseLookups(response.body());
 
                     departmentList.clear();
-                    if (d.has("departments") && d.get("departments").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("departments")) {
-                            JsonObject o = el.getAsJsonObject();
-                            departmentList.add(new AddStudentActivity.IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
-                                    0
-                            ));
-                        }
-                    }
+                    departmentList.addAll(parsed.faculties);
                     if (spEditDepartment != null) {
                         ArrayAdapter<AddStudentActivity.IdNameItem> adapter = new ArrayAdapter<>(EditStudentActivity.this,
-                                android.R.layout.simple_spinner_item, departmentList);
+                                android.R.layout.simple_spinner_item, new ArrayList<>(departmentList));
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spEditDepartment.setAdapter(adapter);
                     }
 
                     allProgramList.clear();
-                    if (d.has("programs") && d.get("programs").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("programs")) {
-                            JsonObject o = el.getAsJsonObject();
-                            allProgramList.add(new AddStudentActivity.IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
-                                    o.has("department_id") && !o.get("department_id").isJsonNull() ? o.get("department_id").getAsInt() : 0
-                            ));
-                        }
-                    }
+                    allProgramList.addAll(parsed.majors);
 
                     academicYearList.clear();
-                    if (d.has("academic_years") && d.get("academic_years").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("academic_years")) {
-                            JsonObject o = el.getAsJsonObject();
-                            academicYearList.add(new AddStudentActivity.IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    "",
-                                    0
-                            ));
-                        }
-                    }
+                    academicYearList.addAll(parsed.academicYears);
                     if (spEditAcademicYear != null) {
                         ArrayAdapter<AddStudentActivity.IdNameItem> adapter = new ArrayAdapter<>(EditStudentActivity.this,
-                                android.R.layout.simple_spinner_item, academicYearList);
+                                android.R.layout.simple_spinner_item, new ArrayList<>(academicYearList));
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spEditAcademicYear.setAdapter(adapter);
                     }
@@ -309,9 +304,10 @@ public class EditStudentActivity extends AppCompatActivity {
                         currentStudent.setProgram(d.get("program_name").getAsString());
                     }
                     if (d.has("year_level") && !d.get("year_level").isJsonNull()) {
-                        String yl = d.get("year_level").getAsString().replaceAll("\\D+", "");
-                        if (!yl.isEmpty()) {
-                            currentStudent.setYear("Year " + yl);
+                        Integer ylParsed = YearLevelHelper.parse(d.get("year_level").getAsString());
+                        if (ylParsed != null) {
+                            currentStudent.setYearLevel(ylParsed);
+                            currentStudent.setYear("Year " + ylParsed);
                         }
                     }
                     if (d.has("academic_year_id") && !d.get("academic_year_id").isJsonNull()) {
@@ -371,13 +367,8 @@ public class EditStudentActivity extends AppCompatActivity {
         }
 
         if (spEditYearLevel != null) {
-            String yr = currentStudent.getYear();
-            for (int i = 0; i < spEditYearLevel.getCount(); i++) {
-                if (yr.equalsIgnoreCase(spEditYearLevel.getItemAtPosition(i).toString())) {
-                    spEditYearLevel.setSelection(i);
-                    break;
-                }
-            }
+            Object rawYear = currentStudent.getYearLevel() != null ? currentStudent.getYearLevel() : currentStudent.getYear();
+            spEditYearLevel.setSelection(YearLevelHelper.spinnerIndexFor(rawYear, false));
         }
 
         if (isActive) {
@@ -401,11 +392,11 @@ public class EditStudentActivity extends AppCompatActivity {
                     break;
                 }
             }
-            spEditDepartment.setSelection(targetIdx);
-            filterProgramsForDepartment(departmentList.get(targetIdx));
+            isSyncingStudentSpinners = true;
+            spEditDepartment.setSelection(targetIdx, false);
+            filterProgramsForDepartment(departmentList.get(targetIdx), true);
+            spEditDepartment.post(() -> isSyncingStudentSpinners = false);
         }
-
-        selectProgramInSpinner();
 
         if (spEditAcademicYear != null && !academicYearList.isEmpty()) {
             for (int i = 0; i < academicYearList.size(); i++) {
@@ -495,21 +486,42 @@ public class EditStudentActivity extends AppCompatActivity {
         body.addProperty("date_of_birth", dob);
         body.addProperty("status", apiStatus);
 
-        if (spEditDepartment != null && spEditDepartment.getSelectedItem() instanceof AddStudentActivity.IdNameItem) {
-            AddStudentActivity.IdNameItem dept = (AddStudentActivity.IdNameItem) spEditDepartment.getSelectedItem();
-            body.addProperty("department_id", dept.id);
-            body.addProperty("department", dept.name);
+        final AddStudentActivity.IdNameItem selectedDept = (spEditDepartment != null && spEditDepartment.getSelectedItem() instanceof AddStudentActivity.IdNameItem)
+                ? (AddStudentActivity.IdNameItem) spEditDepartment.getSelectedItem() : null;
+        final AddStudentActivity.IdNameItem selectedProg = (spEditProgram != null && spEditProgram.getSelectedItem() instanceof AddStudentActivity.IdNameItem)
+                ? (AddStudentActivity.IdNameItem) spEditProgram.getSelectedItem() : null;
+
+        if (!departmentList.isEmpty()) {
+            if (selectedDept == null || selectedDept.id <= 0) {
+                Toast.makeText(this, R.string.please_select_a_department, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedProg == null || selectedProg.id <= 0) {
+                Toast.makeText(this, R.string.please_select_a_program, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
-        if (spEditProgram != null && spEditProgram.getSelectedItem() instanceof AddStudentActivity.IdNameItem) {
-            AddStudentActivity.IdNameItem prog = (AddStudentActivity.IdNameItem) spEditProgram.getSelectedItem();
-            body.addProperty("program_id", prog.id);
-            body.addProperty("program", prog.name);
+        if (selectedDept != null && selectedDept.id > 0) {
+            body.addProperty("department_id", selectedDept.id);
+            body.addProperty("department", selectedDept.name);
+        }
+
+        if (selectedProg != null && selectedProg.id > 0) {
+            body.addProperty("program_id", selectedProg.id);
+            body.addProperty("program", selectedProg.name);
         }
 
         if (spEditYearLevel != null && spEditYearLevel.getSelectedItem() != null) {
-            String yrStr = spEditYearLevel.getSelectedItem().toString();
-            body.addProperty("year_level", yrStr.replaceAll("\\D+", ""));
+            String storageYl = YearLevelHelper.toStorageString(spEditYearLevel.getSelectedItem());
+            if (storageYl == null) {
+                storageYl = YearLevelHelper.toStorageString(spEditYearLevel.getSelectedItemPosition() + 1);
+            }
+            if (storageYl == null) {
+                Toast.makeText(this, R.string.err_invalid_year_level, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            body.addProperty("year_level", storageYl);
         }
 
         if (spEditAcademicYear != null && spEditAcademicYear.getSelectedItem() instanceof AddStudentActivity.IdNameItem) {
@@ -535,6 +547,14 @@ public class EditStudentActivity extends AppCompatActivity {
                     if (!phone.isEmpty()) currentStudent.setPhone(phone);
                     currentStudent.setDob(dob);
                     currentStudent.setStatus(isCheckedActive ? "Active" : "Inactive");
+                    if (selectedDept != null && selectedDept.id > 0) {
+                        currentStudent.setDepartmentId(selectedDept.id);
+                        currentStudent.setDepartment(selectedDept.name);
+                    }
+                    if (selectedProg != null && selectedProg.id > 0) {
+                        currentStudent.setProgramId(selectedProg.id);
+                        currentStudent.setProgram(selectedProg.name);
+                    }
 
                     if (currentUser != null) {
                         currentUser.setName(displayName);

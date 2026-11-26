@@ -142,6 +142,15 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvQuizPolicySummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Attempts: 1 • Scoring: Highest • v1"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="11.5sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,6 +186,41 @@
                     app:cornerRadius="8dp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnManageQuiz"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Manage / Reopen"
+                    android:textAllCaps="false"
+                    android:textSize="11.5sp"
+                    app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnQuizOverrides"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Retakes &amp; Overrides"
+                    android:textAllCaps="false"
+                    android:textSize="11.5sp"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvQuestionsLockedBanner"
                 android:layout_width="match_parent"
@@ -184,7 +228,7 @@
                 android:layout_marginTop="8dp"
                 android:background="#FFFBEB"
                 android:padding="8dp"
-                android:text="Students have started attempting this quiz. Questions can no longer be edited or reordered."
+                android:text="Students have attempted this quiz. Question edits create a new version and preserve existing attempt snapshots."
                 android:textColor="@color/warning_orange"
                 android:textSize="11.5sp"
                 android:textStyle="bold"

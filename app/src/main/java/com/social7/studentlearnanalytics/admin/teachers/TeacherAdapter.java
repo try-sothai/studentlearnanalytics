@@ -33,7 +33,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
     private final OnTeacherActionListener listener;
 
     private String currentStatusFilter = "ALL";
-    private String currentDepartmentFilter = "All Departments";
+    private String currentDepartmentFilter = "All Faculties";
 
     public TeacherAdapter(Context context, List<Teacher> teacherList, OnTeacherActionListener listener) {
         this.context = context;
@@ -64,7 +64,8 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
                     ("ACTIVE".equals(currentStatusFilter) && "Active".equalsIgnoreCase(teacher.getStatus())) ||
                     ("INACTIVE".equals(currentStatusFilter) && "Inactive".equalsIgnoreCase(teacher.getStatus()));
 
-            boolean matchesDepartment = "All Departments".equalsIgnoreCase(currentDepartmentFilter) ||
+            boolean matchesDepartment = "All Faculties".equalsIgnoreCase(currentDepartmentFilter) ||
+                    "All Departments".equalsIgnoreCase(currentDepartmentFilter) ||
                     (teacher.getDepartment() != null && teacher.getDepartment().equalsIgnoreCase(currentDepartmentFilter));
 
             if (matchesSearch && matchesStatus && matchesDepartment) {

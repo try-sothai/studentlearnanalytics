@@ -1,6 +1,6 @@
 package com.social7.studentlearnanalytics.admin;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -24,14 +26,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.adapter.NotificationAdapter;
 import com.social7.studentlearnanalytics.admin.users.NotificationSettingsActivity;
 import com.social7.studentlearnanalytics.model.Notification;
+import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationFragment extends Fragment {
 
@@ -49,6 +58,16 @@ public class NotificationFragment extends Fragment {
 
     private String currentCategoryFilter = "ALL"; // "ALL", "UNREAD", "System", "User", "Course"
     private String currentSearchQuery = "";
+    private boolean lastRequestFailed = false;
+
+    private final ActivityResultLauncher<Intent> detailLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    loadNotificationsFromApi();
+                }
+            }
+    );
 
     public NotificationFragment() {
     }
@@ -67,12 +86,20 @@ public class NotificationFragment extends Fragment {
         );
 
         initViews(view);
-        setupData();
         setupFilterChips();
         setupSearchAndFilter(view);
         setupOverflowMenu(view);
+        loadNotificationsFromApi();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isAdded() && getContext() != null) {
+            loadNotificationsFromApi();
+        }
     }
 
     private void initViews(View view) {
@@ -111,23 +138,31 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    private void setupData() {
-        masterNotificationList.clear();
+    private void loadNotificationsFromApi() {
+        if (!isAdded() || getContext() == null) return;
+        lastRequestFailed = false;
 
-        // TODAY Group
-        masterNotificationList.add(new Notification("N001", "New Teacher Registration", "Ms. Dany has registered as a new teacher and is pending approval.", "10:30 AM", "User", "TODAY", false));
-        masterNotificationList.add(new Notification("N002", "New Course Created", "CS102 - Data Structures has been created by Mr. Vanna.", "09:15 AM", "Course", "TODAY", false));
-        masterNotificationList.add(new Notification("N003", "Report Ready", "Monthly academic report for Semester 1 is ready to view.", "08:45 AM", "Report", "TODAY", false));
+        ApiClient.getApiService(requireContext()).getNotifications().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                masterNotificationList.clear();
+                if (response.isSuccessful() && response.body() != null) {
+                    masterNotificationList.addAll(UiUtils.parseNotificationsJson(response.body()));
+                } else {
+                    lastRequestFailed = true;
+                }
+                filterAndRefreshNotifications();
+            }
 
-        // YESTERDAY Group
-        masterNotificationList.add(new Notification("N004", "System Announcement", "The academic calendar for 2024 - 2025 has been published.", "04:00 PM", "System", "YESTERDAY", true));
-        masterNotificationList.add(new Notification("N005", "Suspicious Login Attempt", "A suspicious login attempt was detected from a new device.", "02:15 PM", "Security", "YESTERDAY", true));
-        masterNotificationList.add(new Notification("N006", "New Student Registration", "New students have registered and are pending approval.", "11:00 AM", "User", "YESTERDAY", true));
-
-        // THIS WEEK Group
-        masterNotificationList.add(new Notification("N007", "Class Enrollment Update", "CS101 has 5 new enrollments.", "Oct 25", "Academic", "THIS WEEK", true));
-
-        filterAndRefreshNotifications();
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                lastRequestFailed = true;
+                masterNotificationList.clear();
+                filterAndRefreshNotifications();
+            }
+        });
     }
 
     private void setupFilterChips() {
@@ -194,7 +229,7 @@ public class NotificationFragment extends Fragment {
     private void showFilterOptionsDialog() {
         if (!isAdded() || getContext() == null) return;
         String[] options = {"All Categories", "User Notifications", "Course Notifications", "System Notifications", "Unread Only"};
-        new MaterialAlertDialogBuilder(getContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.filter_notifications)
                 .setItems(options, (dialog, which) -> {
                     switch (which) {
@@ -218,7 +253,7 @@ public class NotificationFragment extends Fragment {
 
     private void showOverflowPopupMenu(View anchor) {
         if (!isAdded() || getContext() == null) return;
-        PopupMenu popup = new PopupMenu(getContext(), anchor);
+        PopupMenu popup = new PopupMenu(requireContext(), anchor);
         popup.getMenu().add(0, 1, 0, "Mark All as Read");
         popup.getMenu().add(0, 2, 1, "Delete Read");
         popup.getMenu().add(0, 3, 2, "Notification Settings");
@@ -244,7 +279,7 @@ public class NotificationFragment extends Fragment {
                 return true;
             } else if (id == 3) {
                 if (!isAdded() || getContext() == null) return false;
-                Intent intent = new Intent(getContext(), NotificationSettingsActivity.class);
+                Intent intent = new Intent(requireContext(), NotificationSettingsActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -255,31 +290,66 @@ public class NotificationFragment extends Fragment {
     }
 
     private void markAllAsRead() {
-        for (Notification n : masterNotificationList) {
-            n.setRead(true);
-        }
-        filterAndRefreshNotifications();
-        if (isAdded() && getContext() != null) {
-            Toast.makeText(getContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
-        }
+        if (!isAdded() || getContext() == null) return;
+        ApiClient.getApiService(requireContext()).markAllNotificationsRead().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful()) {
+                    for (Notification n : masterNotificationList) {
+                        n.setRead(true);
+                    }
+                    filterAndRefreshNotifications();
+                    Toast.makeText(getContext(), "All notifications marked as read", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed to mark all as read", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showDeleteReadConfirmationDialog() {
         if (!isAdded() || getContext() == null) return;
-        new MaterialAlertDialogBuilder(getContext())
+        List<Notification> readItems = new ArrayList<>();
+        for (Notification n : masterNotificationList) {
+            if (n.isRead() && n.getId() != null && !n.getId().isEmpty()) {
+                readItems.add(n);
+            }
+        }
+        if (readItems.isEmpty()) return;
+
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.delete_read_notifications)
                 .setMessage(R.string.are_you_sure_you_want_to_delete_all_read_n)
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
-                    List<Notification> toRemove = new ArrayList<>();
-                    for (Notification n : masterNotificationList) {
-                        if (n.isRead()) {
-                            toRemove.add(n);
-                        }
-                    }
-                    masterNotificationList.removeAll(toRemove);
-                    filterAndRefreshNotifications();
-                    if (isAdded() && getContext() != null) {
-                        Toast.makeText(getContext(), "Read notifications deleted", Toast.LENGTH_SHORT).show();
+                    AtomicInteger remaining = new AtomicInteger(readItems.size());
+                    for (Notification n : readItems) {
+                        ApiClient.getApiService(requireContext()).deleteNotification(n.getId())
+                                .enqueue(new Callback<JsonObject>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                        if (response.isSuccessful()) {
+                                            masterNotificationList.remove(n);
+                                        }
+                                        if (remaining.decrementAndGet() == 0 && isAdded() && getContext() != null) {
+                                            filterAndRefreshNotifications();
+                                            Toast.makeText(getContext(), "Read notifications deleted", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                                        if (remaining.decrementAndGet() == 0 && isAdded() && getContext() != null) {
+                                            filterAndRefreshNotifications();
+                                        }
+                                    }
+                                });
                     }
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
@@ -295,15 +365,24 @@ public class NotificationFragment extends Fragment {
     }
 
     private void filterAndRefreshNotifications() {
+        if (!isAdded() || getContext() == null) return;
         displayedNotificationList.clear();
 
-        for (Notification n : masterNotificationList) {
-            boolean matchesCategory = true;
+        int systemCount = 0;
+        int userCount = 0;
+        int courseCount = 0;
 
+        for (Notification n : masterNotificationList) {
+            String cat = n.getCategory() != null ? n.getCategory() : "System";
+            if ("System".equalsIgnoreCase(cat) || "Security".equalsIgnoreCase(cat)) systemCount++;
+            if ("User".equalsIgnoreCase(cat)) userCount++;
+            if ("Course".equalsIgnoreCase(cat) || "Academic".equalsIgnoreCase(cat)) courseCount++;
+
+            boolean matchesCategory = true;
             if ("UNREAD".equalsIgnoreCase(currentCategoryFilter)) {
                 matchesCategory = !n.isRead();
             } else if (!"ALL".equalsIgnoreCase(currentCategoryFilter)) {
-                matchesCategory = currentCategoryFilter.equalsIgnoreCase(n.getCategory());
+                matchesCategory = currentCategoryFilter.equalsIgnoreCase(cat);
             }
 
             boolean matchesSearch = true;
@@ -311,7 +390,7 @@ public class NotificationFragment extends Fragment {
                 String q = currentSearchQuery.toLowerCase();
                 boolean inTitle = n.getTitle() != null && n.getTitle().toLowerCase().contains(q);
                 boolean inMsg = n.getMessage() != null && n.getMessage().toLowerCase().contains(q);
-                boolean inCat = n.getCategory() != null && n.getCategory().toLowerCase().contains(q);
+                boolean inCat = cat.toLowerCase().contains(q);
                 matchesSearch = inTitle || inMsg || inCat;
             }
 
@@ -320,23 +399,27 @@ public class NotificationFragment extends Fragment {
             }
         }
 
-        // Update Unread Badge Count
         int unreadCount = getUnreadCount();
         if (tvNotifBadgeCount != null) {
             tvNotifBadgeCount.setText(String.valueOf(unreadCount));
             tvNotifBadgeCount.setVisibility(unreadCount > 0 ? View.VISIBLE : View.GONE);
         }
 
-        // Update Category Chip Counts
         if (pillNotifAll != null) pillNotifAll.setText(pillNotifAll.getContext().getString(R.string.all_c49d0d) + masterNotificationList.size() + ")");
         if (pillNotifUnread != null) pillNotifUnread.setText("Unread (" + unreadCount + ")");
+        if (pillNotifSystem != null) pillNotifSystem.setText("System (" + systemCount + ")");
+        if (pillNotifUser != null) pillNotifUser.setText("User (" + userCount + ")");
+        if (pillNotifCourse != null) pillNotifCourse.setText("Course (" + courseCount + ")");
 
-        // Refresh List & Empty State
         if (displayedNotificationList.isEmpty()) {
             if (rvNotifications != null) rvNotifications.setVisibility(View.GONE);
             if (layoutNotifEmptyState != null) layoutNotifEmptyState.setVisibility(View.VISIBLE);
 
-            if (!currentSearchQuery.isEmpty() || !"ALL".equalsIgnoreCase(currentCategoryFilter)) {
+            if (lastRequestFailed) {
+                if (tvEmptyStateTitle != null) tvEmptyStateTitle.setText("Unable to Load Notifications");
+                if (tvEmptyStateDesc != null) tvEmptyStateDesc.setText("Please check your network connection and try again.");
+                if (btnResetNotifSearch != null) btnResetNotifSearch.setVisibility(View.GONE);
+            } else if (!currentSearchQuery.isEmpty() || !"ALL".equalsIgnoreCase(currentCategoryFilter)) {
                 if (tvEmptyStateTitle != null) tvEmptyStateTitle.setText("No Matching Notifications");
                 if (tvEmptyStateDesc != null) tvEmptyStateDesc.setText("No notifications found matching your search or filter criteria.");
                 if (btnResetNotifSearch != null) btnResetNotifSearch.setVisibility(View.VISIBLE);
@@ -349,15 +432,23 @@ public class NotificationFragment extends Fragment {
             if (rvNotifications != null) rvNotifications.setVisibility(View.VISIBLE);
             if (layoutNotifEmptyState != null) layoutNotifEmptyState.setVisibility(View.GONE);
 
-            if (!isAdded() || getContext() == null) return;
             adapter = new NotificationAdapter(getContext(), displayedNotificationList, notification -> {
-                notification.setRead(true);
-                filterAndRefreshNotifications();
+                if (!notification.isRead() && notification.getId() != null && !notification.getId().isEmpty()) {
+                    notification.setRead(true);
+                    filterAndRefreshNotifications();
+                    ApiClient.getApiService(requireContext()).markNotificationRead(notification.getId())
+                            .enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {}
+                                @Override
+                                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+                            });
+                }
 
                 if (!isAdded() || getContext() == null) return;
                 Intent intent = new Intent(getContext(), NotificationDetailActivity.class);
                 intent.putExtra("notification", notification);
-                startActivity(intent);
+                detailLauncher.launch(intent);
             });
 
             if (rvNotifications != null) {

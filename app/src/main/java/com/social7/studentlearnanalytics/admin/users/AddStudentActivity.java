@@ -5,17 +5,23 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,6 +34,7 @@ import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 import com.social7.studentlearnanalytics.utils.PersonNameDisplayHelper;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +74,16 @@ public class AddStudentActivity extends AppCompatActivity {
     private final List<IdNameItem> allSemesterList = new ArrayList<>();
     private final List<IdNameItem> filteredSemesterList = new ArrayList<>();
 
+    private boolean lookupsLoaded = false;
+    private boolean isLoadingLookups = false;
+    private boolean isSyncingSpinners = false;
+    private int lastSelectedDepartmentId = -1;
+    private int lastSelectedAcademicYearId = -1;
+    private int majorFetchSeq = 0;
+    private boolean majorLoadFailed = false;
+    private boolean isLoadingMajors = false;
+    private IdNameItem selectedDepartmentForMajors = null;
+
     public static class IdNameItem {
         public final int id;
         public final String name;
@@ -75,7 +92,7 @@ public class AddStudentActivity extends AppCompatActivity {
 
         public IdNameItem(int id, String name, String code, int parentId) {
             this.id = id;
-            this.name = name;
+            this.name = name != null ? name : "";
             this.code = code != null ? code : "";
             this.parentId = parentId;
         }
@@ -83,6 +100,9 @@ public class AddStudentActivity extends AppCompatActivity {
         @NonNull
         @Override
         public String toString() {
+            if (id <= 0) {
+                return name;
+            }
             if (code != null && !code.isEmpty() && !name.contains("(" + code + ")")) {
                 return name + " (" + code + ")";
             }
@@ -102,9 +122,27 @@ public class AddStudentActivity extends AppCompatActivity {
 
         initViews();
         setupGenderAndYearLevelSpinners();
+        setupInitialAcademicSpinners();
         setupDependentSpinners();
         fetchAcademicLookups();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
+        if (!lookupsLoaded && !isLoadingLookups) {
+            fetchAcademicLookups();
+        } else if (lookupsLoaded
+                && !isLoadingMajors
+                && selectedDepartmentForMajors != null
+                && selectedDepartmentForMajors.id > 0
+                && (majorLoadFailed || filteredProgramList.size() <= 1)) {
+            fetchMajorsForDepartment(selectedDepartmentForMajors);
+        }
     }
 
     private void initViews() {
@@ -165,28 +203,64 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private void setupGenderAndYearLevelSpinners() {
-        if (spAddStudentGender != null) {
-            ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, new String[]{"Male", "Female"});
-            genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spAddStudentGender.setAdapter(genderAdapter);
+        setStringSpinner(spAddStudentGender, java.util.Arrays.asList("Male", "Female"));
+        setStringSpinner(spAddYearLevel, YearLevelHelper.getFormDropdownOptions(this));
+    }
+
+    private void setupInitialAcademicSpinners() {
+        isSyncingSpinners = true;
+
+        departmentList.clear();
+        departmentList.add(new IdNameItem(0, getString(R.string.loading_options), "", 0));
+        setSpinner(spAddDepartment, departmentList);
+
+        filteredProgramList.clear();
+        filteredProgramList.add(new IdNameItem(0, getString(R.string.select_faculty_first), "", 0));
+        setSpinner(spAddProgram, filteredProgramList);
+        if (spAddProgram != null) {
+            spAddProgram.setEnabled(false);
+            spAddProgram.setAlpha(0.6f);
         }
 
-        if (spAddYearLevel != null) {
-            ArrayAdapter<String> yearLevelAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, new String[]{"Year 1", "Year 2", "Year 3", "Year 4", "Year 5"});
-            yearLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spAddYearLevel.setAdapter(yearLevelAdapter);
-        }
+        academicYearList.clear();
+        academicYearList.add(new IdNameItem(0, getString(R.string.loading_options), "", 0));
+        setSpinner(spAddAcademicYear, academicYearList);
+
+        filteredSemesterList.clear();
+        filteredSemesterList.add(new IdNameItem(0, getString(R.string.none_optional), "", 0));
+        setSpinner(spAddSemester, filteredSemesterList);
+
+        releaseSyncGuard();
     }
 
     private void setupDependentSpinners() {
+        View.OnTouchListener retryTouchListener = (v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP && !lookupsLoaded && !isLoadingLookups) {
+                fetchAcademicLookups();
+                return true;
+            }
+            return false;
+        };
+
         if (spAddDepartment != null) {
+            spAddDepartment.setOnTouchListener(retryTouchListener);
             spAddDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isSyncingSpinners || !lookupsLoaded) return;
                     IdNameItem dept = position >= 0 && position < departmentList.size() ? departmentList.get(position) : null;
-                    filterProgramsForDepartment(dept);
+                    int deptId = dept != null ? dept.id : 0;
+                    if (deptId == lastSelectedDepartmentId) return;
+                    lastSelectedDepartmentId = deptId;
+                    selectedDepartmentForMajors = dept;
+                    if (dept == null || dept.id <= 0) {
+                        majorFetchSeq++;
+                        isLoadingMajors = false;
+                        majorLoadFailed = false;
+                        filterProgramsForDepartment(null);
+                    } else {
+                        fetchMajorsForDepartment(dept);
+                    }
                 }
 
                 @Override
@@ -194,11 +268,30 @@ public class AddStudentActivity extends AppCompatActivity {
             });
         }
 
+        if (spAddProgram != null) {
+            spAddProgram.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_UP
+                        && majorLoadFailed
+                        && !isLoadingMajors
+                        && selectedDepartmentForMajors != null
+                        && selectedDepartmentForMajors.id > 0) {
+                    fetchMajorsForDepartment(selectedDepartmentForMajors);
+                    return true;
+                }
+                return false;
+            });
+        }
+
         if (spAddAcademicYear != null) {
+            spAddAcademicYear.setOnTouchListener(retryTouchListener);
             spAddAcademicYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (isSyncingSpinners || !lookupsLoaded) return;
                     IdNameItem ay = position >= 0 && position < academicYearList.size() ? academicYearList.get(position) : null;
+                    int ayId = ay != null ? ay.id : 0;
+                    if (ayId == lastSelectedAcademicYearId) return;
+                    lastSelectedAcademicYearId = ayId;
                     filterSemestersForAcademicYear(ay);
                 }
 
@@ -209,130 +302,285 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private void filterProgramsForDepartment(IdNameItem dept) {
+        AcademicDropdownHelper.MajorOptionsResult result = AcademicDropdownHelper.buildMajorOptions(
+                dept,
+                allProgramList,
+                getString(R.string.select_faculty_first),
+                getString(R.string.select_major),
+                getString(R.string.no_majors_for_faculty)
+        );
         filteredProgramList.clear();
-        if (dept == null) {
-            filteredProgramList.addAll(allProgramList);
-        } else {
-            boolean isComputing = "CS".equalsIgnoreCase(dept.code) || "IT".equalsIgnoreCase(dept.code);
-            for (IdNameItem prog : allProgramList) {
-                if (prog.parentId == dept.id) {
-                    filteredProgramList.add(prog);
-                } else if (isComputing && ("CS".equalsIgnoreCase(prog.code) || "BSCS".equalsIgnoreCase(prog.code)
-                        || "SE".equalsIgnoreCase(prog.code) || "BSE".equalsIgnoreCase(prog.code)
-                        || "IT".equalsIgnoreCase(prog.code) || "BSIT".equalsIgnoreCase(prog.code))) {
-                    filteredProgramList.add(prog);
-                }
-            }
-            if (filteredProgramList.isEmpty()) {
-                filteredProgramList.addAll(allProgramList);
-            }
-        }
+        filteredProgramList.addAll(result.items);
         setSpinner(spAddProgram, filteredProgramList);
-    }
-
-    private void filterSemestersForAcademicYear(IdNameItem ay) {
-        filteredSemesterList.clear();
-        filteredSemesterList.add(new IdNameItem(0, "None", "", 0));
-        for (IdNameItem sem : allSemesterList) {
-            if (sem.id == 0) continue;
-            if (ay == null || sem.parentId == 0 || sem.parentId == ay.id) {
-                filteredSemesterList.add(sem);
-            }
+        if (spAddProgram != null) {
+            spAddProgram.setEnabled(result.enabled);
+            spAddProgram.setAlpha(result.enabled ? 1.0f : 0.6f);
         }
-        setSpinner(spAddSemester, filteredSemesterList);
     }
 
-    private void fetchAcademicLookups() {
-        ApiClient.getApiService(this).getStudentLookups().enqueue(new Callback<JsonObject>() {
+    private void fetchMajorsForDepartment(@NonNull final IdNameItem dept) {
+        final int requestSeq = ++majorFetchSeq;
+        isLoadingMajors = true;
+        majorLoadFailed = false;
+
+        filteredProgramList.clear();
+        filteredProgramList.add(new IdNameItem(0, getString(R.string.loading_majors), "", 0));
+        setSpinner(spAddProgram, filteredProgramList);
+        if (spAddProgram != null) {
+            spAddProgram.setEnabled(false);
+            spAddProgram.setAlpha(0.6f);
+        }
+
+        ApiClient.getApiService(this).getProgramsByDepartment(dept.id).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (isFinishing() || isDestroyed()) return;
+                if (isFinishing() || isDestroyed() || requestSeq != majorFetchSeq) return;
+                isLoadingMajors = false;
                 if (response.isSuccessful() && response.body() != null) {
-                    JsonObject d = response.body().has("data") ? response.body().getAsJsonObject("data") : null;
-                    if (d == null) return;
-
-                    // Departments
-                    departmentList.clear();
-                    if (d.has("departments") && d.get("departments").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("departments")) {
-                            JsonObject o = el.getAsJsonObject();
-                            departmentList.add(new IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
-                                    0
-                            ));
-                        }
+                    List<IdNameItem> fetched = AcademicDropdownHelper.parseMajorsResponse(response.body());
+                    AcademicDropdownHelper.MajorOptionsResult result = AcademicDropdownHelper.buildMajorOptionsFromApiResult(
+                            dept,
+                            fetched,
+                            getString(R.string.select_faculty_first),
+                            getString(R.string.select_major),
+                            getString(R.string.no_majors_for_faculty)
+                    );
+                    filteredProgramList.clear();
+                    filteredProgramList.addAll(result.items);
+                    setSpinner(spAddProgram, filteredProgramList);
+                    if (spAddProgram != null) {
+                        spAddProgram.setEnabled(result.enabled);
+                        spAddProgram.setAlpha(result.enabled ? 1.0f : 0.6f);
                     }
-                    setSpinner(spAddDepartment, departmentList);
-
-                    // Programs
-                    allProgramList.clear();
-                    if (d.has("programs") && d.get("programs").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("programs")) {
-                            JsonObject o = el.getAsJsonObject();
-                            allProgramList.add(new IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    o.has("code") && !o.get("code").isJsonNull() ? o.get("code").getAsString() : "",
-                                    o.has("department_id") && !o.get("department_id").isJsonNull() ? o.get("department_id").getAsInt() : 0
-                            ));
-                        }
-                    }
-                    filterProgramsForDepartment(departmentList.isEmpty() ? null : departmentList.get(0));
-
-                    // Academic Years
-                    academicYearList.clear();
-                    if (d.has("academic_years") && d.get("academic_years").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("academic_years")) {
-                            JsonObject o = el.getAsJsonObject();
-                            academicYearList.add(new IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "",
-                                    "",
-                                    0
-                            ));
-                        }
-                    }
-                    setSpinner(spAddAcademicYear, academicYearList);
-
-                    // Semesters
-                    allSemesterList.clear();
-                    if (d.has("semesters") && d.get("semesters").isJsonArray()) {
-                        for (JsonElement el : d.getAsJsonArray("semesters")) {
-                            JsonObject o = el.getAsJsonObject();
-                            allSemesterList.add(new IdNameItem(
-                                    o.get("id").getAsInt(),
-                                    o.has("name") && !o.get("name").isJsonNull() ? o.get("name").getAsString() : "Semester " + o.get("semester_number").getAsInt(),
-                                    "",
-                                    o.has("academic_year_id") && !o.get("academic_year_id").isJsonNull() ? o.get("academic_year_id").getAsInt() : 0
-                            ));
-                        }
-                    }
-                    filterSemestersForAcademicYear(academicYearList.isEmpty() ? null : academicYearList.get(0));
                 } else {
-                    if (!isFinishing()) {
-                        Toast.makeText(AddStudentActivity.this, "Server Error: Failed to load lookups", Toast.LENGTH_SHORT).show();
-                        Log.e("AddStudent", "Lookups failed: " + response.code());
-                    }
+                    applyMajorLoadErrorState("Failed to load majors for faculty " + dept.id + " (HTTP " + response.code() + ")");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                if (!isFinishing()) {
-                    Toast.makeText(AddStudentActivity.this, "Failed to load academic options", Toast.LENGTH_SHORT).show();
-                }
+                if (isFinishing() || isDestroyed() || requestSeq != majorFetchSeq) return;
+                isLoadingMajors = false;
+                applyMajorLoadErrorState("Network error loading majors for faculty " + dept.id + ": " + t.getMessage());
             }
         });
     }
 
+    private void applyMajorLoadErrorState(String logMessage) {
+        majorLoadFailed = true;
+        Log.e("AddStudent", logMessage);
+
+        filteredProgramList.clear();
+        filteredProgramList.add(new IdNameItem(0, getString(R.string.failed_to_load_majors_retry), "", 0));
+        setSpinner(spAddProgram, filteredProgramList);
+        if (spAddProgram != null) {
+            spAddProgram.setEnabled(true);
+            spAddProgram.setAlpha(1.0f);
+        }
+
+        Toast.makeText(AddStudentActivity.this, getString(R.string.failed_to_load_majors_retry), Toast.LENGTH_SHORT).show();
+    }
+
+    private void filterSemestersForAcademicYear(IdNameItem ay) {
+        List<IdNameItem> options = AcademicDropdownHelper.buildSemesterOptions(
+                ay,
+                allSemesterList,
+                getString(R.string.none_optional)
+        );
+        filteredSemesterList.clear();
+        filteredSemesterList.addAll(options);
+        setSpinner(spAddSemester, filteredSemesterList);
+    }
+
+    private void fetchAcademicLookups() {
+        if (isLoadingLookups) return;
+        isLoadingLookups = true;
+
+        if (!lookupsLoaded) {
+            isSyncingSpinners = true;
+            departmentList.clear();
+            departmentList.add(new IdNameItem(0, getString(R.string.loading_options), "", 0));
+            setSpinner(spAddDepartment, departmentList);
+
+            academicYearList.clear();
+            academicYearList.add(new IdNameItem(0, getString(R.string.loading_options), "", 0));
+            setSpinner(spAddAcademicYear, academicYearList);
+            releaseSyncGuard();
+        }
+
+        ApiClient.getApiService(this).getStudentLookups().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                isLoadingLookups = false;
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    AcademicDropdownHelper.LookupData parsed = AcademicDropdownHelper.parseLookups(response.body());
+                    if (parsed.faculties.isEmpty() && parsed.academicYears.isEmpty()) {
+                        applyLookupFailureState("No academic lookup records returned by server");
+                        return;
+                    }
+
+                    isSyncingSpinners = true;
+
+                    departmentList.clear();
+                    departmentList.addAll(AcademicDropdownHelper.buildFacultyOptions(
+                            parsed.faculties, getString(R.string.select_faculty)));
+                    setSpinner(spAddDepartment, departmentList);
+
+                    allProgramList.clear();
+                    allProgramList.addAll(parsed.majors);
+                    lastSelectedDepartmentId = 0;
+                    selectedDepartmentForMajors = null;
+                    majorFetchSeq++;
+                    isLoadingMajors = false;
+                    majorLoadFailed = false;
+                    filterProgramsForDepartment(null);
+
+                    academicYearList.clear();
+                    academicYearList.addAll(AcademicDropdownHelper.buildAcademicYearOptions(
+                            parsed.academicYears, getString(R.string.select_academic_year_title)));
+                    setSpinner(spAddAcademicYear, academicYearList);
+
+                    allSemesterList.clear();
+                    allSemesterList.addAll(parsed.semesters);
+                    lastSelectedAcademicYearId = 0;
+                    filterSemestersForAcademicYear(null);
+
+                    lookupsLoaded = true;
+                    releaseSyncGuard();
+                } else {
+                    applyLookupFailureState("Server Error: Failed to load lookups (HTTP " + response.code() + ")");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                isLoadingLookups = false;
+                if (isFinishing() || isDestroyed()) return;
+                applyLookupFailureState("Failed to load academic options: " + t.getMessage());
+            }
+        });
+    }
+
+    private void applyLookupFailureState(String logMessage) {
+        lookupsLoaded = false;
+        Log.e("AddStudent", logMessage);
+
+        isSyncingSpinners = true;
+        departmentList.clear();
+        departmentList.add(new IdNameItem(0, getString(R.string.tap_to_retry_loading), "", 0));
+        setSpinner(spAddDepartment, departmentList);
+
+        allProgramList.clear();
+        lastSelectedDepartmentId = 0;
+        selectedDepartmentForMajors = null;
+        majorFetchSeq++;
+        isLoadingMajors = false;
+        majorLoadFailed = false;
+        filterProgramsForDepartment(null);
+
+        academicYearList.clear();
+        academicYearList.add(new IdNameItem(0, getString(R.string.tap_to_retry_loading), "", 0));
+        setSpinner(spAddAcademicYear, academicYearList);
+
+        allSemesterList.clear();
+        lastSelectedAcademicYearId = 0;
+        filterSemestersForAcademicYear(null);
+        releaseSyncGuard();
+
+        Toast.makeText(AddStudentActivity.this, getString(R.string.tap_to_retry_loading), Toast.LENGTH_SHORT).show();
+    }
+
+    private void releaseSyncGuard() {
+        if (spAddDepartment != null) {
+            spAddDepartment.post(() -> isSyncingSpinners = false);
+        } else {
+            isSyncingSpinners = false;
+        }
+    }
+
     private void setSpinner(Spinner sp, List<IdNameItem> items) {
         if (sp == null) return;
-        ArrayAdapter<IdNameItem> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, items);
+        final List<IdNameItem> copy = new ArrayList<>(items);
+        ArrayAdapter<IdNameItem> adapter = new ArrayAdapter<IdNameItem>(this,
+                android.R.layout.simple_spinner_item, copy) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView && position >= 0 && position < copy.size()) {
+                    IdNameItem item = copy.get(position);
+                    TextView tv = (TextView) view;
+                    tv.setTextColor(ContextCompat.getColor(AddStudentActivity.this,
+                            item.id > 0 ? R.color.admin_text_primary : R.color.admin_text_secondary));
+                    tv.setTextSize(14f);
+                    tv.setSingleLine(true);
+                    tv.setEllipsize(TextUtils.TruncateAt.END);
+                    tv.setPadding(dp(12), 0, dp(32), 0);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (view instanceof TextView && position >= 0 && position < copy.size()) {
+                    IdNameItem item = copy.get(position);
+                    TextView tv = (TextView) view;
+                    tv.setBackgroundColor(ContextCompat.getColor(AddStudentActivity.this, R.color.card_white));
+                    tv.setTextColor(ContextCompat.getColor(AddStudentActivity.this,
+                            item.id > 0 ? R.color.admin_text_primary : R.color.admin_text_secondary));
+                    tv.setTextSize(14f);
+                    tv.setPadding(dp(12), dp(14), dp(12), dp(14));
+                }
+                return view;
+            }
+        };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp.setAdapter(adapter);
+        sp.setSelection(0, false);
+    }
+
+    private void setStringSpinner(Spinner sp, List<String> items) {
+        if (sp == null) return;
+        final List<String> copy = new ArrayList<>(items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, copy) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    TextView tv = (TextView) view;
+                    tv.setTextColor(ContextCompat.getColor(AddStudentActivity.this, R.color.admin_text_primary));
+                    tv.setTextSize(14f);
+                    tv.setSingleLine(true);
+                    tv.setEllipsize(TextUtils.TruncateAt.END);
+                    tv.setPadding(dp(12), 0, dp(32), 0);
+                }
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    TextView tv = (TextView) view;
+                    tv.setBackgroundColor(ContextCompat.getColor(AddStudentActivity.this, R.color.card_white));
+                    tv.setTextColor(ContextCompat.getColor(AddStudentActivity.this, R.color.admin_text_primary));
+                    tv.setTextSize(14f);
+                    tv.setPadding(dp(12), dp(14), dp(12), dp(14));
+                }
+                return view;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
+        sp.setSelection(0, false);
+    }
+
+    private int dp(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 
     private void setupListeners() {
@@ -386,24 +634,32 @@ public class AddStudentActivity extends AppCompatActivity {
         IdNameItem selectedSem = spAddSemester != null && spAddSemester.getSelectedItem() instanceof IdNameItem
                 ? (IdNameItem) spAddSemester.getSelectedItem() : null;
 
-        if (selectedDept == null) {
+        if (selectedDept == null || selectedDept.id <= 0) {
             Toast.makeText(this, R.string.please_select_a_department, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
-        if (selectedProg == null) {
+        if (selectedProg == null || selectedProg.id <= 0) {
             Toast.makeText(this, R.string.please_select_a_program, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
-        if (selectedYear == null) {
+        if (selectedYear == null || selectedYear.id <= 0) {
             Toast.makeText(this, R.string.please_select_an_academic_year, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 
         if (!valid) return;
 
-        int yearLevel = spAddYearLevel != null ? (spAddYearLevel.getSelectedItemPosition() + 1) : 1;
+        Integer parsedYl = spAddYearLevel != null ? YearLevelHelper.parse(spAddYearLevel.getSelectedItem()) : 1;
+        if (parsedYl == null && spAddYearLevel != null) {
+            parsedYl = YearLevelHelper.parse(spAddYearLevel.getSelectedItemPosition() + 1);
+        }
+        if (parsedYl == null) {
+            Toast.makeText(this, R.string.err_invalid_year_level, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int yearLevel = parsedYl;
         String gender = spAddStudentGender != null ? spAddStudentGender.getSelectedItem().toString() : "Male";
 
         JsonObject body = new JsonObject();

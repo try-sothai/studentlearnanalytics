@@ -88,10 +88,11 @@
                 android:layout_gravity="top|end"
                 android:background="@drawable/bg_nav_badge_red"
                 android:gravity="center"
-                android:text="3"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="9sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
         </FrameLayout>
 
         <FrameLayout

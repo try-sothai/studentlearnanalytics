@@ -32,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvStudentName;
     private TextView tvStudentId;
     private TextView tvDepartment;
+    private TextView tvStudentYearLevel;
     private TextView tvAcademicYear;
 
     private String profileEmail = "";
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private String profileMajor = "";
     private String profileClassName = "";
     private String profileYearLevel = "";
+    private String profileAcademicYear = "";
     private String profileEnrollmentStatus = "Active Student";
 
     @Nullable
@@ -65,6 +67,7 @@ public class ProfileFragment extends Fragment {
         tvStudentName = view.findViewById(R.id.tvStudentName);
         tvStudentId = view.findViewById(R.id.tvStudentId);
         tvDepartment = view.findViewById(R.id.tvDepartment);
+        tvStudentYearLevel = view.findViewById(R.id.tvStudentYearLevel);
         tvAcademicYear = view.findViewById(R.id.tvAcademicYear);
 
         if (tvStudentName != null && sessionManager.getStudentName() != null) {
@@ -94,15 +97,15 @@ public class ProfileFragment extends Fragment {
                 String email = !profileEmail.isEmpty() ? profileEmail : "Not provided";
                 String phone = !profilePhone.isEmpty() ? profilePhone : "Not provided";
                 String dept = !profileDepartment.isEmpty() ? profileDepartment : "Not assigned";
-                String year = !profileYearLevel.isEmpty() ? profileYearLevel : "Year 1";
+                String year = !profileYearLevel.isEmpty() ? profileYearLevel : getString(R.string.year_level_unassigned);
 
                 showInfoDialog("Personal Information",
                         "• Full Name: " + name + "\n" +
                         "• Student ID / Username: " + id + "\n" +
                         "• Email: " + email + "\n" +
                         "• Phone: " + phone + "\n" +
-                        "• Department: " + dept + "\n" +
-                        "• Year Level: " + year);
+                        "• Faculty: " + dept + "\n" +
+                        "• " + getString(R.string.student_year_level) + ": " + year);
             });
         }
 
@@ -111,12 +114,14 @@ public class ProfileFragment extends Fragment {
                 String dept = !profileDepartment.isEmpty() ? profileDepartment : "Not assigned";
                 String major = !profileMajor.isEmpty() ? profileMajor : dept;
                 String cls = !profileClassName.isEmpty() ? profileClassName : "Standard Section";
-                String year = !profileYearLevel.isEmpty() ? profileYearLevel : "Year 1";
+                String year = !profileYearLevel.isEmpty() ? profileYearLevel : getString(R.string.year_level_unassigned);
+                String ay = !profileAcademicYear.isEmpty() ? profileAcademicYear : "N/A";
                 showInfoDialog("Academic Information",
-                        "• Department: " + dept + "\n" +
-                        "• Program / Major: " + major + "\n" +
+                        "• Faculty: " + dept + "\n" +
+                        "• Major: " + major + "\n" +
                         "• Class / Section: " + cls + "\n" +
-                        "• Year Level: " + year + "\n" +
+                        "• " + getString(R.string.student_year_level) + ": " + year + "\n" +
+                        "• Academic Year: " + ay + "\n" +
                         "• Enrollment Status: " + profileEnrollmentStatus);
             });
         }
@@ -207,7 +212,18 @@ public class ProfileFragment extends Fragment {
                             }
                             if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
                                 String rawYr = studentObj.get("year_level").getAsString();
-                                profileYearLevel = rawYr.toLowerCase().contains("year") ? rawYr : ("Year " + rawYr);
+                                if (com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYr) != null) {
+                                    profileYearLevel = com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(getContext(), rawYr);
+                                }
+                            }
+                            if (studentObj.has("academic_year") && !studentObj.get("academic_year").isJsonNull()) {
+                                com.google.gson.JsonElement ayEl = studentObj.get("academic_year");
+                                if (ayEl.isJsonPrimitive()) {
+                                    profileAcademicYear = ayEl.getAsString().trim();
+                                } else if (ayEl.isJsonObject() && ayEl.getAsJsonObject().has("name")
+                                        && !ayEl.getAsJsonObject().get("name").isJsonNull()) {
+                                    profileAcademicYear = ayEl.getAsJsonObject().get("name").getAsString().trim();
+                                }
                             }
                             if (studentObj.has("department") && studentObj.get("department").isJsonObject()) {
                                 JsonObject dept = studentObj.getAsJsonObject("department");
@@ -225,6 +241,17 @@ public class ProfileFragment extends Fragment {
                                 JsonObject cls = studentObj.getAsJsonObject("class_room");
                                 if (cls.has("name") && !cls.get("name").isJsonNull()) {
                                     profileClassName = cls.get("name").getAsString();
+                                }
+                            }
+                        }
+
+                        if (profileAcademicYear.isEmpty() && root.has("profile") && root.get("profile").isJsonObject()) {
+                            JsonObject profWrapper = root.getAsJsonObject("profile");
+                            if (profWrapper.has("profile") && profWrapper.get("profile").isJsonObject()) {
+                                JsonObject profObj = profWrapper.getAsJsonObject("profile");
+                                if (profObj.has("academic_year") && !profObj.get("academic_year").isJsonNull()
+                                        && profObj.get("academic_year").isJsonPrimitive()) {
+                                    profileAcademicYear = profObj.get("academic_year").getAsString().trim();
                                 }
                             }
                         }
@@ -249,8 +276,17 @@ public class ProfileFragment extends Fragment {
                         if (tvDepartment != null && !profileDepartment.isEmpty()) {
                             tvDepartment.setText(profileDepartment);
                         }
-                        if (tvAcademicYear != null && !profileYearLevel.isEmpty()) {
-                            tvAcademicYear.setText(profileYearLevel);
+                        if (tvStudentYearLevel != null) {
+                            tvStudentYearLevel.setText(!profileYearLevel.isEmpty()
+                                    ? profileYearLevel : getString(R.string.year_level_unassigned));
+                        }
+                        if (tvAcademicYear != null) {
+                            if (!profileAcademicYear.isEmpty()) {
+                                tvAcademicYear.setText(profileAcademicYear);
+                                tvAcademicYear.setVisibility(View.VISIBLE);
+                            } else {
+                                tvAcademicYear.setVisibility(View.GONE);
+                            }
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing profile data", e);

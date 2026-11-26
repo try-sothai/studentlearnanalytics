@@ -108,6 +108,15 @@ public class LoginResponse {
         @SerializedName("year")
         private String year;
 
+        @SerializedName("year_level")
+        private Object yearLevel;
+
+        @SerializedName("year_level_code")
+        private String yearLevelCode;
+
+        @SerializedName("academic_year")
+        private String academicYear;
+
         @SerializedName("student")
         private JsonElement student;
 
@@ -190,7 +199,41 @@ public class LoginResponse {
         }
 
         public String getYear() {
+            Object raw = yearLevel != null ? yearLevel : year;
+            if (raw == null && student != null && student.isJsonObject()) {
+                JsonObject studentObj = student.getAsJsonObject();
+                if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
+                    raw = studentObj.get("year_level").getAsString();
+                }
+            }
+            Integer lvl = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(raw);
+            if (lvl != null) {
+                return "Year " + lvl;
+            }
             return year != null ? year : "";
+        }
+
+        public String getYearLevelCode() {
+            if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+                return yearLevelCode.trim();
+            }
+            String code = com.social7.studentlearnanalytics.utils.YearLevelHelper.toCode(
+                    yearLevel != null ? yearLevel : getYear()
+            );
+            return code != null ? code : "";
+        }
+
+        public String getAcademicYear() {
+            if (academicYear != null && !academicYear.trim().isEmpty()) {
+                return academicYear.trim();
+            }
+            if (student != null && student.isJsonObject()) {
+                JsonObject studentObj = student.getAsJsonObject();
+                if (studentObj.has("academic_year") && !studentObj.get("academic_year").isJsonNull()) {
+                    return studentObj.get("academic_year").getAsString();
+                }
+            }
+            return "";
         }
     }
 }

@@ -71,6 +71,8 @@ public class ReportsFragment extends Fragment {
     private View layoutOverviewContainer, layoutStudentsReportContainer, layoutTeachersReportContainer, layoutCoursesReportContainer;
     private TextView tvOverviewTotalStudents, tvOverviewTotalTeachers, tvOverviewTotalCourses, tvOverviewTotalUsers;
     private TextView tvStatTotalStudents, tvStatActiveStudents, tvStatNewEnrollments, tvStatGraduated;
+    private TextView tvStudentEnrollMetricTotal, tvStudentEnrollMetricNew, tvStudentEnrollMetricReturning, tvStudentEnrollMetricGradRate;
+    private android.widget.LinearLayout llTopEnrolledCoursesContainer;
     private TextView tvAttOverallRate, tvAttPresentCount, tvAttAbsentCount, tvAttLateCount;
     private TextView tvStatTotalTeachers, tvStatActiveTeachers, tvStatAssignedCourses, tvStatPendingReviews;
     private TextView tvStatTotalCourses, tvStatActiveCourses, tvStatTotalEnrollments, tvStatAvgClassSize;
@@ -175,6 +177,11 @@ public class ReportsFragment extends Fragment {
         tvStatActiveStudents = view.findViewById(R.id.tvStatActiveStudents);
         tvStatNewEnrollments = view.findViewById(R.id.tvStatNewEnrollments);
         tvStatGraduated = view.findViewById(R.id.tvStatGraduated);
+        tvStudentEnrollMetricTotal = view.findViewById(R.id.tvStudentEnrollMetricTotal);
+        tvStudentEnrollMetricNew = view.findViewById(R.id.tvStudentEnrollMetricNew);
+        tvStudentEnrollMetricReturning = view.findViewById(R.id.tvStudentEnrollMetricReturning);
+        tvStudentEnrollMetricGradRate = view.findViewById(R.id.tvStudentEnrollMetricGradRate);
+        llTopEnrolledCoursesContainer = view.findViewById(R.id.llTopEnrolledCoursesContainer);
         tvStatTotalTeachers = view.findViewById(R.id.tvStatTotalTeachers);
         tvStatActiveTeachers = view.findViewById(R.id.tvStatActiveTeachers);
         tvStatAssignedCourses = view.findViewById(R.id.tvStatAssignedCourses);
@@ -823,10 +830,20 @@ public class ReportsFragment extends Fragment {
             if (tvOverviewTotalTeachers != null) tvOverviewTotalTeachers.setText(teacherCount);
             if (tvOverviewTotalCourses != null) tvOverviewTotalCourses.setText(courseCount);
             if (tvOverviewTotalUsers != null) tvOverviewTotalUsers.setText(userCount);
+            int totalStuInt = UiUtils.optInt(m, "total_students", 0);
+            int activeStuInt = UiUtils.optInt(m, "active_students", 0);
+            int graduatedStuInt = UiUtils.optInt(m, "graduated_students", 0);
             if (tvStatTotalStudents != null) tvStatTotalStudents.setText(stuCount);
             if (tvStatActiveStudents != null) tvStatActiveStudents.setText(activeStu);
             if (tvStatNewEnrollments != null) tvStatNewEnrollments.setText(activeStu);
-            if (tvStatGraduated != null) tvStatGraduated.setText("0");
+            if (tvStatGraduated != null) tvStatGraduated.setText(String.valueOf(graduatedStuInt));
+            if (tvStudentEnrollMetricTotal != null) tvStudentEnrollMetricTotal.setText(stuCount);
+            if (tvStudentEnrollMetricNew != null) tvStudentEnrollMetricNew.setText(activeStu);
+            if (tvStudentEnrollMetricReturning != null) tvStudentEnrollMetricReturning.setText(String.valueOf(graduatedStuInt));
+            if (tvStudentEnrollMetricGradRate != null) {
+                tvStudentEnrollMetricGradRate.setText(totalStuInt > 0
+                        ? String.format(Locale.US, "%.1f%%", (activeStuInt * 100.0) / totalStuInt) : "--");
+            }
             if (chartStudentDistribution != null) {
                 chartStudentDistribution.setCenterText(stuCount + "\nStudents");
             }
@@ -1326,6 +1343,72 @@ public class ReportsFragment extends Fragment {
             coursePerformanceAdapter = new CourseReportListAdapter(getContext(), perfList, null);
             rvCoursePerformanceList.setLayoutManager(new LinearLayoutManager(getContext()));
             rvCoursePerformanceList.setAdapter(coursePerformanceAdapter);
+        }
+
+        if (llTopEnrolledCoursesContainer != null && getContext() != null) {
+            llTopEnrolledCoursesContainer.removeAllViews();
+            List<JsonObject> sortedCourses = new ArrayList<>();
+            for (int i = 0; i < courses.size(); i++) {
+                if (courses.get(i).isJsonObject()) sortedCourses.add(courses.get(i).getAsJsonObject());
+            }
+            sortedCourses.sort((a, b) -> Integer.compare(
+                    UiUtils.optInt(b, "enrollment_count", 0),
+                    UiUtils.optInt(a, "enrollment_count", 0)));
+            int maxEnrolled = sortedCourses.isEmpty() ? 1 : Math.max(1, UiUtils.optInt(sortedCourses.get(0), "enrollment_count", 1));
+            int limit = Math.min(5, sortedCourses.size());
+            if (limit == 0) {
+                TextView emptyTv = new TextView(getContext());
+                emptyTv.setText("No course enrollment records available.");
+                emptyTv.setTextColor(Color.parseColor("#64748B"));
+                emptyTv.setTextSize(13f);
+                llTopEnrolledCoursesContainer.addView(emptyTv);
+            } else {
+                for (int i = 0; i < limit; i++) {
+                    JsonObject c = sortedCourses.get(i);
+                    String code = UiUtils.optString(c, "code", "");
+                    String name = UiUtils.optString(c, "name", "");
+                    int enrolled = UiUtils.optInt(c, "enrollment_count", 0);
+
+                    android.widget.LinearLayout row = new android.widget.LinearLayout(getContext());
+                    row.setOrientation(android.widget.LinearLayout.VERTICAL);
+                    android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+                    lp.bottomMargin = (int) (10 * getResources().getDisplayMetrics().density);
+                    row.setLayoutParams(lp);
+
+                    android.widget.LinearLayout top = new android.widget.LinearLayout(getContext());
+                    top.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+                    TextView tvTitle = new TextView(getContext());
+                    tvTitle.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+                    tvTitle.setText((!code.isEmpty() ? code + " — " : "") + name);
+                    tvTitle.setTextColor(Color.parseColor("#1E293B"));
+                    tvTitle.setTextSize(13f);
+                    tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+                    TextView tvCount = new TextView(getContext());
+                    tvCount.setText(String.valueOf(enrolled));
+                    tvCount.setTextColor(Color.parseColor("#3155F5"));
+                    tvCount.setTextSize(13f);
+                    tvCount.setTypeface(null, android.graphics.Typeface.BOLD);
+                    top.addView(tvTitle);
+                    top.addView(tvCount);
+                    row.addView(top);
+
+                    android.widget.ProgressBar pb = new android.widget.ProgressBar(getContext(), null,
+                            android.R.attr.progressBarStyleHorizontal);
+                    android.widget.LinearLayout.LayoutParams pbLp = new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            (int) (8 * getResources().getDisplayMetrics().density));
+                    pbLp.topMargin = (int) (4 * getResources().getDisplayMetrics().density);
+                    pb.setLayoutParams(pbLp);
+                    pb.setMax(maxEnrolled);
+                    pb.setProgress(enrolled);
+                    row.addView(pb);
+
+                    llTopEnrolledCoursesContainer.addView(row);
+                }
+            }
         }
     }
 }

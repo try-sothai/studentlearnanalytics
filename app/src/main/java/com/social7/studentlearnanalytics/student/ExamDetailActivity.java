@@ -137,8 +137,10 @@ public class ExamDetailActivity extends AppCompatActivity {
             String title = getString(obj, "title", "Untitled Exam");
             String examType = getString(obj, "exam_type", null);
             String status = getString(obj, "status", "scheduled");
+            String displayStatus = getString(obj, "display_status", null);
             String rawDate = getString(obj, "exam_date", "");
             String startTime = getString(obj, "start_time", getString(obj, "exam_time", null));
+            String endTime = getString(obj, "end_time", null);
             String room = getString(obj, "room", getString(obj, "location", null));
             String isoDate = rawDate.length() >= 10 ? rawDate.substring(0, 10) : rawDate;
 
@@ -154,55 +156,121 @@ public class ExamDetailActivity extends AppCompatActivity {
             }
 
             String courseName = null;
+            String courseCode = null;
             if (obj.has("course") && obj.get("course").isJsonObject()) {
                 JsonObject course = obj.getAsJsonObject("course");
                 courseName = getString(course, "course_name", getString(course, "name", null));
+                courseCode = getString(course, "course_code", getString(course, "code", null));
                 if (room == null) {
                     room = getString(course, "room", null);
                 }
             }
             if (courseName == null) courseName = title;
 
+            String className = null;
+            if (obj.has("course_offering") && obj.get("course_offering").isJsonObject()) {
+                JsonObject offering = obj.getAsJsonObject("course_offering");
+                if (offering.has("class_room") && offering.get("class_room").isJsonObject()) {
+                    className = getString(offering.getAsJsonObject("class_room"), "name", null);
+                }
+            }
+            if (className == null) className = getString(obj, "class_name", null);
+
+            String semName = null;
+            if (obj.has("semester") && obj.get("semester").isJsonObject()) {
+                semName = getString(obj.getAsJsonObject("semester"), "name", null);
+            }
+            if (semName == null) semName = getString(obj, "semester_name", null);
+
+            String venue = getString(obj, "venue", room);
+            String desc = getString(obj, "description", null);
+            boolean isResultsPublished = (obj.has("is_published") && !obj.get("is_published").isJsonNull())
+                    ? obj.get("is_published").getAsBoolean()
+                    : ("published".equalsIgnoreCase(status) || "completed".equalsIgnoreCase(status));
+
             Double totalScore = getDouble(obj, "total_score");
+            double maxMarks = totalScore != null && totalScore > 0 ? totalScore : 100.0;
             Integer duration = obj.has("duration_minutes") && !obj.get("duration_minutes").isJsonNull()
                     ? obj.get("duration_minutes").getAsInt() : null;
 
+            Double rawScore = null;
+            Double percentage = null;
+            String resultStatus = null;
             String scoreText = null;
             String grade = null;
-            if (obj.has("results") && obj.get("results").isJsonArray()) {
+            String remarks = null;
+            if (isResultsPublished && obj.has("results") && obj.get("results").isJsonArray()) {
                 JsonArray results = obj.getAsJsonArray("results");
                 if (results.size() > 0 && results.get(0).isJsonObject()) {
                     JsonObject result = results.get(0).getAsJsonObject();
                     Double score = getDouble(result, "score");
                     grade = getString(result, "grade", null);
+                    remarks = getString(result, "remarks", null);
+                    percentage = getDouble(result, "percentage");
+                    resultStatus = getString(result, "result_status", null);
                     if (score != null) {
-                        scoreText = numberFormat.format(score)
-                                + (totalScore != null ? " / " + numberFormat.format(totalScore) : "");
+                        rawScore = score;
+                        if (percentage == null && maxMarks > 0) {
+                            percentage = Math.round((score / maxMarks) * 1000.0) / 10.0;
+                        }
+                        if (resultStatus == null && percentage != null) {
+                            resultStatus = percentage >= 50.0 ? "Pass" : "Fail";
+                        }
+                        scoreText = numberFormat.format(score) + " / " + numberFormat.format(maxMarks);
                     }
                 }
             }
 
-            boolean completed = scoreText != null
+            boolean completed = isResultsPublished
+                    || scoreText != null
                     || "completed".equalsIgnoreCase(status)
+                    || "published".equalsIgnoreCase(status)
+                    || "results_pending".equalsIgnoreCase(status)
                     || (!isoDate.isEmpty() && isoDate.compareTo(today) < 0);
 
+            String resolvedStatusLabel = displayStatus != null && !displayStatus.isEmpty()
+                    ? displayStatus
+                    : (isResultsPublished && scoreText != null ? "Results Published"
+                    : (completed ? "Results Pending" : capitalize(status)));
+
+            String timeRange = Exam.calculateTimeRange(startTime, endTime, duration);
             StringBuilder details = new StringBuilder();
             details.append(examType != null ? capitalize(examType) : "Exam");
             if (!title.equals(courseName)) details.append(" • ").append(title);
-            if (startTime != null && !startTime.isEmpty()) details.append(" • ").append(startTime);
-            if (room != null && !room.isEmpty()) details.append(" • Room ").append(room);
+            if (!timeRange.isEmpty()) details.append(" • ").append(timeRange);
+            if (venue != null && !venue.isEmpty()) details.append(" • ").append(venue);
             if (completed) {
-                if (scoreText == null) {
-                    details.append(" • Result pending");
+                if (!isResultsPublished || scoreText == null) {
+                    details.append(" • Results Pending");
                 } else if (grade != null) {
                     details.append(" • Grade ").append(grade);
                 }
             } else {
                 if (duration != null) details.append(" • ").append(duration).append(" min");
-                details.append(" • ").append(capitalize(status));
+                details.append(" • ").append(resolvedStatusLabel);
             }
 
             Exam exam = new Exam(id, month, day, courseName, details.toString(), completed, scoreText);
+            exam.setTitle(title);
+            if (courseCode != null) exam.setCourseCode(courseCode);
+            if (className != null) exam.setClassName(className);
+            if (semName != null) exam.setSemesterName(semName);
+            if (examType != null) exam.setExamType(capitalize(examType));
+            exam.setStatusLabel(resolvedStatusLabel);
+            exam.setRawStatus(status);
+            exam.setPublished(isResultsPublished);
+            exam.setStartTime(startTime);
+            exam.setEndTime(endTime);
+            if (venue != null) exam.setVenue(venue);
+            if (duration != null) exam.setDurationMinutes(duration);
+            exam.setExamDateFormatted(isoDate);
+            if (desc != null) exam.setDescription(desc);
+            if (grade != null) exam.setGrade(grade);
+            if (remarks != null) exam.setRemarks(remarks);
+            exam.setRawScore(rawScore);
+            exam.setPercentage(percentage);
+            exam.setResultStatus(resultStatus);
+            exam.setMaxScore((int) Math.round(maxMarks));
             if (completed) {
                 completedExams.add(0, exam);
             } else {

@@ -1,6 +1,7 @@
 package com.social7.studentlearnanalytics.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,14 +127,38 @@ public class TeacherFiltersResponse implements Serializable {
 
     public static class StudyYearItem implements Serializable {
         @SerializedName("year")
-        private int year;
+        private Object year;
+
+        @SerializedName("year_level")
+        private Object yearLevel;
+
+        @SerializedName("code")
+        private String code;
 
         @SerializedName("name")
         private String name;
 
-        public int getYear() { return year; }
+        public int getYear() {
+            Integer parsed = YearLevelHelper.parse(yearLevel != null ? yearLevel : year);
+            return parsed != null ? parsed : 0;
+        }
+
+        public String getCode() {
+            if (code != null && !code.trim().isEmpty()) {
+                return code.trim();
+            }
+            int y = getYear();
+            return y > 0 ? YearLevelHelper.toCode(y) : "";
+        }
+
         public String getName() { return name; }
-        @Override public String toString() { return name != null ? name : "Year " + year; }
+        @Override public String toString() {
+            if (name != null && !name.trim().isEmpty()) {
+                return name;
+            }
+            int y = getYear();
+            return y > 0 ? ("Y" + y + " — Year " + y) : "";
+        }
     }
 
     public static class SemesterItem implements Serializable {
@@ -183,12 +208,26 @@ public class TeacherFiltersResponse implements Serializable {
         private String name;
 
         @SerializedName("year_level")
-        private Integer yearLevel;
+        private Object yearLevel;
+
+        @SerializedName("year_level_code")
+        private String yearLevelCode;
+
+        @SerializedName("academic_year")
+        private String academicYear;
 
         public int getId() { return id; }
         public String getCode() { return code; }
         public String getName() { return name; }
-        public Integer getYearLevel() { return yearLevel; }
+        public Integer getYearLevel() { return YearLevelHelper.parse(yearLevel); }
+        public String getYearLevelCode() {
+            if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+                return yearLevelCode.trim();
+            }
+            String c = YearLevelHelper.toCode(yearLevel);
+            return c != null ? c : "";
+        }
+        public String getAcademicYear() { return academicYear != null ? academicYear : ""; }
         @Override public String toString() { return (name != null ? name : code); }
     }
 }

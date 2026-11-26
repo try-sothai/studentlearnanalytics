@@ -145,32 +145,32 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MAE Error" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2.45 pts" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalMae" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RMSE Error" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3.12 pts" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalRmse" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R² Variance" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.88 (88%)" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalR2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Test Samples" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_1_240_rows" android:textColor="@color/admin_text_primary" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalSamples" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Rows" android:textColor="@color/admin_text_primary" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/model_version" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="v2.4 RF" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalModelVersion" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/status" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Optimal" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvEvalStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pending" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>

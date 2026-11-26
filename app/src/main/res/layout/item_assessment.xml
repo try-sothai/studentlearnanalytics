@@ -82,6 +82,19 @@
                 android:textSize="11.5sp"
                 tools:text="Due: Sep 15, 2024 • 100 pts" />
 
+            <TextView
+                android:id="@+id/assessment_provisional_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#D97706"
+                android:textSize="10.5sp"
+                android:textStyle="italic"
+                android:visibility="gone"
+                tools:text="Provisional score — awaiting teacher grading" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -101,6 +114,35 @@
                 android:textSize="11.5sp"
                 android:textStyle="bold"
                 tools:text="85 / 100" />
+
+            <TextView
+                android:id="@+id/assessment_grading_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/bg_badge_core"
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="2dp"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="Status: Pending Grading" />
+
+            <TextView
+                android:id="@+id/assessment_review_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_badge_core"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="Review Answers"
+                android:textColor="@color/slas_primary_purple"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/assessment_action_hint"

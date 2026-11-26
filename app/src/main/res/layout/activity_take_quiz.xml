@@ -544,6 +544,17 @@
                     app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetakeFromResult"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Retake Quiz"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    app:cornerRadius="12dp" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReturnHub"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

@@ -41,6 +41,8 @@ public class PendingAssessmentAdapter extends RecyclerView.Adapter<RecyclerView.
 
         // Item fields
         public String id;
+        public int rawId = 0;
+        public int submissionId = 0;
         public String title;
         public String type; // "Assignment", "Quiz", "Exam", "Project"
         public int maxPoints;
@@ -67,6 +69,25 @@ public class PendingAssessmentAdapter extends RecyclerView.Adapter<RecyclerView.
                            int completedCount, int totalStudents) {
             this.isHeader = false;
             this.id = id;
+            this.courseCode = courseCode;
+            this.title = title;
+            this.type = type;
+            this.maxPoints = maxPoints;
+            this.dueDate = dueDate;
+            this.dueStatus = dueStatus;
+            this.isOverdue = isOverdue;
+            this.completedCount = completedCount;
+            this.totalStudents = totalStudents;
+        }
+
+        // Extended Constructor for Item with integer IDs
+        public PendingItem(String id, int rawId, int submissionId, String courseCode, String title, String type, int maxPoints,
+                           String dueDate, String dueStatus, boolean isOverdue,
+                           int completedCount, int totalStudents) {
+            this.isHeader = false;
+            this.id = id;
+            this.rawId = rawId;
+            this.submissionId = submissionId;
             this.courseCode = courseCode;
             this.title = title;
             this.type = type;

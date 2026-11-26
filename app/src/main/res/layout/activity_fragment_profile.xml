@@ -109,13 +109,23 @@
                             android:textSize="12.5sp" />
 
                         <TextView
+                            android:id="@+id/tvStudentYearLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/year_level_unassigned"
+                            android:textColor="@color/profile_dark_navy"
+                            android:textSize="12.5sp" />
+
+                        <TextView
                             android:id="@+id/tvAcademicYear"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="@string/str_3rd_year"
+                            android:text=""
                             android:textColor="@color/profile_dark_navy"
-                            android:textSize="12.5sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

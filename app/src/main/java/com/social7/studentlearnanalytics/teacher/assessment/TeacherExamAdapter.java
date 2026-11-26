@@ -1,6 +1,7 @@
 package com.social7.studentlearnanalytics.teacher.assessment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,19 +27,28 @@ public class TeacherExamAdapter extends RecyclerView.Adapter<TeacherExamAdapter.
         public final String classAndType;
         public final String details;
         public final String status;
+        public final boolean isPublished;
 
-        public ExamCardItem(int id, String courseCode, String title, String classAndType, String details, String status) {
+        public ExamCardItem(int id, String courseCode, String title, String classAndType, String details, String status, boolean isPublished) {
             this.id = id;
             this.courseCode = courseCode;
             this.title = title;
             this.classAndType = classAndType;
             this.details = details;
             this.status = status;
+            this.isPublished = isPublished;
+        }
+
+        public ExamCardItem(int id, String courseCode, String title, String classAndType, String details, String status) {
+            this(id, courseCode, title, classAndType, details, status, "published".equalsIgnoreCase(status));
         }
     }
 
     public interface OnExamActionListener {
+        void onGradeClick(ExamCardItem item);
         void onDeleteClick(ExamCardItem item);
+        default boolean handlesEditClick() { return false; }
+        default void onEditClick(ExamCardItem item) {}
     }
 
     private final Context context;
@@ -56,14 +66,14 @@ public class TeacherExamAdapter extends RecyclerView.Adapter<TeacherExamAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_teacher_assignment_card, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_teacher_exam_card, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ExamCardItem item = filteredList.get(position);
-        holder.bind(item, listener);
+        holder.bind(context, item, listener);
     }
 
     @Override
@@ -86,42 +96,71 @@ public class TeacherExamAdapter extends RecyclerView.Adapter<TeacherExamAdapter.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView tvCourseCode, tvAssignmentTitle, tvClassCohort, tvAssignmentDetails, tvStatusBadge;
-        private final MaterialButton btnGradeAssignment, btnDeleteAssignment;
+        private final TextView tvExamCourseCode, tvExamCardTitle, tvExamCardClassType, tvExamCardDetails, tvExamCardStatusBadge;
+        private final MaterialButton btnDeleteExamCard, btnEditExamCard, btnManageGradeExamCard;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvCourseCode = itemView.findViewById(R.id.tvCourseCode);
-            tvAssignmentTitle = itemView.findViewById(R.id.tvAssignmentTitle);
-            tvClassCohort = itemView.findViewById(R.id.tvClassCohort);
-            tvAssignmentDetails = itemView.findViewById(R.id.tvAssignmentDetails);
-            tvStatusBadge = itemView.findViewById(R.id.tvStatusBadge);
-            btnGradeAssignment = itemView.findViewById(R.id.btnGradeAssignment);
-            btnDeleteAssignment = itemView.findViewById(R.id.btnDeleteAssignment);
+            tvExamCourseCode = itemView.findViewById(R.id.tvExamCourseCode);
+            tvExamCardTitle = itemView.findViewById(R.id.tvExamCardTitle);
+            tvExamCardClassType = itemView.findViewById(R.id.tvExamCardClassType);
+            tvExamCardDetails = itemView.findViewById(R.id.tvExamCardDetails);
+            tvExamCardStatusBadge = itemView.findViewById(R.id.tvExamCardStatusBadge);
+            btnDeleteExamCard = itemView.findViewById(R.id.btnDeleteExamCard);
+            btnEditExamCard = itemView.findViewById(R.id.btnEditExamCard);
+            btnManageGradeExamCard = itemView.findViewById(R.id.btnManageGradeExamCard);
         }
 
-        void bind(ExamCardItem item, OnExamActionListener listener) {
-            if (tvCourseCode != null) tvCourseCode.setText(item.courseCode);
-            if (tvAssignmentTitle != null) tvAssignmentTitle.setText(item.title);
-            if (tvClassCohort != null) tvClassCohort.setText(item.classAndType);
-            if (tvAssignmentDetails != null) tvAssignmentDetails.setText(item.details);
+        void bind(Context context, ExamCardItem item, OnExamActionListener listener) {
+            if (tvExamCourseCode != null) tvExamCourseCode.setText(item.courseCode);
+            if (tvExamCardTitle != null) tvExamCardTitle.setText(item.title);
+            if (tvExamCardClassType != null) tvExamCardClassType.setText(item.classAndType);
+            if (tvExamCardDetails != null) tvExamCardDetails.setText(item.details);
 
-            if (tvStatusBadge != null) {
-                tvStatusBadge.setText(item.status);
-                if ("Completed".equalsIgnoreCase(item.status)) {
-                    tvStatusBadge.setTextColor(Color.parseColor("#10B981"));
-                } else if ("Draft".equalsIgnoreCase(item.status)) {
-                    tvStatusBadge.setTextColor(Color.parseColor("#9333EA"));
+            if (tvExamCardStatusBadge != null) {
+                String badgeText = item.status != null && !item.status.isEmpty()
+                        ? item.status
+                        : (item.isPublished ? "Results Published" : "Scheduled");
+                tvExamCardStatusBadge.setText(badgeText);
+                String lower = badgeText.toLowerCase(Locale.US);
+                if (item.isPublished || lower.contains("published") || "completed".equals(lower)) {
+                    tvExamCardStatusBadge.setTextColor(Color.parseColor("#10B981"));
+                } else if (lower.contains("pending")) {
+                    tvExamCardStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                } else if ("draft".equals(lower)) {
+                    tvExamCardStatusBadge.setTextColor(Color.parseColor("#9333EA"));
+                } else if ("cancelled".equals(lower)) {
+                    tvExamCardStatusBadge.setTextColor(Color.parseColor("#EF4444"));
                 } else {
-                    tvStatusBadge.setTextColor(Color.parseColor("#2563EB"));
+                    tvExamCardStatusBadge.setTextColor(Color.parseColor("#2563EB"));
                 }
             }
 
-            if (btnGradeAssignment != null) {
-                btnGradeAssignment.setVisibility(View.GONE);
+            if (btnManageGradeExamCard != null) {
+                btnManageGradeExamCard.setOnClickListener(v -> {
+                    if (listener != null) listener.onGradeClick(item);
+                });
             }
-            if (btnDeleteAssignment != null) {
-                btnDeleteAssignment.setOnClickListener(v -> {
+
+            if (btnEditExamCard != null) {
+                btnEditExamCard.setOnClickListener(v -> {
+                    if (listener != null && listener.handlesEditClick()) {
+                        listener.onEditClick(item);
+                    } else if (context != null) {
+                        Intent intent = new Intent(context, EditAssessmentActivity.class);
+                        intent.putExtra("assessment_type", "Exam");
+                        intent.putExtra("exam_id", item.id);
+                        context.startActivity(intent);
+                    }
+                });
+            }
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onGradeClick(item);
+            });
+
+            if (btnDeleteExamCard != null) {
+                btnDeleteExamCard.setOnClickListener(v -> {
                     if (listener != null) listener.onDeleteClick(item);
                 });
             }

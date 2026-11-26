@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Class: BSIT 4-A • Computer Science Dept"
+            android:text="Class: BSIT 4-A • Computer Science Faculty"
             android:textColor="@color/admin_text_primary"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -102,11 +102,29 @@
                 android:insetBottom="0dp"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="4dp"
                 android:text="@string/delete"
                 android:textAllCaps="false"
                 android:textColor="@color/admin_inactive_red"
                 android:textSize="12sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReopenAssignment"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="Reopen / Access"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_purple"
+                android:textSize="11.5sp"
+                app:cornerRadius="8dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGradeAssignment"

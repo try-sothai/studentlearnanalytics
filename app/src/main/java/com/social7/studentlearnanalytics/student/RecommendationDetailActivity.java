@@ -131,7 +131,11 @@ public class RecommendationDetailActivity extends AppCompatActivity {
                     }
                 });
 
-        ApiClient.getApiService(this).getRecommendations().enqueue(new Callback<JsonObject>() {
+        if (layoutRecDetailStaticContainer != null) {
+            layoutRecDetailStaticContainer.setVisibility(View.GONE);
+        }
+
+        ApiClient.getApiService(this).getRecommendations(selectedSemesterId).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (isFinishing()) return;
@@ -145,14 +149,32 @@ public class RecommendationDetailActivity extends AppCompatActivity {
                     }
                     if (arr != null && arr.size() > 0) {
                         renderDynamicRecommendations(arr);
+                        return;
                     }
                 }
+                renderEmptyRecommendationsState("No recommendations available for the selected semester.");
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (isFinishing()) return;
+                renderEmptyRecommendationsState("Unable to load recommendations. Please check your connection.");
             }
         });
+    }
+
+    private void renderEmptyRecommendationsState(String message) {
+        if (layoutRecDetailStaticContainer != null) {
+            layoutRecDetailStaticContainer.setVisibility(View.GONE);
+        }
+        if (layoutRecDetailDynamicContainer == null) return;
+        layoutRecDetailDynamicContainer.removeAllViews();
+        TextView tvEmpty = new TextView(this);
+        tvEmpty.setText(message);
+        tvEmpty.setTextColor(Color.parseColor("#64748B"));
+        tvEmpty.setTextSize(13f);
+        tvEmpty.setPadding(16, 24, 16, 24);
+        layoutRecDetailDynamicContainer.addView(tvEmpty);
     }
 
     private void bindKpiCards(DashboardResponse.DashboardData data) {
@@ -269,12 +291,19 @@ public class RecommendationDetailActivity extends AppCompatActivity {
                     ApiClient.getApiService(this).updateRecommendation(recId, body).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                            if (tvStatusBadge != null) tvStatusBadge.setText(R.string.status_completed);
-                            Toast.makeText(RecommendationDetailActivity.this, "Recommendation marked as completed", Toast.LENGTH_SHORT).show();
+                            if (isFinishing() || isDestroyed()) return;
+                            if (response.isSuccessful()) {
+                                if (tvStatusBadge != null) tvStatusBadge.setText(R.string.status_completed);
+                                Toast.makeText(RecommendationDetailActivity.this, "Recommendation marked as completed", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RecommendationDetailActivity.this, "Could not update recommendation", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                            if (isFinishing() || isDestroyed()) return;
+                            Toast.makeText(RecommendationDetailActivity.this, "Network error updating recommendation", Toast.LENGTH_SHORT).show();
                         }
                     });
                 });

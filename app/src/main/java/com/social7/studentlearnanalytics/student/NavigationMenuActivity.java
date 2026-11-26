@@ -30,6 +30,9 @@ public class NavigationMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Student")) {
+            return;
+        }
         setContentView(R.layout.activity_navigation_menu);
 
         sessionManager = new SessionManager(this);
@@ -72,7 +75,10 @@ public class NavigationMenuActivity extends AppCompatActivity {
 
         // 5. Recommendations
         findViewById(R.id.menu_recommendation).setOnClickListener(v -> {
-            Intent intent = new Intent(this, RecommendationDetailActivity.class);
+            Intent intent = new Intent(
+                    this,
+                    com.social7.studentlearnanalytics.student.recommendations.SmartRecommendationsActivity.class
+            );
             startActivity(intent);
             finish();
         });
@@ -102,8 +108,11 @@ public class NavigationMenuActivity extends AppCompatActivity {
 
         // 9. Settings
         findViewById(R.id.menu_settings).setOnClickListener(v -> {
-            // Re-route Settings to ProfileFragment as there is no Student Settings Activity
-            openTab(R.id.nav_profile);
+            Intent intent = new Intent(this, StudentMainActivity.class);
+            intent.putExtra("open_fragment", "settings");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
         });
 
         // 10. Logout
@@ -139,9 +148,18 @@ public class NavigationMenuActivity extends AppCompatActivity {
                             }
                             
                             if (tvYear != null && studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
-                                String year = studentObj.get("year_level").getAsString();
-                                if (!year.toLowerCase().contains("year")) year = year + " Year";
-                                tvYear.setText(year);
+                                String rawYear = studentObj.get("year_level").getAsString();
+                                String formattedYear = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYear) != null
+                                        ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(NavigationMenuActivity.this, rawYear)
+                                        : getString(R.string.year_level_unassigned);
+                                if (studentObj.has("academic_year") && !studentObj.get("academic_year").isJsonNull()
+                                        && studentObj.get("academic_year").isJsonPrimitive()) {
+                                    String ay = studentObj.get("academic_year").getAsString().trim();
+                                    if (!ay.isEmpty()) {
+                                        formattedYear = formattedYear + " (" + ay + ")";
+                                    }
+                                }
+                                tvYear.setText(formattedYear);
                             }
                             
                             if (tvMajor != null && studentObj.has("department") && studentObj.get("department").isJsonObject()) {

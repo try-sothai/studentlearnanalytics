@@ -59,7 +59,9 @@ public class EditTeacherActivity extends AppCompatActivity {
         }
 
         if (currentTeacher == null) {
-            currentTeacher = new Teacher("TCH001", "Mr. Chan", "chan@univ.edu", "Computer Science", "Lecturer", "Active");
+            Toast.makeText(this, "Missing teacher record details.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         initViews();

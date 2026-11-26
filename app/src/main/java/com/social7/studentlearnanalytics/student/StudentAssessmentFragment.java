@@ -33,6 +33,7 @@ import com.social7.studentlearnanalytics.student.assignment.StudentSubmissionAda
 import com.social7.studentlearnanalytics.student.assignment.StudentSubmissionDetailActivity;
 import com.social7.studentlearnanalytics.teacher.assessment.SubmissionFileViewerActivity;
 import com.social7.studentlearnanalytics.utils.AssessmentUiHelper;
+import com.social7.studentlearnanalytics.utils.QuizScoreUiHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class StudentAssessmentFragment extends Fragment {
     private String quizError = null;
     private String examError = null;
     private String submissionsError = null;
+    private int quizLoadGeneration = 0;
 
     public StudentAssessmentFragment() {
     }
@@ -230,7 +232,10 @@ public class StudentAssessmentFragment extends Fragment {
                         item.previewType = AssessmentUiHelper.optString(obj, "preview_type", "");
                         item.hasFile = obj.has("has_file") && !obj.get("has_file").isJsonNull() && obj.get("has_file").getAsBoolean();
                         item.fileExists = obj.has("file_exists") && !obj.get("file_exists").isJsonNull() && obj.get("file_exists").getAsBoolean();
-                        item.versionLabel = AssessmentUiHelper.optString(obj, "version_label", "Latest Submission");
+                        item.versionNumber = Math.max(1, AssessmentUiHelper.optInt(obj, "version_number", 1));
+                        item.isLate = obj.has("is_late") && !obj.get("is_late").isJsonNull() && obj.get("is_late").getAsBoolean();
+                        item.versionLabel = AssessmentUiHelper.optString(obj, "version_label",
+                                AssessmentUiHelper.optBoolean(obj, "is_latest", true) ? "Latest Submission" : "Previous Version");
                         allSubmissions.add(item);
                     }
                     applyFilterAndBind();
@@ -250,10 +255,11 @@ public class StudentAssessmentFragment extends Fragment {
 
         if ("Quiz".equalsIgnoreCase(category)) {
             quizError = null;
+            final int generation = ++quizLoadGeneration;
             ApiClient.getApiService(getContext()).getStudentQuizzes(null).enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                    if (!isAdded()) return;
+                    if (!isAdded() || generation != quizLoadGeneration) return;
                     showLoading(false);
                     allQuizzes.clear();
 
@@ -267,88 +273,15 @@ public class StudentAssessmentFragment extends Fragment {
                     for (JsonElement el : arr) {
                         if (!el.isJsonObject()) continue;
                         JsonObject obj = el.getAsJsonObject();
-                        String id = AssessmentUiHelper.optString(obj, "id", "");
-                        String title = AssessmentUiHelper.optString(obj, "title", "Quiz");
-                        String startAt = AssessmentUiHelper.optString(obj, "start_at", "");
-                        String endAt = AssessmentUiHelper.optString(obj, "end_at", "");
-                        String rawDate = !endAt.isEmpty() ? endAt : (!startAt.isEmpty() ? startAt : AssessmentUiHelper.optString(obj, "created_at", ""));
-                        String dateStr = (!endAt.isEmpty() ? "Closes: " : "") + AssessmentUiHelper.formatDateShort(rawDate);
-
-                        int totalScore = (int) Math.round(AssessmentUiHelper.optDouble(obj, "total_score", 100));
-                        int questionsCount = AssessmentUiHelper.optInt(obj, "questions_count", 0);
-                        int durationMins = AssessmentUiHelper.optInt(obj, "duration_minutes", 0);
-                        String rawStatus = AssessmentUiHelper.optString(obj, "status", "published");
-
-                        int score = 0;
-                        boolean isSubmitted = false;
-                        boolean isGraded = false;
-                        boolean inProgress = false;
-                        String attemptStatus = "";
-
-                        if (obj.has("attempts") && obj.get("attempts").isJsonArray()) {
-                            JsonArray atts = obj.getAsJsonArray("attempts");
-                            if (atts.size() > 0 && atts.get(0).isJsonObject()) {
-                                JsonObject att = atts.get(0).getAsJsonObject();
-                                attemptStatus = AssessmentUiHelper.optString(att, "status", "");
-                                if ("in_progress".equalsIgnoreCase(attemptStatus)) {
-                                    inProgress = true;
-                                } else {
-                                    isSubmitted = true;
-                                    if ("completed".equalsIgnoreCase(attemptStatus) && att.has("score") && !att.get("score").isJsonNull()) {
-                                        score = Math.round(att.get("score").getAsFloat());
-                                        isGraded = true;
-                                    }
-                                }
-                            }
-                        }
-
-                        boolean isClosed = "closed".equalsIgnoreCase(rawStatus) || (!endAt.isEmpty() && AssessmentUiHelper.isPast(endAt));
-                        boolean isUpcoming = !startAt.isEmpty() && AssessmentUiHelper.isFuture(startAt);
-
-                        String statusLabel;
-                        String actionLabel;
-                        if (isGraded) {
-                            statusLabel = "Completed";
-                            actionLabel = isClosed ? "Review Answers" : "View Result";
-                        } else if (isSubmitted) {
-                            statusLabel = "Submitted";
-                            actionLabel = "Pending Grading";
-                        } else if (inProgress && !isClosed) {
-                            statusLabel = "In Progress";
-                            actionLabel = "Continue Quiz";
-                        } else if (isClosed) {
-                            statusLabel = "Closed";
-                            actionLabel = "View Details";
-                        } else if (isUpcoming) {
-                            statusLabel = "Upcoming";
-                            actionLabel = "View Details";
-                        } else {
-                            statusLabel = "Available";
-                            actionLabel = "Start Quiz";
-                        }
-
-                        String[] courseInfo = extractCourseCodeAndName(obj);
-                        String[] ctxInfo = extractAcademicContext(obj);
-
-                        Assessment item = new Assessment(id, title, dateStr, score, totalScore, "quiz",
-                                ctxInfo[1], courseInfo[1], isSubmitted, isGraded);
-                        item.setCourseCode(courseInfo[0]);
-                        item.setClassName(ctxInfo[0]);
-                        item.setAcademicYearName(ctxInfo[2]);
-                        item.setRawStatus(rawStatus);
-                        item.setStatusLabel(statusLabel);
-                        item.setActionLabel(actionLabel);
-                        item.setQuestionsCount(questionsCount);
-                        item.setDurationMinutes(durationMins);
-                        item.setInProgress(inProgress);
-                        allQuizzes.add(item);
+                        allQuizzes.add(QuizScoreUiHelper.parseStudentQuizItem(obj, null));
                     }
                     applyFilterAndBind();
+                    enrichPendingQuizzesFromReview(generation);
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                    if (!isAdded()) return;
+                    if (!isAdded() || generation != quizLoadGeneration) return;
                     showLoading(false);
                     allQuizzes.clear();
                     quizError = "Network error. Please check your connection and try again.";
@@ -386,36 +319,55 @@ public class StudentAssessmentFragment extends Fragment {
                         int totalMarks = (int) Math.round(AssessmentUiHelper.optDouble(obj, "total_marks",
                                 AssessmentUiHelper.optDouble(obj, "total_score", 100)));
                         int durationMins = AssessmentUiHelper.optInt(obj, "duration_minutes", 0);
+                        String startTime = AssessmentUiHelper.optString(obj, "start_time", AssessmentUiHelper.optString(obj, "exam_time", ""));
+                        String endTime = AssessmentUiHelper.optString(obj, "end_time", "");
                         String venue = AssessmentUiHelper.optString(obj, "venue", "");
                         String rawStatus = AssessmentUiHelper.optString(obj, "status", "scheduled");
+                        String displayStatus = AssessmentUiHelper.optString(obj, "display_status", "");
+                        boolean isPublished = (obj.has("is_published") && !obj.get("is_published").isJsonNull())
+                                ? obj.get("is_published").getAsBoolean()
+                                : ("published".equalsIgnoreCase(rawStatus) || "completed".equalsIgnoreCase(rawStatus));
 
                         boolean hasResult = false;
+                        Double rawScore = null;
+                        Double percentage = null;
+                        String resultStatus = null;
                         String scoreText = null;
                         String grade = null;
                         String remarks = null;
-                        if (obj.has("results") && obj.get("results").isJsonArray()) {
+                        if (isPublished && obj.has("results") && obj.get("results").isJsonArray()) {
                             JsonArray results = obj.getAsJsonArray("results");
                             if (results.size() > 0 && results.get(0).isJsonObject()) {
                                 JsonObject r = results.get(0).getAsJsonObject();
                                 if (r.has("score") && !r.get("score").isJsonNull()) {
                                     hasResult = true;
-                                    scoreText = AssessmentUiHelper.formatMarks(r.get("score").getAsDouble()) + " / " + totalMarks;
+                                    rawScore = r.get("score").getAsDouble();
+                                    percentage = (r.has("percentage") && !r.get("percentage").isJsonNull())
+                                            ? r.get("percentage").getAsDouble()
+                                            : (totalMarks > 0 ? Math.round((rawScore / totalMarks) * 1000.0) / 10.0 : 0.0);
+                                    resultStatus = AssessmentUiHelper.optString(r, "result_status",
+                                            percentage >= 50.0 ? "Pass" : "Fail");
+                                    scoreText = AssessmentUiHelper.formatMarks(rawScore) + " / " + totalMarks;
                                     grade = AssessmentUiHelper.optString(r, "grade", null);
                                     remarks = AssessmentUiHelper.optString(r, "remarks", null);
                                 }
                             }
                         }
 
-                        boolean completed = hasResult || "completed".equalsIgnoreCase(rawStatus);
-                        String statusLabel = completed ? "Completed"
-                                : ("ongoing".equalsIgnoreCase(rawStatus) ? "Ongoing" : "Scheduled");
+                        boolean completed = isPublished || hasResult || "completed".equalsIgnoreCase(rawStatus) || "results_pending".equalsIgnoreCase(rawStatus);
+                        String statusLabel = !displayStatus.isEmpty() ? displayStatus
+                                : ((isPublished && hasResult) ? "Results Published"
+                                : ("completed".equalsIgnoreCase(rawStatus) ? "Completed"
+                                : ("results_pending".equalsIgnoreCase(rawStatus) ? "Results Pending" : "Scheduled")));
 
                         String rawExamType = AssessmentUiHelper.optString(obj, "exam_type", "exam");
                         String examCategory = rawExamType.isEmpty() ? "Exam"
                                 : rawExamType.substring(0, 1).toUpperCase(Locale.US) + rawExamType.substring(1).toLowerCase(Locale.US);
 
+                        String timeRange = Exam.calculateTimeRange(startTime, endTime, durationMins > 0 ? durationMins : null);
                         StringBuilder details = new StringBuilder();
                         details.append(examCategory).append(" • ").append(statusLabel);
+                        if (!timeRange.isEmpty()) details.append(" • ").append(timeRange);
                         if (durationMins > 0) details.append(" • ").append(durationMins).append(" mins");
                         if (!venue.isEmpty()) details.append(" • ").append(venue);
 
@@ -427,10 +379,17 @@ public class StudentAssessmentFragment extends Fragment {
                         exam.setExamType(examCategory);
                         exam.setStatusLabel(statusLabel);
                         exam.setRawStatus(rawStatus);
+                        exam.setPublished(isPublished);
+                        exam.setStartTime(startTime);
+                        exam.setEndTime(endTime);
                         exam.setVenue(venue);
                         if (durationMins > 0) exam.setDurationMinutes(durationMins);
+                        exam.setMaxScore(totalMarks);
                         exam.setExamDateFormatted(AssessmentUiHelper.formatDateShort(examDate));
                         exam.setDescription(AssessmentUiHelper.optString(obj, "description", ""));
+                        exam.setRawScore(rawScore);
+                        exam.setPercentage(percentage);
+                        exam.setResultStatus(resultStatus);
                         exam.setGrade(grade);
                         exam.setRemarks(remarks);
                         allExams.add(exam);
@@ -522,6 +481,14 @@ public class StudentAssessmentFragment extends Fragment {
                         String[] courseInfo = extractCourseCodeAndName(obj);
                         String[] ctxInfo = extractAcademicContext(obj);
 
+                        String effectiveDl = AssessmentUiHelper.optString(obj, "effective_deadline", rawDue);
+                        String extDl = AssessmentUiHelper.optString(obj, "extended_deadline", "");
+                        if (!extDl.isEmpty()) {
+                            dateStr = "Extended: " + AssessmentUiHelper.formatDateShort(extDl);
+                        } else if (!effectiveDl.isEmpty()) {
+                            dateStr = "Due: " + AssessmentUiHelper.formatDateShort(effectiveDl);
+                        }
+
                         Assessment item = new Assessment(id, title, dateStr, score, totalScore,
                                 isHw ? "homework" : "assignment", ctxInfo[1], courseInfo[1], isSubmitted, isGraded);
                         item.setCourseCode(courseInfo[0]);
@@ -531,6 +498,30 @@ public class StudentAssessmentFragment extends Fragment {
                         item.setStatusLabel(statusLabel);
                         item.setActionLabel(actionLabel);
                         item.setOverdue(isOverdue);
+
+                        com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.applyToAssessment(item, obj);
+                        item.setAssessmentApiType(isHw ? "homework" : "assignment");
+                        String srvStatus = obj.has("reopen_status") && !obj.get("reopen_status").isJsonNull()
+                                ? AssessmentUiHelper.optString(obj, "reopen_status", "") : "";
+                        if (!srvStatus.isEmpty()) {
+                            if (isGraded && !"Reopened".equalsIgnoreCase(srvStatus) && !"Extended".equalsIgnoreCase(srvStatus)) {
+                                item.setStatusLabel("Graded");
+                            } else {
+                                item.setStatusLabel(srvStatus);
+                            }
+                            if (item.isCanResubmit()) {
+                                item.setActionLabel("Resubmit");
+                            } else if (item.isCanSubmit()) {
+                                item.setActionLabel(isSubmitted ? "Resubmit" : (item.isAllowLateSubmission() ? "Submit Late" : "Submit"));
+                            } else if (isGraded) {
+                                item.setActionLabel("View Grade");
+                            } else if (isSubmitted) {
+                                item.setActionLabel("View Submission");
+                            } else {
+                                item.setActionLabel("View Details");
+                            }
+                            item.setOverdue("Expired".equalsIgnoreCase(srvStatus));
+                        }
 
                         if (isHw) {
                             allHomework.add(item);
@@ -551,6 +542,37 @@ public class StudentAssessmentFragment extends Fragment {
                     applyFilterAndBind();
                 }
             });
+        }
+    }
+
+    private void enrichPendingQuizzesFromReview(int generation) {
+        if (!isAdded() || getContext() == null) return;
+        for (Assessment item : allQuizzes) {
+            if (!item.isPendingGrading() || item.getLatestAttemptId() == null || item.getLatestAttemptId().isEmpty()) {
+                continue;
+            }
+            ApiClient.getApiService(getContext()).reviewStudentQuizAttempt(item.getLatestAttemptId())
+                    .enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            if (!isAdded() || generation != quizLoadGeneration) return;
+                            if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) {
+                                return;
+                            }
+                            QuizScoreUiHelper.ReviewScoreSummary summary =
+                                    QuizScoreUiHelper.parseStudentReviewSummary(response.body().getAsJsonObject("data"));
+                            QuizScoreUiHelper.applyReviewSummaryToAssessment(item, summary);
+                            if (rvStudentAssessmentList != null && rvStudentAssessmentList.getAdapter() != null
+                                    && "Quiz".equalsIgnoreCase(selectedCategory)) {
+                                rvStudentAssessmentList.getAdapter().notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                            // Keep list responsive even if background review lookup fails
+                        }
+                    });
         }
     }
 

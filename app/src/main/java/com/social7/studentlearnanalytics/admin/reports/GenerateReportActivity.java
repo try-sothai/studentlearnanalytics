@@ -177,11 +177,11 @@ public class GenerateReportActivity extends AppCompatActivity {
         setOptionAdapter(spGenerateReportSemester, filteredSemesterOptions);
 
         deptOptions.clear();
-        deptOptions.add(new OptionItem(0, 0, "All Departments"));
+        deptOptions.add(new OptionItem(0, 0, "All Faculties"));
         setOptionAdapter(spGenerateReportDept, deptOptions);
 
         filteredProgramOptions.clear();
-        filteredProgramOptions.add(new OptionItem(0, 0, "All Programs"));
+        filteredProgramOptions.add(new OptionItem(0, 0, "All Majors"));
         setOptionAdapter(spGenerateReportProgram, filteredProgramOptions);
 
         String[] statuses = {"All", "Active", "Enrolled", "Inactive"};
@@ -225,7 +225,7 @@ public class GenerateReportActivity extends AppCompatActivity {
                 updateSemesterOptions(0);
 
                 deptOptions.clear();
-                deptOptions.add(new OptionItem(0, 0, "All Departments"));
+                deptOptions.add(new OptionItem(0, 0, "All Faculties"));
                 if (data.has("departments") && data.get("departments").isJsonArray()) {
                     for (JsonElement el : data.getAsJsonArray("departments")) {
                         if (!el.isJsonObject()) continue;
@@ -268,7 +268,7 @@ public class GenerateReportActivity extends AppCompatActivity {
 
     private void updateProgramOptions(int selectedDeptId) {
         filteredProgramOptions.clear();
-        filteredProgramOptions.add(new OptionItem(0, 0, "All Programs"));
+        filteredProgramOptions.add(new OptionItem(0, 0, "All Majors"));
         for (OptionItem p : allProgramOptions) {
             if (selectedDeptId <= 0 || p.parentId == selectedDeptId) {
                 filteredProgramOptions.add(p);

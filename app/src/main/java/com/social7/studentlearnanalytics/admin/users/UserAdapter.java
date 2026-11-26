@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.User;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         }
 
         public void bind(final Context context, final User user, final OnUserActionListener listener) {
-            if (tvUserId != null) tvUserId.setText(user.getCode());
+            String idLabel = user.getCode() != null ? user.getCode() : "";
+            if ("Student".equalsIgnoreCase(user.getRole()) && user.getStudentRecord() != null) {
+                Integer yl = user.getStudentRecord().getYearLevel();
+                if (yl != null) {
+                    String badge = YearLevelHelper.toBadgeText(context, yl);
+                    idLabel = idLabel.isEmpty() ? badge : (idLabel + " • " + badge);
+                }
+            }
+            if (tvUserId != null) tvUserId.setText(idLabel);
             if (tvUserName != null) tvUserName.setText(user.getName());
             if (tvUserEmail != null) tvUserEmail.setText(user.getEmail());
 

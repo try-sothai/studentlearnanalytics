@@ -32,6 +32,7 @@ import retrofit2.Response;
 public class NotificationFragment extends Fragment {
 
     private TextView tabAll, tabUnread, tabImportant;
+    private TextView tvTeacherNotifEmpty;
     private RecyclerView rvTeacherNotifications;
     private NotificationAdapter adapter;
     private final List<Notification> allNotifications = new ArrayList<>();
@@ -74,6 +75,7 @@ public class NotificationFragment extends Fragment {
         if (tabImportant != null) tabImportant.setOnClickListener(v -> setFilter("IMPORTANT"));
 
         rvTeacherNotifications = view.findViewById(R.id.rvTeacherNotifications);
+        tvTeacherNotifEmpty = view.findViewById(R.id.tvTeacherNotifEmpty);
         if (rvTeacherNotifications != null) {
             rvTeacherNotifications.setLayoutManager(new LinearLayoutManager(requireContext()));
             adapter = new NotificationAdapter(requireContext(), displayedNotifications, this::markSingleReadOnApi);
@@ -193,6 +195,9 @@ public class NotificationFragment extends Fragment {
         }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+        if (tvTeacherNotifEmpty != null) {
+            tvTeacherNotifEmpty.setVisibility(displayedNotifications.isEmpty() ? View.VISIBLE : View.GONE);
         }
     }
 

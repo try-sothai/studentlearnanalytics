@@ -136,6 +136,40 @@
                             app:strokeWidth="1dp" />
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabFaculties"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="Faculties"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTabMajors"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:backgroundTint="#F4F7FF"
+                            android:minHeight="38dp"
+                            android:paddingHorizontal="12dp"
+                            android:text="Majors"
+                            android:textAllCaps="false"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            app:cornerRadius="10dp"
+                            app:strokeColor="@color/admin_border"
+                            app:strokeWidth="1dp" />
+
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnTabCurriculum"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="wrap_content"
@@ -340,7 +374,7 @@
                                 android:background="@drawable/bg_notif_tab_inactive"
                                 android:gravity="center"
                                 android:paddingHorizontal="14dp"
-                                android:text="Dept: All"
+                                android:text="Faculty: All"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -353,7 +387,7 @@
                                 android:background="@drawable/bg_notif_tab_inactive"
                                 android:gravity="center"
                                 android:paddingHorizontal="14dp"
-                                android:text="Program: All"
+                                android:text="Major: All"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -366,7 +400,7 @@
                                 android:background="@drawable/bg_notif_tab_inactive"
                                 android:gravity="center"
                                 android:paddingHorizontal="14dp"
-                                android:text="Year: All"
+                                android:text="@string/academic_year_all"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -478,8 +512,8 @@
                             android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:layout_weight="1"
                             app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Colleges" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvTotalColleges" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="3" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvLabelTotalCatalog" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Categories" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvTotalColleges" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="15sp" android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -487,8 +521,8 @@
                             android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:layout_weight="1"
                             app:cardBackgroundColor="@color/card_white" app:cardCornerRadius="12dp" app:cardElevation="1dp" app:strokeColor="@color/admin_border" app:strokeWidth="1dp">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/departments" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvTotalDepartments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="6" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
+                                <TextView android:id="@+id/tvLabelActiveCatalog" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Categories" android:textColor="@color/admin_text_secondary" android:textSize="11sp" />
+                                <TextView android:id="@+id/tvTotalDepartments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="0" android:textColor="@color/admin_active_green" android:textSize="15sp" android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </LinearLayout>
@@ -763,13 +797,76 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategories"
+            <FrameLayout
+                android:id="@+id/layoutCategoriesContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:padding="12dp"
-                android:visibility="gone" />
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="12dp" />
+
+                <LinearLayout
+                    android:id="@+id/layoutCategoriesEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:contentDescription="@string/course_categories"
+                        android:src="@drawable/ic_open_book"
+                        app:tint="@color/admin_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tvCategoriesEmptyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="No categories yet"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCategoriesEmptyMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="Tap + Add Category to create your first course category."
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCategoriesEmptyAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:backgroundTint="@color/admin_primary_blue"
+                        android:minHeight="40dp"
+                        android:text="@string/add_category"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/pbLoadingCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCurriculumAudit"

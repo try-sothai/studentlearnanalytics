@@ -179,7 +179,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="All Depts"
+                            android:text="All Faculties"
                             android:textColor="@color/teacher_dark_navy"
                             android:textSize="11sp"
                             android:textStyle="bold" />

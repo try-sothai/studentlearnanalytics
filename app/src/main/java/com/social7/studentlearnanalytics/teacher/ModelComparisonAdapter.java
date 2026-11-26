@@ -65,6 +65,10 @@ public class ModelComparisonAdapter extends RecyclerView.Adapter<ModelComparison
         return filteredList.size();
     }
 
+    public void refresh() {
+        filter("");
+    }
+
     public void filter(String query) {
         filteredList.clear();
         String text = query != null ? query.trim().toLowerCase() : "";

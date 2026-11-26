@@ -32,9 +32,15 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
 
-        holder.tvTitle.setText(item.has("title") ? item.get("title").getAsString() : "Recommendation");
-        holder.tvReason.setText(item.has("reason") ? item.get("reason").getAsString() : "Please review.");
-        holder.tvAction.setText(item.has("action") ? item.get("action").getAsString() : "Action Needed");
+        holder.tvTitle.setText(item.has("title") && !item.get("title").isJsonNull()
+                ? item.get("title").getAsString() : "Recommendation");
+        String reason = item.has("reason") && !item.get("reason").isJsonNull()
+                ? item.get("reason").getAsString()
+                : (item.has("message") && !item.get("message").isJsonNull()
+                ? item.get("message").getAsString() : "No details provided.");
+        holder.tvReason.setText(reason);
+        holder.tvAction.setText(item.has("action") && !item.get("action").isJsonNull()
+                ? item.get("action").getAsString() : "Review course materials");
 
         String course = item.has("course_name") && !item.get("course_name").isJsonNull() ? item.get("course_name").getAsString() : "General";
         holder.tvCourseName.setText(course.toUpperCase());

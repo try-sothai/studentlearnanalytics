@@ -24,10 +24,15 @@ public class LearningAnalyticsActivity extends AppCompatActivity {
     private TextView tvAssignmentAverage;
     private TextView tvQuizAverage;
     private TextView tvPerformance;
+    private View cardAnalyticsStatus, btnRetryAnalytics;
+    private TextView tvAnalyticsStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Student")) {
+            return;
+        }
         setContentView(R.layout.activity_learning_analytics);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -43,42 +48,77 @@ public class LearningAnalyticsActivity extends AppCompatActivity {
         tvAssignmentAverage = findViewById(R.id.tvAssignmentAverage);
         tvQuizAverage = findViewById(R.id.tvQuizAverage);
         tvPerformance = findViewById(R.id.tvPerformance);
+        cardAnalyticsStatus = findViewById(R.id.cardAnalyticsStatus);
+        tvAnalyticsStatus = findViewById(R.id.tvAnalyticsStatus);
+        btnRetryAnalytics = findViewById(R.id.btnRetryAnalytics);
+        if (btnRetryAnalytics != null) {
+            btnRetryAnalytics.setOnClickListener(v -> loadAnalytics());
+        }
 
         loadAnalytics();
     }
 
     private void loadAnalytics() {
         progressBar.setVisibility(View.VISIBLE);
+        if (cardAnalyticsStatus != null) cardAnalyticsStatus.setVisibility(View.GONE);
         ApiService apiService = ApiClient.getApiService(this);
         apiService.getStudentModuleAnalytics(null).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject body = response.body();
-                    if (body.has("data") && !body.get("data").isJsonNull()) {
+                    if (body.has("data") && body.get("data").isJsonObject()) {
                         JsonObject data = body.getAsJsonObject("data");
+                        JsonObject src = (data.has("current") && data.get("current").isJsonObject())
+                                ? data.getAsJsonObject("current") : data;
 
-                        String attendance = data.has("attendance_rate") && !data.get("attendance_rate").isJsonNull() ? data.get("attendance_rate").getAsString() + "%" : "N/A";
-                        String assignment = data.has("assignment_average") && !data.get("assignment_average").isJsonNull() ? data.get("assignment_average").getAsString() + "%" : "N/A";
-                        String quiz = data.has("quiz_average") && !data.get("quiz_average").isJsonNull() ? data.get("quiz_average").getAsString() + "%" : "N/A";
-                        String performance = data.has("overall_performance") && !data.get("overall_performance").isJsonNull() ? data.get("overall_performance").getAsString() + "%" : "N/A";
+                        String attendance = formatMetricPct(src, data, "attendance_rate");
+                        String assignment = formatMetricPct(src, data, "assignment_average");
+                        String quiz = formatMetricPct(src, data, "quiz_average");
+                        String performance = formatMetricPct(src, data, "overall_performance");
 
                         tvAttendanceAverage.setText(attendance);
                         tvAssignmentAverage.setText(assignment);
                         tvQuizAverage.setText(quiz);
                         tvPerformance.setText(performance);
+                        return;
                     }
+                    showStatus("No analytics data returned.");
                 } else {
-                    Toast.makeText(LearningAnalyticsActivity.this, "Failed to load analytics.", Toast.LENGTH_SHORT).show();
+                    String msg = "Failed to load analytics (HTTP " + response.code() + ").";
+                    Toast.makeText(LearningAnalyticsActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    showStatus(msg);
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                if (isFinishing() || isDestroyed()) return;
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(LearningAnalyticsActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                String msg = "Network error: " + (t.getMessage() != null ? t.getMessage() : "Connection failed");
+                Toast.makeText(LearningAnalyticsActivity.this, msg, Toast.LENGTH_SHORT).show();
+                showStatus("Could not reach the server. Tap Retry to try again.");
             }
         });
+    }
+
+    private void showStatus(String message) {
+        if (cardAnalyticsStatus != null) cardAnalyticsStatus.setVisibility(View.VISIBLE);
+        if (tvAnalyticsStatus != null) tvAnalyticsStatus.setText(message);
+    }
+
+    private String formatMetricPct(JsonObject primary, JsonObject fallback, String key) {
+        JsonObject target = (primary != null && primary.has(key) && !primary.get(key).isJsonNull())
+                ? primary : fallback;
+        if (target != null && target.has(key) && !target.get(key).isJsonNull()) {
+            try {
+                return String.format(java.util.Locale.US, "%.1f%%", target.get(key).getAsDouble());
+            } catch (Exception ignored) {
+                return target.get(key).getAsString() + "%";
+            }
+        }
+        return "N/A";
     }
 }

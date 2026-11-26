@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="Oct 28, 2024 10:30 AM"
+                            android:text="—"
                             android:textColor="@color/notif_spec_secondary_text"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -112,7 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:text="New Teacher Registration"
+                        android:text=""
                         android:textColor="@color/notif_spec_dark_navy"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -123,14 +123,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="3dp"
-                        android:text="Ms. Dany has registered as a new teacher and is pending your approval. Please review her information and approve or reject the registration."
+                        android:text=""
                         android:textColor="@color/notif_spec_dark_navy"
                         android:textSize="14sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 2: Related User Information Card -->
+            <!-- Section 2: Notification Metadata Card (No Hardcoded User Data) -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardRelatedUserInfo"
                 android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_information"
+                        android:text="Notification Metadata"
                         android:textColor="@color/notif_spec_dark_navy"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -162,7 +162,7 @@
                         android:layout_marginVertical="12dp"
                         android:background="@color/notif_spec_border" />
 
-                    <!-- User Header Row -->
+                    <!-- Notification Summary Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -180,9 +180,10 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:contentDescription="@string/user_profile_avatar"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_profile"
+                                android:contentDescription="@string/nav_notifications"
+                                android:padding="10dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_notifications"
                                 app:tint="@color/notif_spec_primary_blue" />
                         </com.google.android.material.card.MaterialCardView>
 
@@ -197,7 +198,7 @@
                                 android:id="@+id/tvValUserName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ms. Dany"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_dark_navy"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -207,7 +208,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="@string/role_teacher"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_secondary_text"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -219,20 +220,19 @@
                             android:background="@drawable/bg_notif_badge_pending"
                             android:gravity="center"
                             android:paddingHorizontal="12dp"
-                            android:text="@string/status_pending"
+                            android:text="—"
                             android:textColor="@color/notif_spec_warning_orange"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- User Detail Table -->
+                    <!-- Metadata Table -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:orientation="vertical">
 
-                        <!-- Email -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -240,9 +240,9 @@
                             android:paddingVertical="4dp">
 
                             <TextView
-                                android:layout_width="110dp"
+                                android:layout_width="120dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/email"
+                                android:text="Notification ID:"
                                 android:textColor="@color/notif_spec_secondary_text"
                                 android:textSize="13sp" />
 
@@ -251,13 +251,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="dany@teacher.edu"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Phone -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -266,9 +265,9 @@
                             android:paddingVertical="4dp">
 
                             <TextView
-                                android:layout_width="110dp"
+                                android:layout_width="120dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/phone"
+                                android:text="Category:"
                                 android:textColor="@color/notif_spec_secondary_text"
                                 android:textSize="13sp" />
 
@@ -277,13 +276,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="+855 12 345 678"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Department -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -292,9 +290,9 @@
                             android:paddingVertical="4dp">
 
                             <TextView
-                                android:layout_width="110dp"
+                                android:layout_width="120dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/department_1b2fae"
+                                android:text="Group:"
                                 android:textColor="@color/notif_spec_secondary_text"
                                 android:textSize="13sp" />
 
@@ -303,13 +301,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="@string/computer_science"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Registered At -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -318,9 +315,9 @@
                             android:paddingVertical="4dp">
 
                             <TextView
-                                android:layout_width="110dp"
+                                android:layout_width="120dp"
                                 android:layout_height="wrap_content"
-                                android:text="Registered At:"
+                                android:text="Timestamp:"
                                 android:textColor="@color/notif_spec_secondary_text"
                                 android:textSize="13sp" />
 
@@ -329,7 +326,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Oct 28, 2024 10:30 AM"
+                                android:text="—"
                                 android:textColor="@color/notif_spec_dark_navy"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />

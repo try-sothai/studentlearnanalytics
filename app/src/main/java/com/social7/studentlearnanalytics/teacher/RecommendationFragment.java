@@ -46,6 +46,7 @@ public class RecommendationFragment extends Fragment {
 
     private PieChart chartRecommendationPriorityPie;
     private MaterialButton btnGenerateRecs;
+    private TextView tvRecTotalCount, tvRecHighCount, tvRecMedCount, tvRecLowCount, tvRecStudentsCount, tvRecCompletedCount;
 
     private RecyclerView rvStudentRecsList;
     private StudentRecommendationAdapter studentRecAdapter;
@@ -217,6 +218,13 @@ public class RecommendationFragment extends Fragment {
                 }
 
                 bindOverviewPie(highCnt, medCnt, lowCnt);
+                int totalRecs = highCnt + medCnt + lowCnt;
+                if (tvRecTotalCount != null) tvRecTotalCount.setText(totalRecs + " Active");
+                if (tvRecHighCount != null) tvRecHighCount.setText(highCnt + " Urgent");
+                if (tvRecMedCount != null) tvRecMedCount.setText(medCnt + " Active");
+                if (tvRecLowCount != null) tvRecLowCount.setText(lowCnt + " Advisory");
+                if (tvRecStudentsCount != null) tvRecStudentsCount.setText(studentRecList.size() + " Students");
+                if (tvRecCompletedCount != null) tvRecCompletedCount.setText(historyList.size() + " Plans");
                 if (studentRecAdapter != null) studentRecAdapter.filter("");
                 if (priorityRecAdapter != null) priorityRecAdapter.notifyDataSetChanged();
                 if (interventionAdapter != null) interventionAdapter.notifyDataSetChanged();
@@ -227,6 +235,12 @@ public class RecommendationFragment extends Fragment {
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 if (!isAdded() || getContext() == null) return;
                 bindOverviewPie(0, 0, 0);
+                if (tvRecTotalCount != null) tvRecTotalCount.setText("0 Active");
+                if (tvRecHighCount != null) tvRecHighCount.setText("0 Urgent");
+                if (tvRecMedCount != null) tvRecMedCount.setText("0 Active");
+                if (tvRecLowCount != null) tvRecLowCount.setText("0 Advisory");
+                if (tvRecStudentsCount != null) tvRecStudentsCount.setText("0 Students");
+                if (tvRecCompletedCount != null) tvRecCompletedCount.setText("0 Plans");
                 Toast.makeText(getContext(), "Network error loading recommendations", Toast.LENGTH_SHORT).show();
             }
         });
@@ -235,6 +249,12 @@ public class RecommendationFragment extends Fragment {
     private void bindOverviewViews(View root) {
         chartRecommendationPriorityPie = root.findViewById(R.id.chartRecommendationPriorityPie);
         btnGenerateRecs = root.findViewById(R.id.btnGenerateRecs);
+        tvRecTotalCount = root.findViewById(R.id.tvRecTotalCount);
+        tvRecHighCount = root.findViewById(R.id.tvRecHighCount);
+        tvRecMedCount = root.findViewById(R.id.tvRecMedCount);
+        tvRecLowCount = root.findViewById(R.id.tvRecLowCount);
+        tvRecStudentsCount = root.findViewById(R.id.tvRecStudentsCount);
+        tvRecCompletedCount = root.findViewById(R.id.tvRecCompletedCount);
 
         if (chartRecommendationPriorityPie != null) {
             chartRecommendationPriorityPie.setNoDataText("Loading recommendations...");

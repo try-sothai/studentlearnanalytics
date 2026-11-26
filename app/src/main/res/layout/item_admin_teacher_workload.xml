@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Department: College of Computer Studies"
+            android:text="Faculty: College of Computer Studies"
             android:textColor="@color/admin_text_primary"
             android:textSize="12sp"
             android:textStyle="bold" />

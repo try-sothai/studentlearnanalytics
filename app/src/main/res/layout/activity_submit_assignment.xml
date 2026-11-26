@@ -106,6 +106,55 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvReopenStatusBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/soft_purple"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:text="Not Submitted"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAttemptsSummary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Attempts: 0 / 1"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvDeadlineComparison"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/info_blue"
+                        android:textSize="11.5sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvBlockedReasonBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:background="@color/danger_red_bg"
+                        android:padding="8dp"
+                        android:textColor="@color/danger_red"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
                     <TextView
                         android:id="@+id/tvInstructions"
                         android:layout_width="wrap_content"
@@ -251,6 +300,21 @@
                             app:cornerRadius="8dp"
                             app:strokeColor="@color/primary" />
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSubmissionHistory"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Submission History (All Versions)"
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_purple"
+                        android:textSize="12sp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="@color/primary_purple" />
 
                     <TextView
                         android:id="@+id/tvStatusMessage"

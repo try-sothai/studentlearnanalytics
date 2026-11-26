@@ -95,10 +95,19 @@ public class AssignTeacherClassActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_assign_teacher_class);
         existingKeys = getIntent().getStringExtra(EXTRA_EXISTING_KEYS);
         if (existingKeys == null) existingKeys = "";
         bindViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin");
     }
 
     private void bindViews() {
@@ -157,6 +166,12 @@ public class AssignTeacherClassActivity extends AppCompatActivity {
         api.assignFacultyClasses(selectedTeacherId, classBody).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (!response.isSuccessful()) {
+                    btnSave.setEnabled(true);
+                    Toast.makeText(AssignTeacherClassActivity.this, "Failed to assign teacher to class (HTTP " + response.code() + ")", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (selectedCourseId > 0) {
                     JsonObject courseBody = new JsonObject();
                     JsonArray courseIds = new JsonArray();
@@ -165,12 +180,20 @@ public class AssignTeacherClassActivity extends AppCompatActivity {
                     api.assignFacultyCourses(selectedTeacherId, courseBody).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(@NonNull Call<JsonObject> c2, @NonNull Response<JsonObject> r2) {
+                            if (isFinishing() || isDestroyed()) return;
+                            if (!r2.isSuccessful()) {
+                                btnSave.setEnabled(true);
+                                Toast.makeText(AssignTeacherClassActivity.this, "Class assigned, but failed to assign course (HTTP " + r2.code() + ")", Toast.LENGTH_LONG).show();
+                                return;
+                            }
                             finishWithSuccess();
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<JsonObject> c2, @NonNull Throwable t2) {
-                            finishWithSuccess();
+                            if (isFinishing() || isDestroyed()) return;
+                            btnSave.setEnabled(true);
+                            Toast.makeText(AssignTeacherClassActivity.this, R.string.network_error_server, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {

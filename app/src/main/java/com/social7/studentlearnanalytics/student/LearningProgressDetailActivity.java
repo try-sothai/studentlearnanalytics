@@ -80,30 +80,31 @@ public class LearningProgressDetailActivity extends AppCompatActivity {
             });
         }
 
-        fetchProgressData();
+        fetchBreakdownMetrics();
         fetchAnalyticsSeries();
     }
 
-    private void fetchProgressData() {
-        ApiClient.getApiService(this).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
-                if (isFinishing() || isDestroyed()) return;
+    private void fetchBreakdownMetrics() {
+        ApiClient.getApiService(this).getStudentDashboardFiltered(selectedSemesterId, null)
+                .enqueue(new Callback<DashboardResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
+                        if (isFinishing() || isDestroyed()) return;
 
-                if (response.isSuccessful() && response.body() != null) {
-                    cachedDashboard = response.body().getData();
-                    bindBreakdownCards(cachedDashboard);
-                    setupSpinnerIfNeeded(cachedDashboard);
-                    renderSelectedTrend();
-                }
-            }
+                        if (response.isSuccessful() && response.body() != null) {
+                            cachedDashboard = response.body().getData();
+                            bindBreakdownCards(cachedDashboard);
+                            setupSpinnerIfNeeded(cachedDashboard);
+                            renderSelectedTrend();
+                        }
+                    }
 
-            @Override
-            public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
-                if (isFinishing() || isDestroyed()) return;
-                Log.d(TAG, "Dashboard API call failed: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Call<DashboardResponse> call, @NonNull Throwable t) {
+                        if (isFinishing() || isDestroyed()) return;
+                        Log.d(TAG, "Dashboard API call failed: " + t.getMessage());
+                    }
+                });
     }
 
     private void setupSpinnerIfNeeded(DashboardResponse.DashboardData data) {
@@ -128,6 +129,7 @@ public class LearningProgressDetailActivity extends AppCompatActivity {
                     if ((selectedSemesterId == null && newId != null)
                             || (selectedSemesterId != null && !selectedSemesterId.equals(newId))) {
                         selectedSemesterId = newId;
+                        fetchBreakdownMetrics();
                         fetchAnalyticsSeries();
                     }
                 }
@@ -195,20 +197,23 @@ public class LearningProgressDetailActivity extends AppCompatActivity {
         if (cachedAnalytics != null && !cachedAnalytics.isEmpty()) {
             for (int i = 0; i < cachedAnalytics.size(); i++) {
                 LearningAnalytic a = cachedAnalytics.get(i);
-                float v = 0f;
+                Float v = null;
                 if (selectedCategoryId == R.id.btnAttendance) {
-                    v = a.attendanceRate != null ? a.attendanceRate : 0f;
+                    v = a.attendanceRate;
                 } else if (selectedCategoryId == R.id.btnAssignments) {
-                    v = a.assignmentAverage != null ? a.assignmentAverage : 0f;
+                    v = a.assignmentAverage;
                 } else if (selectedCategoryId == R.id.btnQuizzes) {
-                    v = a.quizAverage != null ? a.quizAverage : 0f;
+                    v = a.quizAverage;
                 } else if (selectedCategoryId == R.id.btnExams) {
-                    v = a.examAverage != null ? a.examAverage : 0f;
+                    v = a.examAverage;
                 } else {
-                    v = a.overallPerformance != null ? a.overallPerformance : 0f;
+                    v = a.overallPerformance;
+                }
+                if (v == null) {
+                    continue;
                 }
                 values.add(v);
-                String lbl = "P" + (i + 1);
+                String lbl = "P" + (values.size());
                 if (a.periodStart != null && a.periodStart.length() >= 7) {
                     lbl = a.periodStart.substring(5, 7) + "/" + a.periodStart.substring(2, 4);
                 }
@@ -225,19 +230,23 @@ public class LearningProgressDetailActivity extends AppCompatActivity {
     private void setupLineChart(LineChart chart, List<Float> values, List<String> labels) {
         if (chart == null) return;
 
-        if (values == null || values.isEmpty()) {
+        List<Entry> entries = new ArrayList<>();
+        if (values != null) {
+            for (int i = 0; i < values.size(); i++) {
+                Float val = values.get(i);
+                if (val != null) {
+                    entries.add(new Entry(i, val));
+                }
+            }
+        }
+
+        if (entries.isEmpty()) {
             chart.clear();
             chart.setNoDataText("No learning progress trend data available yet");
             chart.setNoDataTextColor(Color.parseColor("#64748B"));
             ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
             chart.invalidate();
             return;
-        }
-
-        List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < values.size(); i++) {
-            Float val = values.get(i);
-            entries.add(new Entry(i, val != null ? val : 0f));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, getString(R.string.performance_trend));

@@ -1,11 +1,15 @@
 package com.social7.studentlearnanalytics.model;
 
 import com.google.gson.JsonObject;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 public class TeachingAssignment {
     private int courseOfferingId;
     private int academicYearId;
     private String academicYearName;
+    private Integer yearLevel;
+    private String yearLevelCode;
+    private String yearLevelLabel;
     private int semesterId;
     private String semesterName;
     private int classId;
@@ -22,6 +26,14 @@ public class TeachingAssignment {
         item.courseOfferingId = optInt(obj, "course_offering_id", 0);
         item.academicYearId = optInt(obj, "academic_year_id", 0);
         item.academicYearName = optStr(obj, "academic_year_name", "Academic Year");
+        String rawYl = optStr(obj, "year_level", "");
+        item.yearLevel = YearLevelHelper.parse(rawYl);
+        item.yearLevelCode = optStr(obj, "year_level_code", "");
+        if (item.yearLevelCode.isEmpty() && item.yearLevel != null) {
+            String code = YearLevelHelper.toCode(item.yearLevel);
+            if (code != null) item.yearLevelCode = code;
+        }
+        item.yearLevelLabel = optStr(obj, "year_level_label", "");
         item.semesterId = optInt(obj, "semester_id", 0);
         item.semesterName = optStr(obj, "semester_name", "Semester");
         item.classId = optInt(obj, "class_id", 0);
@@ -51,6 +63,12 @@ public class TeachingAssignment {
     public int getCourseOfferingId() { return courseOfferingId; }
     public int getAcademicYearId() { return academicYearId; }
     public String getAcademicYearName() { return academicYearName; }
+    public Integer getYearLevel() { return yearLevel; }
+    public String getYearLevelCode() { return yearLevelCode != null ? yearLevelCode : ""; }
+    public String getYearLevelLabel() {
+        if (yearLevelLabel != null && !yearLevelLabel.isEmpty()) return yearLevelLabel;
+        return yearLevel != null ? YearLevelHelper.toFullLabel(null, yearLevel) : "";
+    }
     public int getSemesterId() { return semesterId; }
     public String getSemesterName() { return semesterName; }
     public int getClassId() { return classId; }

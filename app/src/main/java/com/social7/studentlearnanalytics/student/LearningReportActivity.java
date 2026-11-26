@@ -136,7 +136,10 @@ public class LearningReportActivity extends AppCompatActivity {
                             loadedStudentCode = student.getStudentCode();
                             loadedStudentName = student.getDisplayName();
                             loadedDepartment = student.getDepartmentName();
-                            loadedYearLevel = student.getYearLevelFormatted();
+                            Integer ylNum = student.getYearLevelNumber();
+                            loadedYearLevel = ylNum != null
+                                    ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(LearningReportActivity.this, ylNum)
+                                    : student.getYearLevelFormatted();
                         }
                         if (loadedStudentCode.isEmpty() && sessionManager != null) loadedStudentCode = sessionManager.getUserId();
                         if (loadedStudentName.isEmpty() && sessionManager != null) loadedStudentName = sessionManager.getStudentName();
@@ -159,7 +162,7 @@ public class LearningReportActivity extends AppCompatActivity {
                         if (tvReportGpa != null) tvReportGpa.setText("Cumulative GPA: " + data.getGpaFormatted());
                         if (tvReportAcademicStanding != null) {
                             String standing = (data.getGpaSummary() != null && data.getGpaSummary().academicStanding != null)
-                                    ? data.getGpaSummary().academicStanding : "Good Standing";
+                                    ? data.getGpaSummary().academicStanding : "Unavailable";
                             tvReportAcademicStanding.setText("Academic Standing: " + standing);
                         }
                         if (tvReportPredictedScore != null) tvReportPredictedScore.setText("Predicted Final Score: " + data.getPredictedScoreFormatted());
@@ -356,7 +359,7 @@ public class LearningReportActivity extends AppCompatActivity {
         y += 18;
         canvas.drawText("• Student ID: " + studentId, 40, y, bodyPaint);
         y += 18;
-        canvas.drawText("• Department / Major: " + (!loadedDepartment.isEmpty() ? loadedDepartment : "N/A"), 40, y, bodyPaint);
+        canvas.drawText("• Faculty / Major: " + (!loadedDepartment.isEmpty() ? loadedDepartment : "N/A"), 40, y, bodyPaint);
         y += 18;
         canvas.drawText("• Year Level: " + (!loadedYearLevel.isEmpty() ? loadedYearLevel : "N/A"), 40, y, bodyPaint);
         y += 28;

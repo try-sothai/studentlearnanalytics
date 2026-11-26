@@ -30,7 +30,8 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="@id/layoutTeacherHeaderInfo"
+        app:layout_constraintTop_toTopOf="@id/layoutTeacherHeaderInfo">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="44dp"
@@ -72,10 +73,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="6dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/layoutTeacherAvatarContainer"
         app:layout_constraintEnd_toStartOf="@id/btnTeacherDrawerClose"
         app:layout_constraintStart_toEndOf="@id/layoutTeacherAvatarContainer"
-        app:layout_constraintTop_toTopOf="@id/layoutTeacherAvatarContainer">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tvTeacherDrawerName"
@@ -125,8 +125,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@color/drawer_divider"
-        app:layout_constraintTop_toBottomOf="@id/layoutTeacherAvatarContainer" />
+        app:layout_constraintTop_toBottomOf="@id/layoutTeacherHeaderInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

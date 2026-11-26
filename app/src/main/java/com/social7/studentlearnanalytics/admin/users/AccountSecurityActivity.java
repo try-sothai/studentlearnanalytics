@@ -33,10 +33,19 @@ public class AccountSecurityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_account_security);
 
         initViews();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin");
     }
 
     private void initViews() {
@@ -101,8 +110,8 @@ public class AccountSecurityActivity extends AppCompatActivity {
         if (isValid) {
             JsonObject body = new JsonObject();
             body.addProperty("current_password", currentPass);
-            body.addProperty("new_password", newPass);
-            body.addProperty("new_password_confirmation", confirmPass);
+            body.addProperty("password", newPass);
+            body.addProperty("password_confirmation", confirmPass);
 
             if (btnUpdatePassword != null) btnUpdatePassword.setEnabled(false);
 
@@ -141,15 +150,16 @@ public class AccountSecurityActivity extends AppCompatActivity {
     }
 
     private void toggle2FA() {
-        is2FAEnabled = !is2FAEnabled;
+        is2FAEnabled = false;
         if (tvBadge2FAStatus != null) {
-            tvBadge2FAStatus.setText(is2FAEnabled ? "Enabled" : "Disabled");
-            tvBadge2FAStatus.setTextColor(Color.parseColor(is2FAEnabled ? "#16A34A" : "#EF4444"));
-            tvBadge2FAStatus.setBackgroundResource(is2FAEnabled ? R.drawable.bg_badge_core : R.drawable.bg_badge_credit);
+            tvBadge2FAStatus.setText("Unavailable");
+            tvBadge2FAStatus.setTextColor(Color.parseColor("#EF4444"));
+            tvBadge2FAStatus.setBackgroundResource(R.drawable.bg_badge_credit);
         }
-        if (btnEnable2FA != null) {
-            btnEnable2FA.setText(is2FAEnabled ? "Disable 2FA" : "Enable 2FA");
-        }
-        Toast.makeText(this, "Two-Factor Authentication " + (is2FAEnabled ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Two-Factor Authentication")
+                .setMessage("Two-Factor Authentication enrollment is not supported by the backend API in this version.")
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 }

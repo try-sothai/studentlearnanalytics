@@ -79,6 +79,9 @@ public class EnterScoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Teacher", "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_enter_score);
 
         TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerTeacherDetail), "Grade Submission", "", true);

@@ -62,9 +62,10 @@ public class RecommendationFragment extends Fragment {
 
         View btnGenerateRecs = view.findViewById(R.id.btnGenerateRecs);
         if (btnGenerateRecs != null) {
-            btnGenerateRecs.setOnClickListener(v -> 
-                Toast.makeText(getContext(), "Generating new AI recommendations...", Toast.LENGTH_SHORT).show()
-            );
+            btnGenerateRecs.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Refreshing recommendations from server...", Toast.LENGTH_SHORT).show();
+                fetchRecommendations(true);
+            });
         }
 
         // Setup card click listeners
@@ -86,6 +87,10 @@ public class RecommendationFragment extends Fragment {
     }
 
     private void fetchRecommendations() {
+        fetchRecommendations(false);
+    }
+
+    private void fetchRecommendations(boolean showUserResult) {
         if (getContext() == null) return;
 
         ApiClient.getApiService(requireContext()).getRecommendations().enqueue(new Callback<JsonObject>() {
@@ -102,20 +107,30 @@ public class RecommendationFragment extends Fragment {
                             dataArray = body.getAsJsonArray("recommendations");
                         }
 
-                        if (dataArray != null && !dataArray.isEmpty()) {
-                            Log.d(TAG, "Loaded " + dataArray.size() + " recommendations from API");
+                        int count = dataArray != null ? dataArray.size() : 0;
+                        Log.d(TAG, "Loaded " + count + " recommendations from API");
+                        if (showUserResult && getContext() != null) {
+                            Toast.makeText(getContext(),
+                                    count > 0 ? ("Loaded " + count + " active recommendations") : "No active recommendations yet",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing recommendations", e);
                     }
                 } else {
                     Log.d(TAG, "Recommendations HTTP code: " + response.code());
+                    if (showUserResult && getContext() != null) {
+                        Toast.makeText(getContext(), "Unable to refresh recommendations", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 Log.d(TAG, "Recommendations API failed: " + t.getMessage());
+                if (showUserResult && isAdded() && getContext() != null) {
+                    Toast.makeText(getContext(), "Network error refreshing recommendations", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

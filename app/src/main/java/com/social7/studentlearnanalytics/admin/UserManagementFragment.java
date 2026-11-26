@@ -90,7 +90,7 @@ public class UserManagementFragment extends Fragment implements
     private TextView pillFilterAllTeachers, pillFilterActiveTeachers, pillFilterInactiveTeachers;
     private Spinner spDepartmentFilter;
     private MaterialButton btnAddTeacher, btnImportTeachers;
-    private String currentTeacherDepartmentFilter = "All Departments";
+    private String currentTeacherDepartmentFilter = "All Faculties";
     private final ActivityResultLauncher<String[]> teacherImportPicker =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
                 if (uri != null) {
@@ -479,6 +479,10 @@ public class UserManagementFragment extends Fragment implements
                                         String email = obj.has("email") && !obj.get("email").isJsonNull() ? obj.get("email").getAsString() : "";
                                         String userStatus = obj.has("status") && !obj.get("status").isJsonNull() ? obj.get("status").getAsString() : "Active";
                                         
+                                        String rawYearLevel = null;
+                                        if (obj.has("year_level") && !obj.get("year_level").isJsonNull()) {
+                                            rawYearLevel = obj.get("year_level").getAsString();
+                                        }
                                         String code = "STD" + numId;
                                         if (obj.has("code") && !obj.get("code").isJsonNull()) {
                                             code = obj.get("code").getAsString();
@@ -491,9 +495,20 @@ public class UserManagementFragment extends Fragment implements
                                             } else if (sObj.has("student_id") && !sObj.get("student_id").isJsonNull()) {
                                                 code = sObj.get("student_id").getAsString();
                                             }
+                                            if (rawYearLevel == null && sObj.has("year_level") && !sObj.get("year_level").isJsonNull()) {
+                                                rawYearLevel = sObj.get("year_level").getAsString();
+                                            }
                                         }
 
                                         User user = new User(numId, code, name, email, "Student", capitalize(userStatus), code);
+                                        Integer parsedYl = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYearLevel);
+                                        if (parsedYl != null) {
+                                            Student sRec = new Student();
+                                            sRec.setYearLevel(parsedYl);
+                                            sRec.setYearLevelCode(com.social7.studentlearnanalytics.utils.YearLevelHelper.toCode(parsedYl));
+                                            sRec.setYear("Year " + parsedYl);
+                                            user.setStudentRecord(sRec);
+                                        }
                                         masterUserList.add(user);
                                     }
                                 }
@@ -783,7 +798,7 @@ public class UserManagementFragment extends Fragment implements
         if (spDepartmentFilter == null || getContext() == null) return;
 
         String[] departments = {
-                "All Departments",
+                "All Faculties",
                 "Computer Science",
                 "Information Technology",
                 "Information Systems",
@@ -835,7 +850,9 @@ public class UserManagementFragment extends Fragment implements
 
         String querySearch = getSearchText(etSearchTeacher);
         String status = currentTeacherStatusFilter.toLowerCase();
-        String deptParam = (currentTeacherDepartmentFilter != null && !"All Departments".equalsIgnoreCase(currentTeacherDepartmentFilter))
+        String deptParam = (currentTeacherDepartmentFilter != null
+                && !"All Faculties".equalsIgnoreCase(currentTeacherDepartmentFilter)
+                && !"All Departments".equalsIgnoreCase(currentTeacherDepartmentFilter))
                 ? currentTeacherDepartmentFilter : null;
 
         ApiClient.getApiService(getContext()).getTeachersPaged(status, deptParam, querySearch, currentPage, PER_PAGE)
@@ -1218,7 +1235,7 @@ public class UserManagementFragment extends Fragment implements
                                 FacultyEvaluationAdapter.FacultyItem item = new FacultyEvaluationAdapter.FacultyItem(
                                         str(o, "name", "Unknown"),
                                         str(o, "position", "—"),
-                                        str(o, "department", "No department"),
+                                        str(o, "department", "No faculty"),
                                         com.social7.studentlearnanalytics.utils.UiUtils.optInt(o, "courses_count", 0) + " assigned",
                                         com.social7.studentlearnanalytics.utils.UiUtils.optInt(o, "classes_count", 0) + " assigned",
                                         passRate.isEmpty() ? "N/A" : passRate + "%",
@@ -1323,7 +1340,7 @@ public class UserManagementFragment extends Fragment implements
     private void showFacultyProfile(FacultyEvaluationAdapter.FacultyItem item) {
         String details = "Faculty ID: " + item.facultyId + "\n" +
                 "Position: " + item.title + "\n" +
-                "Department: " + item.department + "\n\n" +
+                "Faculty: " + item.department + "\n\n" +
                 "Assigned Courses: " + item.courses + "\n" +
                 "Assigned Classes: " + item.classes + "\n\n" +
                 "Class Pass Rate: " + item.passRate + "\n" +
@@ -1673,6 +1690,12 @@ public class UserManagementFragment extends Fragment implements
             student.setUserId(user.getNumericId());
         }
 
+        if (user.getStudentRecord() != null && user.getStudentRecord().getYearLevel() != null) {
+            student.setYearLevel(user.getStudentRecord().getYearLevel());
+            student.setYearLevelCode(user.getStudentRecord().getYearLevelCode());
+            student.setYear(user.getStudentRecord().getYear());
+        }
+
         Intent intent = new Intent(requireContext(), AdminStudentDetailActivity.class);
         intent.putExtra("student", student);
         intent.putExtra("user", user);
@@ -1691,6 +1714,12 @@ public class UserManagementFragment extends Fragment implements
         student.setStatus(user.getStatus());
         if (user.getNumericId() != null) {
             student.setUserId(user.getNumericId());
+        }
+
+        if (user.getStudentRecord() != null && user.getStudentRecord().getYearLevel() != null) {
+            student.setYearLevel(user.getStudentRecord().getYearLevel());
+            student.setYearLevelCode(user.getStudentRecord().getYearLevelCode());
+            student.setYear(user.getStudentRecord().getYear());
         }
 
         Intent intent = new Intent(requireContext(), EditStudentActivity.class);

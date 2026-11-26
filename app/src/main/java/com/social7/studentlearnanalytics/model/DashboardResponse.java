@@ -1,6 +1,7 @@
 package com.social7.studentlearnanalytics.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 import java.util.List;
 
 public class DashboardResponse {
@@ -28,6 +29,9 @@ public class DashboardResponse {
         @SerializedName("student_id")
         private String studentId;
 
+        @SerializedName("academic_year")
+        private String academicYear;
+
         @SerializedName("overall_performance")
         private Object overallPerformance;
 
@@ -39,6 +43,9 @@ public class DashboardResponse {
 
         @SerializedName("quiz_score")
         private Object quizScore;
+
+        @SerializedName("exam_score")
+        private Object examScore;
 
         @SerializedName("gpa")
         private Object gpa;
@@ -154,18 +161,19 @@ public class DashboardResponse {
                     return Double.parseDouble(String.valueOf(predictions.get(0).confidenceScore).trim());
                 } catch (Exception ignored) {}
             }
-            return 0.85; // Default standard model confidence
+            return null;
         }
 
         public String getModelVersion() {
             if (predictions != null && !predictions.isEmpty() && predictions.get(0).modelVersion != null) {
                 return predictions.get(0).modelVersion;
             }
-            return "v1.0.0";
+            return null;
         }
 
         public Object getGpaValue() {
             if (gpa != null) return gpa;
+            if (gpaSummary != null && gpaSummary.currentSemesterGpa != null) return gpaSummary.currentSemesterGpa;
             if (gpaSummary != null && gpaSummary.semesterGpa != null) return gpaSummary.semesterGpa;
             if (gpaSummary != null && gpaSummary.cumulativeGpa != null) return gpaSummary.cumulativeGpa;
             return gpaRecord != null ? gpaRecord.gpa : null;
@@ -213,6 +221,21 @@ public class DashboardResponse {
             return getYearLevelFormatted();
         }
 
+        public String getYearLevelCode() {
+            return student != null ? student.getYearLevelCode() : "";
+        }
+
+        public String getYearLevelLabel() {
+            return student != null ? student.getYearLevelLabel() : getYearLevelFormatted();
+        }
+
+        public String getAcademicYear() {
+            if (student != null && !student.getAcademicYear().isEmpty()) {
+                return student.getAcademicYear();
+            }
+            return academicYear != null ? academicYear.trim() : "";
+        }
+
         public String getOverallPerformanceFormatted() {
             Object obj = (analytics != null && analytics.overallScore != null) ? analytics.overallScore : overallPerformance;
             return formatPercentage(obj);
@@ -243,7 +266,7 @@ public class DashboardResponse {
         }
 
         public String getExamScoreFormatted() {
-            Object obj = (analytics != null && analytics.examAvg != null) ? analytics.examAvg : null;
+            Object obj = (analytics != null && analytics.examAvg != null) ? analytics.examAvg : examScore;
             if (obj == null && examsSummary != null && examsSummary.average != null) {
                 obj = examsSummary.average;
             }
@@ -408,6 +431,9 @@ public class DashboardResponse {
         @SerializedName("student_id")
         private String studentId;
 
+        @SerializedName("academic_year")
+        private String academicYear;
+
         @SerializedName("major")
         private String major;
 
@@ -419,6 +445,15 @@ public class DashboardResponse {
 
         @SerializedName("year_level")
         private Object yearLevel;
+
+        @SerializedName("year_level_code")
+        private String yearLevelCode;
+
+        @SerializedName("year_level_label")
+        private String yearLevelLabel;
+
+        @SerializedName("semester")
+        private Object semester;
 
         public String getDisplayName() {
             if (user != null && user.name != null && !user.name.isEmpty()) {
@@ -453,18 +488,38 @@ public class DashboardResponse {
         }
 
         public String getYearLevelFormatted() {
-            if (yearLevel == null) return "Year 1";
-            String raw = String.valueOf(yearLevel).trim();
-            if (raw.isEmpty() || "null".equalsIgnoreCase(raw)) return "Year 1";
-            if (raw.endsWith(".0")) {
-                raw = raw.substring(0, raw.length() - 2);
+            Integer lvl = YearLevelHelper.parse(yearLevel);
+            if (lvl != null) {
+                return "Year " + lvl;
             }
-            if (raw.toLowerCase().contains("year")) return raw;
-            return "Year " + raw;
+            return "Year 1";
         }
 
         public String getYearLevel() {
             return getYearLevelFormatted();
+        }
+
+        public Integer getYearLevelNumber() {
+            return YearLevelHelper.parse(yearLevel);
+        }
+
+        public String getYearLevelCode() {
+            if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+                return yearLevelCode.trim();
+            }
+            String code = YearLevelHelper.toCode(yearLevel);
+            return code != null ? code : "";
+        }
+
+        public String getYearLevelLabel() {
+            if (yearLevelLabel != null && !yearLevelLabel.trim().isEmpty()) {
+                return yearLevelLabel.trim();
+            }
+            return getYearLevelFormatted();
+        }
+
+        public String getAcademicYear() {
+            return academicYear != null ? academicYear.trim() : "";
         }
     }
 
@@ -593,8 +648,14 @@ public class DashboardResponse {
     }
 
     public static class GpaSummaryInfo {
+        @SerializedName("current_semester_gpa")
+        public Float currentSemesterGpa;
+
         @SerializedName("semester_gpa")
         public Float semesterGpa;
+
+        @SerializedName("semester_average")
+        public Float semesterAverage;
 
         @SerializedName("cumulative_gpa")
         public Float cumulativeGpa;

@@ -39,6 +39,7 @@ public class AtRiskStudentAdapter extends RecyclerView.Adapter<AtRiskStudentAdap
         public String avatarBgColor;
         public String avatarTextColor;
         public List<String> categories;
+        public int numericStudentId = 0;
 
         public AtRiskStudent(String id, String name, String program, String year, String riskBadge,
                               String gpa, String avgScore, String absence,

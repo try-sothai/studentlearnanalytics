@@ -1,7 +1,5 @@
 package com.social7.studentlearnanalytics.student;
 
-
-import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.localization.ChartFontHelper;
 import com.social7.studentlearnanalytics.model.Course;
 import com.social7.studentlearnanalytics.model.DashboardResponse;
 import com.social7.studentlearnanalytics.network.ApiClient;
@@ -32,9 +31,9 @@ import com.social7.studentlearnanalytics.student.attendance.AttendanceDetailActi
 import com.social7.studentlearnanalytics.student.quiz.QuizDetailActivity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,16 +62,21 @@ public class OverallPerformanceActivity extends AppCompatActivity {
     private Spinner spinnerSemester;
 
     private String passedSemester = null;
+    private boolean appliedPassedSemester = false;
+    private Long selectedSemesterId = null;
+    private final Map<String, Long> discoveredSemesters = new LinkedHashMap<>();
+    private final List<String> semesterLabels = new ArrayList<>();
+    private final List<Long> semesterIds = new ArrayList<>();
+    private boolean suppressSemesterSelect = false;
     private DashboardResponse.DashboardData cachedData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overall_performance);
-        
-        getWindow().setStatusBarColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
+
         getWindow().setNavigationBarColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
-        getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
         if (getIntent() != null && getIntent().hasExtra("selected_semester")) {
             passedSemester = getIntent().getStringExtra("selected_semester");
@@ -162,7 +166,7 @@ public class OverallPerformanceActivity extends AppCompatActivity {
     private void fetchPerformanceData() {
         showLoading();
 
-        ApiClient.getApiService(this).getStudentDashboard().enqueue(new Callback<DashboardResponse>() {
+        ApiClient.getApiService(this).getStudentDashboardFiltered(selectedSemesterId, null).enqueue(new Callback<DashboardResponse>() {
             @Override
             public void onResponse(@NonNull Call<DashboardResponse> call, @NonNull Response<DashboardResponse> response) {
                 if (isFinishing() || isDestroyed()) return;
@@ -278,79 +282,75 @@ public class OverallPerformanceActivity extends AppCompatActivity {
     private void setupSemesterSpinner(Spinner spinner, List<DashboardResponse.EnrollmentInfo> enrollments) {
         if (spinner == null) return;
 
-        List<String> semesters = new ArrayList<>();
-        if (enrollments != null && !enrollments.isEmpty()) {
-            Set<String> set = new HashSet<>();
+        if (enrollments != null) {
             for (DashboardResponse.EnrollmentInfo info : enrollments) {
-                if (info != null && info.semester != null && info.semester.name != null && !info.semester.name.trim().isEmpty()) {
-                    set.add(info.semester.name.trim());
+                if (info != null && info.semester != null) {
+                    String semName = info.semester.getDisplayName();
+                    Long semId = info.semester.getIdAsLong();
+                    if (!semName.isEmpty() && !discoveredSemesters.containsKey(semName)) {
+                        discoveredSemesters.put(semName, semId);
+                    }
                 }
             }
-            semesters.addAll(set);
         }
 
-        if (passedSemester != null && !passedSemester.trim().isEmpty()) {
-            if (!semesters.contains(passedSemester.trim())) {
-                semesters.add(0, passedSemester.trim());
+        semesterLabels.clear();
+        semesterIds.clear();
+        semesterLabels.add("All Semesters");
+        semesterIds.add(null);
+
+        for (Map.Entry<String, Long> entry : discoveredSemesters.entrySet()) {
+            semesterLabels.add(entry.getKey());
+            semesterIds.add(entry.getValue());
+        }
+
+        if (!appliedPassedSemester && passedSemester != null && !passedSemester.trim().isEmpty()) {
+            appliedPassedSemester = true;
+            String target = passedSemester.trim();
+            for (int i = 1; i < semesterLabels.size(); i++) {
+                if (semesterLabels.get(i).equalsIgnoreCase(target)) {
+                    Long matchedId = semesterIds.get(i);
+                    if (matchedId != null && !matchedId.equals(selectedSemesterId)) {
+                        selectedSemesterId = matchedId;
+                        fetchPerformanceData();
+                        return;
+                    }
+                    break;
+                }
             }
         }
 
-        if (semesters.isEmpty()) {
-            semesters.add("Semester 1, 2024");
-            semesters.add("Semester 2, 2024");
-            semesters.add("Semester 1, 2025");
+        int targetPos = 0;
+        if (selectedSemesterId != null) {
+            for (int i = 1; i < semesterIds.size(); i++) {
+                if (selectedSemesterId.equals(semesterIds.get(i))) {
+                    targetPos = i;
+                    break;
+                }
+            }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, semesters);
+        suppressSemesterSelect = true;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, semesterLabels);
         spinner.setAdapter(adapter);
-
-        if (passedSemester != null) {
-            int pos = adapter.getPosition(passedSemester.trim());
-            if (pos >= 0) {
-                spinner.setSelection(pos);
-            }
-        }
+        spinner.setSelection(targetPos, false);
+        spinner.post(() -> suppressSemesterSelect = false);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = (String) parent.getItemAtPosition(position);
-                filterSubjectListBySemester(selected);
+                if (suppressSemesterSelect) return;
+                Long newId = (position >= 0 && position < semesterIds.size()) ? semesterIds.get(position) : null;
+                if ((newId == null && selectedSemesterId == null) || (newId != null && newId.equals(selectedSemesterId))) {
+                    return;
+                }
+                selectedSemesterId = newId;
+                fetchPerformanceData();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-    }
-
-    private void filterSubjectListBySemester(String selectedSemester) {
-        if (cachedData == null || layoutSubjectList == null) return;
-
-        List<DashboardResponse.EnrollmentInfo> allEnrollments = cachedData.getEnrollments();
-        if (allEnrollments == null || allEnrollments.isEmpty()) {
-            populateSubjectList(layoutSubjectList, null);
-            return;
-        }
-
-        if (selectedSemester == null || selectedSemester.trim().isEmpty() || "All Semesters".equalsIgnoreCase(selectedSemester.trim())) {
-            populateSubjectList(layoutSubjectList, allEnrollments);
-            return;
-        }
-
-        List<DashboardResponse.EnrollmentInfo> filtered = new ArrayList<>();
-        for (DashboardResponse.EnrollmentInfo info : allEnrollments) {
-            if (info != null && info.semester != null) {
-                String semName = info.semester.name != null ? info.semester.name.trim().toLowerCase() : "";
-                String semId = info.semester.id != null ? String.valueOf(info.semester.id).trim().toLowerCase() : "";
-                String target = selectedSemester.trim().toLowerCase();
-
-                if (!target.isEmpty() && (semName.contains(target) || target.contains(semName) || semId.equals(target))) {
-                    filtered.add(info);
-                }
-            }
-        }
-
-        populateSubjectList(layoutSubjectList, filtered);
     }
 
     private void populateKeyInsights(TextView tvInsight, DashboardResponse.DashboardData data) {
@@ -415,8 +415,8 @@ public class OverallPerformanceActivity extends AppCompatActivity {
 
             TextView tvName = new TextView(this);
             String name = info.course.courseName != null ? info.course.courseName : "Course";
-            String code = info.course.courseCode != null ? info.course.courseCode : "CS101";
-            if (info.course.courseCode != null && !info.course.courseCode.isEmpty()) {
+            String code = info.course.courseCode != null ? info.course.courseCode : "";
+            if (!code.isEmpty()) {
                 name = code + " - " + name;
             }
             if (info.finalScore != null) {
@@ -444,16 +444,30 @@ public class OverallPerformanceActivity extends AppCompatActivity {
             pb.setProgress(progressVal);
             pb.setProgressTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#5B3DF5")));
 
-            // Make subject row clickable -> opens CourseDetailActivity
-            final String finalCName = info.course.courseName != null ? info.course.courseName : "Course";
+            // Make subject row clickable -> opens CourseDetailActivity with real API fields
+            final String finalCName = info.course.courseName != null ? info.course.courseName : "";
             final String finalCCode = code;
-            final String finalCId = info.course.id != null ? info.course.id : "1";
+            final String finalCId = info.course.id != null ? info.course.id : "";
             final int finalScore = progressVal;
+            final int credits = info.course.credit != null ? Math.round(info.course.credit) : 0;
+            final String teacherName = (info.course.teacher != null
+                    && info.course.teacher.user != null
+                    && info.course.teacher.user.name != null)
+                    ? info.course.teacher.user.name.trim()
+                    : "";
+            final String dept = (cachedData != null) ? cachedData.getMajorOrDepartment() : "";
+            final String grade = info.grade != null ? info.grade.trim() : "";
 
             row.setOnClickListener(v -> {
-                Course course = new Course(finalCId, finalCCode, finalCName, "Assigned Instructor", finalScore, 3, "Core", 88, 85, 78, 76, "Computer Science");
+                Course course = new Course(finalCId, finalCCode, finalCName, teacherName, finalScore, credits, "", 0, 0, 0, 0, dept);
                 Intent intent = new Intent(OverallPerformanceActivity.this, CourseDetailActivity.class);
                 intent.putExtra("course", course);
+                if (!finalCId.isEmpty()) intent.putExtra("course_id", finalCId);
+                if (!finalCCode.isEmpty()) intent.putExtra("course_code", finalCCode);
+                if (!finalCName.isEmpty()) intent.putExtra("course_title", finalCName);
+                if (!teacherName.isEmpty()) intent.putExtra("instructor", teacherName);
+                if (!dept.isEmpty()) intent.putExtra("course_department", dept);
+                if (!grade.isEmpty()) intent.putExtra("course_grade", grade);
                 startActivity(intent);
             });
 
@@ -466,19 +480,26 @@ public class OverallPerformanceActivity extends AppCompatActivity {
     private void setupBarChart(BarChart chart, List<Float> values, List<String> labels) {
         if (chart == null) return;
 
-        if (values == null || values.isEmpty()) {
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> validLabels = new ArrayList<>();
+        if (values != null) {
+            for (int i = 0; i < values.size(); i++) {
+                Float val = values.get(i);
+                if (val == null) continue;
+                int xIdx = entries.size();
+                entries.add(new BarEntry(xIdx, val));
+                String lbl = (labels != null && i < labels.size() && labels.get(i) != null) ? labels.get(i) : String.valueOf(xIdx + 1);
+                validLabels.add(lbl);
+            }
+        }
+
+        if (entries.isEmpty()) {
             chart.clear();
             chart.setNoDataText("No trend data available");
             chart.setNoDataTextColor(Color.parseColor("#64748B"));
             ChartFontHelper.applyKhmerFont(chart.getContext(), chart);
             chart.invalidate();
             return;
-        }
-
-        List<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < values.size(); i++) {
-            Float val = values.get(i);
-            entries.add(new BarEntry(i, val != null ? val : 0f));
         }
 
         BarDataSet dataSet = new BarDataSet(entries, getString(R.string.performance_trend));
@@ -496,14 +517,15 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         chart.getXAxis().setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
         chart.getXAxis().setTextColor(Color.parseColor("#64748B"));
         chart.getXAxis().setAxisLineColor(Color.parseColor("#E8E4FA"));
+        chart.getXAxis().setGranularity(1f);
 
         com.github.mikephil.charting.components.YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setTextColor(Color.parseColor("#64748B"));
         leftAxis.setGridColor(Color.parseColor("#E8E4FA"));
         leftAxis.setAxisLineColor(Color.parseColor("#E8E4FA"));
 
-        if (labels != null && !labels.isEmpty()) {
-            chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        if (!validLabels.isEmpty()) {
+            chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(validLabels));
         }
 
         chart.animateY(1000);
@@ -511,4 +533,3 @@ public class OverallPerformanceActivity extends AppCompatActivity {
         chart.invalidate();
     }
 }
-

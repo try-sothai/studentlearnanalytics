@@ -89,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Senior Lecturer • Computer Science Dept"
+                            android:text="Senior Lecturer • Computer Science Faculty"
                             android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>

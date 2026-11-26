@@ -486,23 +486,29 @@ public class AdminDashboardFragment extends Fragment {
         JsonArray seriesArray = data.getAsJsonArray("series");
         
         JsonArray newArr = new JsonArray();
+        int prevTotal = 0;
         for (int i = 0; i < seriesArray.size(); i++) {
             if (!seriesArray.get(i).isJsonObject()) continue;
             JsonObject item = seriesArray.get(i).getAsJsonObject();
-            JsonObject fakeAy = new JsonObject();
-            fakeAy.addProperty("academic_year_name", com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "academic_year", "Year"));
-            fakeAy.addProperty("has_data", true);
+            int totalStu = com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0);
+            int activeStu = com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "active_learners", 0);
+            double growthPct = com.social7.studentlearnanalytics.utils.UiUtils.calculateGrowthPercentage(totalStu, prevTotal);
+            if (totalStu > 0) prevTotal = totalStu;
+
+            JsonObject aySummary = new JsonObject();
+            aySummary.addProperty("academic_year_name", com.social7.studentlearnanalytics.utils.UiUtils.optString(item, "academic_year", "Year"));
+            aySummary.addProperty("has_data", true);
             JsonObject regUsers = new JsonObject();
-            regUsers.addProperty("total", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0));
-            fakeAy.add("registered_users", regUsers);
-            
+            regUsers.addProperty("total", totalStu);
+            aySummary.add("registered_users", regUsers);
+
             JsonObject activeUsers = new JsonObject();
-            activeUsers.addProperty("total", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "active_learners", 0));
-            fakeAy.add("active_users", activeUsers);
-            
-            fakeAy.addProperty("enrolled_students", com.social7.studentlearnanalytics.utils.UiUtils.optInt(item, "total_students", 0));
-            fakeAy.addProperty("user_growth_percentage", 5.0);
-            newArr.add(fakeAy);
+            activeUsers.addProperty("total", activeStu);
+            aySummary.add("active_users", activeUsers);
+
+            aySummary.addProperty("enrolled_students", totalStu);
+            aySummary.addProperty("user_growth_percentage", growthPct);
+            newArr.add(aySummary);
         }
         latestAnnualAnalyticsObj = new JsonObject();
         latestAnnualAnalyticsObj.add("all_years_analytics", newArr);

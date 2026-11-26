@@ -45,6 +45,8 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
         public boolean hasFile = false;
         public boolean fileExists = false;
         public String versionLabel = "Latest Submission";
+        public int versionNumber = 1;
+        public boolean isLate = false;
     }
 
     public interface OnStudentSubmissionClickListener {
@@ -142,8 +144,13 @@ public class StudentSubmissionAdapter extends RecyclerView.Adapter<StudentSubmis
             }
 
             if (tvSubmittedAt != null) {
+                String verTag = "v" + Math.max(1, item.versionNumber)
+                        + (item.versionLabel != null && !item.versionLabel.isEmpty() ? (" • " + item.versionLabel) : "");
+                if (item.isLate) {
+                    verTag += " • Late";
+                }
                 tvSubmittedAt.setText("Submitted: " + (item.submittedAt.isEmpty() ? "-" : item.submittedAt)
-                        + " • " + item.versionLabel);
+                        + " • " + verTag);
             }
 
             if (tvGradingStatus != null) {

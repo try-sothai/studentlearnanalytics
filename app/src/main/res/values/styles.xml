@@ -17,4 +17,23 @@
         <item name="android:background">@drawable/bg_circle_avatar</item>
     </style>
 
+    <!-- Reusable SLAS Card & Status Pill Styles -->
+    <style name="SlasCard" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/slas_surface</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/slas_border</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="SlasStatusPill">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
 </resources>

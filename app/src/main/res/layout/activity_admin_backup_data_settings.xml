@@ -90,22 +90,22 @@
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/database_size" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="142.8 MB" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvBackupDbSize" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="—" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_records" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_12_450_rows" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvBackupTotalRecords" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="—" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/last_backup" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:id="@+id/tvLastBackupDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mar 10, 2026" android:textColor="@color/admin_text_primary" android:textSize="16sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Status / Latency" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                            <TextView android:id="@+id/tvLastBackupDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking..." android:textColor="@color/admin_text_primary" android:textSize="15sp" android:textStyle="bold"/>
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/database_engine" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PostgreSQL 15" android:textColor="@color/admin_purple_accent" android:textSize="16sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvBackupDbEngine" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="—" android:textColor="@color/admin_purple_accent" android:textSize="15sp" android:textStyle="bold"/>
                         </LinearLayout>
                     </GridLayout>
 
@@ -115,7 +115,7 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="16dp"
                         android:backgroundTint="@color/admin_primary_blue"
-                        android:text="@string/create_database_backup_now"
+                        android:text="Refresh Live Database Status"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="14sp"
@@ -125,7 +125,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Backup History Card -->
+            <!-- Data Export & Server Backup Policy Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/recent_backup_archives"
+                        android:text="Server Backups &amp; Data Exports"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -156,25 +156,29 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
-                    <!-- Backup Record 1 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvBackupPolicySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="3dp"
+                        android:text="Full MySQL database snapshots (mysqldump) are managed securely on the backend server host. To export academic datasets (Students, Teachers, Courses, Analytics) as CSV or PDF reports from mobile, open Reports &amp; Exports below."
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="slas_backup_20260310.sql" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mar 10, 2026 02:00 AM • 142.8 MB • Auto" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
+                            <TextView android:id="@+id/tvBackupSummaryEntities" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Loading entity totals..." android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
+                            <TextView android:id="@+id/tvBackupDatabaseName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Schema: —" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
                         </LinearLayout>
-                        <TextView android:id="@+id/btnDownloadBackup1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:text="@string/download" android:textColor="@color/admin_primary_blue" android:textSize="12sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/btnDownloadBackup1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:text="Export Reports" android:textColor="@color/admin_primary_blue" android:textSize="12sp" android:textStyle="bold"/>
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginBottom="10dp" android:background="@color/admin_border"/>
-
-                    <!-- Backup Record 2 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="slas_backup_20260303.sql" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mar 03, 2026 02:00 AM • 139.4 MB • Auto" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                        </LinearLayout>
-                        <TextView android:id="@+id/btnDownloadBackup2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_badge_core" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:text="@string/download" android:textColor="@color/admin_primary_blue" android:textSize="12sp" android:textStyle="bold"/>
-                    </LinearLayout>
+                    <TextView android:id="@+id/btnDownloadBackup2" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

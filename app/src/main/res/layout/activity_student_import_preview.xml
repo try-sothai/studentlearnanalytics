@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invalid Dept / Program" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invalid Faculty / Major" android:textSize="10sp" android:textColor="@color/admin_text_secondary"/>
                     <TextView android:id="@+id/tvInvalidDeptProgramRows" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/warning_orange"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

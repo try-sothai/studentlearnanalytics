@@ -152,7 +152,7 @@ public class StudentDashboardFragment extends Fragment {
         // Risk Level Card Navigation Listeners
         View cardRiskLevel = view.findViewById(R.id.cardRiskLevel);
         if (cardRiskLevel != null) {
-            cardRiskLevel.setOnClickListener(v -> startActivity(new Intent(getActivity(), PredictionDetailActivity.class)));
+            cardRiskLevel.setOnClickListener(v -> startActivity(new Intent(getActivity(), RiskAnalysisActivity.class)));
         }
 
         View btnRiskDetails = view.findViewById(R.id.btnRiskDetails);
@@ -188,12 +188,12 @@ public class StudentDashboardFragment extends Fragment {
 
         View actionExams = view.findViewById(R.id.actionExams);
         if (actionExams != null) {
-            actionExams.setOnClickListener(v -> startActivity(new Intent(getActivity(), GradesOverviewActivity.class)));
+            actionExams.setOnClickListener(v -> startActivity(new Intent(getActivity(), ExamDetailActivity.class)));
         }
 
         View actionAnalytics = view.findViewById(R.id.actionAnalytics);
         if (actionAnalytics != null) {
-            actionAnalytics.setOnClickListener(v -> startActivity(new Intent(getActivity(), com.social7.studentlearnanalytics.student.recommendations.SmartRecommendationsActivity.class)));
+            actionAnalytics.setOnClickListener(v -> startActivity(new Intent(getActivity(), OverallPerformanceActivity.class)));
         }
 
         // Recent Activities Section Listeners
@@ -277,12 +277,17 @@ public class StudentDashboardFragment extends Fragment {
         TextView tvDepartmentYear = root.findViewById(R.id.tvDepartmentYear);
         if (tvDepartmentYear != null) {
             String majorOrDept = data.getMajorOrDepartment();
-            String yearLvl = data.getYearLevelFormatted();
+            Integer ylNum = data.getStudent() != null ? data.getStudent().getYearLevelNumber() : null;
+            String yearLvl = ylNum != null
+                    ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(getContext(), ylNum)
+                    : data.getYearLevelFormatted();
+            String ay = data.getAcademicYear();
+            String yearAndAy = (ay != null && !ay.isEmpty()) ? (yearLvl + " • " + ay) : yearLvl;
 
             if (majorOrDept != null && !majorOrDept.trim().isEmpty()) {
-                tvDepartmentYear.setText(majorOrDept.trim() + " | " + yearLvl);
+                tvDepartmentYear.setText(majorOrDept.trim() + " | " + yearAndAy);
             } else {
-                tvDepartmentYear.setText(getString(R.string.major_info_unavailable_sep) + yearLvl);
+                tvDepartmentYear.setText(getString(R.string.major_info_unavailable_sep) + yearAndAy);
             }
         }
 
@@ -291,14 +296,19 @@ public class StudentDashboardFragment extends Fragment {
         }
 
         TextView tvPerfTrend = root.findViewById(R.id.tvPerfTrend);
-        if (tvPerfTrend != null && data.getAnalytics() != null && data.getAnalytics().performanceChange != null) {
-            float change = data.getAnalytics().performanceChange;
-            if (change >= 0) {
-                tvPerfTrend.setText(String.format(Locale.US, "▲ +%.1f%%", change));
-                tvPerfTrend.setTextColor(Color.parseColor("#10B981"));
+        if (tvPerfTrend != null) {
+            if (data.getAnalytics() != null && data.getAnalytics().performanceChange != null) {
+                float change = data.getAnalytics().performanceChange;
+                tvPerfTrend.setVisibility(View.VISIBLE);
+                if (change >= 0) {
+                    tvPerfTrend.setText(String.format(Locale.US, "▲ +%.1f%%", change));
+                    tvPerfTrend.setTextColor(Color.parseColor("#10B981"));
+                } else {
+                    tvPerfTrend.setText(String.format(Locale.US, "▼ %.1f%%", change));
+                    tvPerfTrend.setTextColor(Color.parseColor("#FCA5A5"));
+                }
             } else {
-                tvPerfTrend.setText(String.format(Locale.US, "▼ %.1f%%", change));
-                tvPerfTrend.setTextColor(Color.parseColor("#FCA5A5"));
+                tvPerfTrend.setVisibility(View.GONE);
             }
         }
 
@@ -348,12 +358,15 @@ public class StudentDashboardFragment extends Fragment {
             tvMetricGpa.setText(data.getGpaFormatted());
         }
         TextView tvGpaSub = root.findViewById(R.id.tvGpaSub);
-        if (tvGpaSub != null && data.getGpaSummary() != null) {
+        if (tvGpaSub != null) {
             DashboardResponse.GpaSummaryInfo gpaSum = data.getGpaSummary();
-            if (gpaSum.academicStanding != null && !gpaSum.academicStanding.isEmpty()) {
+            if (gpaSum != null && gpaSum.academicStanding != null && !gpaSum.academicStanding.isEmpty()) {
                 String standing = gpaSum.academicStanding.substring(0, 1).toUpperCase() + gpaSum.academicStanding.substring(1);
                 tvGpaSub.setText(standing);
                 tvGpaSub.setTextColor(Color.parseColor("#10B981"));
+            } else {
+                tvGpaSub.setText("No grades yet");
+                tvGpaSub.setTextColor(Color.parseColor("#64748B"));
             }
         }
 
@@ -383,9 +396,16 @@ public class StudentDashboardFragment extends Fragment {
                 }
                 if (tvConfidence != null) {
                     Double conf = data.getPredictionConfidence();
-                    int confPct = (int) Math.round((conf != null ? conf : 0.85) * 100);
-                    tvConfidence.setText(getString(R.string.model_confidence_prefix) + confPct + "% (" + data.getModelVersion() + ")");
-                    tvConfidence.setTextColor(Color.parseColor("#10B981"));
+                    String ver = data.getModelVersion();
+                    if (conf != null) {
+                        int confPct = (int) Math.round(conf * 100);
+                        String verSuffix = (ver != null && !ver.isEmpty()) ? (" (" + ver + ")") : "";
+                        tvConfidence.setText(getString(R.string.model_confidence_prefix) + confPct + "%" + verSuffix);
+                        tvConfidence.setTextColor(Color.parseColor("#10B981"));
+                    } else {
+                        tvConfidence.setText(getString(R.string.model_confidence_prefix) + "N/A");
+                        tvConfidence.setTextColor(Color.parseColor("#64748B"));
+                    }
                 }
             }
         }
@@ -427,6 +447,8 @@ public class StudentDashboardFragment extends Fragment {
 
         if (data.getChartData() != null && !data.getChartData().isEmpty()) {
             setupPerformanceChart(lineChartPerformance, data.getChartData(), data.getChartLabels());
+        } else {
+            setupPerformanceChart(lineChartPerformance, null, null);
         }
     }
 

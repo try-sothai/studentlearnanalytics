@@ -1,5 +1,6 @@
 package com.social7.studentlearnanalytics.model;
 
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 import java.io.Serializable;
 
 public class ClassModel implements Serializable {
@@ -17,6 +18,8 @@ public class ClassModel implements Serializable {
     private int buildingId;
     private int floorId;
     private int yearLevel = 1;
+    private String yearLevelCode;
+    private String yearLevelLabel;
     private int capacity = 40;
     private String buildingName;
     private String floorName;
@@ -77,7 +80,27 @@ public class ClassModel implements Serializable {
     public void setFloorId(int floorId) { this.floorId = floorId; }
 
     public int getYearLevel() { return yearLevel; }
-    public void setYearLevel(int yearLevel) { this.yearLevel = yearLevel; }
+    public void setYearLevel(int yearLevel) {
+        Integer parsed = YearLevelHelper.parse(yearLevel);
+        this.yearLevel = parsed != null ? parsed : yearLevel;
+    }
+
+    public String getYearLevelCode() {
+        if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+            return yearLevelCode.trim();
+        }
+        String code = YearLevelHelper.toCode(yearLevel);
+        return code != null ? code : "";
+    }
+    public void setYearLevelCode(String yearLevelCode) { this.yearLevelCode = yearLevelCode; }
+
+    public String getYearLevelLabel() {
+        if (yearLevelLabel != null && !yearLevelLabel.trim().isEmpty()) {
+            return yearLevelLabel.trim();
+        }
+        return YearLevelHelper.toFullLabel(null, yearLevel);
+    }
+    public void setYearLevelLabel(String yearLevelLabel) { this.yearLevelLabel = yearLevelLabel; }
 
     public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) { this.capacity = capacity; }

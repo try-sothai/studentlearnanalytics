@@ -300,6 +300,14 @@ public class AdminMainActivity extends AppCompatActivity {
                 .setTitle(R.string.log_out_6a80a6)
                 .setMessage(R.string.are_you_sure_you_want_to_log_out_of_your_a_4f0898)
                 .setPositiveButton(R.string.log_out, (dialog, which) -> {
+                    com.social7.studentlearnanalytics.network.ApiClient.getApiService(this)
+                            .logout()
+                            .enqueue(new retrofit2.Callback<com.google.gson.JsonObject>() {
+                                @Override
+                                public void onResponse(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull retrofit2.Response<com.google.gson.JsonObject> response) {}
+                                @Override
+                                public void onFailure(@NonNull retrofit2.Call<com.google.gson.JsonObject> call, @NonNull Throwable t) {}
+                            });
                     if (sessionManager != null) {
                         sessionManager.clearSession();
                     }

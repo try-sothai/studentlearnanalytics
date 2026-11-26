@@ -1,16 +1,23 @@
 package com.social7.studentlearnanalytics.admin;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +25,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,15 +43,18 @@ import com.social7.studentlearnanalytics.admin.classes.AssignTeacherClassActivit
 import com.social7.studentlearnanalytics.admin.classes.CurriculumAuditAdapter;
 import com.social7.studentlearnanalytics.admin.classes.RecordSelectorActivity;
 import com.social7.studentlearnanalytics.admin.courses.AddCourseActivity;
+import com.social7.studentlearnanalytics.admin.courses.AdminCourseDetailActivity;
 import com.social7.studentlearnanalytics.admin.courses.CourseAdapter;
 import com.social7.studentlearnanalytics.admin.courses.CourseAssignmentAdapter;
 import com.social7.studentlearnanalytics.admin.courses.CourseCategoryAdapter;
 import com.social7.studentlearnanalytics.model.Course;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -82,6 +95,14 @@ public class CourseManagementFragment extends Fragment {
     private MaterialButton btnResetFilter;
     private ProgressBar pbLoadingCourses;
 
+    private View layoutCategoriesContainer;
+    private View layoutCategoriesEmptyState;
+    private TextView tvCategoriesEmptyTitle;
+    private TextView tvCategoriesEmptyMessage;
+    private MaterialButton btnCategoriesEmptyAction;
+    private ProgressBar pbLoadingCategories;
+    private String lastCategoriesApiError = null;
+
     private TextView tvStatTotalCourses;
     private TextView tvStatActiveCourses;
     private TextView tvStatInactiveCourses;
@@ -98,6 +119,8 @@ public class CourseManagementFragment extends Fragment {
 
     private MaterialButton btnTabAllCourses;
     private MaterialButton btnTabCategories;
+    private MaterialButton btnTabFaculties;
+    private MaterialButton btnTabMajors;
     private MaterialButton btnTabCurriculum;
     private MaterialButton btnTabAssignments;
 
@@ -107,7 +130,8 @@ public class CourseManagementFragment extends Fragment {
 
     private int currentPage = 1;
     private final int itemsPerPage = 8;
-    private int selectedTab = 0; // 0=Course List, 1=Categories, 2=Curriculum, 3=Assignments
+    // 0=Course List, 1=Course Categories, 2=Curriculum, 3=Assignments, 4=Faculties, 5=Majors
+    private int selectedTab = 0;
 
     private String selectedStatusFilter = "ALL";
     private int filterDeptId = -1;
@@ -213,6 +237,13 @@ public class CourseManagementFragment extends Fragment {
         }
 
         rvCategories = view.findViewById(R.id.rvCategories);
+        layoutCategoriesContainer = view.findViewById(R.id.layoutCategoriesContainer);
+        layoutCategoriesEmptyState = view.findViewById(R.id.layoutCategoriesEmptyState);
+        tvCategoriesEmptyTitle = view.findViewById(R.id.tvCategoriesEmptyTitle);
+        tvCategoriesEmptyMessage = view.findViewById(R.id.tvCategoriesEmptyMessage);
+        btnCategoriesEmptyAction = view.findViewById(R.id.btnCategoriesEmptyAction);
+        pbLoadingCategories = view.findViewById(R.id.pbLoadingCategories);
+
         etSearchCategory = view.findViewById(R.id.etSearchCategory);
         if (etSearchCategory != null) {
             etSearchCategory.addTextChangedListener(new TextWatcher() {
@@ -221,11 +252,27 @@ public class CourseManagementFragment extends Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (categoryAdapter != null) categoryAdapter.filter(s.toString());
+                    if (categoryAdapter != null) {
+                        categoryAdapter.filter(s != null ? s.toString() : "");
+                        updateCategoriesEmptyState();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {}
+            });
+        }
+
+        if (btnCategoriesEmptyAction != null) {
+            btnCategoriesEmptyAction.setOnClickListener(v -> {
+                if (lastCategoriesApiError != null) {
+                    loadCategoriesData();
+                } else if (etSearchCategory != null && etSearchCategory.getText() != null
+                        && !etSearchCategory.getText().toString().trim().isEmpty()) {
+                    etSearchCategory.setText("");
+                } else {
+                    showCategoryFormDialog(null);
+                }
             });
         }
 
@@ -247,6 +294,7 @@ public class CourseManagementFragment extends Fragment {
         }
 
         View btnAddCourse = view.findViewById(R.id.btnAddCourse);
+        View btnAddCategory = view.findViewById(R.id.btnAddCategory);
         View btnAddAssignment = view.findViewById(R.id.btnAddAssignment);
 
         layoutSummaryCards = view.findViewById(R.id.layoutSummaryCards);
@@ -274,6 +322,8 @@ public class CourseManagementFragment extends Fragment {
 
         btnTabAllCourses = view.findViewById(R.id.btnTabCourseList);
         btnTabCategories = view.findViewById(R.id.btnTabCategories);
+        btnTabFaculties = view.findViewById(R.id.btnTabFaculties);
+        btnTabMajors = view.findViewById(R.id.btnTabMajors);
         btnTabCurriculum = view.findViewById(R.id.btnTabCurriculum);
         btnTabAssignments = view.findViewById(R.id.btnTabAssignments);
 
@@ -316,6 +366,10 @@ public class CourseManagementFragment extends Fragment {
             });
         }
 
+        if (btnAddCategory != null) {
+            btnAddCategory.setOnClickListener(v -> showCategoryFormDialog(null));
+        }
+
         if (btnAddAssignment != null) {
             btnAddAssignment.setOnClickListener(v -> {
                 Intent intent = new Intent(requireContext(), AssignTeacherClassActivity.class);
@@ -345,12 +399,34 @@ public class CourseManagementFragment extends Fragment {
         if (btnTabCategories != null) {
             btnTabCategories.setOnClickListener(v -> selectSectionTab(1));
         }
+        if (btnTabFaculties != null) {
+            btnTabFaculties.setOnClickListener(v -> selectSectionTab(4));
+        }
+        if (btnTabMajors != null) {
+            btnTabMajors.setOnClickListener(v -> selectSectionTab(5));
+        }
         if (btnTabCurriculum != null) {
             btnTabCurriculum.setOnClickListener(v -> selectSectionTab(2));
         }
         if (btnTabAssignments != null) {
             btnTabAssignments.setOnClickListener(v -> selectSectionTab(3));
         }
+    }
+
+    private boolean isCatalogEntityTab(int tabIndex) {
+        return tabIndex == 1 || tabIndex == 4 || tabIndex == 5;
+    }
+
+    private String getCatalogSingularLabel() {
+        if (selectedTab == 4) return "Faculty";
+        if (selectedTab == 5) return "Major";
+        return "Course Category";
+    }
+
+    private String getCatalogPluralLabel() {
+        if (selectedTab == 4) return "Faculties";
+        if (selectedTab == 5) return "Majors";
+        return "Categories";
     }
 
     private void selectSectionTab(int tabIndex) {
@@ -363,11 +439,15 @@ public class CourseManagementFragment extends Fragment {
         com.google.android.material.appbar.AppBarLayout appBar = root.findViewById(R.id.appBarCourses);
         if (appBar != null) appBar.setExpanded(true, false);
 
-        MaterialButton[] tabs = new MaterialButton[]{
-                btnTabAllCourses, btnTabCategories, btnTabCurriculum, btnTabAssignments
-        };
-        if (tabIndex >= 0 && tabIndex < tabs.length) {
-            com.social7.studentlearnanalytics.utils.UiUtils.scrollToTab(tabs[tabIndex]);
+        MaterialButton targetBtn = null;
+        if (tabIndex == 0) targetBtn = btnTabAllCourses;
+        else if (tabIndex == 1) targetBtn = btnTabCategories;
+        else if (tabIndex == 4) targetBtn = btnTabFaculties;
+        else if (tabIndex == 5) targetBtn = btnTabMajors;
+        else if (tabIndex == 2) targetBtn = btnTabCurriculum;
+        else if (tabIndex == 3) targetBtn = btnTabAssignments;
+        if (targetBtn != null) {
+            com.social7.studentlearnanalytics.utils.UiUtils.scrollToTab(targetBtn);
         }
 
         View ctrlList = root.findViewById(R.id.layoutCourseListControls);
@@ -375,21 +455,39 @@ public class CourseManagementFragment extends Fragment {
         View ctrlCurr = root.findViewById(R.id.layoutCurriculumControls);
         View ctrlAssign = root.findViewById(R.id.layoutAssignmentsControls);
 
+        boolean isCatTab = isCatalogEntityTab(tabIndex);
         if (ctrlList != null) ctrlList.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
-        if (ctrlCat != null) ctrlCat.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
+        if (ctrlCat != null) ctrlCat.setVisibility(isCatTab ? View.VISIBLE : View.GONE);
         if (ctrlCurr != null) ctrlCurr.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
         if (ctrlAssign != null) ctrlAssign.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
 
         View layoutCourseList = root.findViewById(R.id.layoutCourseListContainer);
         if (layoutCourseList != null) layoutCourseList.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
-        if (rvCategories != null) rvCategories.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
+        if (layoutCategoriesContainer != null) layoutCategoriesContainer.setVisibility(isCatTab ? View.VISIBLE : View.GONE);
+        if (rvCategories != null) rvCategories.setVisibility(isCatTab ? View.VISIBLE : View.GONE);
         if (rvCurriculumAudit != null) rvCurriculumAudit.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
         if (rvAssignments != null) rvAssignments.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
         if (layoutPagination != null) layoutPagination.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
 
+        if (isCatTab) {
+            MaterialButton btnAddCat = root.findViewById(R.id.btnAddCategory);
+            TextView tvLblTotal = root.findViewById(R.id.tvLabelTotalCatalog);
+            TextView tvLblActive = root.findViewById(R.id.tvLabelActiveCatalog);
+            String singular = getCatalogSingularLabel();
+            String plural = getCatalogPluralLabel();
+            if (btnAddCat != null) {
+                btnAddCat.setText(tabIndex == 1 ? getString(R.string.add_category) : ("+ " + singular));
+            }
+            if (etSearchCategory != null) {
+                etSearchCategory.setHint("Search " + plural.toLowerCase(Locale.ROOT) + "...");
+            }
+            if (tvLblTotal != null) tvLblTotal.setText("Total " + plural);
+            if (tvLblActive != null) tvLblActive.setText("Active " + plural);
+        }
+
         if (tabIndex == 0) {
             updatePaginationAndEmptyState();
-        } else if (tabIndex == 1) {
+        } else if (isCatTab) {
             loadCategoriesData();
         } else if (tabIndex == 2) {
             loadCurriculumAuditData();
@@ -401,14 +499,15 @@ public class CourseManagementFragment extends Fragment {
     private void updateTabStyles(int activeIndex) {
         if (!isAdded() || getContext() == null) return;
 
+        int[] indices = new int[]{0, 1, 4, 5, 2, 3};
         MaterialButton[] tabs = new MaterialButton[]{
-                btnTabAllCourses, btnTabCategories, btnTabCurriculum, btnTabAssignments
+                btnTabAllCourses, btnTabCategories, btnTabFaculties, btnTabMajors, btnTabCurriculum, btnTabAssignments
         };
 
         for (int i = 0; i < tabs.length; i++) {
             MaterialButton btn = tabs[i];
             if (btn == null) continue;
-            if (i == activeIndex) {
+            if (indices[i] == activeIndex) {
                 btn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(getResources().getColor(R.color.admin_primary_blue, null)));
                 btn.setTextColor(getResources().getColor(R.color.white, null));
             } else {
@@ -588,21 +687,23 @@ public class CourseManagementFragment extends Fragment {
 
         if (pillFilterDepartment != null) {
             boolean active = filterDeptId > 0 || !filterDeptName.isEmpty();
-            pillFilterDepartment.setText(active ? ("Dept: " + filterDeptName) : "Dept: All");
+            pillFilterDepartment.setText(active ? ("Faculty: " + filterDeptName) : "Faculty: All");
             pillFilterDepartment.setBackgroundResource(active ? R.drawable.bg_notif_tab_active : R.drawable.bg_notif_tab_inactive);
             pillFilterDepartment.setTextColor(getResources().getColor(active ? R.color.white : R.color.admin_text_primary, null));
         }
 
         if (pillFilterProgram != null) {
             boolean active = filterProgramId > 0 || !filterProgramName.isEmpty();
-            pillFilterProgram.setText(active ? ("Program: " + filterProgramName) : "Program: All");
+            pillFilterProgram.setText(active ? ("Major: " + filterProgramName) : "Major: All");
             pillFilterProgram.setBackgroundResource(active ? R.drawable.bg_notif_tab_active : R.drawable.bg_notif_tab_inactive);
             pillFilterProgram.setTextColor(getResources().getColor(active ? R.color.white : R.color.admin_text_primary, null));
         }
 
         if (pillFilterAcademicYear != null) {
             boolean active = filterAyId > 0 || !filterAyName.isEmpty();
-            pillFilterAcademicYear.setText(active ? ("Year: " + filterAyName) : "Year: All");
+            pillFilterAcademicYear.setText(active
+                    ? getString(R.string.academic_year_filter_format, filterAyName)
+                    : getString(R.string.academic_year_all));
             pillFilterAcademicYear.setBackgroundResource(active ? R.drawable.bg_notif_tab_active : R.drawable.bg_notif_tab_inactive);
             pillFilterAcademicYear.setTextColor(getResources().getColor(active ? R.color.white : R.color.admin_text_primary, null));
         }
@@ -699,7 +800,7 @@ public class CourseManagementFragment extends Fragment {
         }
 
         applyActiveFilters();
-        if (selectedTab == 1) loadCategoriesData();
+        if (isCatalogEntityTab(selectedTab)) loadCategoriesData();
         else if (selectedTab == 2) loadCurriculumAuditData();
         else if (selectedTab == 3) loadAssignmentsData();
     }
@@ -794,42 +895,10 @@ public class CourseManagementFragment extends Fragment {
     }
 
     private void showCourseDetailsDialog(Course course) {
-        if (!isAdded() || getContext() == null) return;
-
-        String dept = !course.getDepartment().isEmpty() ? course.getDepartment() : "N/A";
-        String prog = !course.getProgramName().isEmpty()
-                ? (course.getProgramName() + (!course.getProgramCode().isEmpty() ? " (" + course.getProgramCode() + ")" : ""))
-                : "General Program";
-        String teacher = !course.getTeacher().isEmpty() ? course.getTeacher() : "Unassigned";
-        String ay = !course.getAcademicYear().isEmpty() ? course.getAcademicYear() : "Current Academic Year";
-        String sem = !course.getSemester().isEmpty() ? course.getSemester() : "Semester 1";
-        String classes = !course.getClassesSummary().isEmpty() ? course.getClassesSummary() : "None assigned";
-        String desc = !course.getDescription().isEmpty() ? course.getDescription() : "No description provided.";
-
-        String details = "Course Code: " + course.getCode() + "\n" +
-                "Course Name: " + course.getName() + "\n" +
-                "Department: " + dept + "\n" +
-                "Program: " + prog + "\n" +
-                "Credit Hours: " + course.getCredits() + " Credits\n" +
-                "Academic Year: " + ay + "\n" +
-                "Semester: " + sem + "\n" +
-                "Assigned Teacher: " + teacher + "\n" +
-                "Associated Classes: " + classes + "\n" +
-                "Enrolled Students: " + course.getEnrollmentsCount() + "\n" +
-                "Course Status: " + course.getStatus() + "\n\n" +
-                "Description:\n" + desc;
-
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(course.getCode() + " — " + course.getName())
-                .setMessage(details)
-                .setPositiveButton(R.string.edit_course, (dialog, which) -> {
-                    Intent intent = new Intent(requireContext(), AddCourseActivity.class);
-                    intent.putExtra(AddCourseActivity.EXTRA_EDIT_COURSE, course);
-                    addEditCourseLauncher.launch(intent);
-                })
-                .setNeutralButton("Manage Status / Delete", (dialog, which) -> showCourseManageActionsDialog(course))
-                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                .show();
+        if (!isAdded() || getContext() == null || course == null) return;
+        Intent intent = new Intent(requireContext(), AdminCourseDetailActivity.class);
+        intent.putExtra(AdminCourseDetailActivity.EXTRA_COURSE, course);
+        addEditCourseLauncher.launch(intent);
     }
 
     private void showCourseManageActionsDialog(Course course) {
@@ -977,7 +1046,7 @@ public class CourseManagementFragment extends Fragment {
                         .setTitle("Curriculum Audit Detail")
                         .setMessage(getString(R.string.course_code) + ": " + item.code + "\n" +
                                 "Course Name: " + item.name + "\n" +
-                                "Department: " + item.className + "\n" +
+                                "Faculty: " + item.className + "\n" +
                                 "Assigned Teacher: " + item.teacher + "\n" +
                                 "Credits: " + item.credits + " Units\n" +
                                 "Syllabus Audit Status: " + item.status + "\n\n" +
@@ -993,39 +1062,726 @@ public class CourseManagementFragment extends Fragment {
     private void loadCategoriesData() {
         if (!isAdded() || getContext() == null) return;
 
-        categoryList.clear();
-        Map<String, Integer> deptCounts = new LinkedHashMap<>();
-        for (Course c : masterCourseList) {
-            String dept = !c.getDepartment().trim().isEmpty() ? c.getDepartment() : "General";
-            deptCounts.put(dept, deptCounts.getOrDefault(dept, 0) + 1);
-        }
-        for (Map.Entry<String, Integer> entry : deptCounts.entrySet()) {
-            categoryList.add(new CourseCategoryAdapter.CategoryItem(
-                    "Academic Department", entry.getKey(), entry.getValue(), "Active"));
+        ensureCategoryAdapter();
+        lastCategoriesApiError = null;
+        if (pbLoadingCategories != null) pbLoadingCategories.setVisibility(View.VISIBLE);
+        if (layoutCategoriesEmptyState != null) layoutCategoriesEmptyState.setVisibility(View.GONE);
+
+        final int requestTab = selectedTab;
+        Call<JsonObject> call;
+        if (requestTab == 4) {
+            call = ApiClient.getApiService(getContext()).getDepartments();
+        } else if (requestTab == 5) {
+            call = ApiClient.getApiService(getContext()).getPrograms(null);
+        } else {
+            call = ApiClient.getApiService(getContext()).getCourseCategories();
         }
 
-        View root = getView();
-        if (root != null) {
-            TextView tvColleges = root.findViewById(R.id.tvTotalColleges);
-            TextView tvDepts = root.findViewById(R.id.tvTotalDepartments);
-            if (tvColleges != null) tvColleges.setText(String.valueOf(Math.max(1, deptCounts.size())));
-            if (tvDepts != null) tvDepts.setText(String.valueOf(deptCounts.size()));
-        }
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null || selectedTab != requestTab) return;
+                if (pbLoadingCategories != null) pbLoadingCategories.setVisibility(View.GONE);
 
+                if (response.isSuccessful() && response.body() != null) {
+                    categoryList.clear();
+                    JsonObject body = response.body();
+                    if (body.has("data") && body.get("data").isJsonArray()) {
+                        JsonArray arr = body.getAsJsonArray("data");
+                        for (JsonElement el : arr) {
+                            if (el != null && el.isJsonObject()) {
+                                categoryList.add(CourseCategoryAdapter.CategoryItem.fromJson(el.getAsJsonObject()));
+                            }
+                        }
+                    }
+                    lastCategoriesApiError = null;
+                    updateCategorySummaryCards();
+                    categoryAdapter.updateData(categoryList);
+                    updateCategoriesEmptyState();
+                } else {
+                    lastCategoriesApiError = extractApiErrorMessage(response, getString(R.string.network_error_server));
+                    updateCategorySummaryCards();
+                    categoryAdapter.updateData(categoryList);
+                    updateCategoriesEmptyState();
+                    if (isCatalogEntityTab(selectedTab)) {
+                        Toast.makeText(getContext(), lastCategoriesApiError, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null || selectedTab != requestTab) return;
+                if (pbLoadingCategories != null) pbLoadingCategories.setVisibility(View.GONE);
+                Log.e(TAG, "Failed to load academic catalog data", t);
+                lastCategoriesApiError = getString(R.string.network_error_server);
+                updateCategorySummaryCards();
+                categoryAdapter.updateData(categoryList);
+                updateCategoriesEmptyState();
+                if (isCatalogEntityTab(selectedTab)) {
+                    Toast.makeText(getContext(), lastCategoriesApiError, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void ensureCategoryAdapter() {
+        if (categoryAdapter != null || getContext() == null) return;
+        categoryAdapter = new CourseCategoryAdapter(getContext(), categoryList, new CourseCategoryAdapter.OnCategoryActionListener() {
+            @Override
+            public void onViewCategory(CourseCategoryAdapter.CategoryItem item) {
+                showCategoryDetailDialog(item);
+            }
+
+            @Override
+            public void onEditCategory(CourseCategoryAdapter.CategoryItem item) {
+                showCategoryFormDialog(item);
+            }
+
+            @Override
+            public void onToggleStatus(CourseCategoryAdapter.CategoryItem item) {
+                toggleCategoryStatus(item);
+            }
+
+            @Override
+            public void onDeleteCategory(CourseCategoryAdapter.CategoryItem item) {
+                confirmDeleteCategory(item);
+            }
+        });
         if (rvCategories != null) {
-            categoryAdapter = new CourseCategoryAdapter(getContext(), categoryList, item -> {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.category_detail)
-                        .setMessage("Category Type: " + item.collegeName + "\n" +
-                                "Department: " + item.departmentName + "\n" +
-                                "Total Courses: " + item.courseCount + "\n" +
-                                "Status: " + item.head)
-                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                        .show();
-            });
             rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
             rvCategories.setAdapter(categoryAdapter);
         }
+    }
+
+    private void updateCategorySummaryCards() {
+        View root = getView();
+        if (root == null) return;
+        int totalCount = categoryList.size();
+        int activeCount = 0;
+        for (CourseCategoryAdapter.CategoryItem item : categoryList) {
+            if (item.isActive()) activeCount++;
+        }
+        TextView tvTotal = root.findViewById(R.id.tvTotalColleges);
+        TextView tvActive = root.findViewById(R.id.tvTotalDepartments);
+        if (tvTotal != null) tvTotal.setText(String.valueOf(totalCount));
+        if (tvActive != null) tvActive.setText(String.valueOf(activeCount));
+    }
+
+    private void updateCategoriesEmptyState() {
+        if (!isAdded() || categoryAdapter == null) return;
+
+        int filteredCount = categoryAdapter.getFilteredCount();
+        if (filteredCount > 0) {
+            if (layoutCategoriesEmptyState != null) layoutCategoriesEmptyState.setVisibility(View.GONE);
+            if (rvCategories != null) rvCategories.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        if (rvCategories != null) rvCategories.setVisibility(View.GONE);
+        if (layoutCategoriesEmptyState != null) layoutCategoriesEmptyState.setVisibility(View.VISIBLE);
+
+        String searchText = etSearchCategory != null && etSearchCategory.getText() != null
+                ? etSearchCategory.getText().toString().trim()
+                : "";
+        String singular = getCatalogSingularLabel();
+        String plural = getCatalogPluralLabel();
+
+        if (lastCategoriesApiError != null) {
+            if (tvCategoriesEmptyTitle != null) tvCategoriesEmptyTitle.setText("Unable to Load " + plural);
+            if (tvCategoriesEmptyMessage != null) tvCategoriesEmptyMessage.setText(lastCategoriesApiError);
+            if (btnCategoriesEmptyAction != null) btnCategoriesEmptyAction.setText(R.string.retry);
+        } else if (!searchText.isEmpty() && !categoryList.isEmpty()) {
+            if (tvCategoriesEmptyTitle != null) tvCategoriesEmptyTitle.setText("No Matching " + plural);
+            if (tvCategoriesEmptyMessage != null) tvCategoriesEmptyMessage.setText(R.string.search_no_results);
+            if (btnCategoriesEmptyAction != null) btnCategoriesEmptyAction.setText(R.string.reset_search_filters);
+        } else {
+            if (tvCategoriesEmptyTitle != null) tvCategoriesEmptyTitle.setText("No " + plural + " Yet");
+            if (tvCategoriesEmptyMessage != null) tvCategoriesEmptyMessage.setText("Tap + " + singular + " to create your first " + singular.toLowerCase(Locale.ROOT) + ".");
+            if (btnCategoriesEmptyAction != null) {
+                btnCategoriesEmptyAction.setText(selectedTab == 1 ? getString(R.string.add_category) : ("+ " + singular));
+            }
+        }
+    }
+
+    private void showCategoryDetailDialog(CourseCategoryAdapter.CategoryItem item) {
+        if (!isAdded() || getContext() == null || item == null) return;
+        String desc = item.description != null && !item.description.trim().isEmpty()
+                ? item.description.trim()
+                : "No description provided.";
+        String linked = item.buildDependencySummary();
+        StringBuilder msg = new StringBuilder();
+        msg.append("Code: ").append(item.code.isEmpty() ? "—" : item.code).append("\n");
+        if (selectedTab == 5 && item.departmentName != null && !item.departmentName.isEmpty()) {
+            msg.append("Faculty: ").append(item.departmentName).append("\n");
+            msg.append("Duration: ").append(item.durationYears).append(" Years\n");
+        }
+        msg.append("Status: ").append(item.getDisplayStatus()).append("\n");
+        msg.append("Courses: ").append(item.courseCount).append("\n");
+        if (!linked.isEmpty()) {
+            msg.append("Linked Records: ").append(linked).append("\n");
+        }
+        msg.append("\nDescription:\n").append(desc);
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(item.name)
+                .setMessage(msg.toString())
+                .setPositiveButton("Edit", (d, w) -> showCategoryFormDialog(item))
+                .setNegativeButton(R.string.close, null)
+                .show();
+    }
+
+    private void showCategoryFormDialog(@Nullable CourseCategoryAdapter.CategoryItem existing) {
+        if (!isAdded() || getContext() == null) return;
+        if (selectedTab == 5) {
+            showMajorFormDialog(existing);
+            return;
+        }
+
+        boolean isFaculty = (selectedTab == 4);
+        String entityLabel = isFaculty ? "Faculty" : "Course Category";
+        boolean isEdit = existing != null;
+        float density = getResources().getDisplayMetrics().density;
+        int padH = Math.round(20 * density);
+        int padV = Math.round(12 * density);
+        int marginBottom = Math.round(12 * density);
+
+        ScrollView scrollView = new ScrollView(requireContext());
+        LinearLayout container = new LinearLayout(requireContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setPadding(padH, padV, padH, padV / 2);
+        scrollView.addView(container);
+
+        TextInputLayout tilName = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilName.setHint(entityLabel + " Name *");
+        LinearLayout.LayoutParams lpName = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpName.bottomMargin = marginBottom;
+        tilName.setLayoutParams(lpName);
+        TextInputEditText etName = new TextInputEditText(tilName.getContext());
+        etName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        etName.setSingleLine(true);
+        if (isEdit) etName.setText(existing.name);
+        tilName.addView(etName);
+        container.addView(tilName);
+
+        TextInputLayout tilCode = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilCode.setHint(entityLabel + " Code (Optional)");
+        tilCode.setHelperText("Optional — auto-generated from name if left blank");
+        LinearLayout.LayoutParams lpCode = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpCode.bottomMargin = marginBottom;
+        tilCode.setLayoutParams(lpCode);
+        TextInputEditText etCode = new TextInputEditText(tilCode.getContext());
+        etCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        etCode.setSingleLine(true);
+        if (isEdit) etCode.setText(existing.code);
+        tilCode.addView(etCode);
+        container.addView(tilCode);
+
+        TextInputLayout tilDesc = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilDesc.setHint("Description (Optional)");
+        LinearLayout.LayoutParams lpDesc = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpDesc.bottomMargin = marginBottom;
+        tilDesc.setLayoutParams(lpDesc);
+        TextInputEditText etDesc = new TextInputEditText(tilDesc.getContext());
+        etDesc.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        etDesc.setMinLines(2);
+        etDesc.setMaxLines(4);
+        if (isEdit && existing.description != null) etDesc.setText(existing.description);
+        tilDesc.addView(etDesc);
+        container.addView(tilDesc);
+
+        TextView tvStatusLabel = new TextView(requireContext());
+        tvStatusLabel.setText(entityLabel + " Status");
+        tvStatusLabel.setTextSize(13f);
+        tvStatusLabel.setPadding(0, 4, 0, 6);
+        container.addView(tvStatusLabel);
+
+        RadioGroup rgStatus = new RadioGroup(requireContext());
+        rgStatus.setOrientation(RadioGroup.HORIZONTAL);
+        RadioButton rbActive = new RadioButton(requireContext());
+        rbActive.setId(View.generateViewId());
+        rbActive.setText(R.string.status_active);
+        rbActive.setPadding(0, 0, Math.round(24 * density), 0);
+        RadioButton rbInactive = new RadioButton(requireContext());
+        rbInactive.setId(View.generateViewId());
+        rbInactive.setText(R.string.status_inactive);
+        rgStatus.addView(rbActive);
+        rgStatus.addView(rbInactive);
+        if (isEdit && !existing.isActive()) {
+            rbInactive.setChecked(true);
+        } else {
+            rbActive.setChecked(true);
+        }
+        container.addView(rgStatus);
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
+                .setTitle((isEdit ? "Edit " : "Add ") + entityLabel)
+                .setView(scrollView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.save, null)
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button btnSave = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            Button btnCancel = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            btnSave.setOnClickListener(v -> {
+                tilName.setError(null);
+                tilCode.setError(null);
+
+                String name = etName.getText() != null ? etName.getText().toString().trim() : "";
+                String code = etCode.getText() != null ? etCode.getText().toString().trim().toUpperCase(Locale.ROOT) : "";
+                String desc = etDesc.getText() != null ? etDesc.getText().toString().trim() : "";
+                String status = rbInactive.isChecked() ? "inactive" : "active";
+
+                if (name.isEmpty()) {
+                    tilName.setError(entityLabel + " name is required.");
+                    etName.requestFocus();
+                    return;
+                }
+
+                JsonObject body = new JsonObject();
+                body.addProperty("name", name);
+                if (!code.isEmpty()) {
+                    body.addProperty("code", code);
+                }
+                body.addProperty("description", desc);
+                body.addProperty("status", status);
+
+                btnSave.setEnabled(false);
+                btnCancel.setEnabled(false);
+                btnSave.setText("Saving...");
+
+                Call<JsonObject> call;
+                if (isFaculty) {
+                    call = isEdit
+                            ? ApiClient.getApiService(requireContext()).updateDepartment(existing.id, body)
+                            : ApiClient.getApiService(requireContext()).createDepartment(body);
+                } else {
+                    call = isEdit
+                            ? ApiClient.getApiService(requireContext()).updateCourseCategory(existing.id, body)
+                            : ApiClient.getApiService(requireContext()).createCourseCategory(body);
+                }
+
+                call.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (response.isSuccessful()) {
+                            dialog.dismiss();
+                            Toast.makeText(
+                                    getContext(),
+                                    entityLabel + (isEdit ? " updated successfully." : " created successfully."),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            loadCategoriesData();
+                            loadCourseData();
+                        } else {
+                            btnSave.setEnabled(true);
+                            btnCancel.setEnabled(true);
+                            btnSave.setText(R.string.save);
+                            String errMsg = extractApiErrorMessage(response, "Unable to save " + entityLabel.toLowerCase(Locale.ROOT) + ".");
+                            String lower = errMsg.toLowerCase(Locale.ROOT);
+                            if (lower.contains("code")) {
+                                tilCode.setError(errMsg);
+                            } else {
+                                tilName.setError(errMsg);
+                            }
+                            Toast.makeText(getContext(), errMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        btnSave.setEnabled(true);
+                        btnCancel.setEnabled(true);
+                        btnSave.setText(R.string.save);
+                        Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        });
+
+        dialog.show();
+    }
+
+    private void showMajorFormDialog(@Nullable CourseCategoryAdapter.CategoryItem existing) {
+        if (!isAdded() || getContext() == null) return;
+
+        ApiClient.getApiService(requireContext()).getDepartments().enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                List<Integer> facultyIds = new ArrayList<>();
+                List<String> facultyNames = new ArrayList<>();
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")
+                        && response.body().get("data").isJsonArray()) {
+                    for (JsonElement el : response.body().getAsJsonArray("data")) {
+                        if (!el.isJsonObject()) continue;
+                        JsonObject fObj = el.getAsJsonObject();
+                        int fid = fObj.has("id") ? fObj.get("id").getAsInt() : -1;
+                        String fName = fObj.has("name") && !fObj.get("name").isJsonNull() ? fObj.get("name").getAsString() : "";
+                        String fCode = fObj.has("code") && !fObj.get("code").isJsonNull() ? fObj.get("code").getAsString() : "";
+                        String fStatus = fObj.has("status") && !fObj.get("status").isJsonNull() ? fObj.get("status").getAsString() : "active";
+                        if (fid > 0 && (!"inactive".equalsIgnoreCase(fStatus) || (existing != null && existing.departmentId == fid))) {
+                            facultyIds.add(fid);
+                            facultyNames.add(fCode.isEmpty() ? fName : (fName + " (" + fCode + ")"));
+                        }
+                    }
+                }
+                if (facultyIds.isEmpty()) {
+                    Toast.makeText(getContext(), "Please create an active Faculty first before adding a Major.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                renderMajorFormDialogWithFaculties(existing, facultyIds, facultyNames);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void renderMajorFormDialogWithFaculties(
+            @Nullable CourseCategoryAdapter.CategoryItem existing,
+            List<Integer> facultyIds,
+            List<String> facultyNames
+    ) {
+        boolean isEdit = existing != null;
+        float density = getResources().getDisplayMetrics().density;
+        int padH = Math.round(20 * density);
+        int padV = Math.round(12 * density);
+        int marginBottom = Math.round(12 * density);
+
+        ScrollView scrollView = new ScrollView(requireContext());
+        LinearLayout container = new LinearLayout(requireContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setPadding(padH, padV, padH, padV / 2);
+        scrollView.addView(container);
+
+        TextView tvFacLabel = new TextView(requireContext());
+        tvFacLabel.setText("Parent Faculty *");
+        tvFacLabel.setTextSize(13f);
+        tvFacLabel.setPadding(0, 0, 0, 6);
+        container.addView(tvFacLabel);
+
+        android.widget.Spinner spFaculty = new android.widget.Spinner(requireContext());
+        android.widget.ArrayAdapter<String> facAdapter = new android.widget.ArrayAdapter<>(
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, facultyNames);
+        spFaculty.setAdapter(facAdapter);
+        LinearLayout.LayoutParams lpSp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpSp.bottomMargin = marginBottom;
+        spFaculty.setLayoutParams(lpSp);
+        if (isEdit && existing.departmentId > 0) {
+            int idx = facultyIds.indexOf(existing.departmentId);
+            if (idx >= 0) spFaculty.setSelection(idx);
+        }
+        container.addView(spFaculty);
+
+        TextInputLayout tilName = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilName.setHint("Major Name *");
+        LinearLayout.LayoutParams lpName = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpName.bottomMargin = marginBottom;
+        tilName.setLayoutParams(lpName);
+        TextInputEditText etName = new TextInputEditText(tilName.getContext());
+        etName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        etName.setSingleLine(true);
+        if (isEdit) etName.setText(existing.name);
+        tilName.addView(etName);
+        container.addView(tilName);
+
+        TextInputLayout tilCode = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilCode.setHint("Major Code (Optional)");
+        tilCode.setHelperText("Optional — auto-generated from name if left blank");
+        LinearLayout.LayoutParams lpCode = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpCode.bottomMargin = marginBottom;
+        tilCode.setLayoutParams(lpCode);
+        TextInputEditText etCode = new TextInputEditText(tilCode.getContext());
+        etCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        etCode.setSingleLine(true);
+        if (isEdit) etCode.setText(existing.code);
+        tilCode.addView(etCode);
+        container.addView(tilCode);
+
+        TextInputLayout tilDesc = new TextInputLayout(requireContext(), null,
+                com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox);
+        tilDesc.setHint("Description (Optional)");
+        LinearLayout.LayoutParams lpDesc = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lpDesc.bottomMargin = marginBottom;
+        tilDesc.setLayoutParams(lpDesc);
+        TextInputEditText etDesc = new TextInputEditText(tilDesc.getContext());
+        etDesc.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        etDesc.setMinLines(2);
+        etDesc.setMaxLines(4);
+        if (isEdit && existing.description != null) etDesc.setText(existing.description);
+        tilDesc.addView(etDesc);
+        container.addView(tilDesc);
+
+        TextView tvStatusLabel = new TextView(requireContext());
+        tvStatusLabel.setText("Major Status");
+        tvStatusLabel.setTextSize(13f);
+        tvStatusLabel.setPadding(0, 4, 0, 6);
+        container.addView(tvStatusLabel);
+
+        RadioGroup rgStatus = new RadioGroup(requireContext());
+        rgStatus.setOrientation(RadioGroup.HORIZONTAL);
+        RadioButton rbActive = new RadioButton(requireContext());
+        rbActive.setId(View.generateViewId());
+        rbActive.setText(R.string.status_active);
+        rbActive.setPadding(0, 0, Math.round(24 * density), 0);
+        RadioButton rbInactive = new RadioButton(requireContext());
+        rbInactive.setId(View.generateViewId());
+        rbInactive.setText(R.string.status_inactive);
+        rgStatus.addView(rbActive);
+        rgStatus.addView(rbInactive);
+        if (isEdit && !existing.isActive()) {
+            rbInactive.setChecked(true);
+        } else {
+            rbActive.setChecked(true);
+        }
+        container.addView(rgStatus);
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(isEdit ? "Edit Major" : "Add Major")
+                .setView(scrollView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.save, null)
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button btnSave = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            Button btnCancel = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            btnSave.setOnClickListener(v -> {
+                tilName.setError(null);
+                tilCode.setError(null);
+
+                int facPos = spFaculty.getSelectedItemPosition();
+                int selectedFacultyId = (facPos >= 0 && facPos < facultyIds.size()) ? facultyIds.get(facPos) : facultyIds.get(0);
+                String name = etName.getText() != null ? etName.getText().toString().trim() : "";
+                String code = etCode.getText() != null ? etCode.getText().toString().trim().toUpperCase(Locale.ROOT) : "";
+                String desc = etDesc.getText() != null ? etDesc.getText().toString().trim() : "";
+                String status = rbInactive.isChecked() ? "inactive" : "active";
+
+                if (name.isEmpty()) {
+                    tilName.setError("Major name is required.");
+                    etName.requestFocus();
+                    return;
+                }
+
+                JsonObject body = new JsonObject();
+                body.addProperty("department_id", selectedFacultyId);
+                body.addProperty("name", name);
+                if (!code.isEmpty()) {
+                    body.addProperty("code", code);
+                }
+                body.addProperty("description", desc);
+                body.addProperty("status", status);
+
+                btnSave.setEnabled(false);
+                btnCancel.setEnabled(false);
+                btnSave.setText("Saving...");
+
+                Call<JsonObject> call = isEdit
+                        ? ApiClient.getApiService(requireContext()).updateProgram(parseIntOr(existing.id, 0), body)
+                        : ApiClient.getApiService(requireContext()).createProgram(body);
+
+                call.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (!isAdded() || getContext() == null) return;
+                        if (response.isSuccessful()) {
+                            dialog.dismiss();
+                            Toast.makeText(
+                                    getContext(),
+                                    isEdit ? "Major updated successfully." : "Major created successfully.",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            loadCategoriesData();
+                            loadCourseData();
+                        } else {
+                            btnSave.setEnabled(true);
+                            btnCancel.setEnabled(true);
+                            btnSave.setText(R.string.save);
+                            String errMsg = extractApiErrorMessage(response, "Unable to save major.");
+                            String lower = errMsg.toLowerCase(Locale.ROOT);
+                            if (lower.contains("code")) {
+                                tilCode.setError(errMsg);
+                            } else {
+                                tilName.setError(errMsg);
+                            }
+                            Toast.makeText(getContext(), errMsg, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        if (!isAdded() || getContext() == null) return;
+                        btnSave.setEnabled(true);
+                        btnCancel.setEnabled(true);
+                        btnSave.setText(R.string.save);
+                        Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        });
+
+        dialog.show();
+    }
+
+    private void toggleCategoryStatus(CourseCategoryAdapter.CategoryItem item) {
+        if (!isAdded() || getContext() == null || item == null || item.id.isEmpty()) return;
+
+        String entityLabel = getCatalogSingularLabel();
+        String nextStatus = item.isActive() ? "inactive" : "active";
+        JsonObject body = new JsonObject();
+        body.addProperty("status", nextStatus);
+
+        Call<JsonObject> call;
+        if (selectedTab == 4) {
+            call = ApiClient.getApiService(getContext()).updateDepartment(item.id, body);
+        } else if (selectedTab == 5) {
+            call = ApiClient.getApiService(getContext()).updateProgram(parseIntOr(item.id, 0), body);
+        } else {
+            call = ApiClient.getApiService(getContext()).updateCourseCategory(item.id, body);
+        }
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful()) {
+                    Toast.makeText(
+                            getContext(),
+                            entityLabel + " \"" + item.name + "\" is now " + ("active".equals(nextStatus) ? "Active" : "Inactive") + ".",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    loadCategoriesData();
+                } else {
+                    String msg = extractApiErrorMessage(response, "Failed to update " + entityLabel.toLowerCase(Locale.ROOT) + " status.");
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void confirmDeleteCategory(CourseCategoryAdapter.CategoryItem item) {
+        if (!isAdded() || getContext() == null || item == null || item.id.isEmpty()) return;
+
+        String entityLabel = getCatalogSingularLabel();
+        if (item.hasLinkedRecords()) {
+            String summary = item.buildDependencySummary();
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Cannot Delete " + entityLabel)
+                    .setMessage("\"" + item.name + "\" is linked to " + summary
+                            + ". Deleting it could break existing academic relationships.\n\n"
+                            + "Deactivate this " + entityLabel.toLowerCase(Locale.ROOT) + " instead to keep existing records intact.")
+                    .setNegativeButton(R.string.close, null);
+            if (item.isActive()) {
+                builder.setPositiveButton("Deactivate Instead", (d, w) -> toggleCategoryStatus(item));
+            }
+            builder.show();
+            return;
+        }
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Delete " + entityLabel + "?")
+                .setMessage("Are you sure you want to delete \"" + item.name + "\"? This action cannot be undone.")
+                .setPositiveButton(R.string.delete, (dialog, which) -> executeDeleteCategory(item))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void executeDeleteCategory(CourseCategoryAdapter.CategoryItem item) {
+        if (!isAdded() || getContext() == null) return;
+
+        String entityLabel = getCatalogSingularLabel();
+        Call<JsonObject> call;
+        if (selectedTab == 4) {
+            call = ApiClient.getApiService(getContext()).deleteDepartment(item.id);
+        } else if (selectedTab == 5) {
+            call = ApiClient.getApiService(getContext()).deleteProgram(parseIntOr(item.id, 0));
+        } else {
+            call = ApiClient.getApiService(getContext()).deleteCourseCategory(item.id);
+        }
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (!isAdded() || getContext() == null) return;
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), entityLabel + " \"" + item.name + "\" deleted successfully.", Toast.LENGTH_SHORT).show();
+                    loadCategoriesData();
+                } else if (response.code() == 422) {
+                    String msg = extractApiErrorMessage(
+                            response,
+                            "This " + entityLabel.toLowerCase(Locale.ROOT) + " is linked to existing records and cannot be deleted."
+                    );
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Deletion Prevented")
+                            .setMessage(msg)
+                            .setNegativeButton(R.string.close, null);
+                    if (item.isActive()) {
+                        builder.setPositiveButton("Deactivate Instead", (d, w) -> toggleCategoryStatus(item));
+                    }
+                    builder.show();
+                    loadCategoriesData();
+                } else {
+                    String msg = extractApiErrorMessage(response, "Unable to delete " + entityLabel.toLowerCase(Locale.ROOT) + ".");
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || getContext() == null) return;
+                Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String extractApiErrorMessage(@NonNull Response<?> response, String fallback) {
+        try {
+            if (response.errorBody() != null) {
+                String raw = response.errorBody().string();
+                JsonObject err = JsonParser.parseString(raw).getAsJsonObject();
+                if (err.has("errors") && err.get("errors").isJsonObject()) {
+                    JsonObject errors = err.getAsJsonObject("errors");
+                    for (String key : errors.keySet()) {
+                        if (errors.get(key).isJsonArray() && errors.getAsJsonArray(key).size() > 0) {
+                            return errors.getAsJsonArray(key).get(0).getAsString();
+                        }
+                    }
+                }
+                if (err.has("message") && !err.get("message").isJsonNull()) {
+                    String msg = err.get("message").getAsString();
+                    if (msg != null && !msg.trim().isEmpty()) {
+                        return msg;
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return fallback;
     }
 
     private void loadAssignmentsData() {
@@ -1064,7 +1820,7 @@ public class CourseManagementFragment extends Fragment {
                         .setTitle(R.string.course_assignment_detail)
                         .setMessage(getString(R.string.course_code) + ": " + item.courseCode + "\n" +
                                 "Course Name: " + item.courseName + "\n" +
-                                "Associated Class / Dept: " + item.className + "\n" +
+                                "Associated Class / Faculty: " + item.className + "\n" +
                                 "Assigned Teacher: " + item.teacherName + "\n" +
                                 "Status: " + item.status)
                         .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())

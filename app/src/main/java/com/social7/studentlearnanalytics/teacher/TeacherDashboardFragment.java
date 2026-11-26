@@ -373,7 +373,7 @@ public class TeacherDashboardFragment extends Fragment {
 
         // 5. Program
         List<String> programNames = new ArrayList<>();
-        programNames.add("All Programs");
+        programNames.add("All Majors");
         for (TeacherFiltersResponse.ProgramItem p : filterData.getPrograms()) {
             programNames.add(p.getCode() != null ? p.getCode() : p.getName());
         }
@@ -386,11 +386,15 @@ public class TeacherDashboardFragment extends Fragment {
             onFilterChanged();
         });
 
-        // 6. Study Year
+        // 6. Study Year (Student Year Level Y1-Y4)
         List<String> studyYearNames = new ArrayList<>();
-        studyYearNames.add("All Years");
+        studyYearNames.add(getString(R.string.all_year_levels));
         for (TeacherFiltersResponse.StudyYearItem sy : filterData.getStudyYears()) {
-            studyYearNames.add(sy.getName());
+            int yNum = sy.getYear();
+            String label = yNum > 0
+                    ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(getContext(), yNum)
+                    : (sy.getName() != null ? sy.getName() : "");
+            studyYearNames.add(label);
         }
         setupSpinner(spinnerStudyYear, studyYearNames, position -> {
             if (position == 0) {

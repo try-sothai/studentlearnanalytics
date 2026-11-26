@@ -124,7 +124,7 @@ public class TeacherProfileFragment extends Fragment {
                     if (teacherObj != null && phone.isEmpty()) {
                         phone = getStr(teacherObj, "phone", "");
                     }
-                    String dept = "Academic Department";
+                    String dept = "Academic Faculty";
                     if (teacherObj != null && teacherObj.has("department") && teacherObj.get("department").isJsonObject()) {
                         dept = getStr(teacherObj.getAsJsonObject("department"), "name", dept);
                     }

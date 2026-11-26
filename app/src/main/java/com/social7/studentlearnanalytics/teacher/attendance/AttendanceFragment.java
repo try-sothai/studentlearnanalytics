@@ -52,6 +52,8 @@ public class AttendanceFragment extends Fragment {
     private View secAttOverviewContainer, secAttTakeContainer, secAttRecordsContainer, secAttStudentContainer, secAttReportsContainer;
 
     private PieChart pieChartAttendance;
+    private TextView tvAttOverviewRate, tvAttOverviewPresent, tvAttOverviewAbsent, tvAttOverviewLate, tvAttOverviewExcused, tvAttOverviewTotal;
+    private TextView tvAttStudentEmpty;
 
     private RecyclerView rvTakeAttendanceRoster;
     private TakeAttendanceAdapter takeAttendanceAdapter;
@@ -192,17 +194,31 @@ public class AttendanceFragment extends Fragment {
 
     private void bindOverviewViews(View root) {
         pieChartAttendance = root.findViewById(R.id.pieChartAttendance);
+        tvAttOverviewRate = root.findViewById(R.id.tvAttOverviewRate);
+        tvAttOverviewPresent = root.findViewById(R.id.tvAttOverviewPresent);
+        tvAttOverviewAbsent = root.findViewById(R.id.tvAttOverviewAbsent);
+        tvAttOverviewLate = root.findViewById(R.id.tvAttOverviewLate);
+        tvAttOverviewExcused = root.findViewById(R.id.tvAttOverviewExcused);
+        tvAttOverviewTotal = root.findViewById(R.id.tvAttOverviewTotal);
+        tvAttStudentEmpty = root.findViewById(R.id.tvAttStudentEmpty);
         if (pieChartAttendance != null) {
             pieChartAttendance.setNoDataText("Loading attendance overview...");
         }
     }
 
     private void bindOverviewChart(JsonObject summary) {
-        if (pieChartAttendance == null) return;
         if (summary == null) {
-            pieChartAttendance.clear();
-            pieChartAttendance.setNoDataText("No attendance records available");
-            pieChartAttendance.invalidate();
+            if (tvAttOverviewRate != null) tvAttOverviewRate.setText("--");
+            if (tvAttOverviewPresent != null) tvAttOverviewPresent.setText("0");
+            if (tvAttOverviewAbsent != null) tvAttOverviewAbsent.setText("0");
+            if (tvAttOverviewLate != null) tvAttOverviewLate.setText("0");
+            if (tvAttOverviewExcused != null) tvAttOverviewExcused.setText("0");
+            if (tvAttOverviewTotal != null) tvAttOverviewTotal.setText("0");
+            if (pieChartAttendance != null) {
+                pieChartAttendance.clear();
+                pieChartAttendance.setNoDataText("No attendance records available");
+                pieChartAttendance.invalidate();
+            }
             return;
         }
 
@@ -212,6 +228,17 @@ public class AttendanceFragment extends Fragment {
         int excused = getInt(summary, "excused");
         int total = present + absent + late + excused;
         float rate = summary.has("rate") && !summary.get("rate").isJsonNull() ? summary.get("rate").getAsFloat() : 0f;
+
+        if (tvAttOverviewRate != null) {
+            tvAttOverviewRate.setText(total > 0 ? String.format(Locale.US, "%.1f%%", rate) : "--");
+        }
+        if (tvAttOverviewPresent != null) tvAttOverviewPresent.setText(String.valueOf(present));
+        if (tvAttOverviewAbsent != null) tvAttOverviewAbsent.setText(String.valueOf(absent));
+        if (tvAttOverviewLate != null) tvAttOverviewLate.setText(String.valueOf(late));
+        if (tvAttOverviewExcused != null) tvAttOverviewExcused.setText(String.valueOf(excused));
+        if (tvAttOverviewTotal != null) tvAttOverviewTotal.setText(String.valueOf(total));
+
+        if (pieChartAttendance == null) return;
 
         if (total == 0) {
             pieChartAttendance.clear();
@@ -471,7 +498,7 @@ public class AttendanceFragment extends Fragment {
 
         if (rvStudentAttendanceRoster != null && getContext() != null) {
             studentAttendanceAdapter = new StudentAttendanceAdapter(requireContext(), studentAttendanceList, item -> {
-                new MaterialAlertDialogBuilder(requireContext())
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.student_attendance_breakdown)
                         .setMessage(getString(R.string.student_id_a8dd9e) + item.studentId + "\n" +
                                 "Student Name: " + item.studentName + "\n" +
@@ -479,8 +506,18 @@ public class AttendanceFragment extends Fragment {
                                 "Attendance Log:\n" +
                                 item.counts + "\n\n" +
                                 "Overall Attendance Rate: " + item.rateBadge)
-                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                        .show();
+                        .setPositiveButton(R.string.close, (dialog, which) -> dialog.dismiss());
+                if (item.numericStudentId > 0) {
+                    builder.setNeutralButton("View Full Student Profile", (dialog, which) -> {
+                        android.content.Intent intent = new android.content.Intent(
+                                requireContext(), com.social7.studentlearnanalytics.teacher.student.StudentDetailActivity.class);
+                        intent.putExtra("student_id", item.numericStudentId);
+                        intent.putExtra("student_code", item.studentId);
+                        intent.putExtra("student_name", item.studentName);
+                        startActivity(intent);
+                    });
+                }
+                builder.show();
             });
             rvStudentAttendanceRoster.setLayoutManager(new LinearLayoutManager(requireContext()));
             rvStudentAttendanceRoster.setAdapter(studentAttendanceAdapter);
@@ -519,11 +556,17 @@ public class AttendanceFragment extends Fragment {
                 int rate = getInt(obj, "rate");
                 String counts = "Present: " + p + " • Absent: " + a + " • Late: " + l;
                 String badge = rate + "% Rate";
-                studentAttendanceList.add(new StudentAttendanceAdapter.StudentAttendanceRecord(code, name, cls, counts, badge));
+                StudentAttendanceAdapter.StudentAttendanceRecord rec =
+                        new StudentAttendanceAdapter.StudentAttendanceRecord(code, name, cls, counts, badge);
+                rec.numericStudentId = getInt(obj, "student_id");
+                studentAttendanceList.add(rec);
             }
         }
         if (studentAttendanceAdapter != null) {
             studentAttendanceAdapter.filter("");
+        }
+        if (tvAttStudentEmpty != null) {
+            tvAttStudentEmpty.setVisibility(studentAttendanceList.isEmpty() ? View.VISIBLE : View.GONE);
         }
     }
 

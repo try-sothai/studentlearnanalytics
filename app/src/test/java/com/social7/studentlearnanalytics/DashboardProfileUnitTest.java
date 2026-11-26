@@ -90,4 +90,47 @@ public class DashboardProfileUnitTest {
 
         assertEquals("Year 1", student.getYearLevelFormatted());
     }
+
+    @Test
+    public void testCanonicalCodesAndAcademicYearSeparation() {
+        String json = "{\n" +
+                "  \"data\": {\n" +
+                "    \"student\": {\n" +
+                "      \"student_code\": \"STD004\",\n" +
+                "      \"year_level\": \"Y4\",\n" +
+                "      \"year_level_code\": \"Y4\",\n" +
+                "      \"academic_year\": \"2026-2027\",\n" +
+                "      \"user\": { \"name\": \"Dara\" }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+
+        DashboardResponse response = gson.fromJson(json, DashboardResponse.class);
+        DashboardResponse.DashboardData data = response.getData();
+
+        assertEquals("Year 4", data.getYearLevelFormatted());
+        assertEquals("Y4", data.getYearLevelCode());
+        assertEquals("2026-2027", data.getAcademicYear());
+        assertEquals(Integer.valueOf(4), data.getStudent().getYearLevelNumber());
+    }
+
+    @Test
+    public void testAcademicYearNeverConfusedWithYearLevel() {
+        String json = "{\n" +
+                "  \"data\": {\n" +
+                "    \"student\": {\n" +
+                "      \"student_code\": \"STD005\",\n" +
+                "      \"year_level\": \"2026-2027\",\n" +
+                "      \"academic_year\": \"2026-2027\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+
+        DashboardResponse response = gson.fromJson(json, DashboardResponse.class);
+        DashboardResponse.DashboardData data = response.getData();
+
+        assertEquals("Year 1", data.getYearLevelFormatted());
+        assertNull(data.getStudent().getYearLevelNumber());
+        assertEquals("2026-2027", data.getAcademicYear());
+    }
 }

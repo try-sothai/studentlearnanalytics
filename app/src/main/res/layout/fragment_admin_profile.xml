@@ -71,6 +71,7 @@
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/tvAdminProfileHeaderName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -80,14 +81,16 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvAdminProfileHeaderEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="admin@university.edu"
+                    android:text="—"
                     android:textColor="@color/primary_soft"
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/tvAdminProfileHeaderBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -101,7 +104,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Summary Cards Row (Total Logins & Account Status) -->
+        <!-- Summary Cards Row (Total Users & Account Status) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,7 +112,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <!-- Card 1: Total Logins -->
+            <!-- Card 1: Total Users -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -129,17 +132,19 @@
                     android:padding="12dp">
 
                     <TextView
+                        android:id="@+id/tvAdminProfileMetricLabel1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Logins"
+                        android:text="Total Users"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileMetricValue1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="1,234"
+                        android:text="—"
                         android:textColor="@color/primary"
                         android:textSize="22sp"
                         android:textStyle="bold" />
@@ -173,6 +178,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileAccountStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -216,6 +222,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileFullName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -245,10 +252,11 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="admin@university.edu"
+                        android:text="—"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -274,6 +282,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileRole"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -289,7 +298,7 @@
                     android:layout_marginVertical="12dp"
                     android:background="@color/divider_color" />
 
-                <!-- Last Login Row -->
+                <!-- Account ID / Updated At Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -298,15 +307,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_login"
+                        android:text="Account Updated"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/tvAdminProfileLastUpdated"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="May 29, 2024 09:30 AM"
+                        android:text="—"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />

@@ -78,6 +78,10 @@ public interface ApiService {
     @GET("recommendations")
     Call<JsonObject> getRecommendations();
 
+    @Headers({"Accept: application/json"})
+    @GET("recommendations")
+    Call<JsonObject> getRecommendations(@retrofit2.http.Query("semester_id") Integer semesterId);
+
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @retrofit2.http.PUT("recommendations/{id}")
     Call<JsonObject> updateRecommendation(@retrofit2.http.Path("id") String id, @Body JsonObject body);
@@ -212,6 +216,26 @@ public interface ApiService {
     Call<JsonObject> getStudentModuleComparisons();
 
     @Headers({"Accept: application/json"})
+    @GET("student/module/gpa-overview")
+    Call<JsonObject> getStudentGpaOverview();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/gpa-history")
+    Call<JsonObject> getStudentGpaHistory(@retrofit2.http.Query("study_year") Integer studyYear);
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/progression-status")
+    Call<JsonObject> getStudentProgressionStatus();
+
+    @Headers({"Accept: application/json"})
+    @GET("student/module/retakes")
+    Call<JsonObject> getStudentRetakes();
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("student/module/retakes/enroll")
+    Call<JsonObject> enrollStudentRetake(@Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
     @GET("dashboard/teacher")
     Call<JsonObject> getTeacherDashboard();
 
@@ -227,6 +251,15 @@ public interface ApiService {
     Call<JsonObject> getTeacherStudents(
             @retrofit2.http.Query("course_id") Integer courseId,
             @retrofit2.http.Query("risk_level") String riskLevel,
+            @retrofit2.http.Query("search") String search
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/students")
+    Call<JsonObject> getTeacherStudents(
+            @retrofit2.http.Query("course_id") Integer courseId,
+            @retrofit2.http.Query("risk_level") String riskLevel,
+            @retrofit2.http.Query("year_level") String yearLevel,
             @retrofit2.http.Query("search") String search
     );
 
@@ -359,6 +392,32 @@ public interface ApiService {
     Call<JsonObject> deleteTeacherExam(@retrofit2.http.Path("examId") int examId);
 
     @Headers({"Accept: application/json"})
+    @GET("teacher/exams/{examId}")
+    Call<JsonObject> getTeacherExamDetail(@retrofit2.http.Path("examId") int examId);
+
+    @Headers({"Accept: application/json"})
+    @POST("teacher/exams/{examId}/scores")
+    Call<JsonObject> storeTeacherExamScores(
+            @retrofit2.http.Path("examId") int examId,
+            @retrofit2.http.Body JsonObject body
+    );
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.PATCH("teacher/exams/{examId}/publish")
+    Call<JsonObject> publishTeacherExam(@retrofit2.http.Path("examId") int examId);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.PATCH("teacher/exams/{examId}/unpublish")
+    Call<JsonObject> unpublishTeacherExam(@retrofit2.http.Path("examId") int examId);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("teacher/exams/{examId}")
+    Call<JsonObject> deleteTeacherExamForce(
+            @retrofit2.http.Path("examId") int examId,
+            @retrofit2.http.Query("force") boolean force
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("teacher/quizzes/{quizId}")
     Call<JsonObject> getTeacherQuizDetail(@retrofit2.http.Path("quizId") int quizId);
 
@@ -403,11 +462,132 @@ public interface ApiService {
     @GET("teacher/quiz-attempts/{attemptId}")
     Call<JsonObject> getTeacherQuizAttemptDetail(@retrofit2.http.Path("attemptId") int attemptId);
 
-    @Headers({"Accept: application/json"})
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
     @retrofit2.http.PATCH("teacher/quiz-answers/{answerId}/grade")
     Call<JsonObject> gradeTeacherQuizAnswer(
             @retrofit2.http.Path("answerId") int answerId,
             @retrofit2.http.Body JsonObject body
+    );
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/quiz-attempts/{attemptId}/grade")
+    Call<JsonObject> gradeTeacherQuizAttempt(
+            @retrofit2.http.Path("attemptId") int attemptId,
+            @retrofit2.http.Body JsonObject body
+    );
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.PATCH("teacher/quizzes/{quizId}/unpublish")
+    Call<JsonObject> unpublishTeacherQuiz(@retrofit2.http.Path("quizId") int quizId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/quizzes/{quizId}/reopen")
+    Call<JsonObject> reopenTeacherQuiz(
+            @retrofit2.http.Path("quizId") int quizId,
+            @retrofit2.http.Body JsonObject body
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/quizzes/{quizId}/students")
+    Call<JsonObject> getTeacherQuizStudents(@retrofit2.http.Path("quizId") int quizId);
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/quizzes/{quizId}/overrides")
+    Call<JsonObject> getTeacherQuizOverrides(@retrofit2.http.Path("quizId") int quizId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/quizzes/{quizId}/overrides")
+    Call<JsonObject> grantTeacherQuizOverride(
+            @retrofit2.http.Path("quizId") int quizId,
+            @retrofit2.http.Body JsonObject body
+    );
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("teacher/quizzes/{quizId}/overrides/{studentId}")
+    Call<JsonObject> revokeTeacherQuizOverride(
+            @retrofit2.http.Path("quizId") int quizId,
+            @retrofit2.http.Path("studentId") int studentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/quizzes/{quizId}/audit-logs")
+    Call<JsonObject> getTeacherQuizAuditLogs(@retrofit2.http.Path("quizId") int quizId);
+
+    // -------------------------------------------------------------------------
+    // Universal Reopen, Retake, Late Submission, History & Audit Logs
+    // -------------------------------------------------------------------------
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/assessments/{assessmentType}/{assessmentId}/reopen-status")
+    Call<JsonObject> getTeacherAssessmentReopenStatus(
+            @retrofit2.http.Path("assessmentType") String assessmentType,
+            @retrofit2.http.Path("assessmentId") int assessmentId,
+            @retrofit2.http.Query("student_id") Integer studentId
+    );
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/assessments/reopen")
+    Call<JsonObject> reopenTeacherAssessment(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/assessments/extend-deadline")
+    Call<JsonObject> extendTeacherAssessmentDeadline(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/assessments/grant-attempts")
+    Call<JsonObject> grantTeacherAssessmentAttempts(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("teacher/assessments/revoke-reopen")
+    Call<JsonObject> revokeTeacherAssessmentReopen(@Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("teacher/assessments/{assessmentType}/{assessmentId}/overrides/{studentId}")
+    Call<JsonObject> deleteTeacherAssessmentOverride(
+            @retrofit2.http.Path("assessmentType") String assessmentType,
+            @retrofit2.http.Path("assessmentId") int assessmentId,
+            @retrofit2.http.Path("studentId") int studentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/assessments/{assessmentType}/{assessmentId}/submission-history")
+    Call<JsonObject> getTeacherAssessmentSubmissionHistory(
+            @retrofit2.http.Path("assessmentType") String assessmentType,
+            @retrofit2.http.Path("assessmentId") int assessmentId,
+            @retrofit2.http.Query("student_id") Integer studentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/assessments/quiz/{assessmentId}/attempt-history")
+    Call<JsonObject> getTeacherQuizAttemptHistory(
+            @retrofit2.http.Path("assessmentId") int assessmentId,
+            @retrofit2.http.Query("student_id") Integer studentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("teacher/assessments/audit-logs")
+    Call<JsonObject> getTeacherAssessmentAuditLogs(
+            @retrofit2.http.QueryMap java.util.Map<String, String> filters
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("student/assessments/{assessmentType}/{assessmentId}/reopen-status")
+    Call<JsonObject> getStudentAssessmentReopenStatus(
+            @retrofit2.http.Path("assessmentType") String assessmentType,
+            @retrofit2.http.Path("assessmentId") int assessmentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("student/assessments/{assessmentType}/{assessmentId}/submission-history")
+    Call<JsonObject> getStudentAssessmentSubmissionHistory(
+            @retrofit2.http.Path("assessmentType") String assessmentType,
+            @retrofit2.http.Path("assessmentId") int assessmentId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("student/assessments/quiz/{assessmentId}/attempt-history")
+    Call<JsonObject> getStudentQuizAttemptHistory(
+            @retrofit2.http.Path("assessmentId") int assessmentId
     );
 
     @Headers({"Accept: application/json"})
@@ -519,14 +699,26 @@ public interface ApiService {
     @GET("admin/analytics/enrollment")
     Call<JsonObject> getAdminAnalyticsEnrollment();
 
+    @GET("admin/analytics/enrollment")
+    Call<JsonObject> getAdminAnalyticsEnrollment(@retrofit2.http.Query("academic_year_id") Integer academicYearId);
+
     @GET("admin/analytics/performance")
     Call<JsonObject> getAdminAnalyticsPerformance();
+
+    @GET("admin/analytics/performance")
+    Call<JsonObject> getAdminAnalyticsPerformance(@retrofit2.http.Query("academic_year_id") Integer academicYearId);
 
     @GET("admin/analytics/attendance")
     Call<JsonObject> getAdminAnalyticsAttendance();
 
+    @GET("admin/analytics/attendance")
+    Call<JsonObject> getAdminAnalyticsAttendance(@retrofit2.http.Query("academic_year_id") Integer academicYearId);
+
     @GET("admin/analytics/student-risk")
     Call<JsonObject> getAdminAnalyticsStudentRisk();
+
+    @GET("admin/analytics/student-risk")
+    Call<JsonObject> getAdminAnalyticsStudentRisk(@retrofit2.http.Query("academic_year_id") Integer academicYearId);
 
     @GET("admin/analytics/model-evaluation")
     Call<JsonObject> getAdminModelEvaluation();
@@ -566,6 +758,18 @@ public interface ApiService {
             @retrofit2.http.Query("role") String role,
             @retrofit2.http.Query("status") String status,
             @retrofit2.http.Query("department") String department,
+            @retrofit2.http.Query("search") String search,
+            @retrofit2.http.Query("page") int page,
+            @retrofit2.http.Query("per_page") int perPage
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/users")
+    Call<JsonObject> getUsers(
+            @retrofit2.http.Query("role") String role,
+            @retrofit2.http.Query("status") String status,
+            @retrofit2.http.Query("department") String department,
+            @retrofit2.http.Query("year_level") String yearLevel,
             @retrofit2.http.Query("search") String search,
             @retrofit2.http.Query("page") int page,
             @retrofit2.http.Query("per_page") int perPage
@@ -686,6 +890,18 @@ public interface ApiService {
             @retrofit2.http.Query("semester_id") Integer semesterId
     );
 
+    @Headers({"Accept: application/json"})
+    @GET("courses")
+    Call<JsonObject> getCoursesCatalogFiltered(
+            @retrofit2.http.Query("search") String search,
+            @retrofit2.http.Query("status") String status,
+            @retrofit2.http.Query("department_id") Integer departmentId,
+            @retrofit2.http.Query("program_id") Integer programId,
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("year_level") String yearLevel
+    );
+
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @retrofit2.http.PATCH("courses/{id}/status")
     Call<JsonObject> updateCourseStatus(@retrofit2.http.Path("id") String id, @Body JsonObject body);
@@ -704,6 +920,15 @@ public interface ApiService {
 
     @GET("classes")
     Call<JsonObject> getClassesCatalog();
+
+    @Headers({"Accept: application/json"})
+    @GET("classes")
+    Call<JsonObject> getClassesCatalogFiltered(
+            @retrofit2.http.Query("department_id") Integer departmentId,
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("year_level") String yearLevel,
+            @retrofit2.http.Query("search") String search
+    );
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("classes")
@@ -870,6 +1095,16 @@ public interface ApiService {
     );
 
     @Headers({"Accept: application/json"})
+    @retrofit2.http.Multipart
+    @POST("assignment-submissions")
+    Call<JsonObject> submitAssignmentMultipartWithText(
+            @retrofit2.http.Part("assignment_id") okhttp3.RequestBody assignmentId,
+            @retrofit2.http.Part("file_path") okhttp3.RequestBody filePath,
+            @retrofit2.http.Part("submission_text") okhttp3.RequestBody submissionText,
+            @retrofit2.http.Part okhttp3.MultipartBody.Part submissionFile
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("quizzes/{id}")
     Call<JsonObject> getQuizDetails(@retrofit2.http.Path("id") String quizId);
 
@@ -948,6 +1183,15 @@ public interface ApiService {
     );
 
     @Headers({"Accept: application/json"})
+    @GET("admin/reports-analytics/overview")
+    Call<JsonObject> getReportsAnalyticsOverview(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("department_id") Integer departmentId,
+            @retrofit2.http.Query("year_level") String yearLevel
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("admin/reports-analytics/attendance")
     Call<JsonObject> getReportsAnalyticsAttendance(
             @retrofit2.http.Query("academic_year_id") Integer academicYearId,
@@ -955,6 +1199,17 @@ public interface ApiService {
             @retrofit2.http.Query("department_id") Integer departmentId,
             @retrofit2.http.Query("course_id") Integer courseId,
             @retrofit2.http.Query("class_id") Integer classId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/reports-analytics/attendance")
+    Call<JsonObject> getReportsAnalyticsAttendance(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("department_id") Integer departmentId,
+            @retrofit2.http.Query("course_id") Integer courseId,
+            @retrofit2.http.Query("class_id") Integer classId,
+            @retrofit2.http.Query("year_level") String yearLevel
     );
 
     @Headers({"Accept: application/json"})
@@ -975,6 +1230,16 @@ public interface ApiService {
             @retrofit2.http.Query("semester_id") Integer semesterId,
             @retrofit2.http.Query("department_id") Integer departmentId,
             @retrofit2.http.Query("course_id") Integer courseId
+    );
+
+    @Headers({"Accept: application/json"})
+    @GET("admin/reports-analytics/courses")
+    Call<JsonObject> getReportsAnalyticsCourses(
+            @retrofit2.http.Query("academic_year_id") Integer academicYearId,
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("department_id") Integer departmentId,
+            @retrofit2.http.Query("course_id") Integer courseId,
+            @retrofit2.http.Query("year_level") String yearLevel
     );
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
@@ -1035,8 +1300,24 @@ public interface ApiService {
     );
 
     @Headers({"Accept: application/json"})
+    @GET("class-schedules")
+    Call<JsonObject> getClassSchedules(
+            @retrofit2.http.Query("class_id") Integer classId,
+            @retrofit2.http.Query("day_of_week") String dayOfWeek,
+            @retrofit2.http.Query("year_level") String yearLevel,
+            @retrofit2.http.Query("search") String search
+    );
+
+    @Headers({"Accept: application/json"})
     @GET("my-schedules")
     Call<JsonObject> getMySchedules(@retrofit2.http.Query("semester_id") Integer semesterId);
+
+    @Headers({"Accept: application/json"})
+    @GET("my-schedules")
+    Call<JsonObject> getMySchedules(
+            @retrofit2.http.Query("semester_id") Integer semesterId,
+            @retrofit2.http.Query("year_level") String yearLevel
+    );
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("class-schedules")
@@ -1058,6 +1339,10 @@ public interface ApiService {
     @POST("academic-years")
     Call<JsonObject> createAcademicYear(@Body JsonObject body);
 
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("academic-years/{id}")
+    Call<JsonObject> updateAcademicYear(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
     @Headers({"Accept: application/json"})
     @GET("semesters")
     Call<JsonObject> getSemesters();
@@ -1067,6 +1352,62 @@ public interface ApiService {
     Call<JsonObject> createSemester(@Body JsonObject body);
 
     @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("semesters/{id}")
+    Call<JsonObject> updateSemester(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("departments")
     Call<JsonObject> createDepartment(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("departments/{id}")
+    Call<JsonObject> updateDepartment(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("departments/{id}")
+    Call<JsonObject> deleteDepartment(@retrofit2.http.Path("id") String id);
+
+    @Headers({"Accept: application/json"})
+    @GET("departments/{id}/programs")
+    Call<JsonObject> getProgramsByDepartment(@retrofit2.http.Path("id") int departmentId);
+
+    @Headers({"Accept: application/json"})
+    @GET("programs")
+    Call<JsonObject> getPrograms(@retrofit2.http.Query("department_id") Integer departmentId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("programs")
+    Call<JsonObject> createProgram(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("programs/{id}")
+    Call<JsonObject> updateProgram(@retrofit2.http.Path("id") int id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("programs/{id}")
+    Call<JsonObject> deleteProgram(@retrofit2.http.Path("id") int id);
+
+    @Headers({"Accept: application/json"})
+    @GET("programs/{id}/courses")
+    Call<JsonObject> getProgramCourses(@retrofit2.http.Path("id") int programId);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("courses/{id}/majors")
+    Call<JsonObject> assignCourseMajors(@retrofit2.http.Path("id") int courseId, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @GET("course-categories")
+    Call<JsonObject> getCourseCategories();
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("course-categories")
+    Call<JsonObject> createCourseCategory(@Body JsonObject body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @retrofit2.http.PUT("course-categories/{id}")
+    Call<JsonObject> updateCourseCategory(@retrofit2.http.Path("id") String id, @Body JsonObject body);
+
+    @Headers({"Accept: application/json"})
+    @retrofit2.http.DELETE("course-categories/{id}")
+    Call<JsonObject> deleteCourseCategory(@retrofit2.http.Path("id") String id);
 }

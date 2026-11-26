@@ -265,7 +265,9 @@ public class StudentMainActivity extends AppCompatActivity {
                                 String yearStr = "";
                                 if (studentObj.has("year_level") && !studentObj.get("year_level").isJsonNull()) {
                                     String rawYr = studentObj.get("year_level").getAsString();
-                                    yearStr = rawYr.toLowerCase().contains("year") ? rawYr : "Year " + rawYr;
+                                    if (com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYr) != null) {
+                                        yearStr = com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(StudentMainActivity.this, rawYr);
+                                    }
                                 }
 
                                 if (!deptName.isEmpty() && !yearStr.isEmpty()) {
@@ -330,13 +332,16 @@ public class StudentMainActivity extends AppCompatActivity {
         });
     }
 
+    private int cachedUnreadNotificationsCount = 0;
+
     public void updateGlobalNotificationBadge(int unreadCount) {
+        cachedUnreadNotificationsCount = Math.max(0, unreadCount);
         TextView tvNotifBadge = findViewById(R.id.tvStudentNotifBadge);
         if (tvNotifBadge == null) tvNotifBadge = findViewById(R.id.tvTeacherNotifBadge);
         if (tvNotifBadge != null) {
-            if (unreadCount > 0) {
+            if (cachedUnreadNotificationsCount > 0) {
                 tvNotifBadge.setVisibility(View.VISIBLE);
-                tvNotifBadge.setText(String.valueOf(unreadCount));
+                tvNotifBadge.setText(String.valueOf(cachedUnreadNotificationsCount));
             } else {
                 tvNotifBadge.setVisibility(View.GONE);
             }
@@ -344,9 +349,9 @@ public class StudentMainActivity extends AppCompatActivity {
 
         if (bottomNavigation != null) {
             com.google.android.material.badge.BadgeDrawable badge = bottomNavigation.getOrCreateBadge(R.id.nav_notifications);
-            if (unreadCount > 0) {
+            if (cachedUnreadNotificationsCount > 0) {
                 badge.setVisible(true);
-                badge.setNumber(unreadCount);
+                badge.setNumber(cachedUnreadNotificationsCount);
             } else {
                 badge.setVisible(false);
             }
@@ -540,7 +545,9 @@ public class StudentMainActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        if (intent != null && intent.hasExtra("select_tab")) {
+        if (intent != null && "settings".equalsIgnoreCase(intent.getStringExtra("open_fragment"))) {
+            openFragment(new StudentSettingsFragment());
+        } else if (intent != null && intent.hasExtra("select_tab")) {
             int tabId = intent.getIntExtra("select_tab", R.id.nav_home);
             if (bottomNavigation != null) {
                 bottomNavigation.setSelectedItemId(tabId);
@@ -654,6 +661,17 @@ public class StudentMainActivity extends AppCompatActivity {
             String name = sessionManager.getStudentName();
             if (name != null && !name.trim().isEmpty()) {
                 tvAvatarText.setText(String.valueOf(name.charAt(0)).toUpperCase());
+            }
+        }
+
+        TextView tvNotifBadge = root.findViewById(R.id.tvStudentNotifBadge);
+        if (tvNotifBadge == null) tvNotifBadge = root.findViewById(R.id.tvTeacherNotifBadge);
+        if (tvNotifBadge != null) {
+            if (cachedUnreadNotificationsCount > 0) {
+                tvNotifBadge.setVisibility(View.VISIBLE);
+                tvNotifBadge.setText(String.valueOf(cachedUnreadNotificationsCount));
+            } else {
+                tvNotifBadge.setVisibility(View.GONE);
             }
         }
     }

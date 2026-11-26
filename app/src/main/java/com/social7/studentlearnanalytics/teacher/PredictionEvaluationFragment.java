@@ -38,6 +38,7 @@ public class PredictionEvaluationFragment extends Fragment {
     private View secEvalOverviewContainer, secEvalPredVsActualContainer, secEvalModelCompContainer, secEvalHistoryContainer, secEvalInsightsContainer;
 
     private LineChart lineChartEval;
+    private TextView tvEvalMae, tvEvalRmse, tvEvalR2, tvEvalSamples, tvEvalModelVersion, tvEvalStatus;
 
     private RecyclerView rvPredVsActualRoster;
     private PredVsActualAdapter predVsActualAdapter;
@@ -149,6 +150,8 @@ public class PredictionEvaluationFragment extends Fragment {
                             && data.get("has_predictions").getAsBoolean();
 
                     if (!hasPreds) {
+                        if (tvEvalSamples != null) tvEvalSamples.setText("0 Rows");
+                        if (tvEvalStatus != null) tvEvalStatus.setText("No Data");
                         if (lineChartEval != null) {
                             lineChartEval.clear();
                             lineChartEval.setNoDataText("No prediction evaluation records available yet");
@@ -156,6 +159,8 @@ public class PredictionEvaluationFragment extends Fragment {
                         }
                     } else if (data.has("predictions") && data.get("predictions").isJsonArray()) {
                         JsonArray arr = data.getAsJsonArray("predictions");
+                        if (tvEvalSamples != null) tvEvalSamples.setText(arr.size() + " Rows");
+                        if (tvEvalStatus != null) tvEvalStatus.setText(arr.size() > 0 ? "Active" : "No Data");
                         for (JsonElement el : arr) {
                             if (!el.isJsonObject()) continue;
                             JsonObject o = el.getAsJsonObject();
@@ -198,6 +203,12 @@ public class PredictionEvaluationFragment extends Fragment {
 
     private void bindOverviewViews(View root) {
         lineChartEval = root.findViewById(R.id.lineChartEval);
+        tvEvalMae = root.findViewById(R.id.tvEvalMae);
+        tvEvalRmse = root.findViewById(R.id.tvEvalRmse);
+        tvEvalR2 = root.findViewById(R.id.tvEvalR2);
+        tvEvalSamples = root.findViewById(R.id.tvEvalSamples);
+        tvEvalModelVersion = root.findViewById(R.id.tvEvalModelVersion);
+        tvEvalStatus = root.findViewById(R.id.tvEvalStatus);
         if (lineChartEval != null) {
             lineChartEval.setNoDataText("No prediction evaluation records available yet");
         }

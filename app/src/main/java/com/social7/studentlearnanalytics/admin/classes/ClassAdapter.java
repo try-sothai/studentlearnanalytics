@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.ClassModel;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,15 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
             if (tvDetails != null) {
                 StringBuilder details = new StringBuilder();
+                if (YearLevelHelper.isValid(classModel.getYearLevel())) {
+                    details.append(YearLevelHelper.toBadgeText(itemView.getContext(), classModel.getYearLevel()));
+                }
+                if (classModel.getAcademicYear() != null && !classModel.getAcademicYear().isEmpty()) {
+                    if (details.length() > 0) details.append(" • ");
+                    details.append(classModel.getAcademicYear());
+                }
                 if (classModel.getLocationLabel() != null && !classModel.getLocationLabel().isEmpty()) {
+                    if (details.length() > 0) details.append(" • ");
                     details.append(classModel.getLocationLabel());
                 }
                 if (classModel.getCourse() != null && !classModel.getCourse().isEmpty()) {

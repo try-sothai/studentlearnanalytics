@@ -156,22 +156,22 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_assessments" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_24_active" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvOverviewTotalAssessments" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Active" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pending_scores" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Needing Grading" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvOverviewPendingScores" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Needing Grading" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/completed_graded" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_16_graded" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvOverviewCompletedGraded" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Graded" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/average_class_score" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="84.2%" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvOverviewAverageScore" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.0%" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>
@@ -208,23 +208,23 @@
                             android:layout_marginVertical="6dp"
                             android:background="@color/admin_border" />
 
-                        <!-- Course 1 -->
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="CS101 — Intro to Computer Science" android:textColor="@color/admin_text_primary" android:textSize="12sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_85_graded" android:textColor="@color/admin_primary_blue" android:textSize="12sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                            <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="85" android:progressTint="@color/admin_primary_blue"/>
-                        </LinearLayout>
+                        <!-- Dynamic container for real course progress -->
+                        <LinearLayout
+                            android:id="@+id/layoutOverviewCourseProgressContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
 
-                        <!-- Course 2 -->
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="vertical">
-                            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="IT402 — Web Development Systems" android:textColor="@color/admin_text_primary" android:textSize="12sp" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_70_graded" android:textColor="@color/warning_orange" android:textSize="12sp" android:textStyle="bold"/>
-                            </LinearLayout>
-                            <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="100" android:progress="70" android:progressTint="@color/warning_orange"/>
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvOverviewNoProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginVertical="8dp"
+                            android:text="No assigned courses available"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -387,6 +387,99 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Pending Filter Buttons -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFilterAllPending"
+                            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="@string/all"
+                            android:textAllCaps="false"
+                            android:textSize="11sp"
+                            android:textColor="@color/white"
+                            app:backgroundTint="@color/admin_primary_blue"
+                            app:cornerRadius="16dp"
+                            android:paddingHorizontal="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFilterAssignments"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="@string/assignments"
+                            android:textAllCaps="false"
+                            android:textSize="11sp"
+                            android:textColor="@color/admin_text_secondary"
+                            app:strokeColor="@color/admin_border"
+                            app:cornerRadius="16dp"
+                            android:paddingHorizontal="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFilterQuizzes"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="@string/quizzes"
+                            android:textAllCaps="false"
+                            android:textSize="11sp"
+                            android:textColor="@color/admin_text_secondary"
+                            app:strokeColor="@color/admin_border"
+                            app:cornerRadius="16dp"
+                            android:paddingHorizontal="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFilterExams"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="@string/exams"
+                            android:textAllCaps="false"
+                            android:textSize="11sp"
+                            android:textColor="@color/admin_text_secondary"
+                            app:strokeColor="@color/admin_border"
+                            app:cornerRadius="16dp"
+                            android:paddingHorizontal="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFilterOverdue"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:text="@string/status_overdue"
+                            android:textAllCaps="false"
+                            android:textSize="11sp"
+                            android:textColor="@color/admin_text_secondary"
+                            app:strokeColor="@color/admin_border"
+                            app:cornerRadius="16dp"
+                            android:paddingHorizontal="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
                 <!-- Search Input Bar -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -423,6 +516,17 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
 
+                <TextView
+                    android:id="@+id/tvEmptyPendingScores"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="32dp"
+                    android:text="No pending assessments to grade"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -442,11 +546,50 @@
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Assignment Scores Roster" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchAssignments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/search_assignments_by_title_or_course"
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAssignmentScoresList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/tvEmptyAssignments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="32dp"
+                    android:text="@string/no_assignments_found"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -467,11 +610,50 @@
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quiz Scores Roster" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchQuizzes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/search_quizzes_by_title_or_course"
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvQuizScoresList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/tvEmptyQuizzes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="32dp"
+                    android:text="@string/no_quizzes_found"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -492,11 +674,50 @@
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/midterm_final_exam_scores" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchExams"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Search exams by title or course..."
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvExamScoresList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/tvEmptyExams"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="32dp"
+                    android:text="No exams found"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -517,11 +738,50 @@
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Student Academic Gradebook Roster" android:textColor="@color/admin_text_primary" android:textSize="13.5sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="10dp" app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp" app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/admin_primary_blue"
+                    app:hintEnabled="false"
+                    app:startIconDrawable="@drawable/ic_search" app:startIconTint="@color/admin_text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtSearchGradebook"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Search gradebook by student or course..."
+                        android:inputType="text" android:textColor="@color/admin_text_primary" android:textSize="12.5sp"
+                        android:minHeight="44dp"
+                        android:paddingVertical="10dp"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:imeOptions="actionSearch"
+                        android:textColorHint="@color/admin_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvGradebookRosterList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/tvEmptyGradebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="32dp"
+                    android:text="No gradebook records available"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

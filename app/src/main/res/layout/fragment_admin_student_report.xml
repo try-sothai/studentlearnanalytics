@@ -281,19 +281,19 @@
                         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:rowCount="2">
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/total_enrolled" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2,845" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvStudentEnrollMetricTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="12dp" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="New Intake" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="320" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Students" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:id="@+id/tvStudentEnrollMetricNew" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_active_green" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Returning" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="2,339" android:textColor="@color/admin_text_primary" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Graduated" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:id="@+id/tvStudentEnrollMetricReturning" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_text_primary" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Graduation Rate" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.2%" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Rate" android:textColor="@color/admin_text_secondary" android:textSize="12sp"/>
+                                <TextView android:id="@+id/tvStudentEnrollMetricGradRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:textColor="@color/admin_purple_accent" android:textSize="18sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>

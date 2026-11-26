@@ -139,7 +139,7 @@
                                 android:id="@+id/tvSummaryDepartmentName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Computer Science Dept."
+                                android:text="Computer Science Faculty"
                                 android:textColor="@color/teacher_secondary_text"
                                 android:textSize="10sp"
                                 android:ellipsize="end"

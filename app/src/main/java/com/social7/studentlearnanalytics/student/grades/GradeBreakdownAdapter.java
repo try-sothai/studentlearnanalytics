@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
@@ -31,13 +32,21 @@ public class GradeBreakdownAdapter extends RecyclerView.Adapter<GradeBreakdownAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
 
-        holder.tvComponentName.setText(item.has("component_name") ? item.get("component_name").getAsString() : "Component");
-        holder.tvType.setText(item.has("type") ? item.get("type").getAsString() : "Unknown");
+        holder.tvComponentName.setText(item.has("component_name") && !item.get("component_name").isJsonNull()
+                ? item.get("component_name").getAsString() : "Component");
+        String rawType = item.has("type") && !item.get("type").isJsonNull()
+                ? item.get("type").getAsString().trim() : "Assessment";
+        String displayType = rawType.isEmpty()
+                ? "Assessment"
+                : rawType.substring(0, 1).toUpperCase() + rawType.substring(1);
+        holder.tvType.setText(displayType);
 
-        String earned = item.has("earned_score") && !item.get("earned_score").isJsonNull() ? item.get("earned_score").getAsString() : "--";
+        String earned = item.has("earned_score") && !item.get("earned_score").isJsonNull() ? item.get("earned_score").getAsString() : "N/A";
         String max = item.has("maximum_score") && !item.get("maximum_score").isJsonNull() ? item.get("maximum_score").getAsString() : "0";
 
         holder.tvEarned.setText(earned);
+        holder.tvEarned.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),
+                "N/A".equalsIgnoreCase(earned) ? R.color.slas_text_secondary : R.color.slas_text_primary));
         holder.tvMax.setText(max);
 
         if (item.has("teacher_feedback") && !item.get("teacher_feedback").isJsonNull()) {

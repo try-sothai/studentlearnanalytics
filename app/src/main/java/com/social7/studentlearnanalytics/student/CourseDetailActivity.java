@@ -235,13 +235,13 @@ public class CourseDetailActivity extends AppCompatActivity {
                     int credits = currentCourse.getCredits() > 0 ? currentCourse.getCredits() : 3;
                     tvChipStudentCount.setText(credits + " Credits");
                 } else {
-                    tvChipStudentCount.setText((currentCourse.getStudentCount() > 0 ? currentCourse.getStudentCount() : 35) + " Students");
+                    tvChipStudentCount.setText(currentCourse.getStudentCount() > 0 ? (currentCourse.getStudentCount() + " Students") : "Enrolled Roster");
                 }
             }
             if (tvChipSemester != null) {
                 tvChipSemester.setText(!currentCourse.getSemester().isEmpty() ? currentCourse.getSemester() : "Current Semester");
             }
-            String room = !currentCourse.getRoom().isEmpty() ? currentCourse.getRoom() : "Room A101";
+            String room = !currentCourse.getRoom().isEmpty() ? currentCourse.getRoom() : "Room TBA";
             if (tvChipRoom != null) tvChipRoom.setText(room);
             if (tvSchedRoom1 != null) tvSchedRoom1.setText(room);
             if (tvSchedRoom2 != null) tvSchedRoom2.setText(room);
@@ -255,7 +255,9 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
 
             if (tvTotalStudentsSubtext != null && !isStudent) {
-                tvTotalStudentsSubtext.setText(tvTotalStudentsSubtext.getContext().getString(R.string.total_1fd328) + (currentCourse.getStudentCount() > 0 ? currentCourse.getStudentCount() : 35) + " Students");
+                tvTotalStudentsSubtext.setText(currentCourse.getStudentCount() > 0
+                        ? (tvTotalStudentsSubtext.getContext().getString(R.string.total_1fd328) + currentCourse.getStudentCount() + " Students")
+                        : "Enrollment data unavailable");
             }
 
             float avg = currentCourse.getPerformance();
@@ -271,7 +273,7 @@ public class CourseDetailActivity extends AppCompatActivity {
                     }
                 }
                 if (tvClassAvgVal != null) {
-                    tvClassAvgVal.setText("--%");
+                    tvClassAvgVal.setText("N/A");
                 }
                 if (tvLearningInsightsText != null) {
                     if (avg >= 80) {
@@ -283,9 +285,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                float displayAvg = avg > 0 ? avg : 82f;
-                if (tvClassAvgVal != null) tvClassAvgVal.setText(Math.round(displayAvg) + "%");
-                if (tvPassRateVal != null) tvPassRateVal.setText(Math.round(Math.min(100f, displayAvg * 1.05f)) + "%");
+                if (tvClassAvgVal != null) tvClassAvgVal.setText(avg > 0 ? Math.round(avg) + "%" : "N/A");
+                if (tvPassRateVal != null) tvPassRateVal.setText("N/A");
             }
         } else {
             if (tvCourseTitle != null) {
@@ -293,9 +294,9 @@ public class CourseDetailActivity extends AppCompatActivity {
                 tvCourseTitle.setText(title);
             }
             if (tvCourseDept != null) tvCourseDept.setText(extraDept != null ? extraDept : "Academic Course Details");
-            if (tvCourseSubtext != null) tvCourseSubtext.setText(tvCourseSubtext.getContext().getString(R.string.instructor) + (extraInstructor != null ? extraInstructor : "Course Lecturer"));
+            if (tvCourseSubtext != null) tvCourseSubtext.setText(tvCourseSubtext.getContext().getString(R.string.instructor) + (extraInstructor != null ? extraInstructor : "Assigned Instructor"));
             if (tvStatusBadge != null) tvStatusBadge.setText(R.string.status_active);
-            if (tvChipStudentCount != null) tvChipStudentCount.setText(isStudent ? "3 Credits" : "35 Students");
+            if (tvChipStudentCount != null) tvChipStudentCount.setText(isStudent ? "-- Credits" : "Enrolled Roster");
             if (tvChipSemester != null) tvChipSemester.setText(R.string.current_semester);
             if (tvChipRoom != null) tvChipRoom.setText("Room TBA");
             if (tvPassRateVal != null) tvPassRateVal.setText("N/A");
@@ -305,8 +306,53 @@ public class CourseDetailActivity extends AppCompatActivity {
         PieChart pieChart = findViewById(R.id.pieChartPerformanceSummary);
         if (pieChart != null) {
             float chartScore = (currentCourse != null && currentCourse.getPerformance() > 0)
-                    ? currentCourse.getPerformance() : (isStudent ? 0f : 82f);
+                    ? currentCourse.getPerformance() : 0f;
             setupPieChart(pieChart, chartScore);
+        }
+    }
+
+    private Double liveAssignmentAvg = null;
+    private Double liveQuizAvg = null;
+    private Double liveExamAvg = null;
+
+    private void refreshStudentCoursePerformance() {
+        double sum = 0.0;
+        int count = 0;
+        if (liveAssignmentAvg != null) { sum += liveAssignmentAvg; count++; }
+        if (liveQuizAvg != null) { sum += liveQuizAvg; count++; }
+        if (liveExamAvg != null) { sum += liveExamAvg; count++; }
+
+        float score = 0f;
+        if (count > 0) {
+            score = (float) (sum / count);
+        } else if (currentCourse != null && currentCourse.getPerformance() > 0) {
+            score = currentCourse.getPerformance();
+        }
+
+        TextView tvPassRateVal = findViewById(R.id.tvPassRateVal);
+        TextView tvPassRateBadge = findViewById(R.id.tvPassRateBadge);
+        TextView tvLearningInsightsText = findViewById(R.id.tvLearningInsightsText);
+
+        if (tvPassRateVal != null) {
+            tvPassRateVal.setText(count > 0 || score > 0 ? Math.round(score) + "%" : "N/A");
+        }
+        if (tvPassRateBadge != null && (count > 0 || score > 0)) {
+            tvPassRateBadge.setText(score >= 80 ? "Good" : (score >= 50 ? "Pass" : "Needs Focus"));
+        }
+        if (tvLearningInsightsText != null && (count > 0 || score > 0)) {
+            String code = (currentCourse != null && !currentCourse.getCode().isEmpty())
+                    ? currentCourse.getCode() : "this course";
+            if (score >= 80) {
+                tvLearningInsightsText.setText("Your performance in " + code + " is strong (" + Math.round(score) + "%). Keep up the great work!");
+            } else if (score >= 50) {
+                tvLearningInsightsText.setText("Your current score in " + code + " is " + Math.round(score) + "%. Review upcoming quizzes and assignments to boost your grade.");
+            } else {
+                tvLearningInsightsText.setText("Your current score in " + code + " is " + Math.round(score) + "%. Focus on upcoming coursework to raise your grade.");
+            }
+        }
+        PieChart pieChart = findViewById(R.id.pieChartPerformanceSummary);
+        if (pieChart != null) {
+            setupPieChart(pieChart, score);
         }
     }
 
@@ -317,18 +363,31 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (isFinishing() || isDestroyed()) return;
                         if (response.isSuccessful() && response.body() != null) {
                             JsonObject body = response.body();
-                            double rate = body.has("attendance_rate") && !body.get("attendance_rate").isJsonNull()
-                                    ? body.get("attendance_rate").getAsDouble() : 0.0;
-                            int total = body.has("total") && !body.get("total").isJsonNull()
-                                    ? body.get("total").getAsInt() : 0;
-                            int present = body.has("present") && !body.get("present").isJsonNull()
-                                    ? body.get("present").getAsInt() : 0;
+                            JsonObject data = body.has("data") && body.get("data").isJsonObject()
+                                    ? body.getAsJsonObject("data") : body;
+                            JsonObject summary = data.has("summary") && data.get("summary").isJsonObject()
+                                    ? data.getAsJsonObject("summary") : data;
+
+                            int total = summary.has("total") && !summary.get("total").isJsonNull()
+                                    ? summary.get("total").getAsInt() : 0;
+                            int present = summary.has("present") && !summary.get("present").isJsonNull()
+                                    ? summary.get("present").getAsInt() : 0;
+                            Double rate = null;
+                            if (summary.has("percentage") && !summary.get("percentage").isJsonNull()) {
+                                rate = summary.get("percentage").getAsDouble();
+                            } else if (summary.has("attendance_rate") && !summary.get("attendance_rate").isJsonNull()) {
+                                rate = summary.get("attendance_rate").getAsDouble();
+                            } else if (total > 0) {
+                                rate = (present * 100.0) / total;
+                            }
+
                             TextView tvClassAvgVal = findViewById(R.id.tvClassAvgVal);
                             TextView tvClassAvgBadge = findViewById(R.id.tvClassAvgBadge);
                             if (tvClassAvgVal != null) {
-                                tvClassAvgVal.setText(total > 0 ? String.format(Locale.US, "%.0f%%", rate) : "N/A");
+                                tvClassAvgVal.setText(total > 0 && rate != null ? String.format(Locale.US, "%.0f%%", rate) : "N/A");
                             }
                             if (tvClassAvgBadge != null) {
                                 tvClassAvgBadge.setText(total > 0 ? (present + "/" + total) : "No sessions");
@@ -345,8 +404,11 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (isFinishing() || isDestroyed()) return;
                         if (response.isSuccessful() && response.body() != null) {
                             courseAssignments.clear();
+                            double asnEarned = 0.0;
+                            double asnMax = 0.0;
                             JsonObject body = response.body();
                             JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "assignments");
                             if (arr.size() > 0) {
@@ -371,7 +433,10 @@ public class CourseDetailActivity extends AppCompatActivity {
                                             JsonObject sub = subs.get(0).getAsJsonObject();
                                             if (sub.has("score") && !sub.get("score").isJsonNull()) {
                                                 isGraded = true;
-                                                score = Math.round(sub.get("score").getAsFloat());
+                                                float rawSc = sub.get("score").getAsFloat();
+                                                score = Math.round(rawSc);
+                                                asnEarned += rawSc;
+                                                asnMax += (maxScore > 0 ? maxScore : 100);
                                             }
                                         }
                                     }
@@ -379,6 +444,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                                             "assignment", null, null, isSubmitted, isGraded));
                                 }
                             }
+                            liveAssignmentAvg = asnMax > 0 ? (asnEarned / asnMax) * 100.0 : null;
+                            refreshStudentCoursePerformance();
                             if (tabAssignments != null) {
                                 tabAssignments.setText(tabAssignments.getContext().getString(R.string.assignments_99fb8b) + courseAssignments.size() + ")");
                             }
@@ -397,8 +464,11 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (isFinishing() || isDestroyed()) return;
                         if (response.isSuccessful() && response.body() != null) {
                             courseQuizzes.clear();
+                            double qzEarned = 0.0;
+                            double qzMax = 0.0;
                             JsonObject body = response.body();
                             JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "quizzes");
                             if (arr.size() > 0) {
@@ -425,7 +495,10 @@ public class CourseDetailActivity extends AppCompatActivity {
                                             JsonObject att = atts.get(0).getAsJsonObject();
                                             if (att.has("score") && !att.get("score").isJsonNull()) {
                                                 isGraded = true;
-                                                score = Math.round(att.get("score").getAsFloat());
+                                                float rawSc = att.get("score").getAsFloat();
+                                                score = Math.round(rawSc);
+                                                qzEarned += rawSc;
+                                                qzMax += (maxScore > 0 ? maxScore : 100);
                                             }
                                         }
                                     }
@@ -433,6 +506,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                                             "quiz", null, null, isSubmitted, isGraded));
                                 }
                             }
+                            liveQuizAvg = qzMax > 0 ? (qzEarned / qzMax) * 100.0 : null;
+                            refreshStudentCoursePerformance();
                             if (tabQuizzes != null) {
                                 tabQuizzes.setText(tabQuizzes.getContext().getString(R.string.quizzes_8e16c4) + courseQuizzes.size() + ")");
                             }
@@ -451,8 +526,11 @@ public class CourseDetailActivity extends AppCompatActivity {
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (isFinishing() || isDestroyed()) return;
                         if (response.isSuccessful() && response.body() != null) {
                             courseExams.clear();
+                            double exEarned = 0.0;
+                            double exMax = 0.0;
                             JsonObject body = response.body();
                             JsonArray arr = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractDataArray(body, "exams");
                             if (arr.size() > 0) {
@@ -482,6 +560,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                                                 completed = true;
                                                 float sc = r.get("score").getAsFloat();
                                                 scoreText = Math.round(sc) + " / " + totalMarks;
+                                                exEarned += sc;
+                                                exMax += (totalMarks > 0 ? totalMarks : 100);
                                             }
                                         }
                                     }
@@ -489,6 +569,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                                     courseExams.add(new Exam(id, monthDay[0], monthDay[1], title, details, completed, scoreText));
                                 }
                             }
+                            liveExamAvg = exMax > 0 ? (exEarned / exMax) * 100.0 : null;
+                            refreshStudentCoursePerformance();
                             if (tabExams != null) {
                                 tabExams.setText(tabExams.getContext().getString(R.string.exams_9ccb3c) + courseExams.size() + ")");
                             }
@@ -562,7 +644,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         int primaryBlue = Color.parseColor("#2463FF");
         int white = Color.WHITE;
 
-        int studentCount = (currentCourse != null && currentCourse.getStudentCount() > 0) ? currentCourse.getStudentCount() : 35;
+        int studentCount = (currentCourse != null && currentCourse.getStudentCount() > 0) ? currentCourse.getStudentCount() : 0;
 
         if (index == 0) {
             setButtonActive(tabOverview, primaryBlue, white);

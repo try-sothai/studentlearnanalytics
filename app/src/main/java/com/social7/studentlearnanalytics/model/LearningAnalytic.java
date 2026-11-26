@@ -18,6 +18,9 @@ public class LearningAnalytic {
     @SerializedName("period_start")
     public String periodStart;
 
+    @SerializedName("period_label")
+    public String periodLabel;
+
     @SerializedName("period_end")
     public String periodEnd;
 

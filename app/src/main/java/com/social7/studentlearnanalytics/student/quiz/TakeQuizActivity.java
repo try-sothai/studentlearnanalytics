@@ -2,6 +2,8 @@ package com.social7.studentlearnanalytics.student.quiz;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,6 +29,7 @@ import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.AssessmentUiHelper;
+import com.social7.studentlearnanalytics.utils.QuizScoreUiHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +76,7 @@ public class TakeQuizActivity extends AppCompatActivity {
     // Screen C: Result
     private LinearLayout layoutResult;
     private TextView tvResultTitle, tvResultSubtitle;
-    private MaterialButton btnReviewFromResult, btnReturnHub;
+    private MaterialButton btnReviewFromResult, btnRetakeFromResult, btnReturnHub;
 
     private CountDownTimer countDownTimer;
     private final List<JsonObject> questions = new ArrayList<>();
@@ -81,7 +84,11 @@ public class TakeQuizActivity extends AppCompatActivity {
     private final List<List<String>> currentOptionKeys = new ArrayList<>();
     private int currentQuestionIndex = 0;
     private boolean suppressRadioCallback = false;
+    private boolean suppressShortAnswerCallback = false;
+    private int maxAttemptsCap = 1; // 0 = unlimited
+    private int attemptsUsedCount = 0;
     private String latestAttemptId = null;
+    private boolean hasLoadedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +106,15 @@ public class TakeQuizActivity extends AppCompatActivity {
 
         initViews();
         fetchQuizDetails();
+        hasLoadedOnce = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (hasLoadedOnce && layoutTaking != null && layoutTaking.getVisibility() != View.VISIBLE) {
+            fetchQuizDetails();
+        }
     }
 
     private void initViews() {
@@ -178,10 +194,38 @@ public class TakeQuizActivity extends AppCompatActivity {
         tvResultTitle = findViewById(R.id.tvResultTitle);
         tvResultSubtitle = findViewById(R.id.tvResultSubtitle);
         btnReviewFromResult = findViewById(R.id.btnReviewFromResult);
+        btnRetakeFromResult = findViewById(R.id.btnRetakeFromResult);
         btnReturnHub = findViewById(R.id.btnReturnHub);
+
+        etShortAnswerInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (suppressShortAnswerCallback || currentQuestionIndex < 0 || currentQuestionIndex >= selectedAnswers.size()) {
+                    return;
+                }
+                String txt = s != null ? s.toString().trim() : "";
+                if (!txt.equals(selectedAnswers.get(currentQuestionIndex))) {
+                    selectedAnswers.set(currentQuestionIndex, txt);
+                    updateAnsweredCounter();
+                    navAdapter.notifyItemChanged(currentQuestionIndex);
+                }
+            }
+        });
 
         btnReviewFromSummary.setOnClickListener(v -> openAnswerReview(latestAttemptId));
         btnReviewFromResult.setOnClickListener(v -> openAnswerReview(attemptId != null ? attemptId : latestAttemptId));
+        if (btnRetakeFromResult != null) {
+            btnRetakeFromResult.setOnClickListener(v -> {
+                attemptId = null;
+                fetchQuizDetails();
+            });
+        }
         btnReturnHub.setOnClickListener(v -> finish());
     }
 
@@ -240,26 +284,54 @@ public class TakeQuizActivity extends AppCompatActivity {
         quizTotalMarks = AssessmentUiHelper.optDouble(data, "total_marks", 0);
         quizDurationMinutes = AssessmentUiHelper.optInt(data, "duration_minutes", 30);
 
-        tvQuizMetaDetails.setText(String.format(Locale.US,
-                "Questions: %d • Total Marks: %s • Duration: %d mins",
-                totalQuestions, AssessmentUiHelper.formatMarks(quizTotalMarks), quizDurationMinutes));
+        boolean hasMaxCap = data.has("max_attempts") && !data.get("max_attempts").isJsonNull();
+        maxAttemptsCap = hasMaxCap ? AssessmentUiHelper.optInt(data, "max_attempts", 1) : 0;
+        attemptsUsedCount = AssessmentUiHelper.optInt(data, "attempts_used", 0);
+        String scoringMethod = AssessmentUiHelper.optString(data, "scoring_method", "highest");
+        String scoringLabel = "latest".equalsIgnoreCase(scoringMethod) ? "Latest"
+                : ("average".equalsIgnoreCase(scoringMethod) ? "Average" : "Highest");
+        String attemptSummaryTag = hasMaxCap
+                ? String.format(Locale.US, "Attempts: %d/%d", attemptsUsedCount, maxAttemptsCap)
+                : String.format(Locale.US, "Attempts: %d/∞", attemptsUsedCount);
 
-        String endAt = AssessmentUiHelper.optString(data, "end_at", "");
-        if (!endAt.isEmpty()) {
+        tvQuizMetaDetails.setText(String.format(Locale.US,
+                "Questions: %d • Marks: %s • %d mins\n%s • Scoring: %s",
+                totalQuestions, AssessmentUiHelper.formatMarks(quizTotalMarks), quizDurationMinutes,
+                attemptSummaryTag, scoringLabel));
+
+        String effectiveEndAt = AssessmentUiHelper.optString(data, "effective_end_at", AssessmentUiHelper.optString(data, "end_at", ""));
+        String reopenStatus = AssessmentUiHelper.optString(data, "reopen_status", "");
+        if (!effectiveEndAt.isEmpty()) {
             tvQuizDueDate.setVisibility(View.VISIBLE);
-            tvQuizDueDate.setText("Closes: " + AssessmentUiHelper.formatDateTime(endAt));
+            StringBuilder dueSb = new StringBuilder("Closes: ").append(AssessmentUiHelper.formatDateTime(effectiveEndAt));
+            if (!reopenStatus.isEmpty()) {
+                dueSb.append(" [").append(reopenStatus).append("]");
+            } else if (data.has("override") && data.get("override").isJsonObject()) {
+                dueSb.append(" (Extended/Override Active)");
+            }
+            tvQuizDueDate.setText(dueSb.toString());
+        } else if (!reopenStatus.isEmpty()) {
+            tvQuizDueDate.setVisibility(View.VISIBLE);
+            tvQuizDueDate.setText("Status: " + reopenStatus);
         } else {
             tvQuizDueDate.setVisibility(View.GONE);
         }
 
         String instr = AssessmentUiHelper.optString(data, "instructions", "");
         tvInstructionsBody.setText(instr.isEmpty()
-                ? "Read each question carefully. You can jump between questions anytime before submitting."
+                ? "Read each question carefully. Required questions must be answered before submitting."
                 : instr);
 
         boolean canStart = AssessmentUiHelper.optBoolean(data, "can_start", false);
         boolean canContinue = AssessmentUiHelper.optBoolean(data, "can_continue", false);
+        boolean allowSubServer = !data.has("allow_submission") || AssessmentUiHelper.optBoolean(data, "allow_submission", true);
+        if (!allowSubServer) {
+            canStart = false;
+            canContinue = false;
+        }
+        boolean hasPending = AssessmentUiHelper.optBoolean(data, "has_pending_grading", false);
         String windowState = AssessmentUiHelper.optString(data, "window_state", "open");
+        String blockedReason = AssessmentUiHelper.optString(data, "blocked_reason", "");
 
         if (data.has("attempt") && data.get("attempt").isJsonObject()) {
             JsonObject att = data.getAsJsonObject("attempt");
@@ -269,20 +341,64 @@ public class TakeQuizActivity extends AppCompatActivity {
             boolean awaitingManual = AssessmentUiHelper.optBoolean(att, "awaiting_manual_grading", false);
             boolean reviewAllowed = AssessmentUiHelper.optBoolean(att, "review_allowed", false);
 
-            if (!"in_progress".equalsIgnoreCase(attStatus)) {
+            if (!"in_progress".equalsIgnoreCase(attStatus) || attemptsUsedCount > 0) {
                 cardAttemptSummary.setVisibility(View.VISIBLE);
-                if (scoreReleased && att.has("score") && !att.get("score").isJsonNull()) {
+                if (!hasPending && data.has("effective_score") && !data.get("effective_score").isJsonNull()) {
+                    double effSc = data.get("effective_score").getAsDouble();
+                    tvAttemptStatusTitle.setText(String.format(Locale.US, "Official Score (%s): %s / %s",
+                            scoringLabel, AssessmentUiHelper.formatMarks(effSc), AssessmentUiHelper.formatMarks(quizTotalMarks)));
+                } else if (scoreReleased && att.has("score") && !att.get("score").isJsonNull() && !hasPending) {
                     double sc = att.get("score").getAsDouble();
                     tvAttemptStatusTitle.setText("Completed • Score: " + AssessmentUiHelper.formatMarks(sc) + " / " + AssessmentUiHelper.formatMarks(quizTotalMarks));
-                    tvAttemptStatusDetail.setText("Your quiz has been graded.");
-                } else if (awaitingManual) {
+                } else if (awaitingManual || hasPending) {
                     tvAttemptStatusTitle.setText("Submitted • Pending Grading");
-                    tvAttemptStatusDetail.setText("Short-answer questions are awaiting manual teacher grading. Your score will appear once graded.");
+                } else if ("in_progress".equalsIgnoreCase(attStatus)) {
+                    tvAttemptStatusTitle.setText("Attempt In Progress");
                 } else {
                     tvAttemptStatusTitle.setText("Submitted");
-                    tvAttemptStatusDetail.setText("Your attempt has been recorded.");
                 }
+
+                StringBuilder historySb = new StringBuilder();
+                if (awaitingManual || hasPending) {
+                    historySb.append("Short-answer questions are awaiting manual teacher grading. Your final score will appear once graded.");
+                } else if (scoreReleased) {
+                    historySb.append("Your quiz has been graded.");
+                } else {
+                    historySb.append("Your attempt has been recorded.");
+                }
+                if (data.has("attempts_history") && data.get("attempts_history").isJsonArray()) {
+                    JsonArray hist = data.getAsJsonArray("attempts_history");
+                    if (hist.size() > 0) {
+                        historySb.append("\n\nAttempt History:");
+                        for (JsonElement hEl : hist) {
+                            if (!hEl.isJsonObject()) continue;
+                            JsonObject hObj = hEl.getAsJsonObject();
+                            int num = AssessmentUiHelper.optInt(hObj, "attempt_number", 1);
+                            boolean resetFlag = AssessmentUiHelper.optBoolean(hObj, "is_reset", false);
+                            boolean hPending = AssessmentUiHelper.optBoolean(hObj, "awaiting_manual_grading", false);
+                            boolean hReleased = AssessmentUiHelper.optBoolean(hObj, "score_released", false);
+                            String hStatus = AssessmentUiHelper.optString(hObj, "status", "");
+                            historySb.append("\n• Attempt #").append(num).append(": ");
+                            if (resetFlag) {
+                                historySb.append("Reset by Teacher");
+                            } else if ("in_progress".equalsIgnoreCase(hStatus)) {
+                                historySb.append("In Progress");
+                            } else if (hPending) {
+                                historySb.append("Pending Grading");
+                            } else if (hReleased && hObj.has("score") && !hObj.get("score").isJsonNull()) {
+                                double hs = hObj.get("score").getAsDouble();
+                                historySb.append(AssessmentUiHelper.formatMarks(hs)).append(" / ").append(AssessmentUiHelper.formatMarks(quizTotalMarks));
+                            } else {
+                                historySb.append("Submitted");
+                            }
+                        }
+                    }
+                }
+                tvAttemptStatusDetail.setText(historySb.toString());
                 btnReviewFromSummary.setVisibility(reviewAllowed ? View.VISIBLE : View.GONE);
+                if ((awaitingManual || hasPending) && latestAttemptId != null && !latestAttemptId.isEmpty()) {
+                    fetchProvisionalSummaryForDisplay(latestAttemptId, true);
+                }
             } else {
                 cardAttemptSummary.setVisibility(View.GONE);
             }
@@ -298,11 +414,14 @@ public class TakeQuizActivity extends AppCompatActivity {
         } else if (canStart) {
             btnStartQuiz.setVisibility(View.VISIBLE);
             btnStartQuiz.setEnabled(true);
-            btnStartQuiz.setText("Start Quiz Now");
+            btnStartQuiz.setText(attemptsUsedCount > 0 ? "Retake Quiz" : "Start Quiz Now");
             tvCannotStartReason.setVisibility(View.GONE);
         } else {
             btnStartQuiz.setVisibility(View.GONE);
-            if (cardAttemptSummary.getVisibility() != View.VISIBLE) {
+            if (!blockedReason.isEmpty()) {
+                tvCannotStartReason.setVisibility(View.VISIBLE);
+                tvCannotStartReason.setText(blockedReason);
+            } else if (cardAttemptSummary.getVisibility() != View.VISIBLE) {
                 tvCannotStartReason.setVisibility(View.VISIBLE);
                 if ("upcoming".equalsIgnoreCase(windowState)) {
                     tvCannotStartReason.setText("This quiz has not opened yet.");
@@ -443,9 +562,11 @@ public class TakeQuizActivity extends AppCompatActivity {
         JsonObject q = questions.get(index);
         String qType = AssessmentUiHelper.optString(q, "question_type", "multiple_choice");
         double marks = AssessmentUiHelper.optDouble(q, "marks", 1);
+        boolean isRequired = !q.has("is_required") || q.get("is_required").isJsonNull() || q.get("is_required").getAsBoolean();
         tvQuestionTypeTag.setText("true_false".equalsIgnoreCase(qType) ? "True / False"
                 : ("short_answer".equalsIgnoreCase(qType) ? "Short Answer" : "Multiple Choice"));
-        tvQuestionMarksTag.setText(AssessmentUiHelper.formatMarks(marks) + (marks == 1.0 ? " mark" : " marks"));
+        tvQuestionMarksTag.setText(AssessmentUiHelper.formatMarks(marks) + (marks == 1.0 ? " mark" : " marks")
+                + (isRequired ? " • Required" : " • Optional"));
         tvQuestionText.setText(AssessmentUiHelper.optString(q, "question_text", "Question " + (index + 1)));
 
         String currentAnswer = selectedAnswers.get(index);
@@ -453,7 +574,9 @@ public class TakeQuizActivity extends AppCompatActivity {
         if ("short_answer".equalsIgnoreCase(qType)) {
             rgAnswers.setVisibility(View.GONE);
             tilShortAnswer.setVisibility(View.VISIBLE);
+            suppressShortAnswerCallback = true;
             etShortAnswerInput.setText(currentAnswer != null ? currentAnswer : "");
+            suppressShortAnswerCallback = false;
         } else {
             tilShortAnswer.setVisibility(View.GONE);
             rgAnswers.setVisibility(View.VISIBLE);
@@ -523,31 +646,55 @@ public class TakeQuizActivity extends AppCompatActivity {
         });
     }
 
+    private List<Integer> findUnansweredRequiredIndices() {
+        List<Integer> missing = new ArrayList<>();
+        for (int i = 0; i < questions.size(); i++) {
+            JsonObject q = questions.get(i);
+            boolean isRequired = !q.has("is_required") || q.get("is_required").isJsonNull() || q.get("is_required").getAsBoolean();
+            if (!isRequired) continue;
+            String a = i < selectedAnswers.size() ? selectedAnswers.get(i) : "";
+            if (a == null || a.trim().isEmpty()) {
+                missing.add(i);
+            }
+        }
+        return missing;
+    }
+
     private void confirmAndSubmitQuiz() {
         persistCurrentShortAnswer();
+        List<Integer> missingRequired = findUnansweredRequiredIndices();
         int answered = countAnswered();
         int unanswered = questions.size() - answered;
 
-        String msg = String.format(Locale.US,
-                "Answered: %d of %d\nUnanswered: %d\n\n%s",
-                answered, questions.size(), unanswered,
-                unanswered > 0 ? "You still have unanswered questions. Are you sure you want to submit?"
-                        : "All questions are answered. Submit your quiz now?");
+        if (!missingRequired.isEmpty()) {
+            StringBuilder missingNums = new StringBuilder();
+            for (int i = 0; i < missingRequired.size(); i++) {
+                if (i > 0) missingNums.append(", ");
+                missingNums.append("Q").append(missingRequired.get(i) + 1);
+            }
+            int firstMissing = missingRequired.get(0);
+            new AlertDialog.Builder(this)
+                    .setTitle("Incomplete Quiz")
+                    .setMessage(String.format(Locale.US,
+                            "Please answer all required questions before submitting.\n\nAnswered: %d of %d\nUnanswered Required: %s",
+                            answered, questions.size(), missingNums.toString()))
+                    .setPositiveButton("Review Q" + (firstMissing + 1), (d, w) -> jumpToQuestion(firstMissing))
+                    .setNegativeButton("Close", null)
+                    .show();
+            return;
+        }
 
-        AlertDialog.Builder b = new AlertDialog.Builder(this)
+        String msg = String.format(Locale.US,
+                "Answered: %d of %d\nUnanswered Optional: %d\n\n%s",
+                answered, questions.size(), unanswered,
+                "Ready to submit your quiz now?");
+
+        new AlertDialog.Builder(this)
                 .setTitle(R.string.submit_quiz)
                 .setMessage(msg)
-                .setPositiveButton(R.string.submit, (dialog, which) -> submitQuizFinal());
-
-        if (unanswered > 0) {
-            b.setNegativeButton("Review Unanswered", (dialog, which) -> {
-                int first = findFirstUnansweredIndex();
-                if (first >= 0) jumpToQuestion(first);
-            });
-        } else {
-            b.setNegativeButton(R.string.cancel, null);
-        }
-        b.show();
+                .setPositiveButton(R.string.submit, (dialog, which) -> submitQuizFinal())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void submitQuizFinal() {
@@ -579,6 +726,33 @@ public class TakeQuizActivity extends AppCompatActivity {
                     showResultScreen(response.body().getAsJsonObject("data"));
                 } else if (response.code() == 409 && response.body() != null && response.body().has("data")) {
                     showResultScreen(response.body().getAsJsonObject("data"));
+                } else if (response.code() == 422) {
+                    String errMsg = AssessmentUiHelper.extractErrorMessage(response, "Please answer all required questions before submitting.");
+                    int targetIdx = -1;
+                    try {
+                        if (response.errorBody() != null) {
+                            String rawErr = response.errorBody().string();
+                            JsonObject errObj = new com.google.gson.Gson().fromJson(rawErr, JsonObject.class);
+                            if (errObj != null) {
+                                if (errObj.has("message") && !errObj.get("message").isJsonNull()) {
+                                    errMsg = errObj.get("message").getAsString();
+                                }
+                                if (errObj.has("unanswered_question_numbers") && errObj.get("unanswered_question_numbers").isJsonArray()) {
+                                    JsonArray nums = errObj.getAsJsonArray("unanswered_question_numbers");
+                                    if (nums.size() > 0) targetIdx = nums.get(0).getAsInt() - 1;
+                                }
+                            }
+                        }
+                    } catch (Exception ignored) {}
+                    final int jumpIdx = targetIdx;
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(TakeQuizActivity.this)
+                            .setTitle("Incomplete Submission Blocked")
+                            .setMessage(errMsg)
+                            .setNegativeButton("Close", null);
+                    if (jumpIdx >= 0 && jumpIdx < questions.size()) {
+                        dlg.setPositiveButton("Go to Q" + (jumpIdx + 1), (d, w) -> jumpToQuestion(jumpIdx));
+                    }
+                    dlg.show();
                 } else {
                     Toast.makeText(TakeQuizActivity.this,
                             AssessmentUiHelper.extractErrorMessage(response, "Failed to submit quiz"),
@@ -606,78 +780,77 @@ public class TakeQuizActivity extends AppCompatActivity {
         boolean reviewAllowed = AssessmentUiHelper.optBoolean(data, "review_allowed", false);
         double total = AssessmentUiHelper.optDouble(data, "total_marks", quizTotalMarks);
 
-        if (scoreReleased && data.has("score") && !data.get("score").isJsonNull()) {
+        if (scoreReleased && data.has("score") && !data.get("score").isJsonNull() && !awaitingManual) {
             double earned = data.get("score").getAsDouble();
             int pct = total > 0 ? Math.round((float) ((earned / total) * 100.0)) : 0;
             tvResultTitle.setText(String.format(Locale.US, "Quiz Completed! Score: %s / %s (%d%%)",
                     AssessmentUiHelper.formatMarks(earned), AssessmentUiHelper.formatMarks(total), pct));
             tvResultSubtitle.setText("Your answers have been recorded and graded.");
         } else if (awaitingManual) {
-            tvResultTitle.setText("Quiz Submitted!");
+            tvResultTitle.setText("Quiz Submitted! • Pending Grading");
             tvResultSubtitle.setText("Short-answer questions are awaiting manual teacher grading. Your final score will appear once graded.");
+            String targetId = attemptId != null ? attemptId : latestAttemptId;
+            if (targetId != null && !targetId.isEmpty()) {
+                fetchProvisionalSummaryForDisplay(targetId, false);
+            }
         } else {
             tvResultTitle.setText(R.string.quiz_submitted_successfully);
             tvResultSubtitle.setText("Your attempt has been recorded.");
         }
 
         btnReviewFromResult.setVisibility(reviewAllowed ? View.VISIBLE : View.GONE);
+        if (btnRetakeFromResult != null) {
+            int attemptNum = AssessmentUiHelper.optInt(data, "attempt_number", attemptsUsedCount + 1);
+            boolean canRetake = maxAttemptsCap <= 0 || attemptNum < maxAttemptsCap;
+            btnRetakeFromResult.setVisibility(canRetake ? View.VISIBLE : View.GONE);
+        }
     }
 
-    private void openAnswerReview(String targetAttemptId) {
-        if (targetAttemptId == null || targetAttemptId.isEmpty()) return;
-        pbLoading.setVisibility(View.VISIBLE);
-
+    private void fetchProvisionalSummaryForDisplay(String targetAttemptId, boolean forSummaryCard) {
         ApiClient.getApiService(this).reviewStudentQuizAttempt(targetAttemptId).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;
-                pbLoading.setVisibility(View.GONE);
-
                 if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) {
-                    Toast.makeText(TakeQuizActivity.this,
-                            AssessmentUiHelper.extractErrorMessage(response, "Answer review is not available yet."),
-                            Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                JsonObject data = response.body().getAsJsonObject("data");
-                JsonArray qs = data.has("questions") && data.get("questions").isJsonArray()
-                        ? data.getAsJsonArray("questions") : new JsonArray();
-
-                StringBuilder sb = new StringBuilder();
-                for (JsonElement el : qs) {
-                    if (!el.isJsonObject()) continue;
-                    JsonObject q = el.getAsJsonObject();
-                    int num = AssessmentUiHelper.optInt(q, "number", 1);
-                    String text = AssessmentUiHelper.optString(q, "question_text", "");
-                    String yours = AssessmentUiHelper.optString(q, "your_answer", "(Unanswered)");
-                    String corr = AssessmentUiHelper.optString(q, "correct_answer", "");
-                    double maxM = AssessmentUiHelper.optDouble(q, "marks", 1);
-                    String earned = q.has("marks_obtained") && !q.get("marks_obtained").isJsonNull()
-                            ? AssessmentUiHelper.formatMarks(q.get("marks_obtained").getAsDouble()) : "Pending";
-
-                    sb.append("Q").append(num).append(". ").append(text).append("\n")
-                            .append("Your answer: ").append(yours).append("\n");
-                    if (!corr.isEmpty()) {
-                        sb.append("Correct answer: ").append(corr).append("\n");
+                QuizScoreUiHelper.ReviewScoreSummary summary =
+                        QuizScoreUiHelper.parseStudentReviewSummary(response.body().getAsJsonObject("data"));
+                if (forSummaryCard) {
+                    if (summary.isProvisional) {
+                        tvAttemptStatusTitle.setText(summary.formatScoreLine() + " • " + summary.gradingStatus);
+                    } else {
+                        tvAttemptStatusTitle.setText(summary.formatScoreLine() + " • " + summary.gradingStatus);
                     }
-                    sb.append("Marks: ").append(earned).append(" / ").append(AssessmentUiHelper.formatMarks(maxM)).append("\n\n");
+                } else if (summary.isProvisional) {
+                    tvResultTitle.setText(summary.formatScoreLine() + " (" + summary.gradingStatus + ")");
+                    String note = summary.formatProvisionalNote();
+                    if (note != null) {
+                        tvResultSubtitle.setText(note);
+                    }
                 }
-
-                new AlertDialog.Builder(TakeQuizActivity.this)
-                        .setTitle("Answer Review")
-                        .setMessage(sb.toString().trim())
-                        .setPositiveButton("Close", null)
-                        .show();
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                if (isFinishing() || isDestroyed()) return;
-                pbLoading.setVisibility(View.GONE);
-                Toast.makeText(TakeQuizActivity.this, "Network error loading review", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void openAnswerReview(String targetAttemptId) {
+        if (targetAttemptId == null || targetAttemptId.isEmpty()) {
+            Toast.makeText(this, "No submitted attempt found to review.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        android.content.Intent intent = new android.content.Intent(this, StudentQuizReviewActivity.class);
+        intent.putExtra(StudentQuizReviewActivity.EXTRA_ATTEMPT_ID, targetAttemptId);
+        if (tvInstructionsTitle != null && tvInstructionsTitle.getText() != null) {
+            intent.putExtra(StudentQuizReviewActivity.EXTRA_QUIZ_TITLE, tvInstructionsTitle.getText().toString());
+        }
+        if (tvCourseInfo != null && tvCourseInfo.getText() != null) {
+            intent.putExtra(StudentQuizReviewActivity.EXTRA_COURSE_INFO, tvCourseInfo.getText().toString());
+        }
+        startActivity(intent);
     }
 
     private void startTimer(long millis) {

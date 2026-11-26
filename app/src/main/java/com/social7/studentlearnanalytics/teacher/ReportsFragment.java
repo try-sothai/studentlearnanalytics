@@ -197,6 +197,9 @@ public class ReportsFragment extends Fragment {
             else if (item.getItemId() == 2 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_name);
             else if (item.getItemId() == 3 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_score);
             else if (item.getItemId() == 4 && tvSelectedSort != null) tvSelectedSort.setText(R.string.sort_risk);
+            if (adapter != null) {
+                adapter.sortBy(item.getItemId());
+            }
             return true;
         });
         popup.show();

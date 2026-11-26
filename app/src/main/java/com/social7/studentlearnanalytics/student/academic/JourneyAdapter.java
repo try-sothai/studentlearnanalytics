@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHolder> {
 
@@ -31,13 +32,24 @@ public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
-        int studyYear = item.get("study_year").getAsInt();
-        holder.tvStudyYear.setText(String.format("Year %d", studyYear));
+        Object rawStudyYear = null;
+        if (item.has("year_level") && !item.get("year_level").isJsonNull()) {
+            rawStudyYear = item.get("year_level").getAsString();
+        } else if (item.has("study_year") && !item.get("study_year").isJsonNull()) {
+            rawStudyYear = item.get("study_year").getAsString();
+        }
+        String label = YearLevelHelper.toFullLabel(holder.itemView.getContext(), rawStudyYear);
+        if (YearLevelHelper.parse(rawStudyYear) == null && item.has("study_year_label") && !item.get("study_year_label").isJsonNull()) {
+            label = item.get("study_year_label").getAsString();
+        }
+        holder.tvStudyYear.setText(label);
 
-        JsonObject semesters = item.getAsJsonObject("semesters");
         JsonArray semesterList = new JsonArray();
-        for (String key : semesters.keySet()) {
-            semesterList.add(semesters.getAsJsonObject(key));
+        if (item.has("semesters") && item.get("semesters").isJsonObject()) {
+            JsonObject semesters = item.getAsJsonObject("semesters");
+            for (String key : semesters.keySet()) {
+                semesterList.add(semesters.getAsJsonObject(key));
+            }
         }
 
         JourneySemesterAdapter adapter = new JourneySemesterAdapter(semesterList);

@@ -15,6 +15,8 @@ public class QuizQuestionItem {
     public String optionD;
     public int optionCount;
     public String correctAnswer;
+    public boolean isRequired = true;
+    public String gradingGuidance;
     public boolean expanded = false;
 
     public static QuizQuestionItem fromJson(JsonObject obj) {
@@ -25,13 +27,20 @@ public class QuizQuestionItem {
         q.questionText = optStr(obj, "question_text", "");
         q.questionType = optStr(obj, "question_type", "multiple_choice");
         q.marks = optDouble(obj, "marks", 1.0);
+        q.isRequired = optBool(obj, "is_required", true);
         q.optionA = optStr(obj, "option_a", null);
         q.optionB = optStr(obj, "option_b", null);
         q.optionC = optStr(obj, "option_c", null);
         q.optionD = optStr(obj, "option_d", null);
         q.optionCount = optInt(obj, "option_count", countNonEmpty(q.optionA, q.optionB, q.optionC, q.optionD));
         q.correctAnswer = optStr(obj, "correct_answer", null);
+        q.gradingGuidance = optStr(obj, "grading_guidance", q.correctAnswer);
         return q;
+    }
+
+    private static boolean optBool(JsonObject o, String k, boolean def) {
+        if (o == null || !o.has(k) || o.get(k).isJsonNull()) return def;
+        try { return o.get(k).getAsBoolean(); } catch (Exception e) { return def; }
     }
 
     private static int countNonEmpty(String... vals) {

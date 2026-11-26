@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Assessment;
 import com.social7.studentlearnanalytics.student.assignment.SubmitAssignmentActivity;
+import com.social7.studentlearnanalytics.student.quiz.StudentQuizReviewActivity;
 import com.social7.studentlearnanalytics.student.quiz.TakeQuizActivity;
+import com.social7.studentlearnanalytics.utils.AssessmentUiHelper;
+import com.social7.studentlearnanalytics.utils.QuizScoreUiHelper;
 
 import java.util.List;
 import java.util.Locale;
@@ -68,26 +71,101 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         if (a.getDate() != null && !a.getDate().isEmpty()) {
             meta.append(a.getDate());
         }
-        if ("quiz".equalsIgnoreCase(a.getType())) {
+        boolean isQuiz = "quiz".equalsIgnoreCase(a.getType());
+        if (isQuiz) {
+            if (a.getSubmissionStatusLabel() != null && !a.getSubmissionStatusLabel().isEmpty()
+                    && !"Not Submitted".equalsIgnoreCase(a.getSubmissionStatusLabel())) {
+                if (meta.length() > 0) meta.append(" • ");
+                meta.append(a.getSubmissionStatusLabel());
+            }
             if (a.getQuestionsCount() > 0) {
-                meta.append(" • ").append(a.getQuestionsCount()).append(" Qs");
+                if (meta.length() > 0) meta.append(" • ");
+                meta.append(a.getQuestionsCount()).append(" Qs");
             }
             if (a.getDurationMinutes() > 0) {
-                meta.append(" • ").append(a.getDurationMinutes()).append("m");
+                if (meta.length() > 0) meta.append(" • ");
+                meta.append(a.getDurationMinutes()).append("m");
             }
         }
-        if (!a.isGraded() && a.getTotalScore() > 0) {
-            meta.append(" • ").append(a.getTotalScore()).append(" pts");
+        if (!a.isGraded() && !a.isPendingGrading() && a.getTotalScore() > 0) {
+            if (meta.length() > 0) meta.append(" • ");
+            meta.append(a.getTotalScore()).append(" pts");
         }
         holder.dateText.setText(meta.toString());
 
+        // Provisional note (only for quizzes awaiting teacher grading / partially graded)
+        if (holder.provisionalNoteText != null) {
+            if (isQuiz && (a.isPendingGrading() || a.isPartiallyGraded())) {
+                holder.provisionalNoteText.setVisibility(View.VISIBLE);
+                holder.provisionalNoteText.setText(a.isPartiallyGraded()
+                        ? "Provisional score — some answers still pending"
+                        : "Provisional score — awaiting teacher grading (not final)");
+            } else {
+                holder.provisionalNoteText.setVisibility(View.GONE);
+            }
+        }
+
         // Status / Score pill
-        String statusBadge = a.getFormattedScore();
+        String statusBadge;
+        if (isQuiz && a.isGraded() && !a.isPendingGrading()) {
+            statusBadge = "Score: " + a.getFormattedScore();
+        } else if (isQuiz && (a.isPendingGrading() || a.isPartiallyGraded())) {
+            if (a.getProvisionalEarnedScore() != null) {
+                double tot = a.getExactTotalScore() != null ? a.getExactTotalScore() : a.getTotalScore();
+                statusBadge = "Score: " + AssessmentUiHelper.formatMarks(a.getProvisionalEarnedScore())
+                        + " / " + AssessmentUiHelper.formatMarks(tot) + " earned";
+            } else {
+                statusBadge = a.isPartiallyGraded()
+                        ? QuizScoreUiHelper.STATUS_PARTIALLY_GRADED
+                        : QuizScoreUiHelper.STATUS_PENDING_GRADING;
+            }
+        } else {
+            statusBadge = a.getFormattedScore();
+        }
         holder.scoreText.setText(statusBadge);
 
         int badgeColor = resolveStatusColor(a);
         holder.indicatorView.setBackgroundTintList(ColorStateList.valueOf(badgeColor));
         holder.scoreText.setTextColor(badgeColor);
+
+        // Explicit Grading Status badge on quiz cards
+        if (holder.gradingStatusText != null) {
+            if (isQuiz && a.getGradingStatusLabel() != null && !a.getGradingStatusLabel().isEmpty()) {
+                holder.gradingStatusText.setVisibility(View.VISIBLE);
+                holder.gradingStatusText.setText("Status: " + a.getGradingStatusLabel());
+                if (QuizScoreUiHelper.STATUS_GRADED.equalsIgnoreCase(a.getGradingStatusLabel())) {
+                    holder.gradingStatusText.setTextColor(Color.parseColor("#047857"));
+                    holder.gradingStatusText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ECFDF5")));
+                } else if (QuizScoreUiHelper.STATUS_PARTIALLY_GRADED.equalsIgnoreCase(a.getGradingStatusLabel())) {
+                    holder.gradingStatusText.setTextColor(Color.parseColor("#1D4ED8"));
+                    holder.gradingStatusText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EFF6FF")));
+                } else {
+                    holder.gradingStatusText.setTextColor(Color.parseColor("#B45309"));
+                    holder.gradingStatusText.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFFBEB")));
+                }
+            } else {
+                holder.gradingStatusText.setVisibility(View.GONE);
+            }
+        }
+
+        // Direct Review Answers action on submitted quizzes
+        if (holder.reviewBtn != null) {
+            if (isQuiz && a.isReviewAllowed() && a.getLatestAttemptId() != null && !a.getLatestAttemptId().isEmpty()) {
+                holder.reviewBtn.setVisibility(View.VISIBLE);
+                holder.reviewBtn.setOnClickListener(v -> {
+                    Context ctx = v.getContext();
+                    Intent intent = new Intent(ctx, StudentQuizReviewActivity.class);
+                    intent.putExtra(StudentQuizReviewActivity.EXTRA_ATTEMPT_ID, a.getLatestAttemptId());
+                    intent.putExtra(StudentQuizReviewActivity.EXTRA_QUIZ_TITLE, a.getTitle());
+                    String cInfo = holder.courseBadgeText != null && holder.courseBadgeText.getVisibility() == View.VISIBLE
+                            ? holder.courseBadgeText.getText().toString() : "";
+                    intent.putExtra(StudentQuizReviewActivity.EXTRA_COURSE_INFO, cInfo);
+                    ctx.startActivity(intent);
+                });
+            } else {
+                holder.reviewBtn.setVisibility(View.GONE);
+            }
+        }
 
         if ("quiz".equalsIgnoreCase(a.getType())) {
             holder.iconView.setImageResource(R.drawable.ic_analytics);
@@ -123,32 +201,51 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
             } else {
                 Intent intent = new Intent(ctx, SubmitAssignmentActivity.class);
                 intent.putExtra("assignment_id", a.getId());
+                intent.putExtra("assessment_type", a.getAssessmentApiType() != null && !a.getAssessmentApiType().isEmpty()
+                        ? a.getAssessmentApiType()
+                        : com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.normalizeAssessmentType(a.getType()));
                 ctx.startActivity(intent);
             }
         });
     }
 
     private int resolveStatusColor(Assessment a) {
-        String st = a.getStatusLabel() != null ? a.getStatusLabel().toLowerCase(Locale.US) : "";
-        if (a.isGraded() || st.contains("graded") || st.contains("completed")) {
-            return Color.parseColor("#10B981");
-        }
-        if (st.contains("overdue")) {
-            return Color.parseColor("#EF4444");
-        }
-        if (st.contains("closed")) {
-            return Color.parseColor("#64748B");
-        }
-        if (a.isInProgress() || st.contains("progress")) {
-            return Color.parseColor("#F59E0B");
-        }
-        if (a.isSubmitted() || st.contains("submitted")) {
+        if (a.isPartiallyGraded()) {
             return Color.parseColor("#2563EB");
         }
-        if (st.contains("upcoming")) {
-            return Color.parseColor("#64748B");
+        if (a.isPendingGrading()) {
+            return Color.parseColor("#D97706");
         }
-        return Color.parseColor("#5B3DF5");
+        if (a.isGraded()) {
+            return Color.parseColor("#10B981");
+        }
+        String reopen = a.getReopenStatus() != null ? a.getReopenStatus() : "";
+        if ("Reopened".equalsIgnoreCase(reopen)
+                || "Extended".equalsIgnoreCase(reopen)
+                || "Expired".equalsIgnoreCase(reopen)
+                || "Late Submitted".equalsIgnoreCase(reopen)) {
+            return Color.parseColor(com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.resolveBadgeColorHex(reopen));
+        }
+        String st = a.getStatusLabel() != null ? a.getStatusLabel().toLowerCase(Locale.US) : "";
+        if (st.contains("partially")) {
+            return Color.parseColor("#2563EB");
+        }
+        if (st.contains("pending")) {
+            return Color.parseColor("#D97706");
+        }
+        if (st.contains("graded") || st.contains("completed")) {
+            return Color.parseColor("#10B981");
+        }
+        if (a.isInProgress() || st.contains("progress")) {
+            return Color.parseColor(com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.resolveBadgeColorHex("In Progress"));
+        }
+        if (a.isSubmitted() || st.contains("submitted")) {
+            return Color.parseColor(com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.resolveBadgeColorHex("Submitted"));
+        }
+        if (!reopen.isEmpty()) {
+            return Color.parseColor(com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.resolveBadgeColorHex(reopen));
+        }
+        return Color.parseColor(com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.resolveBadgeColorHex(a.getStatusLabel()));
     }
 
     @Override
@@ -159,7 +256,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
     public static class AssessmentViewHolder extends RecyclerView.ViewHolder {
         View indicatorView;
         ImageView iconView;
-        TextView courseBadgeText, titleText, dateText, scoreText, actionHintText;
+        TextView courseBadgeText, titleText, dateText, provisionalNoteText, scoreText, gradingStatusText, reviewBtn, actionHintText;
 
         public AssessmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -168,7 +265,10 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
             courseBadgeText = itemView.findViewById(R.id.assessment_course_badge);
             titleText = itemView.findViewById(R.id.assessment_title);
             dateText = itemView.findViewById(R.id.assessment_date);
+            provisionalNoteText = itemView.findViewById(R.id.assessment_provisional_note);
             scoreText = itemView.findViewById(R.id.assessment_score);
+            gradingStatusText = itemView.findViewById(R.id.assessment_grading_status);
+            reviewBtn = itemView.findViewById(R.id.assessment_review_btn);
             actionHintText = itemView.findViewById(R.id.assessment_action_hint);
         }
     }

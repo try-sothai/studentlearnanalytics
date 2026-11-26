@@ -99,6 +99,12 @@ public class StudentImportItem implements Serializable {
         @SerializedName("program_code")
         public String programCode;
 
+        @SerializedName("year_level")
+        public Object yearLevel;
+
+        @SerializedName("year_level_code")
+        public String yearLevelCode;
+
         @SerializedName("status")
         public String status;
 

@@ -64,7 +64,12 @@ public class CourseAnalyticsAdapter extends RecyclerView.Adapter<CourseAnalytics
         this.listener = listener;
     }
 
+    private String lastQuery = "";
+    private String lastStatusFilter = "All";
+
     public void filter(String query, String statusFilter) {
+        this.lastQuery = query != null ? query : "";
+        this.lastStatusFilter = statusFilter != null ? statusFilter : "All";
         filteredList.clear();
         for (CourseAnalyticsItem item : originalList) {
             boolean matchesQuery = query == null || query.trim().isEmpty()
@@ -80,6 +85,26 @@ public class CourseAnalyticsAdapter extends RecyclerView.Adapter<CourseAnalytics
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void sortBy(int mode) {
+        java.util.Collections.sort(originalList, (a, b) -> {
+            if (mode == 2) {
+                return a.name.compareToIgnoreCase(b.name);
+            } else if (mode == 3) {
+                return Integer.compare(b.avgScore, a.avgScore);
+            } else if (mode == 4) {
+                return Integer.compare(riskRank(a.status), riskRank(b.status));
+            }
+            return a.code.compareToIgnoreCase(b.code);
+        });
+        filter(lastQuery, lastStatusFilter);
+    }
+
+    private static int riskRank(String status) {
+        if ("At Risk".equalsIgnoreCase(status)) return 0;
+        if ("Medium".equalsIgnoreCase(status)) return 1;
+        return 2;
     }
 
     @NonNull

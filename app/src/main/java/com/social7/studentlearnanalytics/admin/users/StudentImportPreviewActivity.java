@@ -98,7 +98,7 @@ public class StudentImportPreviewActivity extends AppCompatActivity {
                 boolean hasReq = false, hasDp = false;
                 for (String err : r.errors) {
                     if (err != null && err.contains("Missing required field:")) hasReq = true;
-                    if (err != null && (err.contains("department_code") || err.contains("program_code"))) hasDp = true;
+                    if (err != null && (err.contains("department_code") || err.contains("program_code") || err.contains("faculty") || err.contains("major"))) hasDp = true;
                 }
                 if (hasReq) missingReq++;
                 if (hasDp) invalidDeptProg++;

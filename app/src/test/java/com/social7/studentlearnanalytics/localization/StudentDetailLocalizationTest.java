@@ -62,6 +62,28 @@ public class StudentDetailLocalizationTest {
         assertEquals("សង្ខេបវត្តមាន", km.get("attendance_summary"));
         assertEquals("អត្រាវត្តមានសរុប", km.get("overall_attendance_rate"));
         assertEquals("កំណត់ចំណាំពីអ្នកគ្រប់គ្រង និងទីប្រឹក្សា", km.get("admin_advisor_notes"));
+
+        assertEquals("Faculty", en.get("department"));
+        assertEquals("Faculty *", en.get("department_0e3338"));
+        assertEquals("Major *", en.get("program"));
+        assertEquals("Major", en.get("program_95c50c"));
+        assertEquals("Faculties", en.get("departments"));
+        assertEquals("Select Faculty", en.get("select_department_title"));
+        assertEquals("Select Major", en.get("select_program_title"));
+        assertEquals("Please select a faculty", en.get("please_select_a_department"));
+        assertEquals("Please select a major", en.get("please_select_a_program"));
+        assertEquals("No majors available for this faculty", en.get("no_majors_for_faculty"));
+
+        assertEquals("មហាវិទ្យាល័យ", km.get("department"));
+        assertEquals("មហាវិទ្យាល័យ *", km.get("department_0e3338"));
+        assertEquals("ជំនាញ *", km.get("program"));
+        assertEquals("ជំនាញ", km.get("program_95c50c"));
+        assertEquals("មហាវិទ្យាល័យ", km.get("departments"));
+        assertEquals("ជ្រើសរើសមហាវិទ្យាល័យ", km.get("select_department_title"));
+        assertEquals("ជ្រើសរើសជំនាញ", km.get("select_program_title"));
+        assertEquals("សូមជ្រើសរើសមហាវិទ្យាល័យ", km.get("please_select_a_department"));
+        assertEquals("សូមជ្រើសរើសជំនាញ", km.get("please_select_a_program"));
+        assertEquals("មិនមានជំនាញសម្រាប់មហាវិទ្យាល័យនេះទេ", km.get("no_majors_for_faculty"));
     }
 
     private Map<String, String> parseStrings(File file) throws Exception {

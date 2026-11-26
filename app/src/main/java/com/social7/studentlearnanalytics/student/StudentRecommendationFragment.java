@@ -118,6 +118,8 @@ public class StudentRecommendationFragment extends Fragment {
                                     (item.courseName != null && !item.courseName.isEmpty() ? " - " + item.courseName : ""));
                             startActivity(intent);
                         })
+                        .setNeutralButton("Full Action Plan", (dialog, which) ->
+                                startActivity(new Intent(requireContext(), RecommendationDetailActivity.class)))
                         .setNegativeButton(R.string.close, null)
                         .show();
             }
@@ -134,10 +136,14 @@ public class StudentRecommendationFragment extends Fragment {
                             @Override
                             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                                 if (!isAdded()) return;
-                                item.statusBadge = "Completed";
-                                if (adapter != null) adapter.refresh();
-                                updateSummaryMetrics();
-                                Toast.makeText(requireContext(), "Marked recommendation as completed!", Toast.LENGTH_SHORT).show();
+                                if (response.isSuccessful()) {
+                                    item.statusBadge = "Completed";
+                                    if (adapter != null) adapter.refresh();
+                                    updateSummaryMetrics();
+                                    Toast.makeText(requireContext(), "Marked recommendation as completed!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(requireContext(), "Could not update recommendation (" + response.code() + ")", Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override

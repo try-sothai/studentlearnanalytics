@@ -55,6 +55,9 @@ public class PredictionRiskFragment extends Fragment {
 
     private BarChart chartOverviewScoreDist;
     private PieChart chartOverviewRiskPie;
+    private TextView tvPredOverviewCount, tvPredOverviewAvgScore, tvPredOverviewAtRisk, tvPredOverviewAccuracy;
+    private TextView tvPredExamAcademicAvg, tvPredExamPredictedAvg, tvPredExamExpectedGrade, tvPredExamConfidence;
+    private TextView tvRiskSummaryFactor, tvRiskSummaryHighCount, tvRiskSummaryIndex, tvRiskSummaryImprovement;
 
     private AtRiskStudentAdapter atRiskAdapter;
     private RecyclerView rvAtRiskStudents;
@@ -179,11 +182,37 @@ public class PredictionRiskFragment extends Fragment {
     private void bindOverviewViews(View root) {
         chartOverviewScoreDist = root.findViewById(R.id.chartOverviewScoreDist);
         chartOverviewRiskPie = root.findViewById(R.id.chartOverviewRiskPie);
+        tvPredOverviewCount = root.findViewById(R.id.tvPredOverviewCount);
+        tvPredOverviewAvgScore = root.findViewById(R.id.tvPredOverviewAvgScore);
+        tvPredOverviewAtRisk = root.findViewById(R.id.tvPredOverviewAtRisk);
+        tvPredOverviewAccuracy = root.findViewById(R.id.tvPredOverviewAccuracy);
+        tvPredExamAcademicAvg = root.findViewById(R.id.tvPredExamAcademicAvg);
+        tvPredExamPredictedAvg = root.findViewById(R.id.tvPredExamPredictedAvg);
+        tvPredExamExpectedGrade = root.findViewById(R.id.tvPredExamExpectedGrade);
+        tvPredExamConfidence = root.findViewById(R.id.tvPredExamConfidence);
+        tvRiskSummaryFactor = root.findViewById(R.id.tvRiskSummaryFactor);
+        tvRiskSummaryHighCount = root.findViewById(R.id.tvRiskSummaryHighCount);
+        tvRiskSummaryIndex = root.findViewById(R.id.tvRiskSummaryIndex);
+        tvRiskSummaryImprovement = root.findViewById(R.id.tvRiskSummaryImprovement);
         if (chartOverviewScoreDist != null) chartOverviewScoreDist.setNoDataText("Loading score distribution...");
         if (chartOverviewRiskPie != null) chartOverviewRiskPie.setNoDataText("Loading risk distribution...");
     }
 
     private void bindOverviewFromApi(JsonObject data) {
+        int totalPreds = (data.has("predictions") && data.get("predictions").isJsonArray())
+                ? data.getAsJsonArray("predictions").size() : 0;
+        int atRiskTot = (data.has("at_risk_students") && data.get("at_risk_students").isJsonArray())
+                ? data.getAsJsonArray("at_risk_students").size() : 0;
+        if (tvPredOverviewCount != null) tvPredOverviewCount.setText(String.valueOf(totalPreds));
+        if (tvPredOverviewAtRisk != null) tvPredOverviewAtRisk.setText(atRiskTot + " Students");
+        if (tvPredOverviewAvgScore != null) {
+            double avg = getDouble(data, "average_predicted_score");
+            tvPredOverviewAvgScore.setText(totalPreds > 0 && avg > 0 ? String.format(Locale.US, "%.1f%%", avg) : "--");
+        }
+        if (tvPredOverviewAccuracy != null) {
+            double acc = getDouble(data, "model_accuracy");
+            tvPredOverviewAccuracy.setText(acc > 0 ? String.format(Locale.US, "%.1f%%", acc) : "--");
+        }
         if (chartOverviewScoreDist != null) {
             JsonObject sb = data.has("score_buckets") && data.get("score_buckets").isJsonObject()
                     ? data.getAsJsonObject("score_buckets") : null;
@@ -306,17 +335,26 @@ public class PredictionRiskFragment extends Fragment {
                 String code = getStr(o, "student_code", "STU");
                 String name = getStr(o, "name", "Student");
                 String cCode = getStr(o, "course_code", "Course");
-                String cls = getStr(o, "class_name", "Section");
+                String cls = getStr(o, "class_name", "");
+                String rawYl = getStr(o, "year_level", "");
+                String ylBadge = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYl) != null
+                        ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toBadgeText(getContext(), rawYl)
+                        : "";
+                String yearAndClass = !ylBadge.isEmpty()
+                        ? (cls.isEmpty() ? ylBadge : (ylBadge + " • " + cls))
+                        : (!cls.isEmpty() ? cls : getString(R.string.year_level_unassigned));
                 String riskLvl = getStr(o, "risk_level", "Medium Risk");
                 String scoreStr = String.format(Locale.US, "%.0f%%", getDouble(o, "risk_score"));
                 String factors = getStr(o, "risk_factors", "Academic & Attendance Risk");
-                atRiskList.add(new AtRiskStudentAdapter.AtRiskStudent(
-                        code, name, cCode, cls, riskLvl,
+                AtRiskStudentAdapter.AtRiskStudent ars = new AtRiskStudentAdapter.AtRiskStudent(
+                        code, name, cCode, yearAndClass, riskLvl,
                         "-", scoreStr, "-",
                         "• " + factors, "", "",
                         "#FFE4E6", "#FF4055",
                         Collections.singletonList("At Risk")
-                ));
+                );
+                ars.numericStudentId = getInt(o, "student_id");
+                atRiskList.add(ars);
             }
         }
         if (rvAtRiskStudents != null && getContext() != null) {
@@ -337,11 +375,21 @@ public class PredictionRiskFragment extends Fragment {
                 "Identified Risk Factors:\n" +
                 student.reason1;
 
-        new MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Student Risk Profile & Diagnosis")
                 .setMessage(details)
-                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss())
-                .show();
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.dismiss());
+        if (student.numericStudentId > 0) {
+            builder.setPositiveButton("View Full Student Profile", (dialog, which) -> {
+                android.content.Intent intent = new android.content.Intent(
+                        requireContext(), com.social7.studentlearnanalytics.teacher.student.StudentDetailActivity.class);
+                intent.putExtra("student_id", student.numericStudentId);
+                intent.putExtra("student_code", student.id);
+                intent.putExtra("student_name", student.name);
+                startActivity(intent);
+            });
+        }
+        builder.show();
     }
 
     private void bindExamPredictionViews(View root) {
@@ -366,6 +414,8 @@ public class PredictionRiskFragment extends Fragment {
 
     private void bindPredictionsFromApi(JsonArray arr) {
         examPredictionList.clear();
+        double predSum = 0.0, confSum = 0.0;
+        int cnt = 0;
         if (arr != null) {
             for (JsonElement el : arr) {
                 if (!el.isJsonObject()) continue;
@@ -375,10 +425,30 @@ public class PredictionRiskFragment extends Fragment {
                 String cCode = getStr(o, "course_code", "COURSE");
                 double pred = getDouble(o, "predicted_score");
                 int conf = getInt(o, "confidence");
+                predSum += pred;
+                confSum += conf;
+                cnt++;
                 String metrics = String.format(Locale.US, "Predicted Exam: %.1f%% • %d%% Confidence", pred, conf);
                 String badge = String.format(Locale.US, "Pred: %.0f%%", pred);
                 examPredictionList.add(new ExamPredictionAdapter.ExamPredictionItem(code, name, cCode, metrics, badge));
             }
+        }
+        if (cnt > 0) {
+            double avgPred = predSum / cnt;
+            double avgConf = confSum / cnt;
+            if (tvPredExamAcademicAvg != null) tvPredExamAcademicAvg.setText(String.format(Locale.US, "%.1f%%", avgPred));
+            if (tvPredExamPredictedAvg != null) tvPredExamPredictedAvg.setText(String.format(Locale.US, "%.1f%%", avgPred));
+            if (tvPredOverviewAvgScore != null) tvPredOverviewAvgScore.setText(String.format(Locale.US, "%.1f%%", avgPred));
+            if (tvPredExamExpectedGrade != null) {
+                String g = avgPred >= 90 ? "A" : (avgPred >= 85 ? "B+" : (avgPred >= 80 ? "B" : (avgPred >= 70 ? "C" : "D")));
+                tvPredExamExpectedGrade.setText("Grade: " + g);
+            }
+            if (tvPredExamConfidence != null) tvPredExamConfidence.setText(String.format(Locale.US, "%.0f%%", avgConf));
+        } else {
+            if (tvPredExamAcademicAvg != null) tvPredExamAcademicAvg.setText("--");
+            if (tvPredExamPredictedAvg != null) tvPredExamPredictedAvg.setText("--");
+            if (tvPredExamExpectedGrade != null) tvPredExamExpectedGrade.setText("--");
+            if (tvPredExamConfidence != null) tvPredExamConfidence.setText("--");
         }
         if (examPredictionAdapter != null) {
             examPredictionAdapter.notifyDataSetChanged();
@@ -406,6 +476,9 @@ public class PredictionRiskFragment extends Fragment {
 
     private void bindCourseRisksFromApi(JsonArray arr) {
         riskAnalysisList.clear();
+        int highTotal = 0;
+        double scoreSum = 0.0;
+        int courseCnt = 0;
         if (arr != null) {
             for (JsonElement el : arr) {
                 if (!el.isJsonObject()) continue;
@@ -416,6 +489,9 @@ public class PredictionRiskFragment extends Fragment {
                 int med = getInt(o, "medium_risk_count");
                 int tot = getInt(o, "at_risk_total");
                 double avg = getDouble(o, "average_score");
+                highTotal += high;
+                scoreSum += avg;
+                courseCnt++;
                 riskAnalysisList.add(new RiskAnalysisAdapter.RiskAnalysisItem(
                         code,
                         name,
@@ -425,6 +501,14 @@ public class PredictionRiskFragment extends Fragment {
                 ));
             }
         }
+        if (tvRiskSummaryHighCount != null) tvRiskSummaryHighCount.setText(highTotal + " Students");
+        if (tvRiskSummaryFactor != null) {
+            tvRiskSummaryFactor.setText(highTotal > 0 ? "High-Risk Alerts Active" : "None");
+        }
+        if (tvRiskSummaryIndex != null) {
+            tvRiskSummaryIndex.setText(courseCnt > 0 ? String.format(Locale.US, "%.1f%% Avg", scoreSum / courseCnt) : "--");
+        }
+        if (tvRiskSummaryImprovement != null) tvRiskSummaryImprovement.setText("--");
         if (riskAnalysisAdapter != null) {
             riskAnalysisAdapter.notifyDataSetChanged();
         }

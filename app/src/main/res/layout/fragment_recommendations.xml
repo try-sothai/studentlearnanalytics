@@ -145,32 +145,32 @@
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total AI Recs" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_42_active" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecTotalCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_primary_blue" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Urgent" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecHighCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_inactive_red" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Medium Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_15_active" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecMedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/warning_orange" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low Priority" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="19 Advisory" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecLowCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/needs_support" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/str_18_students" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecStudentsCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Students" android:textColor="@color/admin_purple_accent" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Completed Plans" android:textColor="@color/admin_text_secondary" android:textSize="11sp"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24 Plans" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvRecCompletedCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 Plans" android:textColor="@color/admin_active_green" android:textSize="14.5sp" android:textStyle="bold"/>
                             </LinearLayout>
                         </GridLayout>
                     </LinearLayout>

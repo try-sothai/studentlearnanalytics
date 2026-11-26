@@ -23,6 +23,7 @@ public class GradebookAdapter extends RecyclerView.Adapter<GradebookAdapter.View
         public String courseClass;
         public String gradeBreakdown;
         public String gradeBadge;
+        public int numericStudentId = 0;
 
         public GradebookItem(String studentId, String studentName, String courseClass, String gradeBreakdown, String gradeBadge) {
             this.studentId = studentId;

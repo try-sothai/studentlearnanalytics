@@ -193,7 +193,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="89"
+                                android:text="0"
                                 android:textColor="@color/warning_orange"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -219,7 +219,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="78"
+                                android:text="0"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -244,7 +244,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="6,245"
+                                android:text="0"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -269,7 +269,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="28"
+                                android:text="0"
                                 android:textColor="@color/admin_purple_accent"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -297,6 +297,7 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/tvTopCoursesTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/top_5_enrolled_courses"
@@ -310,50 +311,22 @@
                         android:layout_marginVertical="10dp"
                         android:background="@color/admin_border" />
 
-                    <!-- Course 1 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="CS101 — Intro to Computer Science" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,240" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
-                        </LinearLayout>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="1500" android:progress="1240" android:progressTint="@color/admin_primary_blue"/>
-                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/containerTopCourses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
-                    <!-- Course 2 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="MA101 — Calculus I" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1,150" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
-                        </LinearLayout>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="1500" android:progress="1150" android:progressTint="@color/admin_action_blue"/>
-                    </LinearLayout>
-
-                    <!-- Course 3 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="IT201 — Web Development" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="980" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
-                        </LinearLayout>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="1500" android:progress="980" android:progressTint="@color/admin_purple_accent"/>
-                    </LinearLayout>
-
-                    <!-- Course 4 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="10dp" android:orientation="vertical">
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="BUS101 — Business Management" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="850" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
-                        </LinearLayout>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="1500" android:progress="850" android:progressTint="@color/warning_orange"/>
-                    </LinearLayout>
-
-                    <!-- Course 5 -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="EN101 — English Communication" android:textColor="@color/admin_text_primary" android:textSize="13sp" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="720" android:textColor="@color/admin_primary_blue" android:textSize="13sp" android:textStyle="bold"/>
-                        </LinearLayout>
-                        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="4dp" android:max="1500" android:progress="720" android:progressTint="@color/admin_active_green"/>
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvTopCoursesEmpty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingVertical="12dp"
+                        android:text="@string/empty_state_no_data"
+                        android:textColor="@color/admin_text_secondary"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

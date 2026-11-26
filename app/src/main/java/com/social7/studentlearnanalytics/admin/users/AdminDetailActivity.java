@@ -47,6 +47,9 @@ public class AdminDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_admin_detail);
 
         if (getIntent() != null && getIntent().hasExtra("admin")) {
@@ -54,7 +57,9 @@ public class AdminDetailActivity extends AppCompatActivity {
         }
 
         if (currentAdmin == null) {
-            currentAdmin = new Admin("ADM001", "Mr. Chan", "chan@univ.edu", "System Administrator", "Active");
+            Toast.makeText(this, "Missing administrator record details.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         initViews();
@@ -65,6 +70,9 @@ public class AdminDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         fetchAdminDetails();
     }
 

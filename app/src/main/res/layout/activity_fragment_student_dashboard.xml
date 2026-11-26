@@ -256,7 +256,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:layout_marginBottom="4dp"
-                            android:text="▲ +5%"
+                            android:text=""
+                            android:visibility="gone"
+                            tools:text="▲ +5%"
                             android:textColor="#10B981"
                             android:textSize="11.5sp"
                             android:textStyle="bold" />
@@ -365,7 +367,8 @@
                             android:id="@+id/tvAttendanceSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="▲ +3%"
+                            android:text=""
+                            tools:text="▲ +3%"
                             android:textColor="@color/slas_success"
                             android:textSize="10.5sp"
                             android:textStyle="bold" />
@@ -435,7 +438,8 @@
                             android:id="@+id/tvAssignmentsSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="▲ +2%"
+                            android:text=""
+                            tools:text="▲ +2%"
                             android:textColor="@color/slas_success"
                             android:textSize="10.5sp"
                             android:textStyle="bold" />
@@ -512,7 +516,8 @@
                             android:id="@+id/tvQuizzesSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="▼ -2%"
+                            android:text=""
+                            tools:text="▼ -2%"
                             android:textColor="@color/slas_danger"
                             android:textSize="10.5sp"
                             android:textStyle="bold" />
@@ -582,7 +587,8 @@
                             android:id="@+id/tvGpaSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="▲ +0.15"
+                            android:text=""
+                            tools:text="▲ +0.15"
                             android:textColor="@color/slas_success"
                             android:textSize="10.5sp"
                             android:textStyle="bold" />
@@ -664,7 +670,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="5dp"
                             android:layout_marginTop="6dp"
-                            android:progress="76"
+                            android:progress="0"
                             android:progressTint="@color/slas_primary_purple"
                             android:progressBackgroundTint="@color/slas_border" />
 
@@ -673,7 +679,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="@string/model_confidence_87"
+                            android:text=""
+                            tools:text="@string/model_confidence_87"
                             android:textColor="@color/slas_success"
                             android:textSize="10sp"
                             android:maxLines="1"

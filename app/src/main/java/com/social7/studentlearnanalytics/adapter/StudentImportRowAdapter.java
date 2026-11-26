@@ -78,11 +78,11 @@ public class StudentImportRowAdapter extends RecyclerView.Adapter<StudentImportR
             if (tvRowMeta != null) {
                 StringBuilder meta = new StringBuilder();
                 if (item.departmentCode != null && !item.departmentCode.isEmpty()) {
-                    meta.append("Dept: ").append(item.departmentCode);
+                    meta.append("Faculty: ").append(item.departmentCode);
                 }
                 if (item.programCode != null && !item.programCode.isEmpty()) {
                     if (meta.length() > 0) meta.append(" • ");
-                    meta.append("Program: ").append(item.programCode);
+                    meta.append("Major: ").append(item.programCode);
                 }
                 if ("IMPORTED".equalsIgnoreCase(status)) {
                     if (meta.length() > 0) meta.append(" • ");

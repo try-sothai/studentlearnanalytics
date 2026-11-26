@@ -31,18 +31,21 @@ public class CourseAttendanceAdapter extends RecyclerView.Adapter<CourseAttendan
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
 
-        String name = item.has("course_name") ? item.get("course_name").getAsString() : "Unknown Course";
+        String name = item.has("course_name") && !item.get("course_name").isJsonNull()
+                ? item.get("course_name").getAsString() : "Unknown Course";
         holder.tvCourseName.setText(name);
 
-        holder.tvTotal.setText(item.has("total") ? item.get("total").getAsString() : "0");
-        holder.tvPresent.setText(item.has("present") ? item.get("present").getAsString() : "0");
-        holder.tvAbsent.setText(item.has("absent") ? item.get("absent").getAsString() : "0");
+        holder.tvTotal.setText(item.has("total") && !item.get("total").isJsonNull() ? item.get("total").getAsString() : "0");
+        holder.tvPresent.setText(item.has("present") && !item.get("present").isJsonNull() ? item.get("present").getAsString() : "0");
+        holder.tvAbsent.setText(item.has("absent") && !item.get("absent").isJsonNull() ? item.get("absent").getAsString() : "0");
 
-        String percent = item.has("percentage") ? item.get("percentage").getAsString() + "%" : "0%";
+        String percent = item.has("percentage") && !item.get("percentage").isJsonNull()
+                ? item.get("percentage").getAsString() + "%" : "N/A";
         holder.tvPercentage.setText(percent);
 
         holder.itemView.setOnClickListener(v -> {
-            int courseOfferingId = item.has("course_offering_id") ? item.get("course_offering_id").getAsInt() : 0;
+            int courseOfferingId = item.has("course_offering_id") && !item.get("course_offering_id").isJsonNull()
+                    ? item.get("course_offering_id").getAsInt() : 0;
             if (courseOfferingId > 0) {
                 android.content.Intent intent = new android.content.Intent(v.getContext(), CourseAttendanceActivity.class);
                 intent.putExtra("course_offering_id", courseOfferingId);

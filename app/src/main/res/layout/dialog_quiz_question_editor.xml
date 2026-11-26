@@ -224,10 +224,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Subjective responses that don't match an exact keyword are queued for manual teacher grading."
+                android:text="All Short Answer submissions go to Pending Grading for manual teacher review and feedback."
                 android:textColor="@color/admin_text_secondary"
                 android:textSize="11sp" />
         </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cbQuestionRequired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="true"
+            android:text="Required question (student must answer before submitting)"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </ScrollView>

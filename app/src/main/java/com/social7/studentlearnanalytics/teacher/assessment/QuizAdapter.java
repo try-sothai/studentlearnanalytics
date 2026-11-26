@@ -25,20 +25,30 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         public String classCohort;
         public String details;
         public String status;
+        public int attemptsCount;
+        public int pendingGradingCount;
 
         public QuizCardItem(String id, String courseCode, String title, String classCohort, String details, String status) {
+            this(id, courseCode, title, classCohort, details, status, 0, 0);
+        }
+
+        public QuizCardItem(String id, String courseCode, String title, String classCohort, String details, String status,
+                            int attemptsCount, int pendingGradingCount) {
             this.id = id;
             this.courseCode = courseCode;
             this.title = title;
             this.classCohort = classCohort;
             this.details = details;
             this.status = status;
+            this.attemptsCount = attemptsCount;
+            this.pendingGradingCount = pendingGradingCount;
         }
     }
 
     public interface OnQuizActionClickListener {
         void onBuilderClick(QuizCardItem item);
         void onPublishClick(QuizCardItem item);
+        default void onAttemptsClick(QuizCardItem item) {}
     }
 
     private final Context context;
@@ -87,7 +97,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvCourseCode, tvQuizTitle, tvClassCohort, tvQuizDetails, tvStatusBadge;
-        private final MaterialButton btnQuizBuilder, btnPublishQuiz;
+        private final MaterialButton btnQuizAttempts, btnQuizBuilder, btnPublishQuiz;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -97,6 +107,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
             tvQuizDetails = itemView.findViewById(R.id.tvQuizDetails);
             tvStatusBadge = itemView.findViewById(R.id.tvStatusBadge);
 
+            btnQuizAttempts = itemView.findViewById(R.id.btnQuizAttempts);
             btnQuizBuilder = itemView.findViewById(R.id.btnQuizBuilder);
             btnPublishQuiz = itemView.findViewById(R.id.btnPublishQuiz);
         }
@@ -116,6 +127,24 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                 } else {
                     tvStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
                 }
+            }
+
+            if (btnQuizAttempts != null) {
+                if (item.pendingGradingCount > 0) {
+                    btnQuizAttempts.setText("Grade (" + item.pendingGradingCount + " Pending)");
+                    btnQuizAttempts.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#D97706")));
+                    btnQuizAttempts.setTextColor(Color.WHITE);
+                    btnQuizAttempts.setStrokeWidth(0);
+                } else {
+                    btnQuizAttempts.setText("Attempts (" + item.attemptsCount + ")");
+                    btnQuizAttempts.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.TRANSPARENT));
+                    btnQuizAttempts.setTextColor(Color.parseColor("#3155F5"));
+                    btnQuizAttempts.setStrokeColor(android.content.res.ColorStateList.valueOf(Color.parseColor("#3155F5")));
+                    btnQuizAttempts.setStrokeWidth(2);
+                }
+                btnQuizAttempts.setOnClickListener(v -> {
+                    if (listener != null) listener.onAttemptsClick(item);
+                });
             }
 
             if (btnQuizBuilder != null) {

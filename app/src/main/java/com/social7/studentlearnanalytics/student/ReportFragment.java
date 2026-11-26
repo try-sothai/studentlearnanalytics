@@ -167,7 +167,10 @@ public class ReportFragment extends Fragment {
             String code = student.getStudentCode();
             String name = student.getDisplayName();
             String dept = student.getDepartmentName();
-            String year = student.getYearLevelFormatted();
+            Integer ylNum = student.getYearLevelNumber();
+            String year = ylNum != null
+                    ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(getContext(), ylNum)
+                    : student.getYearLevelFormatted();
             loadedStudentCode = code != null ? code : "";
             loadedStudentName = name != null ? name : "";
             loadedDepartment = dept != null ? dept : "";
@@ -210,7 +213,7 @@ public class ReportFragment extends Fragment {
         }
         if (tvReportAcademicStanding != null) {
             String standing = (data.getGpaSummary() != null && data.getGpaSummary().academicStanding != null)
-                    ? data.getGpaSummary().academicStanding : "Good Standing";
+                    ? data.getGpaSummary().academicStanding : "Unavailable";
             tvReportAcademicStanding.setText("Academic Standing: " + standing);
         }
         if (tvReportPredictedScore != null) {
@@ -398,7 +401,7 @@ public class ReportFragment extends Fragment {
         y += 18;
         canvas.drawText("• Student ID: " + studentId, 40, y, bodyPaint);
         y += 18;
-        canvas.drawText("• Department / Major: " + (!loadedDepartment.isEmpty() ? loadedDepartment : "N/A"), 40, y, bodyPaint);
+        canvas.drawText("• Faculty / Major: " + (!loadedDepartment.isEmpty() ? loadedDepartment : "N/A"), 40, y, bodyPaint);
         y += 18;
         canvas.drawText("• Year Level: " + (!loadedYearLevel.isEmpty() ? loadedYearLevel : "N/A"), 40, y, bodyPaint);
         y += 28;

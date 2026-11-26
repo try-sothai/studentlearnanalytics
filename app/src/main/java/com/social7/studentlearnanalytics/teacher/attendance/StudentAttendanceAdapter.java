@@ -23,6 +23,7 @@ public class StudentAttendanceAdapter extends RecyclerView.Adapter<StudentAttend
         public String courseClass;
         public String counts;
         public String rateBadge;
+        public int numericStudentId = 0;
 
         public StudentAttendanceRecord(String studentId, String studentName, String courseClass, String counts, String rateBadge) {
             this.studentId = studentId;

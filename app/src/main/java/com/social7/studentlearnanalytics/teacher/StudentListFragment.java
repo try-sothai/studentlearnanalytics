@@ -247,7 +247,7 @@ public class StudentListFragment extends Fragment {
                             if (data.has("teacher") && data.get("teacher").isJsonObject()) {
                                 JsonObject t = data.getAsJsonObject("teacher");
                                 String tName = getStr(t, "name", "Teacher");
-                                String tDept = getStr(t, "department", "Academic Department");
+                                String tDept = getStr(t, "department", "Academic Faculty");
                                 if (tvSummaryTeacherName != null) tvSummaryTeacherName.setText("Teacher: " + tName);
                                 if (tvSummaryDepartmentName != null) tvSummaryDepartmentName.setText(tDept);
                             }
@@ -276,9 +276,13 @@ public class StudentListFragment extends Fragment {
                                     String code = getStr(obj, "student_code", "STU");
                                     String name = getStr(obj, "name", "Student");
                                     String email = getStr(obj, "email", "");
-                                    String dept = getStr(obj, "department", "Academic Department");
-                                    String prog = getStr(obj, "program", "Program");
-                                    String year = getStr(obj, "year_level", "Year 1");
+                                    String dept = getStr(obj, "department", "Academic Faculty");
+                                    String prog = getStr(obj, "program", "Major");
+                                    String rawYear = getStr(obj, "year_level", "");
+                                    Integer parsedYl = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(rawYear);
+                                    String year = parsedYl != null
+                                            ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(getContext(), parsedYl)
+                                            : getString(R.string.year_level_unassigned);
                                     double gpa = getDouble(obj, "gpa");
                                     String risk = getStr(obj, "risk_level", "Good");
                                     double pred = getDouble(obj, "predicted_score");
@@ -290,6 +294,13 @@ public class StudentListFragment extends Fragment {
                                             : ("Need Attention".equalsIgnoreCase(risk) ? "#D97706" : "#2563FF");
 
                                     Student st = new Student(code, name, email, dept, prog, year, gpa, risk, pred, bg, fg, courseCode);
+                                    if (parsedYl != null) {
+                                        st.setYearLevel(parsedYl);
+                                        st.setYearLevelCode(com.social7.studentlearnanalytics.utils.YearLevelHelper.toCode(parsedYl));
+                                        st.setYearLevelLabel(year);
+                                    }
+                                    String ayName = getStr(obj, "academic_year", "");
+                                    if (!ayName.isEmpty()) st.setAcademicYear(ayName);
                                     long dbId = obj.has("id") && !obj.get("id").isJsonNull() ? obj.get("id").getAsLong() : 0L;
                                     long uId = obj.has("user_id") && !obj.get("user_id").isJsonNull() ? obj.get("user_id").getAsLong() : 0L;
                                     if (dbId > 0) st.setDbId(dbId);

@@ -43,6 +43,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_profile_settings);
 
         sessionManager = new SessionManager(this);
@@ -51,6 +54,12 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         prepopulateFromSession();
         fetchProfileFromApi();
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin");
     }
 
     private void initViews() {
@@ -160,7 +169,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private void setupListeners() {
         View btnCamera = findViewById(R.id.btnCameraUpload);
         View.OnClickListener uploadListener = v ->
-                Toast.makeText(this, "Profile image updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Profile photo upload is not supported in this version.", Toast.LENGTH_SHORT).show();
 
         if (btnCamera != null) btnCamera.setOnClickListener(uploadListener);
 
@@ -232,15 +241,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
                     if (response.isSuccessful()) {
                         if (sessionManager != null) {
-                            sessionManager.saveSession(
-                                    sessionManager.getUserId() != null ? sessionManager.getUserId() : "1",
-                                    sessionManager.getToken() != null ? sessionManager.getToken() : "",
-                                    sessionManager.getRole() != null ? sessionManager.getRole() : "Admin",
-                                    name,
-                                    sessionManager.getNumericUserId(),
-                                    sessionManager.getStudentDbId(),
-                                    email
-                            );
+                            sessionManager.updateUserProfile(name, email);
                         }
                         Toast.makeText(ProfileSettingsActivity.this, R.string.profile_updated_successfully, Toast.LENGTH_LONG).show();
                         finish();

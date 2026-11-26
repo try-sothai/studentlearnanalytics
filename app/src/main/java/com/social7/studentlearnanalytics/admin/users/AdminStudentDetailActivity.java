@@ -32,6 +32,7 @@ import com.social7.studentlearnanalytics.model.Student;
 import com.social7.studentlearnanalytics.model.User;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -242,14 +243,13 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
         currentStudent.setProgramCode(getStr(d, "program_code", ""));
 
         String yl = getStr(d, "year_level", "");
-        if (!yl.isEmpty()) {
-            try {
-                int yInt = Integer.parseInt(yl.replaceAll("\\D+", ""));
-                currentStudent.setYearLevel(yInt);
-                currentStudent.setYear(getString(R.string.year_level_format, yInt));
-            } catch (Exception e) {
-                currentStudent.setYear(yl);
-            }
+        Integer yInt = YearLevelHelper.parse(yl);
+        if (yInt != null) {
+            currentStudent.setYearLevel(yInt);
+            currentStudent.setYearLevelCode(YearLevelHelper.toCode(yInt));
+            currentStudent.setYear(YearLevelHelper.toFullLabel(this, yInt));
+        } else {
+            currentStudent.setYear(getString(R.string.year_level_unassigned));
         }
 
         if (d.has("academic_year_id") && !d.get("academic_year_id").isJsonNull()) {
@@ -541,7 +541,11 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
 
         if (tvValDept != null) tvValDept.setText(valOrEmpty(currentStudent.getDepartment()));
         if (tvValProgram != null) tvValProgram.setText(valOrEmpty(currentStudent.getProgram()));
-        if (tvValYear != null) tvValYear.setText(valOrEmpty(currentStudent.getYear()));
+        Object rawYear = currentStudent.getYearLevel() != null ? currentStudent.getYearLevel() : currentStudent.getYear();
+        String yearDisplay = YearLevelHelper.parse(rawYear) != null
+                ? YearLevelHelper.toFullLabel(this, rawYear)
+                : valOrEmpty(currentStudent.getYear());
+        if (tvValYear != null) tvValYear.setText(yearDisplay);
         if (tvValAcademicYear != null) tvValAcademicYear.setText(valOrEmpty(currentStudent.getAcademicYear()));
         if (tvValEnrolledCourses != null) tvValEnrolledCourses.setText(valOrEmpty(currentStudent.getEnrolledCoursesCount()));
 
@@ -557,7 +561,11 @@ public class AdminStudentDetailActivity extends AppCompatActivity {
         if (currentStudent == null) return;
         if (tvStudyDept != null) tvStudyDept.setText(valOrEmpty(currentStudent.getDepartment()));
         if (tvStudyProgram != null) tvStudyProgram.setText(valOrEmpty(currentStudent.getProgram()));
-        if (tvStudyYearLevel != null) tvStudyYearLevel.setText(valOrEmpty(currentStudent.getYear()));
+        Object studyRawYear = currentStudent.getYearLevel() != null ? currentStudent.getYearLevel() : currentStudent.getYear();
+        String studyYearDisplay = YearLevelHelper.parse(studyRawYear) != null
+                ? YearLevelHelper.toFullLabel(this, studyRawYear)
+                : valOrEmpty(currentStudent.getYear());
+        if (tvStudyYearLevel != null) tvStudyYearLevel.setText(studyYearDisplay);
         if (tvStudyAcademicYear != null) tvStudyAcademicYear.setText(valOrEmpty(currentStudent.getAcademicYear()));
         if (tvStudyAssignedClass != null) tvStudyAssignedClass.setText(valOrEmpty(currentStudent.getClassName()));
 

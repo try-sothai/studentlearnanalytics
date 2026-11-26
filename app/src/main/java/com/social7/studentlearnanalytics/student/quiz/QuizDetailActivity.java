@@ -25,6 +25,7 @@ import com.social7.studentlearnanalytics.adapter.AssessmentAdapter;
 import com.social7.studentlearnanalytics.model.Assessment;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.network.ApiService;
+import com.social7.studentlearnanalytics.utils.QuizScoreUiHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class QuizDetailActivity extends AppCompatActivity {
 
     private final List<String> semesterFilterList = new ArrayList<>();
     private ArrayAdapter<String> spinnerAdapter;
+    private int quizLoadGeneration = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,6 @@ public class QuizDetailActivity extends AppCompatActivity {
         initViews();
         setupSemesterSpinner();
         setupRecyclerView();
-        fetchQuizzes();
     }
 
     @Override
@@ -129,12 +130,14 @@ public class QuizDetailActivity extends AppCompatActivity {
             averageScoreText.setText("--");
         }
 
+        final int generation = ++quizLoadGeneration;
         ApiService apiService = ApiClient.getApiService(this);
         Call<JsonObject> call = apiService.getStudentQuizzes(null);
 
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed() || generation != quizLoadGeneration) return;
                 if (loadingProgressBar != null) {
                     loadingProgressBar.setVisibility(View.GONE);
                 }
@@ -154,13 +157,8 @@ public class QuizDetailActivity extends AppCompatActivity {
                                 if (!element.isJsonObject()) continue;
                                 JsonObject obj = element.getAsJsonObject();
 
-                                String id = obj.has("id") && !obj.get("id").isJsonNull()
-                                        ? obj.get("id").getAsString() : "";
-                                String title = obj.has("title") && !obj.get("title").isJsonNull()
-                                        ? obj.get("title").getAsString() : "Untitled Quiz";
-
                                 String rawDate = "";
-                                for (String k : new String[]{"start_at", "quiz_date", "end_at", "created_at"}) {
+                                for (String k : new String[]{"extended_deadline", "effective_end_at", "start_at", "quiz_date", "end_at", "created_at"}) {
                                     if (obj.has(k) && !obj.get(k).isJsonNull()) {
                                         String v = obj.get(k).getAsString();
                                         if (v != null && !v.trim().isEmpty()) {
@@ -169,67 +167,11 @@ public class QuizDetailActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                String displayDate = formatDate(rawDate);
-
-                                int totalScore = obj.has("total_score") && !obj.get("total_score").isJsonNull()
-                                        ? (int) Math.round(obj.get("total_score").getAsDouble()) : 100;
-                                int score = 0;
-                                boolean isSubmitted = false;
-                                boolean isGraded = false;
-
-                                if (obj.has("attempts") && obj.get("attempts").isJsonArray()) {
-                                    JsonArray attempts = obj.getAsJsonArray("attempts");
-                                    if (attempts.size() > 0) {
-                                        JsonObject latestAttempt = attempts.get(0).getAsJsonObject();
-                                        String status = latestAttempt.has("status") && !latestAttempt.get("status").isJsonNull()
-                                                ? latestAttempt.get("status").getAsString() : "";
-                                        boolean hasScore = latestAttempt.has("score") && !latestAttempt.get("score").isJsonNull();
-                                        isSubmitted = "completed".equalsIgnoreCase(status) || "timed_out".equalsIgnoreCase(status) || hasScore;
-                                        if (hasScore) {
-                                            score = (int) Math.round(latestAttempt.get("score").getAsDouble());
-                                            isGraded = true;
-                                        }
-                                    }
+                                Assessment item = QuizScoreUiHelper.parseStudentQuizItem(obj, formatDate(rawDate));
+                                if (item.getSemester() != null && !item.getSemester().trim().isEmpty()) {
+                                    uniqueSemesters.add(item.getSemester().trim());
                                 }
-
-                                String semesterName = null;
-                                if (obj.has("semester") && !obj.get("semester").isJsonNull()) {
-                                    JsonObject semObj = obj.getAsJsonObject("semester");
-                                    if (semObj.has("name") && !semObj.get("name").isJsonNull()) {
-                                        semesterName = semObj.get("name").getAsString();
-                                    } else if (semObj.has("semester_name") && !semObj.get("semester_name").isJsonNull()) {
-                                        semesterName = semObj.get("semester_name").getAsString();
-                                    }
-                                } else if (obj.has("semester_id") && !obj.get("semester_id").isJsonNull()) {
-                                    semesterName = "Semester " + obj.get("semester_id").getAsString();
-                                }
-
-                                if (semesterName != null && !semesterName.trim().isEmpty()) {
-                                    uniqueSemesters.add(semesterName.trim());
-                                }
-
-                                String courseName = null;
-                                if (obj.has("course") && !obj.get("course").isJsonNull()) {
-                                    JsonObject courseObj = obj.getAsJsonObject("course");
-                                    if (courseObj.has("course_name") && !courseObj.get("course_name").isJsonNull()) {
-                                        courseName = courseObj.get("course_name").getAsString();
-                                    } else if (courseObj.has("name") && !courseObj.get("name").isJsonNull()) {
-                                        courseName = courseObj.get("name").getAsString();
-                                    }
-                                }
-
-                                allQuizList.add(new Assessment(
-                                        id,
-                                        title,
-                                        displayDate,
-                                        score,
-                                        totalScore,
-                                        "quiz",
-                                        semesterName,
-                                        courseName,
-                                        isSubmitted,
-                                        isGraded
-                                ));
+                                allQuizList.add(item);
                             }
                         }
 
@@ -239,6 +181,7 @@ public class QuizDetailActivity extends AppCompatActivity {
                                 ? semesterSpinner.getSelectedItem().toString()
                                 : "All Semesters";
                         filterQuizzes(currentSemester);
+                        enrichPendingQuizzesFromReview(generation);
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing quizzes JSON", e);
@@ -330,26 +273,55 @@ public class QuizDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void enrichPendingQuizzesFromReview(int generation) {
+        ApiService apiService = ApiClient.getApiService(this);
+        for (Assessment item : allQuizList) {
+            if (!item.isPendingGrading() || item.getLatestAttemptId() == null || item.getLatestAttemptId().isEmpty()) {
+                continue;
+            }
+            apiService.reviewStudentQuizAttempt(item.getLatestAttemptId()).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (isFinishing() || isDestroyed() || generation != quizLoadGeneration) return;
+                    if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) {
+                        return;
+                    }
+                    QuizScoreUiHelper.ReviewScoreSummary summary =
+                            QuizScoreUiHelper.parseStudentReviewSummary(response.body().getAsJsonObject("data"));
+                    QuizScoreUiHelper.applyReviewSummaryToAssessment(item, summary);
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                    updateAverageScore();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                }
+            });
+        }
+    }
+
     private void updateAverageScore() {
         if (quizList.isEmpty()) {
             if (averageScoreText != null) averageScoreText.setText("--");
             return;
         }
 
-        int totalEarned = 0;
-        int totalPossible = 0;
+        double totalEarned = 0.0;
+        double totalPossible = 0.0;
         int gradedCount = 0;
 
         for (Assessment a : quizList) {
-            if (a.isGraded()) {
-                totalEarned += a.getScore();
-                totalPossible += a.getTotalScore();
+            if (a.isGraded() && !a.isPendingGrading()) {
+                totalEarned += a.getExactScore() != null ? a.getExactScore() : a.getScore();
+                totalPossible += a.getExactTotalScore() != null ? a.getExactTotalScore() : a.getTotalScore();
                 gradedCount++;
             }
         }
 
         if (gradedCount > 0 && totalPossible > 0) {
-            int avg = (totalEarned * 100) / totalPossible;
+            int avg = (int) Math.round((totalEarned * 100.0) / totalPossible);
             if (averageScoreText != null) averageScoreText.setText(avg + "%");
         } else {
             if (averageScoreText != null) averageScoreText.setText("--");

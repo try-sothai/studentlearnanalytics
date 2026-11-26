@@ -55,7 +55,8 @@ public class QuizBuilderQuestionAdapter extends RecyclerView.Adapter<QuizBuilder
         h.tvQuestionNumber.setText("Question " + (position + 1));
         h.tvQuestionTypeBadge.setText(q.getTypeLabel());
 
-        String markStr = AssessmentUiHelper.formatMarks(q.marks) + (q.marks == 1.0 ? " mark" : " marks");
+        String markStr = AssessmentUiHelper.formatMarks(q.marks) + (q.marks == 1.0 ? " mark" : " marks")
+                + (q.isRequired ? " • Required" : " • Optional");
         h.tvQuestionMarks.setText(markStr);
 
         h.tvQuestionText.setText(q.questionText);
@@ -64,12 +65,15 @@ public class QuizBuilderQuestionAdapter extends RecyclerView.Adapter<QuizBuilder
         h.tvExpandToggle.setText(q.expanded ? "Collapse" : "Expand");
 
         String correctDisplay = formatCorrectDisplay(q);
+        String guidanceDisplay = q.gradingGuidance != null && !q.gradingGuidance.trim().isEmpty()
+                ? q.gradingGuidance.trim()
+                : correctDisplay;
         if ("multiple_choice".equalsIgnoreCase(q.questionType)) {
             h.tvCollapsedSummary.setText(String.format(Locale.US, "%d options • Correct: %s", q.optionCount, correctDisplay));
         } else if ("true_false".equalsIgnoreCase(q.questionType)) {
             h.tvCollapsedSummary.setText("True / False • Correct: " + correctDisplay);
         } else {
-            h.tvCollapsedSummary.setText(correctDisplay.isEmpty() ? "Manual teacher grading" : ("Expected: " + correctDisplay));
+            h.tvCollapsedSummary.setText(guidanceDisplay.isEmpty() ? "Manual teacher grading" : ("Guidance: " + guidanceDisplay));
         }
         h.tvCollapsedSummary.setVisibility(q.expanded ? View.GONE : View.VISIBLE);
 
@@ -77,9 +81,9 @@ public class QuizBuilderQuestionAdapter extends RecyclerView.Adapter<QuizBuilder
         if (q.expanded) {
             h.tvOptionsBlock.setText(buildOptionsBlock(q));
             if ("short_answer".equalsIgnoreCase(q.questionType)) {
-                h.tvCorrectAnswerLine.setText(correctDisplay.isEmpty()
+                h.tvCorrectAnswerLine.setText(guidanceDisplay.isEmpty()
                         ? "Grading: Manual teacher review"
-                        : "Expected Answer: " + correctDisplay);
+                        : "Expected / Guidance: " + guidanceDisplay);
             } else {
                 h.tvCorrectAnswerLine.setText("Correct Answer: " + correctDisplay);
             }

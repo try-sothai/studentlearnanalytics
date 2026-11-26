@@ -51,10 +51,13 @@ public class ClassAnalyticsFragment extends Fragment {
     private static final String ARG_OPENED_FROM_REPORTS = "opened_from_reports";
 
     private TextView tvSelectedCourseName, tvSelectedSemester;
+    private TextView tvValClassAvg, tvValPassRate, tvValAtRiskCount, tvValTopPerformers;
     private BarChart barChartScoreDist;
     private LineChart lineChartAnalyticsTrend;
     private Integer selectedCourseId = null;
+    private Integer selectedSemesterId = null;
     private final List<CourseOption> availableCourses = new ArrayList<>();
+    private final List<SemesterOption> availableSemesters = new ArrayList<>();
 
     private static class CourseOption {
         final int id;
@@ -64,6 +67,16 @@ public class ClassAnalyticsFragment extends Fragment {
         CourseOption(int id, String code, String name) {
             this.id = id;
             this.code = code;
+            this.name = name;
+        }
+    }
+
+    private static class SemesterOption {
+        final int id;
+        final String name;
+
+        SemesterOption(int id, String name) {
+            this.id = id;
             this.name = name;
         }
     }
@@ -94,6 +107,15 @@ public class ClassAnalyticsFragment extends Fragment {
 
         tvSelectedCourseName = view.findViewById(R.id.tvSelectedCourseName);
         tvSelectedSemester = view.findViewById(R.id.tvSelectedSemester);
+        tvValClassAvg = view.findViewById(R.id.tvValClassAvg);
+        tvValPassRate = view.findViewById(R.id.tvValPassRate);
+        tvValAtRiskCount = view.findViewById(R.id.tvValAtRiskCount);
+        tvValTopPerformers = view.findViewById(R.id.tvValTopPerformers);
+
+        if (tvValClassAvg != null) tvValClassAvg.setText("--");
+        if (tvValPassRate != null) tvValPassRate.setText("--");
+        if (tvValAtRiskCount != null) tvValAtRiskCount.setText("--");
+        if (tvValTopPerformers != null) tvValTopPerformers.setText("--");
 
         if (getActivity() instanceof TeacherMainActivity) {
             ((TeacherMainActivity) getActivity()).setupTeacherHeader(
@@ -170,7 +192,7 @@ public class ClassAnalyticsFragment extends Fragment {
     private void fetchTeacherAnalytics(BarChart barChart, LineChart lineChart) {
         if (getContext() == null) return;
 
-        ApiClient.getApiService(requireContext()).getTeacherDashboardFiltered(selectedCourseId, null).enqueue(
+        ApiClient.getApiService(requireContext()).getTeacherDashboardFiltered(selectedCourseId, selectedSemesterId).enqueue(
                 new Callback<JsonObject>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -194,6 +216,18 @@ public class ClassAnalyticsFragment extends Fragment {
                                 }
                             }
 
+                            if (data.has("semesters") && data.get("semesters").isJsonArray()) {
+                                availableSemesters.clear();
+                                for (JsonElement sel : data.getAsJsonArray("semesters")) {
+                                    if (!sel.isJsonObject()) continue;
+                                    JsonObject so = sel.getAsJsonObject();
+                                    int sid = so.has("id") && !so.get("id").isJsonNull() ? so.get("id").getAsInt() : 0;
+                                    String sName = so.has("name") && !so.get("name").isJsonNull() ? so.get("name").getAsString() : "";
+                                    if (sid > 0 && !sName.isEmpty()) availableSemesters.add(new SemesterOption(sid, sName));
+                                }
+                            }
+
+                            bindKpiMetricsFromApi(data);
                             bindBarChartFromApi(barChart, data);
                             bindLineChartFromApi(lineChart, data);
                         } else {
@@ -208,6 +242,41 @@ public class ClassAnalyticsFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void bindKpiMetricsFromApi(JsonObject data) {
+        if (data == null) return;
+        int totalGraded = data.has("total_graded_records") && !data.get("total_graded_records").isJsonNull()
+                ? data.get("total_graded_records").getAsInt() : 0;
+
+        if (tvValClassAvg != null) {
+            if (totalGraded > 0 && data.has("average_score") && !data.get("average_score").isJsonNull()) {
+                tvValClassAvg.setText(String.format(Locale.US, "%.1f%%", data.get("average_score").getAsDouble()));
+            } else {
+                tvValClassAvg.setText("--");
+            }
+        }
+        if (tvValPassRate != null) {
+            if (totalGraded > 0 && data.has("pass_rate") && !data.get("pass_rate").isJsonNull()) {
+                tvValPassRate.setText(String.format(Locale.US, "%.0f%%", data.get("pass_rate").getAsDouble()));
+            } else {
+                tvValPassRate.setText("--");
+            }
+        }
+        if (tvValAtRiskCount != null) {
+            if (data.has("at_risk_students_count") && !data.get("at_risk_students_count").isJsonNull()) {
+                tvValAtRiskCount.setText(String.valueOf(data.get("at_risk_students_count").getAsInt()));
+            } else {
+                tvValAtRiskCount.setText("--");
+            }
+        }
+        if (tvValTopPerformers != null) {
+            if (data.has("top_performers_count") && !data.get("top_performers_count").isJsonNull()) {
+                tvValTopPerformers.setText(String.valueOf(data.get("top_performers_count").getAsInt()));
+            } else {
+                tvValTopPerformers.setText("--");
+            }
+        }
     }
 
     private void clearChartsWithMessage(String msg) {
@@ -303,11 +372,22 @@ public class ClassAnalyticsFragment extends Fragment {
     }
 
     private void showSemesterDropdown(View anchor) {
+        if (getContext() == null) return;
         PopupMenu popup = new PopupMenu(requireContext(), anchor);
-        popup.getMenu().add(0, 1, 0, "All Semesters");
+        popup.getMenu().add(0, 0, 0, "All Semesters");
+        for (int i = 0; i < availableSemesters.size(); i++) {
+            SemesterOption opt = availableSemesters.get(i);
+            popup.getMenu().add(0, i + 1, i + 1, opt.name);
+        }
         popup.setOnMenuItemClickListener(item -> {
-            if (tvSelectedSemester != null) {
-                tvSelectedSemester.setText(item.getTitle());
+            int idx = item.getItemId();
+            if (idx == 0) {
+                selectedSemesterId = null;
+                if (tvSelectedSemester != null) tvSelectedSemester.setText("All Semesters");
+            } else if (idx - 1 < availableSemesters.size()) {
+                SemesterOption opt = availableSemesters.get(idx - 1);
+                selectedSemesterId = opt.id;
+                if (tvSelectedSemester != null) tvSelectedSemester.setText(opt.name);
             }
             fetchTeacherAnalytics(barChartScoreDist, lineChartAnalyticsTrend);
             return true;

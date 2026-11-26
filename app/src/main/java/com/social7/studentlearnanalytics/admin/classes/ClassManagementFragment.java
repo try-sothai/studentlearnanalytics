@@ -396,8 +396,8 @@ public class ClassManagementFragment extends Fragment {
                                         String id = getSafeString(obj, "id", String.valueOf(classList.size() + 1));
                                         String name = getSafeString(obj, "name", getSafeString(obj, "class_name", "Class"));
                                         String code = getSafeString(obj, "code", getSafeString(obj, "class_code", "CLASS"));
-                                        String dept = getSafeString(obj, "department", "Department");
-                                        String ay = getSafeString(obj, "academic_year", "2026-2027");
+                                        String dept = getSafeString(obj, "department", "Faculty");
+                                        String ay = getSafeString(obj, "academic_year", "");
                                         String course = getSafeString(obj, "courses_summary", getSafeString(obj, "course", "No courses assigned"));
                                         String teacher = getSafeString(obj, "teachers_summary", getSafeString(obj, "teacher", "Unassigned"));
                                         String status = getSafeString(obj, "status", "Active");
@@ -408,7 +408,11 @@ public class ClassManagementFragment extends Fragment {
                                         cm.setAcademicYearId(getSafeInt(obj, "academic_year_id", 0));
                                         cm.setBuildingId(getSafeInt(obj, "building_id", 0));
                                         cm.setFloorId(getSafeInt(obj, "floor_id", 0));
-                                        cm.setYearLevel(getSafeInt(obj, "year_level", 1));
+                                        Integer parsedYl = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(
+                                                getSafeString(obj, "year_level", ""));
+                                        cm.setYearLevel(parsedYl != null ? parsedYl : 0);
+                                        cm.setYearLevelCode(getSafeString(obj, "year_level_code", ""));
+                                        cm.setYearLevelLabel(getSafeString(obj, "year_level_label", ""));
                                         cm.setCapacity(getSafeInt(obj, "capacity", 40));
                                         cm.setBuildingName(getSafeString(obj, "building_name", getSafeString(obj, "building", "")));
                                         cm.setFloorName(getSafeString(obj, "floor_name", getSafeString(obj, "floor", "")));
@@ -464,78 +468,10 @@ public class ClassManagementFragment extends Fragment {
     }
 
     private void showClassDetailsDialog(ClassModel classModel) {
-        if (!isAdded() || getContext() == null) return;
-
-        ApiClient.getApiService(getContext()).getClassDetail(classModel.getId()).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (!isAdded() || getContext() == null) return;
-                StringBuilder details = new StringBuilder();
-                details.append("Class Name: ").append(classModel.getName()).append(" (").append(classModel.getCode()).append(")\n");
-                String loc = classModel.getLocationLabel();
-                if (loc != null && !loc.isEmpty()) {
-                    details.append("Location: ").append(loc).append("\n");
-                }
-                details.append("Capacity: ").append(classModel.getCapacity()).append("\n");
-                details.append("Department: ").append(classModel.getDepartment()).append("\n");
-                details.append("Academic Year: ").append(classModel.getAcademicYear()).append("\n");
-                details.append("Status: ").append(classModel.getStatus()).append("\n\n");
-
-                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
-                    JsonObject data = response.body().getAsJsonObject("data");
-                    JsonArray offerings = data.has("offerings") && data.get("offerings").isJsonArray()
-                            ? data.getAsJsonArray("offerings") : new JsonArray();
-                    JsonArray students = data.has("students") && data.get("students").isJsonArray()
-                            ? data.getAsJsonArray("students") : new JsonArray();
-
-                    details.append("Courses & Teachers (").append(offerings.size()).append("):\n");
-                    if (offerings.size() == 0) {
-                        details.append("• Empty — No courses assigned yet\n");
-                    } else {
-                        for (JsonElement el : offerings) {
-                            if (!el.isJsonObject()) continue;
-                            JsonObject o = el.getAsJsonObject();
-                            String cName = getSafeString(o, "course", "Course");
-                            String tName = "Unassigned";
-                            if (o.has("active_teachers") && o.get("active_teachers").isJsonArray() && o.getAsJsonArray("active_teachers").size() > 0) {
-                                JsonObject tObj = o.getAsJsonArray("active_teachers").get(0).getAsJsonObject();
-                                String code = getSafeString(tObj, "teacher_code", "");
-                                String full = getSafeString(tObj, "user", (getSafeString(tObj, "first_name", "") + " " + getSafeString(tObj, "last_name", "")).trim());
-                                tName = code.isEmpty() ? full : (full + " (" + code + ")");
-                            }
-                            int enrCount = getSafeInt(o, "enrolled_count", 0);
-                            details.append("• ").append(cName).append(" — ").append(tName).append(" [").append(enrCount).append(" enrolled]\n");
-                        }
-                    }
-
-                    details.append("\nEnrolled Students (").append(students.size()).append("):\n");
-                    if (students.size() == 0) {
-                        details.append("• Empty — No students in this class yet\n");
-                    } else {
-                        for (JsonElement el : students) {
-                            if (!el.isJsonObject()) continue;
-                            JsonObject s = el.getAsJsonObject();
-                            String sc = getSafeString(s, "student_code", "");
-                            String sn = getSafeString(s, "khmer_name", getSafeString(s, "english_name", getSafeString(s, "first_name", "Student")));
-                            details.append("• ").append(sc).append(" — ").append(sn).append("\n");
-                        }
-                    }
-                }
-
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(classModel.getName() + " — Class Detail")
-                        .setMessage(details.toString().trim())
-                        .setNeutralButton("Edit / Assign Floor", (d, w) -> showAddClassDialog(classModel))
-                        .setPositiveButton("Close", null)
-                        .show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                if (!isAdded() || getContext() == null) return;
-                Toast.makeText(getContext(), R.string.network_error_server, Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (!isAdded() || getContext() == null || classModel == null) return;
+        Intent intent = new Intent(requireContext(), AdminClassDetailActivity.class);
+        intent.putExtra(AdminClassDetailActivity.EXTRA_CLASS, classModel);
+        addClassLauncher.launch(intent);
     }
 
     private void showAddClassDialog(@Nullable ClassModel editModel) {
@@ -1239,7 +1175,7 @@ public class ClassManagementFragment extends Fragment {
                         .setMessage("Class: " + item.classCode + "\n" +
                                 "Course: " + item.courseName + "\n" +
                                 "Assigned Teacher: " + item.teacherName + "\n" +
-                                "Department & Term: " + item.departmentTerm + "\n" +
+                                "Faculty & Term: " + item.departmentTerm + "\n" +
                                 "Status: " + item.status)
                         .setPositiveButton("Close", null)
                         .show();

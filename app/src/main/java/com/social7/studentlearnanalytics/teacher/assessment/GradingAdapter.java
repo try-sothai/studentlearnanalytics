@@ -27,6 +27,11 @@ public class GradingAdapter extends RecyclerView.Adapter<GradingAdapter.ViewHold
         public String scoreBadge;
         public int maxMarks;
         public int currentScore;
+        public boolean isQuiz;
+        public int quizId;
+        public String quizTitle;
+        public String courseContext;
+        public int pendingCount;
 
         public GradingCardItem(String id, String studentId, String studentName, String assessmentTitle, String details, String scoreBadge, int maxMarks, int currentScore) {
             this.id = id;

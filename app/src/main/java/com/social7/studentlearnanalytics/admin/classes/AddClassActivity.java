@@ -18,6 +18,9 @@ import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.ClassModel;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +50,12 @@ public class AddClassActivity extends AppCompatActivity {
     private String editClassId = null;
 
     private final ActivityResultLauncher<Intent> deptPicker = registerSelector(RecordSelectorActivity.TYPE_DEPARTMENT, (id, title) -> {
-        selectedDeptId = parseIntOr(id, -1);
+        int nextDeptId = parseIntOr(id, -1);
+        if (nextDeptId != selectedDeptId) {
+            selectedProgramId = -1;
+            if (etProgram != null) etProgram.setText("");
+        }
+        selectedDeptId = nextDeptId;
         etDept.setText(title);
     });
 
@@ -134,9 +142,9 @@ public class AddClassActivity extends AppCompatActivity {
         if (btnBack != null) btnBack.setOnClickListener(v -> finish());
         if (btnCancel != null) btnCancel.setOnClickListener(v -> finish());
 
-        String[] years = {"Year 1", "Year 2", "Year 3", "Year 4", "Year 5"};
+        List<String> years = YearLevelHelper.getFormDropdownOptions(this);
         actvYearLevel.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, years));
-        actvYearLevel.setText("Year 1", false);
+        actvYearLevel.setText(YearLevelHelper.toFullLabel(this, 1), false);
 
         String[] statuses = {"Active", "Inactive"};
         actvStatus.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, statuses));
@@ -200,8 +208,8 @@ public class AddClassActivity extends AppCompatActivity {
         if (etCapacity != null && cm.getCapacity() > 0) {
             etCapacity.setText(String.valueOf(cm.getCapacity()));
         }
-        if (actvYearLevel != null && cm.getYearLevel() > 0) {
-            actvYearLevel.setText("Year " + cm.getYearLevel(), false);
+        if (actvYearLevel != null && YearLevelHelper.isValid(cm.getYearLevel())) {
+            actvYearLevel.setText(YearLevelHelper.toFullLabel(this, cm.getYearLevel()), false);
         }
         if (actvStatus != null && cm.getStatus() != null) {
             actvStatus.setText("inactive".equalsIgnoreCase(cm.getStatus()) ? "Inactive" : "Active", false);
@@ -217,9 +225,14 @@ public class AddClassActivity extends AppCompatActivity {
             return;
         }
 
-        int yearLevel = 1;
-        String yearStr = actvYearLevel.getText() != null ? actvYearLevel.getText().toString().replaceAll("[^0-9]", "") : "1";
-        if (!yearStr.isEmpty()) yearLevel = parseIntOr(yearStr, 1);
+        Integer parsedYearLevel = actvYearLevel.getText() != null
+                ? YearLevelHelper.parse(actvYearLevel.getText().toString())
+                : null;
+        if (parsedYearLevel == null) {
+            Toast.makeText(this, R.string.err_invalid_year_level, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int yearLevel = parsedYearLevel;
 
         int capacity = parseIntOr(etCapacity != null && etCapacity.getText() != null ? etCapacity.getText().toString().trim() : "40", 40);
         if (capacity <= 0) capacity = 40;

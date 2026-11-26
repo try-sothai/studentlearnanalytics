@@ -228,6 +228,7 @@ public class TeacherAssessmentFragment extends Fragment {
         int totalQz = getInt(summary, "total_quizzes");
         int totalEx = getInt(summary, "total_exams");
         int pendingSubs = getInt(summary, "pending_submissions");
+        int pendingQuiz = getInt(summary, "pending_quiz_gradings");
 
         int publishedCount = 0;
         int draftCount = 0;
@@ -261,7 +262,7 @@ public class TeacherAssessmentFragment extends Fragment {
         if (tvMetricTotalExams != null) tvMetricTotalExams.setText(String.valueOf(totalEx));
         if (tvMetricPublished != null) tvMetricPublished.setText(String.valueOf(publishedCount));
         if (tvMetricDrafts != null) tvMetricDrafts.setText(String.valueOf(draftCount));
-        if (tvMetricPendingGrading != null) tvMetricPendingGrading.setText(String.valueOf(pendingSubs));
+        if (tvMetricPendingGrading != null) tvMetricPendingGrading.setText(String.valueOf(pendingSubs + pendingQuiz));
 
         if (layoutCourseProgressRows != null && getContext() != null) {
             // Keep first 2 children (header + divider) and rebuild course rows dynamically from real data
@@ -352,6 +353,21 @@ public class TeacherAssessmentFragment extends Fragment {
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
+
+                @Override
+                public void onReopenClick(AssignmentAdapter.AssignmentCardItem item) {
+                    if (getContext() == null) return;
+                    try {
+                        int aId = Integer.parseInt(item.id.replaceAll("[^0-9]", ""));
+                        Intent intent = new Intent(requireContext(), AssessmentReopenManagerActivity.class);
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_TYPE, item.assignmentApiType);
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_ID, aId);
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_TITLE, item.title);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(requireContext(), "Invalid assignment ID", Toast.LENGTH_SHORT).show();
+                    }
+                }
             });
             rvAssignmentsList.setLayoutManager(new LinearLayoutManager(requireContext()));
             rvAssignmentsList.setAdapter(assignmentAdapter);
@@ -392,10 +408,13 @@ public class TeacherAssessmentFragment extends Fragment {
                 String status = getStr(obj, "status", "Published");
                 String cls = getStr(obj, "class_name", "");
                 String asnType = getStr(obj, "assignment_type", "assignment");
-                String typeTag = "homework".equalsIgnoreCase(asnType) ? "Homework • " : "";
+                String apiType = com.social7.studentlearnanalytics.utils.ReopenPermissionHelper.normalizeAssessmentType(asnType);
+                String typeTag = "homework".equalsIgnoreCase(apiType) ? "Homework • " : "";
                 String subtitle = cls.isEmpty() ? (typeTag + courseName) : (typeTag + courseName + " • " + cls);
-                String details = "Due Date: " + due + " • Marks: " + marks + " pts • Submissions: " + subs + " (" + graded + " graded)";
-                assignmentList.add(new AssignmentAdapter.AssignmentCardItem(id, code, title, subtitle, details, status));
+                int ovCnt = getInt(obj, "overrides_count");
+                String details = "Due Date: " + due + " • Marks: " + marks + " pts • Submissions: " + subs + " (" + graded + " graded)"
+                        + (ovCnt > 0 ? (" • Overrides: " + ovCnt) : "");
+                assignmentList.add(new AssignmentAdapter.AssignmentCardItem(id, code, title, subtitle, details, status, apiType));
             }
         }
         if (assignmentAdapter != null) {
@@ -445,6 +464,11 @@ public class TeacherAssessmentFragment extends Fragment {
                 public void onPublishClick(QuizAdapter.QuizCardItem item) {
                     publishQuizOnApi(item);
                 }
+
+                @Override
+                public void onAttemptsClick(QuizAdapter.QuizCardItem item) {
+                    openQuizAttempts(item, item.pendingGradingCount > 0);
+                }
             });
             rvQuizzesList.setLayoutManager(new LinearLayoutManager(requireContext()));
             rvQuizzesList.setAdapter(quizAdapter);
@@ -480,19 +504,25 @@ public class TeacherAssessmentFragment extends Fragment {
                 String cName = getStr(obj, "course_name", "Course");
                 int qCount = getInt(obj, "questions_count");
                 int attCount = getInt(obj, "attempts_count");
+                int pendingGrading = getInt(obj, "pending_grading_count");
                 int dur = getInt(obj, "duration_minutes");
                 double totalMarks = getDouble(obj, "total_marks");
                 if (totalMarks <= 0) totalMarks = getDouble(obj, "total_score");
                 String cls = getStr(obj, "class_name", "");
                 String status = getStr(obj, "status", "Published");
                 String cohortLine = cName + (cls.isEmpty() ? "" : " • " + cls) + " • " + qCount + " Questions";
+                String details = "Duration: " + dur + " Mins • Marks: " + com.social7.studentlearnanalytics.utils.AssessmentUiHelper.formatMarks(totalMarks)
+                        + " pts • Attempts: " + attCount
+                        + (pendingGrading > 0 ? " • " + pendingGrading + " Pending Grading" : "");
                 quizList.add(new QuizAdapter.QuizCardItem(
                         id,
                         code,
                         title,
                         cohortLine,
-                        "Duration: " + dur + " Mins • Marks: " + com.social7.studentlearnanalytics.utils.AssessmentUiHelper.formatMarks(totalMarks) + " pts • Attempts: " + attCount,
-                        status
+                        details,
+                        status,
+                        attCount,
+                        pendingGrading
                 ));
             }
         }
@@ -545,18 +575,49 @@ public class TeacherAssessmentFragment extends Fragment {
         } catch (NumberFormatException ignored) {}
     }
 
+    private void openQuizAttempts(QuizAdapter.QuizCardItem quiz, boolean filterPending) {
+        if (getContext() == null) return;
+        try {
+            int qzId = Integer.parseInt(quiz.id.replaceAll("[^0-9]", ""));
+            Intent intent = new Intent(requireContext(), TeacherQuizAttemptsActivity.class);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_ID, qzId);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_TITLE, quiz.title);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_COURSE_CONTEXT, quiz.courseCode + " • " + quiz.classCohort);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_FILTER_PENDING, filterPending);
+            startActivity(intent);
+        } catch (NumberFormatException ignored) {}
+    }
+
     private void bindExamsViews(View root) {
         rvExamsList = root.findViewById(R.id.rvExamsList);
         edtSearchExams = root.findViewById(R.id.edtSearchExams);
 
         if (rvExamsList != null && getContext() != null) {
-            examAdapter = new TeacherExamAdapter(requireContext(), examList, item -> {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Delete Exam?")
-                        .setMessage("Are you sure you want to delete '" + item.title + "'?")
-                        .setPositiveButton(R.string.delete, (d, w) -> deleteExamOnApi(item))
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+            examAdapter = new TeacherExamAdapter(requireContext(), examList, new TeacherExamAdapter.OnExamActionListener() {
+                @Override
+                public void onGradeClick(TeacherExamAdapter.ExamCardItem item) {
+                    openExamDetail(item);
+                }
+
+                @Override
+                public boolean handlesEditClick() {
+                    return true;
+                }
+
+                @Override
+                public void onEditClick(TeacherExamAdapter.ExamCardItem item) {
+                    openEditExam(item);
+                }
+
+                @Override
+                public void onDeleteClick(TeacherExamAdapter.ExamCardItem item) {
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Delete Exam?")
+                            .setMessage("Are you sure you want to delete '" + item.title + "'?")
+                            .setPositiveButton(R.string.delete, (d, w) -> deleteExamOnApi(item, false))
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
             });
             rvExamsList.setLayoutManager(new LinearLayoutManager(requireContext()));
             rvExamsList.setAdapter(examAdapter);
@@ -573,6 +634,21 @@ public class TeacherAssessmentFragment extends Fragment {
         }
     }
 
+    private void openEditExam(TeacherExamAdapter.ExamCardItem item) {
+        if (getContext() == null) return;
+        Intent intent = new Intent(requireContext(), EditAssessmentActivity.class);
+        intent.putExtra("assessment_type", "Exam");
+        intent.putExtra("exam_id", item.id);
+        startActivity(intent);
+    }
+
+    private void openExamDetail(TeacherExamAdapter.ExamCardItem item) {
+        if (getContext() == null) return;
+        Intent intent = new Intent(requireContext(), TeacherExamDetailActivity.class);
+        intent.putExtra("exam_id", item.id);
+        startActivity(intent);
+    }
+
     private void bindExamsData(JsonArray arr) {
         examList.clear();
         if (arr != null) {
@@ -586,27 +662,39 @@ public class TeacherAssessmentFragment extends Fragment {
                 String cls = getStr(obj, "class_name", "");
                 String exType = getStr(obj, "exam_type", "Exam");
                 String exDate = getStr(obj, "exam_date", "-");
+                String startTime = getStr(obj, "start_time", "");
+                String endTime = getStr(obj, "end_time", "");
                 String venue = getStr(obj, "venue", "");
                 int dur = getInt(obj, "duration_minutes");
                 int marks = (int) getDouble(obj, "total_score");
                 int resCount = getInt(obj, "results_count");
                 String rawSt = getStr(obj, "raw_status", "scheduled");
-                String status = rawSt.substring(0, 1).toUpperCase(java.util.Locale.US) + rawSt.substring(1);
+                String dispStatus = getStr(obj, "display_status", "");
+                boolean isPub = (obj.has("is_published") && obj.get("is_published").getAsBoolean()) || "published".equalsIgnoreCase(rawSt);
+                String status = !dispStatus.isEmpty()
+                        ? dispStatus
+                        : (rawSt.substring(0, 1).toUpperCase(java.util.Locale.US) + rawSt.substring(1));
 
+                String timeRange = com.social7.studentlearnanalytics.model.Exam.calculateTimeRange(
+                        startTime, endTime, dur > 0 ? dur : null);
                 String classAndType = exType + " • " + cName + (cls.isEmpty() ? "" : " • " + cls);
                 String details = "Date: " + exDate
+                        + (!timeRange.isEmpty() ? " (" + timeRange + ")" : "")
                         + (dur > 0 ? " • " + dur + " mins" : "")
                         + (!venue.isEmpty() ? " • " + venue : "")
                         + " • Marks: " + marks + " pts • Results: " + resCount;
-                examList.add(new TeacherExamAdapter.ExamCardItem(id, code, title, classAndType, details, status));
+                examList.add(new TeacherExamAdapter.ExamCardItem(id, code, title, classAndType, details, status, isPub));
             }
         }
         if (examAdapter != null) examAdapter.filter("");
     }
 
-    private void deleteExamOnApi(TeacherExamAdapter.ExamCardItem item) {
+    private void deleteExamOnApi(TeacherExamAdapter.ExamCardItem item, boolean force) {
         if (getContext() == null) return;
-        ApiClient.getApiService(requireContext()).deleteTeacherExam(item.id).enqueue(new Callback<JsonObject>() {
+        retrofit2.Call<JsonObject> call = force
+                ? ApiClient.getApiService(requireContext()).deleteTeacherExamForce(item.id, true)
+                : ApiClient.getApiService(requireContext()).deleteTeacherExam(item.id);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (!isAdded() || getContext() == null) return;
@@ -614,6 +702,15 @@ public class TeacherAssessmentFragment extends Fragment {
                     examList.remove(item);
                     if (examAdapter != null) examAdapter.filter("");
                     Toast.makeText(requireContext(), "Exam deleted", Toast.LENGTH_SHORT).show();
+                } else if (response.code() == 409 && !force) {
+                    String msg = com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractErrorMessage(
+                            response, "This exam already has recorded student scores. Deleting it will permanently remove those scores.");
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Confirm Exam Deletion")
+                            .setMessage(msg + "\n\nDo you want to delete this exam and its recorded scores anyway?")
+                            .setPositiveButton("Delete Anyway", (d, w) -> deleteExamOnApi(item, true))
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 } else {
                     Toast.makeText(requireContext(), com.social7.studentlearnanalytics.utils.AssessmentUiHelper.extractErrorMessage(response, "Cannot delete exam"), Toast.LENGTH_LONG).show();
                 }
@@ -752,11 +849,17 @@ public class TeacherAssessmentFragment extends Fragment {
                             : ("File: " + fileName + " (" + meta + ")");
                 }
 
+                int versionNum = Math.max(1, getInt(obj, "version_number"));
+                boolean isLateSub = obj.has("is_late") && !obj.get("is_late").isJsonNull() && obj.get("is_late").getAsBoolean();
+                StringBuilder titleTag = new StringBuilder("Assessment: ").append(asnTitle);
+                if (versionNum > 1) titleTag.append(" (v").append(versionNum).append(")");
+                if (isLateSub) titleTag.append(" [Late]");
+
                 SubmissionAdapter.SubmissionCardItem card = new SubmissionAdapter.SubmissionCardItem(
                         subId,
                         stCode,
                         stName,
-                        "Assessment: " + asnTitle,
+                        titleTag.toString(),
                         "Submitted: " + subAt + "\n" + attachmentSummary,
                         status
                 );
@@ -787,6 +890,29 @@ public class TeacherAssessmentFragment extends Fragment {
                         maxMarks,
                         score
                 ));
+            }
+        }
+        // Include Quizzes awaiting manual Short Answer grading in the Grading tab
+        for (QuizAdapter.QuizCardItem qz : quizList) {
+            if (qz.pendingGradingCount > 0) {
+                int qzId = 0;
+                try { qzId = Integer.parseInt(qz.id.replaceAll("[^0-9]", "")); } catch (Exception ignored) {}
+                GradingAdapter.GradingCardItem gItem = new GradingAdapter.GradingCardItem(
+                        "QZ-" + qz.id,
+                        qz.courseCode,
+                        qz.title,
+                        "Quiz Short Answers • " + qz.classCohort,
+                        qz.details,
+                        qz.pendingGradingCount + " Pending Grading",
+                        0,
+                        0
+                );
+                gItem.isQuiz = true;
+                gItem.quizId = qzId;
+                gItem.quizTitle = qz.title;
+                gItem.courseContext = qz.courseCode + " • " + qz.classCohort;
+                gItem.pendingCount = qz.pendingGradingCount;
+                gradingList.add(0, gItem);
             }
         }
         if (submissionAdapter != null) submissionAdapter.filter("");
@@ -868,6 +994,15 @@ public class TeacherAssessmentFragment extends Fragment {
 
     private void openGradingScreenFromGradingCard(GradingAdapter.GradingCardItem item) {
         if (!isAdded() || getContext() == null) return;
+        if (item.isQuiz && item.quizId > 0) {
+            Intent intent = new Intent(requireContext(), TeacherQuizAttemptsActivity.class);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_ID, item.quizId);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_TITLE, item.quizTitle);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_COURSE_CONTEXT, item.courseContext);
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_FILTER_PENDING, true);
+            startActivity(intent);
+            return;
+        }
         for (SubmissionAdapter.SubmissionCardItem sub : submissionList) {
             if (sub.id != null && sub.id.equals(item.id)) {
                 openSubmissionGrading(sub);

@@ -24,7 +24,9 @@ import com.social7.studentlearnanalytics.admin.classes.RecordSelectorActivity;
 import com.social7.studentlearnanalytics.model.Course;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.utils.RoleGuard;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,14 +40,16 @@ public class AddCourseActivity extends AppCompatActivity {
 
     private TextInputLayout tilAddCourseCode, tilAddCourseName, tilAddCourseCredits, tilAddCourseDept;
     private EditText etAddCourseCode, etAddCourseName, etAddCourseCredits;
-    private EditText etAddCourseDept, etAddCourseProgram, etAddCourseAy, etAddCourseSemester, etAddCourseTeacher, etAddCourseDescription;
-    private AutoCompleteTextView actvAddCourseStatus;
+    private EditText etAddCourseDept, etAddCourseProgram, etAddCourseCategory, etAddCourseAy, etAddCourseSemester, etAddCourseTeacher, etAddCourseDescription;
+    private AutoCompleteTextView actvAddCourseStatus, actvAddCourseYearLevel;
     private MaterialButton btnSaveCourse;
     private TextView tvHeaderTitle;
 
     private Course editingCourse = null;
     private int selectedDeptId = -1;
     private int selectedProgramId = -1;
+    private final java.util.List<Integer> selectedProgramIds = new java.util.ArrayList<>();
+    private int selectedCategoryId = -1;
     private int selectedAyId = -1;
     private int selectedSemesterId = -1;
     private int selectedTeacherId = -1;
@@ -70,12 +74,53 @@ public class AddCourseActivity extends AppCompatActivity {
         if (etAddCourseDept != null) etAddCourseDept.setText(title);
         if (tilAddCourseDept != null) tilAddCourseDept.setError(null);
         selectedProgramId = -1;
+        selectedProgramIds.clear();
         if (etAddCourseProgram != null) etAddCourseProgram.setText("");
     });
 
-    private final ActivityResultLauncher<Intent> programPicker = registerPicker((id, title) -> {
-        selectedProgramId = id;
-        if (etAddCourseProgram != null) etAddCourseProgram.setText(title);
+    private final ActivityResultLauncher<Intent> programPicker = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    selectedProgramIds.clear();
+                    selectedProgramId = -1;
+                    java.util.List<String> titles = new java.util.ArrayList<>();
+
+                    String multiJson = data.getStringExtra(RecordSelectorActivity.RESULT_MULTI_JSON);
+                    if (multiJson != null && !multiJson.trim().isEmpty()) {
+                        try {
+                            com.google.gson.JsonArray arr = JsonParser.parseString(multiJson).getAsJsonArray();
+                            for (JsonElement el : arr) {
+                                if (!el.isJsonObject()) continue;
+                                JsonObject o = el.getAsJsonObject();
+                                int pid = o.has("id") ? parseIntOr(o.get("id").getAsString(), -1) : -1;
+                                String pTitle = o.has("title") && !o.get("title").isJsonNull() ? o.get("title").getAsString() : "";
+                                if (pid > 0) {
+                                    selectedProgramIds.add(pid);
+                                    if (selectedProgramId <= 0) selectedProgramId = pid;
+                                }
+                                if (!pTitle.isEmpty()) titles.add(pTitle);
+                            }
+                        } catch (Exception ignored) {}
+                    } else {
+                        int pid = parseIntOr(data.getStringExtra(RecordSelectorActivity.RESULT_ID), -1);
+                        String pTitle = data.getStringExtra(RecordSelectorActivity.RESULT_TITLE);
+                        if (pid > 0) {
+                            selectedProgramId = pid;
+                            selectedProgramIds.add(pid);
+                        }
+                        if (pTitle != null && !pTitle.isEmpty()) titles.add(pTitle);
+                    }
+
+                    if (etAddCourseProgram != null) {
+                        etAddCourseProgram.setText(String.join(", ", titles));
+                    }
+                }
+            });
+
+    private final ActivityResultLauncher<Intent> categoryPicker = registerPicker((id, title) -> {
+        selectedCategoryId = id;
+        if (etAddCourseCategory != null) etAddCourseCategory.setText(title);
     });
 
     private final ActivityResultLauncher<Intent> ayPicker = registerPicker((id, title) -> {
@@ -121,12 +166,20 @@ public class AddCourseActivity extends AppCompatActivity {
         etAddCourseCredits = findViewById(R.id.etAddCourseCredits);
         etAddCourseDept = findViewById(R.id.etAddCourseDept);
         etAddCourseProgram = findViewById(R.id.etAddCourseProgram);
+        etAddCourseCategory = findViewById(R.id.etAddCourseCategory);
         etAddCourseAy = findViewById(R.id.etAddCourseAy);
         etAddCourseSemester = findViewById(R.id.etAddCourseSemester);
         etAddCourseTeacher = findViewById(R.id.etAddCourseTeacher);
         etAddCourseDescription = findViewById(R.id.etAddCourseDescription);
+        actvAddCourseYearLevel = findViewById(R.id.actvAddCourseYearLevel);
         actvAddCourseStatus = findViewById(R.id.actvAddCourseStatus);
         btnSaveCourse = findViewById(R.id.btnSaveCourse);
+
+        if (actvAddCourseYearLevel != null) {
+            List<String> ylOptions = YearLevelHelper.getFilterDropdownOptions(this);
+            actvAddCourseYearLevel.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, ylOptions));
+            actvAddCourseYearLevel.setText(getString(R.string.all_year_levels), false);
+        }
 
         if (actvAddCourseStatus != null) {
             String[] statuses = {"Active", "Inactive"};
@@ -160,13 +213,29 @@ public class AddCourseActivity extends AppCompatActivity {
 
         View.OnClickListener openProgram = v -> {
             Intent i = RecordSelectorActivity.createIntent(this, RecordSelectorActivity.TYPE_PROGRAM);
+            i.putExtra(RecordSelectorActivity.EXTRA_MULTI_SELECT, true);
             if (selectedDeptId > 0) i.putExtra(RecordSelectorActivity.EXTRA_FILTER_PARENT_ID, selectedDeptId);
-            if (selectedProgramId > 0) i.putExtra(RecordSelectorActivity.EXTRA_SELECTED_ID, String.valueOf(selectedProgramId));
+            if (!selectedProgramIds.isEmpty()) {
+                java.util.List<String> idStrs = new java.util.ArrayList<>();
+                for (Integer pid : selectedProgramIds) idStrs.add(String.valueOf(pid));
+                i.putExtra(RecordSelectorActivity.EXTRA_SELECTED_ID, String.join(",", idStrs));
+            } else if (selectedProgramId > 0) {
+                i.putExtra(RecordSelectorActivity.EXTRA_SELECTED_ID, String.valueOf(selectedProgramId));
+            }
             programPicker.launch(i);
         };
         if (etAddCourseProgram != null) etAddCourseProgram.setOnClickListener(openProgram);
         TextInputLayout tilProgram = findViewById(R.id.tilAddCourseProgram);
         if (tilProgram != null) tilProgram.setEndIconOnClickListener(openProgram);
+
+        View.OnClickListener openCategory = v -> {
+            Intent i = RecordSelectorActivity.createIntent(this, RecordSelectorActivity.TYPE_COURSE_CATEGORY);
+            if (selectedCategoryId > 0) i.putExtra(RecordSelectorActivity.EXTRA_SELECTED_ID, String.valueOf(selectedCategoryId));
+            categoryPicker.launch(i);
+        };
+        if (etAddCourseCategory != null) etAddCourseCategory.setOnClickListener(openCategory);
+        TextInputLayout tilCategory = findViewById(R.id.tilAddCourseCategory);
+        if (tilCategory != null) tilCategory.setEndIconOnClickListener(openCategory);
 
         View.OnClickListener openAy = v -> {
             Intent i = RecordSelectorActivity.createIntent(this, RecordSelectorActivity.TYPE_ACADEMIC_YEAR);
@@ -216,7 +285,16 @@ public class AddCourseActivity extends AppCompatActivity {
         if (etAddCourseDept != null) etAddCourseDept.setText(course.getDepartment());
 
         selectedProgramId = course.getProgramId();
-        if (etAddCourseProgram != null) etAddCourseProgram.setText(course.getProgramName());
+        selectedProgramIds.clear();
+        if (!course.getProgramIds().isEmpty()) {
+            selectedProgramIds.addAll(course.getProgramIds());
+        } else if (selectedProgramId > 0) {
+            selectedProgramIds.add(selectedProgramId);
+        }
+        if (etAddCourseProgram != null) etAddCourseProgram.setText(course.getMajorsSummary());
+
+        selectedCategoryId = course.getCourseCategoryId();
+        if (etAddCourseCategory != null) etAddCourseCategory.setText(course.getCourseCategoryName());
 
         selectedAyId = course.getAcademicYearId();
         if (etAddCourseAy != null) etAddCourseAy.setText(course.getAcademicYear());
@@ -228,6 +306,14 @@ public class AddCourseActivity extends AppCompatActivity {
         if (etAddCourseTeacher != null) etAddCourseTeacher.setText(course.getTeacher());
 
         if (etAddCourseDescription != null) etAddCourseDescription.setText(course.getDescription());
+
+        if (actvAddCourseYearLevel != null) {
+            if (course.getYearLevel() != null) {
+                actvAddCourseYearLevel.setText(YearLevelHelper.toFullLabel(this, course.getYearLevel()), false);
+            } else {
+                actvAddCourseYearLevel.setText(getString(R.string.all_year_levels), false);
+            }
+        }
 
         if (actvAddCourseStatus != null) {
             String status = "Inactive".equalsIgnoreCase(course.getStatus()) ? "Inactive" : "Active";
@@ -280,7 +366,7 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         if (selectedDeptId <= 0 && deptText.isEmpty()) {
-            if (tilAddCourseDept != null) tilAddCourseDept.setError("Please select a Department");
+            if (tilAddCourseDept != null) tilAddCourseDept.setError("Please select a Faculty");
             isValid = false;
         } else {
             if (tilAddCourseDept != null) tilAddCourseDept.setError(null);
@@ -305,6 +391,16 @@ public class AddCourseActivity extends AppCompatActivity {
         if (selectedProgramId > 0) {
             body.addProperty("program_id", selectedProgramId);
         }
+        if (!selectedProgramIds.isEmpty()) {
+            com.google.gson.JsonArray progArr = new com.google.gson.JsonArray();
+            for (Integer pid : selectedProgramIds) {
+                if (pid != null && pid > 0) progArr.add(pid);
+            }
+            body.add("program_ids", progArr);
+        }
+        if (selectedCategoryId > 0) {
+            body.addProperty("course_category_id", selectedCategoryId);
+        }
         if (selectedTeacherId > 0) {
             body.addProperty("teacher_id", selectedTeacherId);
         }
@@ -319,6 +415,14 @@ public class AddCourseActivity extends AppCompatActivity {
         }
         if (etAddCourseSemester != null && etAddCourseSemester.getText() != null && !etAddCourseSemester.getText().toString().trim().isEmpty()) {
             body.addProperty("semester", etAddCourseSemester.getText().toString().trim());
+        }
+        if (actvAddCourseYearLevel != null && actvAddCourseYearLevel.getText() != null) {
+            String ylStorage = YearLevelHelper.toStorageString(actvAddCourseYearLevel.getText().toString());
+            if (ylStorage != null) {
+                body.addProperty("year_level", ylStorage);
+            } else if (isEditCourseAllOption(actvAddCourseYearLevel.getText().toString())) {
+                body.add("year_level", com.google.gson.JsonNull.INSTANCE);
+            }
         }
         if (etAddCourseDescription != null && etAddCourseDescription.getText() != null) {
             body.addProperty("description", etAddCourseDescription.getText().toString().trim());
@@ -393,6 +497,12 @@ public class AddCourseActivity extends AppCompatActivity {
         } catch (Exception ignored) {
         }
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+    }
+
+    private boolean isEditCourseAllOption(String text) {
+        if (text == null || text.trim().isEmpty()) return true;
+        return getString(R.string.all_year_levels).equalsIgnoreCase(text.trim())
+                || "All Year Levels".equalsIgnoreCase(text.trim());
     }
 
     private int parseIntOr(String val, int fallback) {

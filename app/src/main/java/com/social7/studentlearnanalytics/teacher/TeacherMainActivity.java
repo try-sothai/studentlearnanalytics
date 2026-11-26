@@ -65,9 +65,11 @@ public class TeacherMainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            openFragment(new TeacherDashboardFragment());
-            if (bottomNavigation != null) {
-                bottomNavigation.setSelectedItemId(R.id.nav_teacher_home);
+            if (!handleNavigationIntent(getIntent())) {
+                openFragment(new TeacherDashboardFragment());
+                if (bottomNavigation != null) {
+                    bottomNavigation.setSelectedItemId(R.id.nav_teacher_home);
+                }
             }
         }
 
@@ -323,6 +325,27 @@ public class TeacherMainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleNavigationIntent(intent);
+    }
+
+    private boolean handleNavigationIntent(Intent intent) {
+        if (intent == null) return false;
+        String target = intent.getStringExtra("navigate_to");
+        if ("notifications".equalsIgnoreCase(target)) {
+            openFragment(new NotificationFragment());
+            return true;
+        }
+        if ("profile".equalsIgnoreCase(target)) {
+            openFragment(new TeacherProfileOverviewFragment());
+            return true;
+        }
+        return false;
     }
 
     public void setupTeacherHeader(View root, String title, String subtitle) {

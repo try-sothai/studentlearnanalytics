@@ -25,6 +25,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,7 +66,7 @@ public class StudentExportDialog extends BottomSheetDialog {
         MaterialButton btnExport = view.findViewById(R.id.btnDoExport);
 
         ArrayAdapter<String> ylAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, new String[]{"All Year Levels", "Year 1", "Year 2", "Year 3", "Year 4", "Year 5"});
+                android.R.layout.simple_spinner_item, YearLevelHelper.getFilterDropdownOptions(getContext()));
         ylAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spYearLevel.setAdapter(ylAdapter);
 
@@ -74,7 +75,7 @@ public class StudentExportDialog extends BottomSheetDialog {
             public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
                 AddStudentActivity.IdNameItem dept = position >= 0 && position < deptList.size() ? deptList.get(position) : null;
                 filteredProgList.clear();
-                filteredProgList.add(new AddStudentActivity.IdNameItem(0, "All Programs", "", 0));
+                filteredProgList.add(new AddStudentActivity.IdNameItem(0, "All Majors", "", 0));
                 for (AddStudentActivity.IdNameItem p : allProgList) {
                     if (p.id == 0) continue;
                     if (dept == null || dept.id == 0 || p.parentId == dept.id) {
@@ -97,7 +98,7 @@ public class StudentExportDialog extends BottomSheetDialog {
                     if (d == null) return;
 
                     deptList.clear();
-                    deptList.add(new AddStudentActivity.IdNameItem(0, "All Departments", "", 0));
+                    deptList.add(new AddStudentActivity.IdNameItem(0, "All Faculties", "", 0));
                     if (d.has("departments")) {
                         for (JsonElement el : d.getAsJsonArray("departments")) {
                             JsonObject o = el.getAsJsonObject();
@@ -112,7 +113,7 @@ public class StudentExportDialog extends BottomSheetDialog {
                     setSpinner(spDept, deptList);
 
                     allProgList.clear();
-                    allProgList.add(new AddStudentActivity.IdNameItem(0, "All Programs", "", 0));
+                    allProgList.add(new AddStudentActivity.IdNameItem(0, "All Majors", "", 0));
                     if (d.has("programs")) {
                         for (JsonElement el : d.getAsJsonArray("programs")) {
                             JsonObject o = el.getAsJsonObject();
@@ -158,7 +159,9 @@ public class StudentExportDialog extends BottomSheetDialog {
             if (prog != null && prog.id > 0) body.addProperty("program_id", prog.id);
 
             int yl = spYearLevel.getSelectedItemPosition();
-            if (yl > 0) body.addProperty("year_level", yl);
+            if (yl > 0 && yl <= YearLevelHelper.MAX_YEAR_LEVEL) {
+                body.addProperty("year_level", YearLevelHelper.toStorageString(yl));
+            }
 
             AddStudentActivity.IdNameItem ay = (AddStudentActivity.IdNameItem) spAcademicYear.getSelectedItem();
             if (ay != null && ay.id > 0) body.addProperty("academic_year_id", ay.id);

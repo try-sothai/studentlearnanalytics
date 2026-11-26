@@ -66,13 +66,35 @@ public class TeacherAnalyticsResponse implements Serializable {
         private String className;
 
         @SerializedName("study_year")
-        private String studyYear;
+        private Object studyYear;
+
+        @SerializedName("year_level")
+        private Object yearLevel;
+
+        @SerializedName("year_level_code")
+        private String yearLevelCode;
 
         public String getAcademicYear() { return academicYear; }
         public String getSemester() { return semester; }
         public String getCourse() { return course; }
         public String getClassName() { return className; }
-        public String getStudyYear() { return studyYear; }
+        public String getStudyYear() {
+            if (studyYear != null) {
+                Integer lvl = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(studyYear);
+                return lvl != null ? ("Y" + lvl) : String.valueOf(studyYear);
+            }
+            return getYearLevelCode();
+        }
+        public Integer getYearLevel() {
+            return com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(yearLevel != null ? yearLevel : studyYear);
+        }
+        public String getYearLevelCode() {
+            if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+                return yearLevelCode.trim();
+            }
+            String code = com.social7.studentlearnanalytics.utils.YearLevelHelper.toCode(yearLevel != null ? yearLevel : studyYear);
+            return code != null ? code : "";
+        }
     }
 
     public static class EngagementItem implements Serializable {

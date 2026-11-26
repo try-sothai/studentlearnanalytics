@@ -48,10 +48,23 @@ public class StudentDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_detail);
 
-        if (getIntent() != null && getIntent().hasExtra("student")) {
-            Serializable extra = getIntent().getSerializableExtra("student");
-            if (extra instanceof Student) {
-                currentStudent = (Student) extra;
+        if (getIntent() != null) {
+            if (getIntent().hasExtra("student")) {
+                Serializable extra = getIntent().getSerializableExtra("student");
+                if (extra instanceof Student) {
+                    currentStudent = (Student) extra;
+                }
+            }
+            if (currentStudent == null && getIntent().hasExtra("student_id")) {
+                int sid = getIntent().getIntExtra("student_id", 0);
+                if (sid > 0) {
+                    currentStudent = new Student();
+                    currentStudent.setDbId((long) sid);
+                    String sCode = getIntent().getStringExtra("student_code");
+                    String sName = getIntent().getStringExtra("student_name");
+                    if (sCode != null && !sCode.isEmpty()) currentStudent.setStudentCode(sCode);
+                    if (sName != null && !sName.isEmpty()) currentStudent.setName(sName);
+                }
             }
         }
 
@@ -97,7 +110,10 @@ public class StudentDetailActivity extends AppCompatActivity {
 
         if (tvName != null) tvName.setText(currentStudent.getName());
         if (tvId != null) tvId.setText(currentStudent.getId());
-        if (tvDept != null) tvDept.setText(currentStudent.getDepartment() + " • " + currentStudent.getYear());
+        String headerYl = com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(
+                this,
+                currentStudent.getYearLevel() != null ? currentStudent.getYearLevel() : currentStudent.getYear());
+        if (tvDept != null) tvDept.setText(currentStudent.getDepartment() + " • " + headerYl);
         if (tvEmail != null) tvEmail.setText(currentStudent.getEmail());
         if (tvGPA != null) tvGPA.setText(String.format(Locale.US, "%.2f / 4.0", currentStudent.getGpa()));
     }
@@ -127,8 +143,12 @@ public class StudentDetailActivity extends AppCompatActivity {
                         if (tvName != null && st.has("name") && !st.get("name").isJsonNull()) tvName.setText(st.get("name").getAsString());
                         if (tvId != null && st.has("student_code") && !st.get("student_code").isJsonNull()) tvId.setText(st.get("student_code").getAsString());
                         if (tvDept != null && st.has("department") && !st.get("department").isJsonNull()) {
-                            String yr = st.has("year_level") && !st.get("year_level").isJsonNull() ? st.get("year_level").getAsString() : "";
-                            tvDept.setText(st.get("department").getAsString() + (yr.isEmpty() ? "" : " • " + yr));
+                            String yrRaw = st.has("year_level") && !st.get("year_level").isJsonNull() ? st.get("year_level").getAsString() : "";
+                            Integer yrParsed = com.social7.studentlearnanalytics.utils.YearLevelHelper.parse(yrRaw);
+                            String yrDisplay = yrParsed != null
+                                    ? com.social7.studentlearnanalytics.utils.YearLevelHelper.toFullLabel(StudentDetailActivity.this, yrParsed)
+                                    : "";
+                            tvDept.setText(st.get("department").getAsString() + (yrDisplay.isEmpty() ? "" : " • " + yrDisplay));
                         }
                         if (tvEmail != null && st.has("email") && !st.get("email").isJsonNull()) tvEmail.setText(st.get("email").getAsString());
                         if (tvGPA != null && st.has("gpa") && !st.get("gpa").isJsonNull()) {

@@ -1,12 +1,18 @@
 package com.social7.studentlearnanalytics.teacher.assessment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +35,7 @@ import com.social7.studentlearnanalytics.model.QuizQuestionItem;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.teacher.TeacherHeaderHelper;
 import com.social7.studentlearnanalytics.utils.AssessmentUiHelper;
+import com.social7.studentlearnanalytics.utils.DatePickerHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,12 +53,24 @@ public class QuizBuilderActivity extends AppCompatActivity {
     private String quizDescription = "";
     private int quizDuration = 30;
     private String quizStatus = "draft";
+    private String quizStartAt = "";
+    private String quizEndAt = "";
+    private Integer quizMaxAttempts = 1; // null = Unlimited
+    private String quizScoringMethod = "highest";
+    private boolean quizAllowLate = false;
     private int attemptsCount = 0;
+    private int pendingGradingCount = 0;
+    private int overridesCount = 0;
+    private int quizVersion = 1;
+    private boolean openAttemptsOnLoad = false;
+    private boolean autoOpenAttemptsHandled = false;
+    private boolean hasLoadedOnce = false;
 
     private TextView tvBuilderCourseContext, tvBuilderStatus, tvBuilderTitle;
-    private TextView tvTotalQuestions, tvTotalMarks, tvQuizDuration, tvQuestionsLockedBanner;
+    private TextView tvTotalQuestions, tvTotalMarks, tvQuizDuration, tvQuizPolicySummary, tvQuestionsLockedBanner;
     private TextView tvQuestionsEmptyTitle, tvQuestionsEmptyDesc;
-    private MaterialButton btnEditQuizInfo, btnViewAttempts, btnAddQuestion, btnSaveQuizDraft, btnPublishQuizBuilder, btnRetryBuilder;
+    private MaterialButton btnEditQuizInfo, btnViewAttempts, btnManageQuiz, btnQuizOverrides;
+    private MaterialButton btnAddQuestion, btnSaveQuizDraft, btnPublishQuizBuilder, btnRetryBuilder;
     private RecyclerView rvQuizQuestions;
     private ProgressBar pbBuilderLoading;
     private LinearLayout layoutQuestionsEmpty;
@@ -67,6 +86,7 @@ public class QuizBuilderActivity extends AppCompatActivity {
         TeacherHeaderHelper.setupHeader(this, findViewById(R.id.headerQuizBuilder), "Quiz Question Builder", "", true);
 
         quizId = getIntent() != null ? getIntent().getIntExtra("quiz_id", 0) : 0;
+        openAttemptsOnLoad = getIntent() != null && getIntent().getBooleanExtra("open_attempts", false);
         if (quizId <= 0) {
             Toast.makeText(this, "Invalid quiz ID", Toast.LENGTH_SHORT).show();
             finish();
@@ -79,10 +99,13 @@ public class QuizBuilderActivity extends AppCompatActivity {
         tvTotalQuestions = findViewById(R.id.tvTotalQuestions);
         tvTotalMarks = findViewById(R.id.tvTotalMarks);
         tvQuizDuration = findViewById(R.id.tvQuizDuration);
+        tvQuizPolicySummary = findViewById(R.id.tvQuizPolicySummary);
         tvQuestionsLockedBanner = findViewById(R.id.tvQuestionsLockedBanner);
 
         btnEditQuizInfo = findViewById(R.id.btnEditQuizInfo);
         btnViewAttempts = findViewById(R.id.btnViewAttempts);
+        btnManageQuiz = findViewById(R.id.btnManageQuiz);
+        btnQuizOverrides = findViewById(R.id.btnQuizOverrides);
         btnAddQuestion = findViewById(R.id.btnAddQuestion);
         btnSaveQuizDraft = findViewById(R.id.btnSaveQuizDraft);
         btnPublishQuizBuilder = findViewById(R.id.btnPublishQuizBuilder);
@@ -121,12 +144,29 @@ public class QuizBuilderActivity extends AppCompatActivity {
         btnAddQuestion.setOnClickListener(v -> showQuestionEditorDialog(null));
         btnEditQuizInfo.setOnClickListener(v -> showEditQuizInfoDialog());
         btnViewAttempts.setOnClickListener(v -> fetchAndShowAttempts());
+        if (btnManageQuiz != null) btnManageQuiz.setOnClickListener(v -> showManageQuizMenu());
+        if (btnQuizOverrides != null) btnQuizOverrides.setOnClickListener(v -> showStudentOverridesDialog());
         btnRetryBuilder.setOnClickListener(v -> loadQuiz());
 
-        btnSaveQuizDraft.setOnClickListener(v -> saveQuizStatus("draft"));
+        btnSaveQuizDraft.setOnClickListener(v -> {
+            if ("published".equalsIgnoreCase(quizStatus)) {
+                unpublishQuiz();
+            } else {
+                saveQuizStatus("draft");
+            }
+        });
         btnPublishQuizBuilder.setOnClickListener(v -> publishQuiz());
 
         loadQuiz();
+        hasLoadedOnce = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (hasLoadedOnce) {
+            loadQuiz();
+        }
     }
 
     private void loadQuiz() {
@@ -166,7 +206,17 @@ public class QuizBuilderActivity extends AppCompatActivity {
         quizDescription = AssessmentUiHelper.optString(data, "description", "");
         quizDuration = AssessmentUiHelper.optInt(data, "duration_minutes", 30);
         quizStatus = AssessmentUiHelper.optString(data, "status", "draft");
+        quizStartAt = AssessmentUiHelper.optString(data, "start_at", "");
+        quizEndAt = AssessmentUiHelper.optString(data, "end_at", "");
+        quizMaxAttempts = (data.has("max_attempts") && !data.get("max_attempts").isJsonNull())
+                ? AssessmentUiHelper.optInt(data, "max_attempts", 1) : null;
+        if (quizMaxAttempts != null && quizMaxAttempts <= 0) quizMaxAttempts = null;
+        quizScoringMethod = AssessmentUiHelper.optString(data, "scoring_method", "highest");
+        quizAllowLate = AssessmentUiHelper.optBoolean(data, "allow_late_submission", false);
         attemptsCount = AssessmentUiHelper.optInt(data, "attempts_count", 0);
+        pendingGradingCount = AssessmentUiHelper.optInt(data, "pending_grading_count", 0);
+        overridesCount = AssessmentUiHelper.optInt(data, "overrides_count", 0);
+        quizVersion = Math.max(1, AssessmentUiHelper.optInt(data, "version", 1));
 
         String courseCode = AssessmentUiHelper.optString(data, "course_code", "");
         String courseName = AssessmentUiHelper.optString(data, "course_name", "Course");
@@ -182,13 +232,35 @@ public class QuizBuilderActivity extends AppCompatActivity {
         tvBuilderCourseContext.setText(ctx.toString());
         tvBuilderTitle.setText(quizTitle);
         tvQuizDuration.setText(quizDuration + " mins");
-        btnViewAttempts.setText("Attempts (" + attemptsCount + ")");
+        btnViewAttempts.setText("Attempts (" + attemptsCount + ")"
+                + (pendingGradingCount > 0 ? " • " + pendingGradingCount + " Pending" : ""));
+        if (btnQuizOverrides != null) {
+            btnQuizOverrides.setText(overridesCount > 0 ? ("Overrides (" + overridesCount + ")") : "Retakes & Overrides");
+        }
+        if (tvQuizPolicySummary != null) {
+            String scoringLabel = "latest".equalsIgnoreCase(quizScoringMethod) ? "Latest"
+                    : ("average".equalsIgnoreCase(quizScoringMethod) ? "Average" : "Highest");
+            StringBuilder policySb = new StringBuilder();
+            policySb.append("Attempts: ").append(quizMaxAttempts == null ? "Unlimited" : quizMaxAttempts);
+            policySb.append(" • Scoring: ").append(scoringLabel);
+            policySb.append(" • v").append(quizVersion);
+            if (!quizEndAt.isEmpty()) {
+                policySb.append(" • Due: ").append(AssessmentUiHelper.formatDateTime(quizEndAt));
+            }
+            if (quizAllowLate) {
+                policySb.append(" • Late Allowed");
+            }
+            if (pendingGradingCount > 0) {
+                policySb.append(" • Pending Grading: ").append(pendingGradingCount);
+            }
+            tvQuizPolicySummary.setText(policySb.toString());
+        }
 
-        boolean locked = attemptsCount > 0;
-        tvQuestionsLockedBanner.setVisibility(locked ? View.VISIBLE : View.GONE);
-        btnAddQuestion.setEnabled(!locked);
-        btnAddQuestion.setAlpha(locked ? 0.5f : 1f);
-        adapter.setLocked(locked);
+        // Allow safe editing/reordering even when attempts exist; backend snapshots prior attempts automatically.
+        tvQuestionsLockedBanner.setVisibility(attemptsCount > 0 ? View.VISIBLE : View.GONE);
+        btnAddQuestion.setEnabled(true);
+        btnAddQuestion.setAlpha(1f);
+        adapter.setLocked(false);
 
         questions.clear();
         if (data.has("questions") && data.get("questions").isJsonArray()) {
@@ -209,6 +281,11 @@ public class QuizBuilderActivity extends AppCompatActivity {
             layoutQuestionsEmpty.setVisibility(View.GONE);
             rvQuizQuestions.setVisibility(View.VISIBLE);
         }
+
+        if (openAttemptsOnLoad && !autoOpenAttemptsHandled) {
+            autoOpenAttemptsHandled = true;
+            fetchAndShowAttempts();
+        }
     }
 
     private void updateSummaryCounts() {
@@ -228,17 +305,26 @@ public class QuizBuilderActivity extends AppCompatActivity {
             tvBuilderStatus.setTextColor(getResources().getColor(R.color.success_green, null));
             btnPublishQuizBuilder.setText("Published");
             btnPublishQuizBuilder.setEnabled(false);
-            btnSaveQuizDraft.setText("Revert to Draft");
+            btnSaveQuizDraft.setText("Unpublish");
+            btnSaveQuizDraft.setEnabled(true);
         } else if ("closed".equalsIgnoreCase(quizStatus)) {
             tvBuilderStatus.setTextColor(getResources().getColor(R.color.warning_orange, null));
             btnPublishQuizBuilder.setText("Re-Publish");
             btnPublishQuizBuilder.setEnabled(true);
             btnSaveQuizDraft.setText("Done");
+            btnSaveQuizDraft.setEnabled(true);
+        } else if ("archived".equalsIgnoreCase(quizStatus)) {
+            tvBuilderStatus.setTextColor(getResources().getColor(R.color.admin_text_secondary, null));
+            btnPublishQuizBuilder.setText("Archived");
+            btnPublishQuizBuilder.setEnabled(false);
+            btnSaveQuizDraft.setText("Restore Draft");
+            btnSaveQuizDraft.setEnabled(true);
         } else {
             tvBuilderStatus.setTextColor(getResources().getColor(R.color.admin_purple_accent, null));
             btnPublishQuizBuilder.setText("Publish Quiz");
             btnPublishQuizBuilder.setEnabled(true);
             btnSaveQuizDraft.setText("Save Draft");
+            btnSaveQuizDraft.setEnabled(true);
         }
     }
 
@@ -251,11 +337,6 @@ public class QuizBuilderActivity extends AppCompatActivity {
     }
 
     private void showQuestionEditorDialog(@Nullable QuizQuestionItem existing) {
-        if (attemptsCount > 0) {
-            Toast.makeText(this, "Questions cannot be modified after students started attempting.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         View form = LayoutInflater.from(this).inflate(R.layout.dialog_quiz_question_editor, null, false);
         RadioGroup rgQuestionType = form.findViewById(R.id.rgQuestionType);
         RadioButton rbTypeMc = form.findViewById(R.id.rbTypeMc);
@@ -282,6 +363,10 @@ public class QuizBuilderActivity extends AppCompatActivity {
         RadioButton rbCorrectTrue = form.findViewById(R.id.rbCorrectTrue);
         RadioButton rbCorrectFalse = form.findViewById(R.id.rbCorrectFalse);
         TextInputEditText etShortExpected = form.findViewById(R.id.etShortExpected);
+        CheckBox cbQuestionRequired = form.findViewById(R.id.cbQuestionRequired);
+        if (cbQuestionRequired != null) {
+            cbQuestionRequired.setChecked(existing == null || existing.isRequired);
+        }
 
         Runnable syncTypeVisibility = () -> {
             int checked = rgQuestionType.getCheckedRadioButtonId();
@@ -300,7 +385,9 @@ public class QuizBuilderActivity extends AppCompatActivity {
                 else rbCorrectTrue.setChecked(true);
             } else if ("short_answer".equalsIgnoreCase(existing.questionType)) {
                 rbTypeShort.setChecked(true);
-                if (existing.correctAnswer != null) etShortExpected.setText(existing.correctAnswer);
+                String guidancePrefill = existing.gradingGuidance != null && !existing.gradingGuidance.trim().isEmpty()
+                        ? existing.gradingGuidance : existing.correctAnswer;
+                if (guidancePrefill != null) etShortExpected.setText(guidancePrefill);
             } else {
                 rbTypeMc.setChecked(true);
                 etOptionA.setText(existing.optionA != null ? existing.optionA : "");
@@ -345,6 +432,7 @@ public class QuizBuilderActivity extends AppCompatActivity {
             JsonObject body = new JsonObject();
             body.addProperty("question_text", qText);
             body.addProperty("marks", marks);
+            body.addProperty("is_required", cbQuestionRequired == null || cbQuestionRequired.isChecked());
 
             int typeId = rgQuestionType.getCheckedRadioButtonId();
             if (typeId == R.id.rbTypeMc) {
@@ -383,7 +471,10 @@ public class QuizBuilderActivity extends AppCompatActivity {
             } else {
                 body.addProperty("question_type", "short_answer");
                 String exp = textOf(etShortExpected);
-                if (!exp.isEmpty()) body.addProperty("correct_answer", exp);
+                if (!exp.isEmpty()) {
+                    body.addProperty("correct_answer", exp);
+                    body.addProperty("grading_guidance", exp);
+                }
             }
 
             dlg.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -499,10 +590,21 @@ public class QuizBuilderActivity extends AppCompatActivity {
         });
     }
 
+    private String toEditableDateTime(String iso) {
+        if (iso == null || iso.trim().isEmpty()) return "";
+        java.util.Date parsed = AssessmentUiHelper.parseIsoDate(iso);
+        if (parsed != null) {
+            return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(parsed);
+        }
+        return iso.trim();
+    }
+
     private void showEditQuizInfoDialog() {
+        ScrollView scroll = new ScrollView(this);
         LinearLayout container = new LinearLayout(this);
         container.setOrientation(LinearLayout.VERTICAL);
-        container.setPadding(48, 24, 48, 8);
+        container.setPadding(48, 24, 48, 12);
+        scroll.addView(container);
 
         TextInputLayout tilT = new TextInputLayout(this);
         tilT.setHint("Quiz Title");
@@ -521,14 +623,70 @@ public class QuizBuilderActivity extends AppCompatActivity {
         TextInputLayout tilDur = new TextInputLayout(this);
         tilDur.setHint("Duration (Minutes)");
         TextInputEditText edtDur = new TextInputEditText(tilDur.getContext());
-        edtDur.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        edtDur.setInputType(InputType.TYPE_CLASS_NUMBER);
         edtDur.setText(String.valueOf(quizDuration));
         tilDur.addView(edtDur);
         container.addView(tilDur);
 
+        TextInputLayout tilStart = new TextInputLayout(this);
+        tilStart.setHint("Start Date & Time (Optional)");
+        TextInputEditText edtStart = new TextInputEditText(tilStart.getContext());
+        edtStart.setFocusable(false);
+        edtStart.setInputType(InputType.TYPE_NULL);
+        edtStart.setText(toEditableDateTime(quizStartAt));
+        edtStart.setOnClickListener(v -> DatePickerHelper.showDateTimePicker(this, tilStart, edtStart, false, true));
+        tilStart.addView(edtStart);
+        container.addView(tilStart);
+
+        TextInputLayout tilEnd = new TextInputLayout(this);
+        tilEnd.setHint("Close Deadline (Optional)");
+        TextInputEditText edtEnd = new TextInputEditText(tilEnd.getContext());
+        edtEnd.setFocusable(false);
+        edtEnd.setInputType(InputType.TYPE_NULL);
+        edtEnd.setText(toEditableDateTime(quizEndAt));
+        edtEnd.setOnClickListener(v -> DatePickerHelper.showDateTimePicker(this, tilEnd, edtEnd, false, true));
+        tilEnd.addView(edtEnd);
+        container.addView(tilEnd);
+
+        TextView lblMaxAtt = new TextView(this);
+        lblMaxAtt.setText("Max Attempts");
+        lblMaxAtt.setPadding(0, 16, 0, 4);
+        container.addView(lblMaxAtt);
+
+        Spinner spMaxAtt = new Spinner(this);
+        String[] attLabels = new String[]{"1 Attempt", "2 Attempts", "3 Attempts", "5 Attempts", "Unlimited"};
+        Integer[] attValues = new Integer[]{1, 2, 3, 5, 0};
+        spMaxAtt.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, attLabels));
+        int attIdx = 0;
+        if (quizMaxAttempts == null) attIdx = 4;
+        else if (quizMaxAttempts == 2) attIdx = 1;
+        else if (quizMaxAttempts == 3) attIdx = 2;
+        else if (quizMaxAttempts == 5) attIdx = 3;
+        spMaxAtt.setSelection(attIdx);
+        container.addView(spMaxAtt);
+
+        TextView lblScoreMethod = new TextView(this);
+        lblScoreMethod.setText("Scoring Method (Multiple Attempts)");
+        lblScoreMethod.setPadding(0, 16, 0, 4);
+        container.addView(lblScoreMethod);
+
+        Spinner spScoreMethod = new Spinner(this);
+        String[] scoreLabels = new String[]{"Highest Score", "Latest Attempt", "Average Score"};
+        String[] scoreValues = new String[]{"highest", "latest", "average"};
+        spScoreMethod.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, scoreLabels));
+        int scIdx = "latest".equalsIgnoreCase(quizScoringMethod) ? 1 : ("average".equalsIgnoreCase(quizScoringMethod) ? 2 : 0);
+        spScoreMethod.setSelection(scIdx);
+        container.addView(spScoreMethod);
+
+        CheckBox cbAllowLate = new CheckBox(this);
+        cbAllowLate.setText("Allow late submissions after deadline");
+        cbAllowLate.setChecked(quizAllowLate);
+        cbAllowLate.setPadding(0, 12, 0, 4);
+        container.addView(cbAllowLate);
+
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Edit Quiz Details")
-                .setView(container)
+                .setTitle("Edit Quiz Info & Policies")
+                .setView(scroll)
                 .setPositiveButton("Save", (d, w) -> {
                     String newTitle = textOf(edtT);
                     if (newTitle.isEmpty()) {
@@ -545,6 +703,15 @@ public class QuizBuilderActivity extends AppCompatActivity {
                     body.addProperty("title", newTitle);
                     body.addProperty("description", textOf(edtD));
                     body.addProperty("duration_minutes", dur);
+                    String stStr = textOf(edtStart);
+                    String enStr = textOf(edtEnd);
+                    if (stStr.isEmpty()) body.add("start_at", com.google.gson.JsonNull.INSTANCE);
+                    else body.addProperty("start_at", stStr);
+                    if (enStr.isEmpty()) body.add("end_at", com.google.gson.JsonNull.INSTANCE);
+                    else body.addProperty("end_at", enStr);
+                    body.addProperty("max_attempts", attValues[spMaxAtt.getSelectedItemPosition()]);
+                    body.addProperty("scoring_method", scoreValues[spScoreMethod.getSelectedItemPosition()]);
+                    body.addProperty("allow_late_submission", cbAllowLate.isChecked());
 
                     ApiClient.getApiService(this).updateTeacherQuiz(quizId, body).enqueue(new Callback<JsonObject>() {
                         @Override
@@ -552,6 +719,7 @@ public class QuizBuilderActivity extends AppCompatActivity {
                             if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
                                 bindQuizPayload(response.body().getAsJsonObject("data"));
                                 Toast.makeText(QuizBuilderActivity.this, "Quiz details updated", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
                             } else {
                                 Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Update failed"), Toast.LENGTH_SHORT).show();
                             }
@@ -565,6 +733,369 @@ public class QuizBuilderActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void unpublishQuiz() {
+        ApiClient.getApiService(this).unpublishTeacherQuiz(quizId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                    bindQuizPayload(response.body().getAsJsonObject("data"));
+                    Toast.makeText(QuizBuilderActivity.this, "Quiz unpublished to Draft", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                } else {
+                    Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Could not unpublish quiz"), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showManageQuizMenu() {
+        List<String> options = new ArrayList<>();
+        if ("published".equalsIgnoreCase(quizStatus)) {
+            options.add("Unpublish Quiz");
+        } else {
+            options.add("Publish Quiz");
+        }
+        options.add("Reopen Quiz / Extend Deadline");
+        options.add("Universal Reopen & Permissions");
+        options.add("View Override & Reopen Audit Logs");
+        options.add("Archive / Delete Quiz");
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Manage Quiz")
+                .setItems(options.toArray(new String[0]), (d, which) -> {
+                    String choice = options.get(which);
+                    if (choice.startsWith("Unpublish")) {
+                        unpublishQuiz();
+                    } else if (choice.startsWith("Publish")) {
+                        publishQuiz();
+                    } else if (choice.startsWith("Reopen")) {
+                        showReopenQuizDialog();
+                    } else if (choice.startsWith("Universal Reopen")) {
+                        android.content.Intent intent = new android.content.Intent(this, AssessmentReopenManagerActivity.class);
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_TYPE, "quiz");
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_ID, quizId);
+                        intent.putExtra(AssessmentReopenManagerActivity.EXTRA_ASSESSMENT_TITLE, quizTitle);
+                        startActivity(intent);
+                    } else if (choice.startsWith("View Override")) {
+                        fetchAndShowAuditLogs();
+                    } else if (choice.startsWith("Archive")) {
+                        confirmArchiveQuiz();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void showReopenQuizDialog() {
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setPadding(48, 24, 48, 8);
+
+        TextInputLayout tilNewEnd = new TextInputLayout(this);
+        tilNewEnd.setHint("New Close Date & Time (Optional)");
+        TextInputEditText edtNewEnd = new TextInputEditText(tilNewEnd.getContext());
+        edtNewEnd.setFocusable(false);
+        edtNewEnd.setInputType(InputType.TYPE_NULL);
+        edtNewEnd.setText(toEditableDateTime(quizEndAt));
+        edtNewEnd.setOnClickListener(v -> DatePickerHelper.showDateTimePicker(this, tilNewEnd, edtNewEnd, false, true));
+        tilNewEnd.addView(edtNewEnd);
+        container.addView(tilNewEnd);
+
+        CheckBox cbLate = new CheckBox(this);
+        cbLate.setText("Allow late submissions");
+        cbLate.setChecked(true);
+        cbLate.setPadding(0, 12, 0, 8);
+        container.addView(cbLate);
+
+        TextInputLayout tilReason = new TextInputLayout(this);
+        tilReason.setHint("Reason for Reopening (Logged in Audit)");
+        TextInputEditText edtReason = new TextInputEditText(tilReason.getContext());
+        tilReason.addView(edtReason);
+        container.addView(tilReason);
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Reopen Quiz")
+                .setView(container)
+                .setPositiveButton("Reopen Quiz", (d, w) -> {
+                    JsonObject body = new JsonObject();
+                    String endStr = textOf(edtNewEnd);
+                    if (!endStr.isEmpty()) body.addProperty("end_at", endStr);
+                    body.addProperty("allow_late_submission", cbLate.isChecked());
+                    String reason = textOf(edtReason);
+                    if (!reason.isEmpty()) body.addProperty("reason", reason);
+
+                    ApiClient.getApiService(this).reopenTeacherQuiz(quizId, body).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            if (isFinishing() || isDestroyed()) return;
+                            if (response.isSuccessful() && response.body() != null && response.body().has("data")) {
+                                bindQuizPayload(response.body().getAsJsonObject("data"));
+                                Toast.makeText(QuizBuilderActivity.this, "Quiz reopened!", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                            } else {
+                                Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Could not reopen quiz"), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                            Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void confirmArchiveQuiz() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(attemptsCount > 0 ? "Archive Quiz?" : "Delete Quiz?")
+                .setMessage(attemptsCount > 0
+                        ? "This quiz has student attempts. Archiving hides it from active student lists while preserving all existing attempt history and scores."
+                        : "Permanently delete this quiz? This cannot be undone.")
+                .setPositiveButton(attemptsCount > 0 ? "Archive" : "Delete", (d, w) -> {
+                    ApiClient.getApiService(this).deleteTeacherQuiz(quizId).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            if (isFinishing() || isDestroyed()) return;
+                            if (response.isSuccessful()) {
+                                Toast.makeText(QuizBuilderActivity.this, attemptsCount > 0 ? "Quiz archived" : "Quiz deleted", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                finish();
+                            } else {
+                                Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Action failed"), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                            Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void fetchAndShowAuditLogs() {
+        ApiClient.getApiService(this).getTeacherQuizAuditLogs(quizId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (!response.isSuccessful() || response.body() == null) {
+                    Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Failed to load audit logs"), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                JsonArray arr = AssessmentUiHelper.extractDataArray(response.body());
+                if (arr.size() == 0) {
+                    new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
+                            .setTitle("Override & Reopen Audit Logs")
+                            .setMessage("No reopen or student override events logged yet.")
+                            .setPositiveButton("Close", null)
+                            .show();
+                    return;
+                }
+                StringBuilder sb = new StringBuilder();
+                for (JsonElement el : arr) {
+                    if (!el.isJsonObject()) continue;
+                    JsonObject log = el.getAsJsonObject();
+                    String action = AssessmentUiHelper.optString(log, "action", "action");
+                    String actor = AssessmentUiHelper.optString(log, "acted_by_name", "Teacher");
+                    String stName = AssessmentUiHelper.optString(log, "student_name", "");
+                    String reason = AssessmentUiHelper.optString(log, "reason", "");
+                    String at = AssessmentUiHelper.optString(log, "created_at", "");
+                    sb.append("• ").append(action.toUpperCase(Locale.US));
+                    if (!stName.isEmpty()) sb.append(" — ").append(stName);
+                    sb.append("\n  By: ").append(actor);
+                    if (!at.isEmpty()) sb.append(" (").append(AssessmentUiHelper.formatDateTime(at)).append(")");
+                    if (!reason.isEmpty()) sb.append("\n  Reason: ").append(reason);
+                    sb.append("\n\n");
+                }
+                new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
+                        .setTitle("Override & Reopen Audit Logs")
+                        .setMessage(sb.toString().trim())
+                        .setPositiveButton("Close", null)
+                        .show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Toast.makeText(QuizBuilderActivity.this, "Network error loading audit logs", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showStudentOverridesDialog() {
+        ApiClient.getApiService(this).getTeacherQuizStudents(quizId).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (isFinishing() || isDestroyed()) return;
+                if (!response.isSuccessful() || response.body() == null) {
+                    Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Failed to load students"), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                JsonArray arr = AssessmentUiHelper.extractDataArray(response.body());
+                if (arr.size() == 0) {
+                    new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
+                            .setTitle("Student Retakes & Overrides")
+                            .setMessage("No enrolled students found for this quiz.")
+                            .setPositiveButton("OK", null)
+                            .show();
+                    return;
+                }
+                List<JsonObject> students = new ArrayList<>();
+                List<String> labels = new ArrayList<>();
+                for (JsonElement el : arr) {
+                    if (!el.isJsonObject()) continue;
+                    JsonObject st = el.getAsJsonObject();
+                    students.add(st);
+                    String name = AssessmentUiHelper.optString(st, "name", "Student");
+                    int used = AssessmentUiHelper.optInt(st, "attempts_used", 0);
+                    String maxStr = (st.has("max_attempts") && !st.get("max_attempts").isJsonNull())
+                            ? String.valueOf(AssessmentUiHelper.optInt(st, "max_attempts", 1)) : "∞";
+                    boolean hasOverride = AssessmentUiHelper.optBoolean(st, "has_override", false);
+                    boolean pending = AssessmentUiHelper.optBoolean(st, "pending_manual_grading", false);
+                    String scStr = pending ? "Pending Grading"
+                            : (st.has("effective_score") && !st.get("effective_score").isJsonNull()
+                            ? AssessmentUiHelper.formatMarks(st.get("effective_score").getAsDouble()) + " pts"
+                            : "No score");
+                    labels.add(name + " — " + used + "/" + maxStr + " • " + scStr + (hasOverride ? " [Override]" : ""));
+                }
+
+                new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
+                        .setTitle("Select Student for Retake / Override")
+                        .setItems(labels.toArray(new String[0]), (d, which) -> showSingleStudentOverrideDialog(students.get(which)))
+                        .setNeutralButton("Audit Logs", (d, w) -> fetchAndShowAuditLogs())
+                        .setNegativeButton("Close", null)
+                        .show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                Toast.makeText(QuizBuilderActivity.this, "Network error loading students", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showSingleStudentOverrideDialog(JsonObject student) {
+        int studentId = AssessmentUiHelper.optInt(student, "student_id", 0);
+        String studentName = AssessmentUiHelper.optString(student, "name", "Student");
+        boolean hasOverride = AssessmentUiHelper.optBoolean(student, "has_override", false);
+        JsonObject currentOv = (student.has("override") && student.get("override").isJsonObject())
+                ? student.getAsJsonObject("override") : null;
+
+        ScrollView scroll = new ScrollView(this);
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setPadding(48, 24, 48, 8);
+        scroll.addView(container);
+
+        TextView lblExtra = new TextView(this);
+        lblExtra.setText("Grant Additional Extra Attempt(s)");
+        container.addView(lblExtra);
+
+        Spinner spExtra = new Spinner(this);
+        String[] extraLabels = new String[]{"0 (Keep current)", "+1 Extra Attempt", "+2 Extra Attempts", "+3 Extra Attempts", "+5 Extra Attempts"};
+        int[] extraVals = new int[]{0, 1, 2, 3, 5};
+        spExtra.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, extraLabels));
+        container.addView(spExtra);
+
+        TextInputLayout tilExtEnd = new TextInputLayout(this);
+        tilExtEnd.setHint("Extended Student Deadline (Optional)");
+        TextInputEditText edtExtEnd = new TextInputEditText(tilExtEnd.getContext());
+        edtExtEnd.setFocusable(false);
+        edtExtEnd.setInputType(InputType.TYPE_NULL);
+        if (currentOv != null) {
+            edtExtEnd.setText(toEditableDateTime(AssessmentUiHelper.optString(currentOv, "extended_end_at", "")));
+        }
+        edtExtEnd.setOnClickListener(v -> DatePickerHelper.showDateTimePicker(this, tilExtEnd, edtExtEnd, false, true));
+        tilExtEnd.addView(edtExtEnd);
+        container.addView(tilExtEnd);
+
+        CheckBox cbLate = new CheckBox(this);
+        cbLate.setText("Allow late submission for this student");
+        cbLate.setChecked(currentOv != null && AssessmentUiHelper.optBoolean(currentOv, "allow_late_submission", false));
+        container.addView(cbLate);
+
+        CheckBox cbReset = new CheckBox(this);
+        cbReset.setText("Soft-reset previous attempts (archive prior attempts as reset)");
+        cbReset.setChecked(false);
+        container.addView(cbReset);
+
+        TextInputLayout tilReason = new TextInputLayout(this);
+        tilReason.setHint("Override Reason (Audit Logged)");
+        TextInputEditText edtReason = new TextInputEditText(tilReason.getContext());
+        if (currentOv != null) {
+            edtReason.setText(AssessmentUiHelper.optString(currentOv, "reason", ""));
+        }
+        tilReason.addView(edtReason);
+        container.addView(tilReason);
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
+                .setTitle("Override: " + studentName)
+                .setView(scroll)
+                .setPositiveButton("Apply Override", (d, w) -> {
+                    JsonObject body = new JsonObject();
+                    body.addProperty("student_id", studentId);
+                    int grantExtra = extraVals[spExtra.getSelectedItemPosition()];
+                    if (grantExtra > 0) body.addProperty("grant_extra_attempts", grantExtra);
+                    String extEnd = textOf(edtExtEnd);
+                    if (!extEnd.isEmpty()) body.addProperty("extended_end_at", extEnd);
+                    body.addProperty("allow_late_submission", cbLate.isChecked());
+                    body.addProperty("reset_attempts", cbReset.isChecked());
+                    String reason = textOf(edtReason);
+                    if (!reason.isEmpty()) body.addProperty("reason", reason);
+
+                    ApiClient.getApiService(this).grantTeacherQuizOverride(quizId, body).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            if (isFinishing() || isDestroyed()) return;
+                            if (response.isSuccessful()) {
+                                Toast.makeText(QuizBuilderActivity.this, "Student override applied!", Toast.LENGTH_SHORT).show();
+                                loadQuiz();
+                            } else {
+                                Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Failed to save override"), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                            Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Cancel", null);
+
+        if (hasOverride) {
+            builder.setNeutralButton("Revoke Override", (d, w) -> {
+                ApiClient.getApiService(this).revokeTeacherQuizOverride(quizId, studentId).enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (isFinishing() || isDestroyed()) return;
+                        if (response.isSuccessful()) {
+                            Toast.makeText(QuizBuilderActivity.this, "Override revoked", Toast.LENGTH_SHORT).show();
+                            loadQuiz();
+                        } else {
+                            Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Could not revoke override"), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                        Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }
+        builder.show();
     }
 
     private void saveQuizStatus(String targetStatus) {
@@ -626,154 +1157,13 @@ public class QuizBuilderActivity extends AppCompatActivity {
     /* ---------------- Quiz Attempts & Short-Answer Manual Grading ---------------- */
 
     private void fetchAndShowAttempts() {
-        ApiClient.getApiService(this).getTeacherQuizAttempts(quizId).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (isFinishing() || isDestroyed()) return;
-                if (!response.isSuccessful() || response.body() == null) {
-                    Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Failed to load attempts"), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                JsonArray arr = AssessmentUiHelper.extractDataArray(response.body());
-                if (arr.size() == 0) {
-                    new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
-                            .setTitle("Student Attempts")
-                            .setMessage("No students have attempted this quiz yet.")
-                            .setPositiveButton("OK", null)
-                            .show();
-                    return;
-                }
-                List<Integer> ids = new ArrayList<>();
-                List<String> labels = new ArrayList<>();
-                for (JsonElement el : arr) {
-                    if (!el.isJsonObject()) continue;
-                    JsonObject o = el.getAsJsonObject();
-                    int aId = AssessmentUiHelper.optInt(o, "id", 0);
-                    String name = AssessmentUiHelper.optString(o, "student_name", "Student");
-                    String st = AssessmentUiHelper.optString(o, "status", "");
-                    boolean pending = AssessmentUiHelper.optBoolean(o, "pending_manual_grading", false);
-                    String sc = o.has("score") && !o.get("score").isJsonNull()
-                            ? AssessmentUiHelper.formatMarks(o.get("score").getAsDouble()) + " pts"
-                            : "Pending";
-                    ids.add(aId);
-                    labels.add(name + " — " + (pending ? "Needs Grading" : (st + " (" + sc + ")")));
-                }
-                new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
-                        .setTitle("Quiz Attempts (Tap to Review/Grade)")
-                        .setItems(labels.toArray(new String[0]), (d, which) -> openAttemptForGrading(ids.get(which)))
-                        .setNegativeButton("Close", null)
-                        .show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Toast.makeText(QuizBuilderActivity.this, "Network error loading attempts", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void openAttemptForGrading(int attemptId) {
-        ApiClient.getApiService(this).getTeacherQuizAttemptDetail(attemptId).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (isFinishing() || isDestroyed()) return;
-                if (!response.isSuccessful() || response.body() == null || !response.body().has("data")) {
-                    Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Failed to load attempt"), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                JsonObject data = response.body().getAsJsonObject("data");
-                String studentName = AssessmentUiHelper.optString(data, "student_name", "Student");
-                JsonArray qs = data.has("questions") && data.get("questions").isJsonArray()
-                        ? data.getAsJsonArray("questions") : new JsonArray();
-
-                LinearLayout list = new LinearLayout(QuizBuilderActivity.this);
-                list.setOrientation(LinearLayout.VERTICAL);
-                list.setPadding(40, 16, 40, 16);
-
-                for (JsonElement el : qs) {
-                    if (!el.isJsonObject()) continue;
-                    JsonObject q = el.getAsJsonObject();
-                    int num = AssessmentUiHelper.optInt(q, "number", 1);
-                    String qText = AssessmentUiHelper.optString(q, "question_text", "");
-                    String stuAns = AssessmentUiHelper.optString(q, "student_answer", "(No answer)");
-                    double maxM = AssessmentUiHelper.optDouble(q, "marks", 1);
-                    int answerId = AssessmentUiHelper.optInt(q, "answer_id", 0);
-                    boolean needsManual = AssessmentUiHelper.optBoolean(q, "needs_manual_grading", false);
-                    String obtained = q.has("marks_obtained") && !q.get("marks_obtained").isJsonNull()
-                            ? AssessmentUiHelper.formatMarks(q.get("marks_obtained").getAsDouble()) : "Pending";
-
-                    TextView tv = new TextView(QuizBuilderActivity.this);
-                    tv.setText("Q" + num + ": " + qText + "\nAnswer: " + stuAns + "\nMarks: " + obtained + " / " + AssessmentUiHelper.formatMarks(maxM));
-                    tv.setPadding(0, 10, 0, 6);
-                    list.addView(tv);
-
-                    if (answerId > 0 && (needsManual || "short_answer".equalsIgnoreCase(AssessmentUiHelper.optString(q, "question_type", "")))) {
-                        MaterialButton btnGrade = new MaterialButton(QuizBuilderActivity.this);
-                        btnGrade.setText(needsManual ? "Grade Short Answer" : "Adjust Marks");
-                        btnGrade.setAllCaps(false);
-                        btnGrade.setOnClickListener(v -> promptGradeAnswer(answerId, maxM, () -> openAttemptForGrading(attemptId)));
-                        list.addView(btnGrade);
-                    }
-                }
-
-                android.widget.ScrollView scroll = new android.widget.ScrollView(QuizBuilderActivity.this);
-                scroll.addView(list);
-
-                new MaterialAlertDialogBuilder(QuizBuilderActivity.this)
-                        .setTitle(studentName + " — Attempt Review")
-                        .setView(scroll)
-                        .setPositiveButton("Done", null)
-                        .show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void promptGradeAnswer(int answerId, double maxMarks, Runnable onGraded) {
-        TextInputLayout til = new TextInputLayout(this);
-        til.setHint("Marks (0 - " + AssessmentUiHelper.formatMarks(maxMarks) + ")");
-        TextInputEditText et = new TextInputEditText(til.getContext());
-        et.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        til.addView(et);
-        til.setPadding(48, 16, 48, 0);
-
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Grade Short Answer")
-                .setView(til)
-                .setPositiveButton("Save Grade", (d, w) -> {
-                    double m;
-                    try { m = Double.parseDouble(textOf(et)); } catch (Exception e) {
-                        Toast.makeText(this, "Enter valid marks", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (m < 0 || m > maxMarks) {
-                        Toast.makeText(this, "Marks must be between 0 and " + AssessmentUiHelper.formatMarks(maxMarks), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    JsonObject body = new JsonObject();
-                    body.addProperty("marks_obtained", m);
-                    ApiClient.getApiService(this).gradeTeacherQuizAnswer(answerId, body).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(QuizBuilderActivity.this, "Answer graded!", Toast.LENGTH_SHORT).show();
-                                onGraded.run();
-                            } else {
-                                Toast.makeText(QuizBuilderActivity.this, AssessmentUiHelper.extractErrorMessage(response, "Grading failed"), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                            Toast.makeText(QuizBuilderActivity.this, "Network error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        Intent intent = new Intent(this, TeacherQuizAttemptsActivity.class);
+        intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_ID, quizId);
+        intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_QUIZ_TITLE, quizTitle);
+        if (tvBuilderCourseContext != null && tvBuilderCourseContext.getText() != null) {
+            intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_COURSE_CONTEXT, tvBuilderCourseContext.getText().toString());
+        }
+        intent.putExtra(TeacherQuizAttemptsActivity.EXTRA_FILTER_PENDING, pendingGradingCount > 0);
+        startActivity(intent);
     }
 }

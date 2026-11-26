@@ -3,6 +3,7 @@ package com.social7.studentlearnanalytics.model;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 import java.io.Serializable;
 
 public class Course implements Serializable {
@@ -88,6 +89,21 @@ public class Course implements Serializable {
     @SerializedName("program_code")
     private String programCode;
 
+    @SerializedName("program_ids")
+    private java.util.List<Integer> programIds = new java.util.ArrayList<>();
+
+    @SerializedName("majors_summary")
+    private String majorsSummary;
+
+    @SerializedName("course_category_id")
+    private int courseCategoryId = -1;
+
+    @SerializedName("course_category_name")
+    private String courseCategoryName;
+
+    @SerializedName("course_category_code")
+    private String courseCategoryCode;
+
     @SerializedName("teacher_id")
     private int teacherId = -1;
 
@@ -96,6 +112,15 @@ public class Course implements Serializable {
 
     @SerializedName("academic_year")
     private String academicYear;
+
+    @SerializedName("year_level")
+    private Object yearLevel;
+
+    @SerializedName("year_level_code")
+    private String yearLevelCode;
+
+    @SerializedName("year_level_label")
+    private String yearLevelLabel;
 
     @SerializedName("semester_id")
     private int semesterId = -1;
@@ -207,6 +232,33 @@ public class Course implements Serializable {
         c.programId = optInt(obj, "program_id", -1);
         c.programName = optString(obj, "program_name", "");
         c.programCode = optString(obj, "program_code", "");
+        c.majorsSummary = optString(obj, "majors_summary", "");
+        c.programIds = new java.util.ArrayList<>();
+        if (obj.has("program_ids") && obj.get("program_ids").isJsonArray()) {
+            for (JsonElement idEl : obj.getAsJsonArray("program_ids")) {
+                try {
+                    if (idEl != null && idEl.isJsonPrimitive()) {
+                        c.programIds.add(idEl.getAsInt());
+                    }
+                } catch (Exception ignored) {}
+            }
+        }
+        if (c.programIds.isEmpty() && c.programId > 0) {
+            c.programIds.add(c.programId);
+        }
+        if (c.majorsSummary.isEmpty() && !c.programName.isEmpty()) {
+            c.majorsSummary = c.programName;
+        }
+
+        c.courseCategoryId = optInt(obj, "course_category_id", -1);
+        c.courseCategoryName = optString(obj, "course_category_name", "");
+        c.courseCategoryCode = optString(obj, "course_category_code", "");
+        if (c.courseCategoryName.isEmpty() && obj.has("course_category") && !obj.get("course_category").isJsonNull() && obj.get("course_category").isJsonObject()) {
+            JsonObject catObj = obj.getAsJsonObject("course_category");
+            c.courseCategoryName = optString(catObj, "name", "");
+            if (c.courseCategoryCode.isEmpty()) c.courseCategoryCode = optString(catObj, "code", "");
+            if (c.courseCategoryId <= 0) c.courseCategoryId = optInt(catObj, "id", -1);
+        }
 
         c.teacherId = optInt(obj, "teacher_id", -1);
         c.teacher = optString(obj, "teacher_name", "");
@@ -227,6 +279,15 @@ public class Course implements Serializable {
 
         c.academicYearId = optInt(obj, "academic_year_id", -1);
         c.academicYear = optString(obj, "academic_year", "");
+        if (obj.has("year_level") && !obj.get("year_level").isJsonNull() && obj.get("year_level").isJsonPrimitive()) {
+            c.yearLevel = YearLevelHelper.parse(obj.get("year_level").getAsString());
+        }
+        c.yearLevelCode = optString(obj, "year_level_code", "");
+        if (c.yearLevelCode.isEmpty() && c.yearLevel != null) {
+            String code = YearLevelHelper.toCode(c.yearLevel);
+            if (code != null) c.yearLevelCode = code;
+        }
+        c.yearLevelLabel = optString(obj, "year_level_label", "");
         c.semesterId = optInt(obj, "semester_id", -1);
         c.semester = optString(obj, "semester", "");
         c.room = optString(obj, "room", "");
@@ -313,12 +374,48 @@ public class Course implements Serializable {
     public String getProgramName() { return programName != null ? programName : ""; }
     public void setProgramName(String programName) { this.programName = programName; }
     public String getProgramCode() { return programCode != null ? programCode : ""; }
+    public java.util.List<Integer> getProgramIds() { return programIds != null ? programIds : new java.util.ArrayList<>(); }
+    public void setProgramIds(java.util.List<Integer> programIds) { this.programIds = programIds != null ? new java.util.ArrayList<>(programIds) : new java.util.ArrayList<>(); }
+    public String getMajorsSummary() {
+        if (majorsSummary != null && !majorsSummary.trim().isEmpty()) return majorsSummary.trim();
+        return getProgramName();
+    }
+    public void setMajorsSummary(String majorsSummary) { this.majorsSummary = majorsSummary; }
+    public int getCourseCategoryId() { return courseCategoryId; }
+    public void setCourseCategoryId(int courseCategoryId) { this.courseCategoryId = courseCategoryId; }
+    public String getCourseCategoryName() { return courseCategoryName != null ? courseCategoryName : ""; }
+    public void setCourseCategoryName(String courseCategoryName) { this.courseCategoryName = courseCategoryName; }
+    public String getCourseCategoryCode() { return courseCategoryCode != null ? courseCategoryCode : ""; }
+    public void setCourseCategoryCode(String courseCategoryCode) { this.courseCategoryCode = courseCategoryCode; }
+    public boolean hasProgramId(int targetProgId) {
+        if (targetProgId <= 0) return false;
+        if (programId == targetProgId) return true;
+        return programIds != null && programIds.contains(targetProgId);
+    }
     public int getTeacherId() { return teacherId; }
     public void setTeacherId(int teacherId) { this.teacherId = teacherId; }
     public int getAcademicYearId() { return academicYearId; }
     public void setAcademicYearId(int academicYearId) { this.academicYearId = academicYearId; }
     public String getAcademicYear() { return academicYear != null ? academicYear : ""; }
     public void setAcademicYear(String academicYear) { this.academicYear = academicYear; }
+    public Integer getYearLevel() { return YearLevelHelper.parse(yearLevel); }
+    public void setYearLevel(Object yearLevel) { this.yearLevel = yearLevel; }
+    public String getYearLevelCode() {
+        if (yearLevelCode != null && !yearLevelCode.trim().isEmpty()) {
+            return yearLevelCode.trim();
+        }
+        String code = YearLevelHelper.toCode(yearLevel);
+        return code != null ? code : "";
+    }
+    public void setYearLevelCode(String yearLevelCode) { this.yearLevelCode = yearLevelCode; }
+    public String getYearLevelLabel() {
+        if (yearLevelLabel != null && !yearLevelLabel.trim().isEmpty()) {
+            return yearLevelLabel.trim();
+        }
+        Integer parsed = getYearLevel();
+        return parsed != null ? YearLevelHelper.toFullLabel(null, parsed) : "";
+    }
+    public void setYearLevelLabel(String yearLevelLabel) { this.yearLevelLabel = yearLevelLabel; }
     public int getSemesterId() { return semesterId; }
     public void setSemesterId(int semesterId) { this.semesterId = semesterId; }
     public String getClassesSummary() { return classesSummary != null ? classesSummary : ""; }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,8 +45,10 @@ public class AddAssessmentActivity extends AppCompatActivity {
     private MaterialButton btnTypeAssignment, btnTypeHomework, btnTypeQuiz, btnTypeExam;
     private MaterialButton btnExamMidterm, btnExamFinal;
     private View layoutExamSubtype, tilVenue, tilDuration, tilTotalScore, layoutQuizBuilderSection;
-    private TextInputLayout tilDueDate;
-    private TextInputEditText etTitle, etDescription, etVenue, etTotalScore, etDuration, etDueDate;
+    private TextInputLayout tilDueDate, tilQuizStartDate;
+    private TextInputEditText etTitle, etDescription, etVenue, etTotalScore, etDuration, etDueDate, etQuizStartDate;
+    private AutoCompleteTextView actvQuizMaxAttempts, actvQuizScoringMethod;
+    private CheckBox cbQuizAllowLate;
     private MaterialButton btnSaveDraft, btnSubmit;
 
     // Teaching Assignment Selector
@@ -111,6 +114,30 @@ public class AddAssessmentActivity extends AppCompatActivity {
         etTotalScore = findViewById(R.id.etTotalScore);
         etDuration = findViewById(R.id.etDuration);
         etDueDate = findViewById(R.id.etDueDate);
+        tilQuizStartDate = findViewById(R.id.tilQuizStartDate);
+        etQuizStartDate = findViewById(R.id.etQuizStartDate);
+        actvQuizMaxAttempts = findViewById(R.id.actvQuizMaxAttempts);
+        actvQuizScoringMethod = findViewById(R.id.actvQuizScoringMethod);
+        cbQuizAllowLate = findViewById(R.id.cbQuizAllowLate);
+
+        if (etQuizStartDate != null) {
+            etQuizStartDate.setOnClickListener(v -> DatePickerHelper.showDateTimePicker(this, tilQuizStartDate, etQuizStartDate, false, true));
+            etQuizStartDate.setOnLongClickListener(v -> {
+                etQuizStartDate.setText("");
+                Toast.makeText(this, "Start date cleared (quiz opens immediately on publish)", Toast.LENGTH_SHORT).show();
+                return true;
+            });
+        }
+        if (actvQuizMaxAttempts != null) {
+            String[] attOpts = new String[]{"1 Attempt", "2 Attempts", "3 Attempts", "5 Attempts", "Unlimited"};
+            actvQuizMaxAttempts.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, attOpts));
+            actvQuizMaxAttempts.setText("1 Attempt", false);
+        }
+        if (actvQuizScoringMethod != null) {
+            String[] scoreOpts = new String[]{"Highest Score", "Latest Attempt", "Average Score"};
+            actvQuizScoringMethod.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, scoreOpts));
+            actvQuizScoringMethod.setText("Highest Score", false);
+        }
 
         pbOfferingsLoading = findViewById(R.id.pbOfferingsLoading);
         layoutNoAssignments = findViewById(R.id.layoutNoAssignments);
@@ -426,7 +453,11 @@ public class AddAssessmentActivity extends AppCompatActivity {
         tilTotalScore.setVisibility(isQuiz ? View.GONE : View.VISIBLE);
 
         if (tilDueDate != null) {
-            tilDueDate.setHint(isExam ? "Exam Date (YYYY-MM-DD)" : (isQuiz ? "Close Date (YYYY-MM-DD HH:MM:SS)" : "Due Date (YYYY-MM-DD HH:MM:SS)"));
+            tilDueDate.setHint(isExam ? "Exam Date & Start Time (YYYY-MM-DD HH:MM)" : (isQuiz ? "Close Date (YYYY-MM-DD HH:MM:SS)" : "Due Date (YYYY-MM-DD HH:MM:SS)"));
+        }
+
+        if (isExam && etDuration != null && "30".equals(etDuration.getText() != null ? etDuration.getText().toString().trim() : "")) {
+            etDuration.setText("90");
         }
 
         if (isQuiz) {
@@ -451,8 +482,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        boolean isExam = "Exam".equalsIgnoreCase(selectedType);
-        DatePickerHelper.showDateTimePicker(this, tilDueDate, etDueDate, isExam, true);
+        DatePickerHelper.showDateTimePicker(this, tilDueDate, etDueDate, false, true);
     }
 
     private void submitAssessment(boolean asDraft) {
@@ -493,7 +523,33 @@ public class AddAssessmentActivity extends AppCompatActivity {
             }
             body.addProperty("duration_minutes", dur);
             body.addProperty("status", "draft"); // Quizzes must be drafted first so questions & auto-marks are attached before publishing
+            String startAt = etQuizStartDate != null && etQuizStartDate.getText() != null ? etQuizStartDate.getText().toString().trim() : "";
+            if (!startAt.isEmpty()) body.addProperty("start_at", startAt);
             if (!dueDate.isEmpty()) body.addProperty("end_at", dueDate);
+
+            String maxSel = actvQuizMaxAttempts != null ? actvQuizMaxAttempts.getText().toString().trim() : "1 Attempt";
+            if ("Unlimited".equalsIgnoreCase(maxSel)) {
+                body.addProperty("max_attempts", 0);
+            } else if (maxSel.startsWith("2")) {
+                body.addProperty("max_attempts", 2);
+            } else if (maxSel.startsWith("3")) {
+                body.addProperty("max_attempts", 3);
+            } else if (maxSel.startsWith("5")) {
+                body.addProperty("max_attempts", 5);
+            } else {
+                body.addProperty("max_attempts", 1);
+            }
+
+            String scoreSel = actvQuizScoringMethod != null ? actvQuizScoringMethod.getText().toString().trim() : "Highest Score";
+            if (scoreSel.toLowerCase(Locale.US).contains("latest")) {
+                body.addProperty("scoring_method", "latest");
+            } else if (scoreSel.toLowerCase(Locale.US).contains("average")) {
+                body.addProperty("scoring_method", "average");
+            } else {
+                body.addProperty("scoring_method", "highest");
+            }
+
+            body.addProperty("allow_late_submission", cbQuizAllowLate != null && cbQuizAllowLate.isChecked());
             openBuilderAfter = !asDraft;
             call = ApiClient.getApiService(this).createTeacherQuiz(offeringId, body);
 
@@ -505,8 +561,8 @@ public class AddAssessmentActivity extends AppCompatActivity {
                 etTotalScore.setError("Enter valid total marks");
                 return;
             }
-            if (totalScore < 1) {
-                etTotalScore.setError("Marks must be at least 1");
+            if (totalScore < 1 || totalScore > 1000) {
+                etTotalScore.setError("Marks must be between 1 and 1000");
                 return;
             }
             if (dueDate.isEmpty()) {
@@ -514,16 +570,30 @@ public class AddAssessmentActivity extends AppCompatActivity {
                 return;
             }
             String examDateOnly = dueDate.length() >= 10 ? dueDate.substring(0, 10) : dueDate;
+            String startTime = dueDate.length() >= 16 ? dueDate.substring(11, 16) : "";
             String durStr = etDuration.getText() != null ? etDuration.getText().toString().trim() : "";
             String venue = etVenue.getText() != null ? etVenue.getText().toString().trim() : "";
 
             body.addProperty("exam_type", examSubtype);
             body.addProperty("exam_date", examDateOnly);
+            if (!startTime.isEmpty() && startTime.matches("^\\d{2}:\\d{2}$")) {
+                body.addProperty("start_time", startTime);
+            }
             body.addProperty("total_score", totalScore);
             if (!durStr.isEmpty()) {
                 try {
-                    body.addProperty("duration_minutes", Integer.parseInt(durStr));
-                } catch (NumberFormatException ignored) {}
+                    int dur = Integer.parseInt(durStr);
+                    if (dur < 1 || dur > 600) {
+                        etDuration.setError("Duration must be between 1 and 600 minutes");
+                        etDuration.requestFocus();
+                        return;
+                    }
+                    body.addProperty("duration_minutes", dur);
+                } catch (NumberFormatException e) {
+                    etDuration.setError("Enter valid duration");
+                    etDuration.requestFocus();
+                    return;
+                }
             }
             if (!venue.isEmpty()) body.addProperty("venue", venue);
             body.addProperty("status", asDraft ? "draft" : "scheduled");

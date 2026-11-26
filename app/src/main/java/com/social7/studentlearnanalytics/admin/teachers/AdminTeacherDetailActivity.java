@@ -57,7 +57,9 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         }
 
         if (currentTeacher == null) {
-            currentTeacher = new Teacher("TCH001", "Mr. Chan", "chan@univ.edu", "Computer Science", "Lecturer", "Active");
+            Toast.makeText(this, "Missing teacher record details.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         initViews();
@@ -615,7 +617,7 @@ public class AdminTeacherDetailActivity extends AppCompatActivity {
         if (tvOtherTabContent == null) return;
         StringBuilder sb = new StringBuilder();
         sb.append("• Role: Faculty Member / ").append(currentTeacher.getPosition()).append("\n");
-        sb.append("• Department: ").append(currentTeacher.getDepartment()).append("\n");
+        sb.append("• Faculty: ").append(currentTeacher.getDepartment()).append("\n");
         sb.append("• Office: ").append(currentTeacher.getOfficeLocation()).append("\n");
         sb.append("• Status: ").append(currentTeacher.getStatus()).append("\n");
         if (customNotes != null && !customNotes.trim().isEmpty()) {

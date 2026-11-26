@@ -70,6 +70,7 @@ public class RecordSelectorActivity extends AppCompatActivity {
     public static final String TYPE_COURSE = "course";
     public static final String TYPE_DEPARTMENT = "department";
     public static final String TYPE_PROGRAM = "program";
+    public static final String TYPE_COURSE_CATEGORY = "course_category";
     public static final String TYPE_BUILDING = "building";
     public static final String TYPE_FLOOR = "floor";
     public static final String TYPE_ACADEMIC_YEAR = "academic_year";
@@ -120,7 +121,10 @@ public class RecordSelectorActivity extends AppCompatActivity {
         preloadedJson = getIntent().getStringExtra(EXTRA_PRELOADED_JSON);
         preselectedId = getIntent().getStringExtra(EXTRA_SELECTED_ID);
         if (preselectedId != null && !preselectedId.isEmpty()) {
-            selectedIds.add(preselectedId);
+            for (String part : preselectedId.split(",")) {
+                String trimmed = part != null ? part.trim() : "";
+                if (!trimmed.isEmpty()) selectedIds.add(trimmed);
+            }
         }
 
         bindViews();
@@ -190,6 +194,10 @@ public class RecordSelectorActivity extends AppCompatActivity {
                 break;
             case TYPE_PROGRAM:
                 titleRes = R.string.select_program_title;
+                break;
+            case TYPE_COURSE_CATEGORY:
+                titleRes = R.string.course_categories;
+                hintRes = R.string.search_categories;
                 break;
             case TYPE_BUILDING:
                 titleRes = R.string.select_building_title;
@@ -269,6 +277,8 @@ public class RecordSelectorActivity extends AppCompatActivity {
             call = api.getStudents();
         } else if (TYPE_BUILDING.equals(selectorType)) {
             call = api.getBuildings();
+        } else if (TYPE_COURSE_CATEGORY.equals(selectorType)) {
+            call = api.getCourseCategories();
         } else if (TYPE_FLOOR.equals(selectorType)) {
             call = api.getFloors(filterParentId > 0 ? filterParentId : null);
         } else {
@@ -431,12 +441,14 @@ public class RecordSelectorActivity extends AppCompatActivity {
                 return item;
             }
             case TYPE_DEPARTMENT:
-            case TYPE_PROGRAM: {
+            case TYPE_PROGRAM:
+            case TYPE_COURSE_CATEGORY: {
                 String code = UiUtils.optString(obj, "code", "");
                 String name = UiUtils.optString(obj, "name", "");
+                String desc = UiUtils.optString(obj, "description", "");
                 item.code = code;
                 item.title = name;
-                item.subtitle = code;
+                item.subtitle = !desc.isEmpty() ? (code.isEmpty() ? desc : (code + " • " + desc)) : code;
                 return item;
             }
             case TYPE_ACADEMIC_YEAR: {

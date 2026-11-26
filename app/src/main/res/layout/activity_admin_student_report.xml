@@ -193,7 +193,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="2,845"
+                                android:text="0"
                                 android:textColor="@color/admin_text_primary"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -219,13 +219,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="2,712"
+                                android:text="0"
                                 android:textColor="@color/admin_active_green"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Item 3: New Enrollments -->
+                        <!-- Item 3: Avg Attendance Rate -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -235,7 +235,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/new_enrollments"
+                                android:text="@string/attendance_rate"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -244,13 +244,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="320"
+                                android:text="--"
                                 android:textColor="@color/admin_primary_blue"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Item 4: Graduated -->
+                        <!-- Item 4: Average GPA -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -260,7 +260,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/status_graduated"
+                                android:text="@string/average_gpa"
                                 android:textColor="@color/admin_text_secondary"
                                 android:textSize="12sp" />
 
@@ -269,7 +269,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="186"
+                                android:text="--"
                                 android:textColor="@color/admin_purple_accent"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />

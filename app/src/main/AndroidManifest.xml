@@ -30,12 +30,26 @@
             android:exported="false" />
 
         <activity
+            android:name=".teacher.TeacherCourseDetailActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".teacher.assessment.AddAssessmentActivity"
             android:exported="false" />
 
         <activity
             android:name=".teacher.assessment.QuizBuilderActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".teacher.assessment.TeacherQuizAttemptsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".teacher.assessment.TeacherGradeQuizAttemptActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".teacher.assessment.EnterScoreActivity"
@@ -53,6 +67,15 @@
 
         <activity
             android:name=".teacher.assessment.EditAssessmentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".teacher.assessment.AssessmentReopenManagerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".teacher.assessment.TeacherExamDetailActivity"
             android:exported="false" />
 
         <activity
@@ -84,6 +107,10 @@
             android:name=".admin.classes.AddClassActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".admin.classes.AdminClassDetailActivity"
+            android:exported="false" />
 
         <activity
             android:name=".admin.classes.AssignTeacherClassActivity"
@@ -226,6 +253,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".admin.courses.AdminCourseDetailActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".auth.ForgotPasswordActivity"
             android:exported="false" />
 
@@ -267,6 +298,10 @@
 
         <activity
             android:name=".student.quiz.TakeQuizActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".student.quiz.StudentQuizReviewActivity"
             android:exported="false" />
 
         <activity

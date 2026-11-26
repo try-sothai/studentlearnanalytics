@@ -136,7 +136,9 @@ public class AttendanceDetailActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (isFinishing() || isDestroyed()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    JsonObject body = response.body();
+                    JsonObject root = response.body();
+                    JsonObject body = root.has("data") && root.get("data").isJsonObject()
+                            ? root.getAsJsonObject("data") : root;
                     if (body.has("semesters") && body.get("semesters").isJsonArray()) {
                         semesters.clear();
                         JsonArray arr = body.getAsJsonArray("semesters");

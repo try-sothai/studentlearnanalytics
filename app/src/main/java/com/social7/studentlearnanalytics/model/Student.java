@@ -1,5 +1,7 @@
 package com.social7.studentlearnanalytics.model;
 
+import android.content.Context;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 import java.io.Serializable;
 
 public class Student implements Serializable {
@@ -24,6 +26,8 @@ public class Student implements Serializable {
     private Integer programId;
     private String year;
     private Integer yearLevel;
+    private String yearLevelCode;
+    private String yearLevelLabel;
     private String academicYear;
     private Integer academicYearId;
     private String semester;
@@ -130,12 +134,32 @@ public class Student implements Serializable {
     public String getProgramCode() { return programCode != null ? programCode : ""; }
     public Integer getProgramId() { return programId; }
     public String getYear() {
+        Integer parsed = YearLevelHelper.parse(yearLevel != null ? yearLevel : year);
+        if (parsed != null) return "Year " + parsed;
         if (year != null && !year.isEmpty()) return year;
-        if (yearLevel != null && yearLevel > 0) return "Year " + yearLevel;
-        return "Year 1";
+        return "";
     }
-    public Integer getYearLevel() { return yearLevel; }
-    public String getAcademicYear() { return academicYear != null && !academicYear.isEmpty() ? academicYear : "2025-2026"; }
+    public Integer getYearLevel() {
+        Integer parsed = YearLevelHelper.parse(yearLevel != null ? yearLevel : year);
+        return parsed != null ? parsed : yearLevel;
+    }
+    public String getYearLevelCode() {
+        if (yearLevelCode != null && !yearLevelCode.isEmpty()) return yearLevelCode;
+        String code = YearLevelHelper.toCode(yearLevel != null ? yearLevel : year);
+        return code != null ? code : "";
+    }
+    public String getYearLevelLabel() {
+        if (yearLevelLabel != null && !yearLevelLabel.isEmpty()) return yearLevelLabel;
+        Integer parsed = getYearLevel();
+        return parsed != null ? YearLevelHelper.toFullLabel(null, parsed) : "";
+    }
+    public String getYearLevelDisplay(Context context) {
+        return YearLevelHelper.toFullLabel(context, yearLevel != null ? yearLevel : year);
+    }
+    public String getYearLevelBadge(Context context) {
+        return YearLevelHelper.toBadgeText(context, yearLevel != null ? yearLevel : year);
+    }
+    public String getAcademicYear() { return academicYear != null ? academicYear : ""; }
     public Integer getAcademicYearId() { return academicYearId; }
     public String getSemester() { return semester != null && !semester.isEmpty() ? semester : ""; }
     public Integer getSemesterId() { return semesterId; }
@@ -192,7 +216,12 @@ public class Student implements Serializable {
     public void setProgramCode(String programCode) { this.programCode = programCode; }
     public void setProgramId(Integer programId) { this.programId = programId; }
     public void setYear(String year) { this.year = year; }
-    public void setYearLevel(Integer yearLevel) { this.yearLevel = yearLevel; }
+    public void setYearLevel(Integer yearLevel) {
+        Integer parsed = YearLevelHelper.parse(yearLevel);
+        this.yearLevel = parsed != null ? parsed : yearLevel;
+    }
+    public void setYearLevelCode(String yearLevelCode) { this.yearLevelCode = yearLevelCode; }
+    public void setYearLevelLabel(String yearLevelLabel) { this.yearLevelLabel = yearLevelLabel; }
     public void setAcademicYear(String academicYear) { this.academicYear = academicYear; }
     public void setAcademicYearId(Integer academicYearId) { this.academicYearId = academicYearId; }
     public void setSemester(String semester) { this.semester = semester; }

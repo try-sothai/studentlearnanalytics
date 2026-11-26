@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.model.Course;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private String currentAcademicYearName = "";
     private int currentSemesterId = -1;
     private String currentSemesterName = "";
+    private Integer currentYearLevel = null;
 
     private int currentPage = 1;
     private int itemsPerPage = 8;
@@ -107,6 +109,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         applyFilters();
     }
 
+    public void filterByYearLevel(Integer yearLevel) {
+        this.currentYearLevel = YearLevelHelper.parse(yearLevel);
+        this.currentPage = 1;
+        applyFilters();
+    }
+
     public void clearAllFilters() {
         this.currentQuery = "";
         this.currentStatusFilter = "ALL";
@@ -118,6 +126,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         this.currentAcademicYearName = "";
         this.currentSemesterId = -1;
         this.currentSemesterName = "";
+        this.currentYearLevel = null;
         this.currentPage = 1;
         applyFilters();
     }
@@ -138,6 +147,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     || containsIgnoreCase(course.getDepartmentCode(), currentQuery)
                     || containsIgnoreCase(course.getProgramName(), currentQuery)
                     || containsIgnoreCase(course.getProgramCode(), currentQuery)
+                    || containsIgnoreCase(course.getMajorsSummary(), currentQuery)
+                    || containsIgnoreCase(course.getCourseCategoryName(), currentQuery)
                     || containsIgnoreCase(course.getTeacher(), currentQuery)
                     || containsIgnoreCase(course.getDescription(), currentQuery);
 
@@ -154,11 +165,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
             boolean matchesProg = true;
             if (currentProgramId > 0) {
-                matchesProg = course.getProgramId() == currentProgramId
-                        || (!currentProgramName.isEmpty() && containsIgnoreCase(course.getProgramName(), currentProgramName));
+                matchesProg = course.hasProgramId(currentProgramId)
+                        || (!currentProgramName.isEmpty() && (containsIgnoreCase(course.getProgramName(), currentProgramName)
+                        || containsIgnoreCase(course.getMajorsSummary(), currentProgramName)));
             } else if (!currentProgramName.isEmpty()) {
                 matchesProg = containsIgnoreCase(course.getProgramName(), currentProgramName)
-                        || containsIgnoreCase(course.getProgramCode(), currentProgramName);
+                        || containsIgnoreCase(course.getProgramCode(), currentProgramName)
+                        || containsIgnoreCase(course.getMajorsSummary(), currentProgramName);
             }
 
             boolean matchesAy = true;
@@ -178,7 +191,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                 matchesSem = containsIgnoreCase(course.getSemester(), currentSemesterName);
             }
 
-            if (matchesQuery && matchesStatus && matchesDept && matchesProg && matchesAy && matchesSem) {
+            if (matchesQuery && matchesStatus && matchesDept && matchesProg && matchesAy && matchesSem
+                    && (currentYearLevel == null || currentYearLevel.equals(course.getYearLevel()))) {
                 filteredList.add(course);
             }
         }
@@ -254,13 +268,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                 if (!course.getDepartment().isEmpty()) {
                     details.append(" • ").append(course.getDepartment());
                 }
-                if (!course.getProgramCode().isEmpty()) {
+                if (!course.getMajorsSummary().isEmpty()) {
+                    details.append(" • ").append(course.getMajorsSummary());
+                } else if (!course.getProgramCode().isEmpty()) {
                     details.append(" (").append(course.getProgramCode()).append(")");
-                } else if (!course.getProgramName().isEmpty()) {
-                    details.append(" • ").append(course.getProgramName());
+                }
+                if (!course.getCourseCategoryName().isEmpty()) {
+                    details.append(" [").append(course.getCourseCategoryName()).append("]");
                 }
                 if (!course.getTeacher().isEmpty()) {
                     details.append("\nTeacher: ").append(course.getTeacher());
+                }
+                if (course.getYearLevel() != null) {
+                    details.append(" • ").append(YearLevelHelper.toBadgeText(itemView.getContext(), course.getYearLevel()));
                 }
                 if (!course.getAcademicYear().isEmpty() || !course.getSemester().isEmpty()) {
                     details.append(" • ");

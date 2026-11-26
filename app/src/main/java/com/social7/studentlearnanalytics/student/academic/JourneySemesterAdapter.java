@@ -1,6 +1,7 @@
 package com.social7.studentlearnanalytics.student.academic;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,25 +35,31 @@ public class JourneySemesterAdapter extends RecyclerView.Adapter<JourneySemester
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JsonObject item = data.get(position).getAsJsonObject();
 
-        String name = item.has("semester_name") ? item.get("semester_name").getAsString() : "Unknown Semester";
-        String state = item.has("state") ? item.get("state").getAsString() : "Upcoming";
+        String name = (item.has("semester_name") && !item.get("semester_name").isJsonNull())
+                ? item.get("semester_name").getAsString() : "Unknown Semester";
+        String state = (item.has("state") && !item.get("state").isJsonNull())
+                ? item.get("state").getAsString() : "Upcoming";
 
         holder.tvSemesterName.setText(name);
         holder.tvStatus.setText(state);
 
-        GradientDrawable bg = (GradientDrawable) holder.tvStatus.getBackground();
-        if ("Current".equalsIgnoreCase(state)) {
-            bg.setColor(Color.parseColor("#3B82F6")); // Blue
-        } else if ("Completed".equalsIgnoreCase(state)) {
-            bg.setColor(Color.parseColor("#10B981")); // Green
-        } else {
-            bg.setColor(Color.parseColor("#9CA3AF")); // Gray
+        Drawable bg = holder.tvStatus.getBackground();
+        if (bg instanceof GradientDrawable) {
+            GradientDrawable gd = (GradientDrawable) bg.mutate();
+            if ("Current".equalsIgnoreCase(state)) {
+                gd.setColor(Color.parseColor("#3B82F6")); // Blue
+            } else if ("Completed".equalsIgnoreCase(state)) {
+                gd.setColor(Color.parseColor("#10B981")); // Green
+            } else {
+                gd.setColor(Color.parseColor("#9CA3AF")); // Gray
+            }
         }
 
         holder.llCourses.removeAllViews();
-        if (item.has("courses")) {
+        if (item.has("courses") && item.get("courses").isJsonArray()) {
             JsonArray courses = item.getAsJsonArray("courses");
             for (int i = 0; i < courses.size(); i++) {
+                if (!courses.get(i).isJsonObject()) continue;
                 JsonObject c = courses.get(i).getAsJsonObject();
                 String courseName = c.has("course_name") && !c.get("course_name").isJsonNull() ? c.get("course_name").getAsString() : "Course";
 

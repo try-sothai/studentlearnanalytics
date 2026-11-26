@@ -303,13 +303,15 @@ public class LearningAnalyticsFragment extends Fragment {
 
         for (int i = 0; i < analytics.size(); i++) {
             LearningAnalytic a = analytics.get(i);
-            attEntries.add(new Entry(i, a.attendanceRate != null ? a.attendanceRate : 0f));
-            asnEntries.add(new Entry(i, a.assignmentAverage != null ? a.assignmentAverage : 0f));
-            quizEntries.add(new Entry(i, a.quizAverage != null ? a.quizAverage : 0f));
-            examEntries.add(new Entry(i, a.examAverage != null ? a.examAverage : 0f));
+            if (a.attendanceRate != null) attEntries.add(new Entry(i, a.attendanceRate));
+            if (a.assignmentAverage != null) asnEntries.add(new Entry(i, a.assignmentAverage));
+            if (a.quizAverage != null) quizEntries.add(new Entry(i, a.quizAverage));
+            if (a.examAverage != null) examEntries.add(new Entry(i, a.examAverage));
 
             String label = "P" + (i + 1);
-            if (a.periodStart != null && a.periodStart.length() >= 10) {
+            if (a.periodLabel != null && !a.periodLabel.trim().isEmpty() && "semester".equals(currentPeriod)) {
+                label = a.periodLabel.trim();
+            } else if (a.periodStart != null && a.periodStart.length() >= 10) {
                 if ("weekly".equals(currentPeriod)) {
                     label = "Wk " + (i + 1);
                 } else if ("monthly".equals(currentPeriod)) {
@@ -323,31 +325,53 @@ public class LearningAnalyticsFragment extends Fragment {
             labels.add(label);
         }
 
-        LineDataSet attSet = new LineDataSet(attEntries, getString(R.string.attendance));
-        attSet.setColor(Color.parseColor("#16A34A"));
-        attSet.setLineWidth(2.5f);
-        attSet.setCircleColor(Color.parseColor("#16A34A"));
-        attSet.setDrawValues(false);
+        List<com.github.mikephil.charting.interfaces.datasets.ILineDataSet> dataSets = new ArrayList<>();
 
-        LineDataSet asnSet = new LineDataSet(asnEntries, getString(R.string.assignments));
-        asnSet.setColor(Color.parseColor("#7C3AED"));
-        asnSet.setLineWidth(2.5f);
-        asnSet.setCircleColor(Color.parseColor("#7C3AED"));
-        asnSet.setDrawValues(false);
+        if (!attEntries.isEmpty()) {
+            LineDataSet attSet = new LineDataSet(attEntries, getString(R.string.attendance));
+            attSet.setColor(Color.parseColor("#16A34A"));
+            attSet.setLineWidth(2.5f);
+            attSet.setCircleColor(Color.parseColor("#16A34A"));
+            attSet.setDrawValues(false);
+            dataSets.add(attSet);
+        }
 
-        LineDataSet quizSet = new LineDataSet(quizEntries, getString(R.string.quizzes));
-        quizSet.setColor(Color.parseColor("#F59E0B"));
-        quizSet.setLineWidth(2.5f);
-        quizSet.setCircleColor(Color.parseColor("#F59E0B"));
-        quizSet.setDrawValues(false);
+        if (!asnEntries.isEmpty()) {
+            LineDataSet asnSet = new LineDataSet(asnEntries, getString(R.string.assignments));
+            asnSet.setColor(Color.parseColor("#7C3AED"));
+            asnSet.setLineWidth(2.5f);
+            asnSet.setCircleColor(Color.parseColor("#7C3AED"));
+            asnSet.setDrawValues(false);
+            dataSets.add(asnSet);
+        }
 
-        LineDataSet examSet = new LineDataSet(examEntries, getString(R.string.exams));
-        examSet.setColor(Color.parseColor("#2563EB"));
-        examSet.setLineWidth(2.5f);
-        examSet.setCircleColor(Color.parseColor("#2563EB"));
-        examSet.setDrawValues(false);
+        if (!quizEntries.isEmpty()) {
+            LineDataSet quizSet = new LineDataSet(quizEntries, getString(R.string.quizzes));
+            quizSet.setColor(Color.parseColor("#F59E0B"));
+            quizSet.setLineWidth(2.5f);
+            quizSet.setCircleColor(Color.parseColor("#F59E0B"));
+            quizSet.setDrawValues(false);
+            dataSets.add(quizSet);
+        }
 
-        LineData lineData = new LineData(attSet, asnSet, quizSet, examSet);
+        if (!examEntries.isEmpty()) {
+            LineDataSet examSet = new LineDataSet(examEntries, getString(R.string.exams));
+            examSet.setColor(Color.parseColor("#2563EB"));
+            examSet.setLineWidth(2.5f);
+            examSet.setCircleColor(Color.parseColor("#2563EB"));
+            examSet.setDrawValues(false);
+            dataSets.add(examSet);
+        }
+
+        if (dataSets.isEmpty()) {
+            lineChartAnalyticsTrend.clear();
+            lineChartAnalyticsTrend.setNoDataText("No analytics trend data available yet");
+            ChartFontHelper.applyKhmerFont(lineChartAnalyticsTrend.getContext(), lineChartAnalyticsTrend);
+            lineChartAnalyticsTrend.invalidate();
+            return;
+        }
+
+        LineData lineData = new LineData(dataSets);
         lineChartAnalyticsTrend.setData(lineData);
 
         XAxis xAxis = lineChartAnalyticsTrend.getXAxis();
@@ -673,7 +697,9 @@ public class LearningAnalyticsFragment extends Fragment {
                 if (!isAdded() || layoutAnalyticsGpaList == null) return;
                 layoutAnalyticsGpaList.removeAllViews();
                 if (response.isSuccessful() && response.body() != null) {
-                    JsonObject body = response.body();
+                    JsonObject root = response.body();
+                    JsonObject body = root.has("data") && root.get("data").isJsonObject()
+                            ? root.getAsJsonObject("data") : root;
                     if (body.has("gpa_records") && body.get("gpa_records").isJsonArray()) {
                         JsonArray records = body.getAsJsonArray("gpa_records");
                         for (JsonElement el : records) {
@@ -686,7 +712,14 @@ public class LearningAnalyticsFragment extends Fragment {
                                 else if (s.has("semester_name") && !s.get("semester_name").isJsonNull()) semName = s.get("semester_name").getAsString();
                             }
                             double gpaVal = rec.has("gpa") && !rec.get("gpa").isJsonNull() ? rec.get("gpa").getAsDouble() : 0.0;
-                            int credits = rec.has("credit_hours") && !rec.get("credit_hours").isJsonNull() ? rec.get("credit_hours").getAsInt() : 0;
+                            int credits = 0;
+                            if (rec.has("earned_credits") && !rec.get("earned_credits").isJsonNull()) {
+                                credits = (int) Math.round(rec.get("earned_credits").getAsDouble());
+                            } else if (rec.has("total_credits") && !rec.get("total_credits").isJsonNull()) {
+                                credits = (int) Math.round(rec.get("total_credits").getAsDouble());
+                            } else if (rec.has("credit_hours") && !rec.get("credit_hours").isJsonNull()) {
+                                credits = (int) Math.round(rec.get("credit_hours").getAsDouble());
+                            }
                             String standing = rec.has("academic_standing") && !rec.get("academic_standing").isJsonNull()
                                     ? rec.get("academic_standing").getAsString() : "Good Standing";
 
@@ -704,7 +737,11 @@ public class LearningAnalyticsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {}
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (!isAdded() || layoutAnalyticsGpaList == null) return;
+                layoutAnalyticsGpaList.removeAllViews();
+                addEmptyText(layoutAnalyticsGpaList, "Network error loading GPA records.");
+            }
         });
     }
 

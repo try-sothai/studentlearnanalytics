@@ -25,20 +25,27 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
         public String classCohort;
         public String details;
         public String status;
+        public String assignmentApiType = "assignment";
 
         public AssignmentCardItem(String id, String courseCode, String title, String classCohort, String details, String status) {
+            this(id, courseCode, title, classCohort, details, status, "assignment");
+        }
+
+        public AssignmentCardItem(String id, String courseCode, String title, String classCohort, String details, String status, String assignmentApiType) {
             this.id = id;
             this.courseCode = courseCode;
             this.title = title;
             this.classCohort = classCohort;
             this.details = details;
             this.status = status;
+            this.assignmentApiType = assignmentApiType != null ? assignmentApiType : "assignment";
         }
     }
 
     public interface OnAssignmentActionClickListener {
         void onGradeClick(AssignmentCardItem item);
         void onDeleteClick(AssignmentCardItem item);
+        default void onReopenClick(AssignmentCardItem item) {}
     }
 
     private final Context context;
@@ -87,7 +94,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvCourseCode, tvAssignmentTitle, tvClassCohort, tvAssignmentDetails, tvStatusBadge;
-        private final MaterialButton btnGradeAssignment, btnDeleteAssignment;
+        private final MaterialButton btnGradeAssignment, btnDeleteAssignment, btnReopenAssignment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +106,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
 
             btnGradeAssignment = itemView.findViewById(R.id.btnGradeAssignment);
             btnDeleteAssignment = itemView.findViewById(R.id.btnDeleteAssignment);
+            btnReopenAssignment = itemView.findViewById(R.id.btnReopenAssignment);
         }
 
         public void bind(AssignmentCardItem item, OnAssignmentActionClickListener listener) {
@@ -127,6 +135,12 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
             if (btnDeleteAssignment != null) {
                 btnDeleteAssignment.setOnClickListener(v -> {
                     if (listener != null) listener.onDeleteClick(item);
+                });
+            }
+
+            if (btnReopenAssignment != null) {
+                btnReopenAssignment.setOnClickListener(v -> {
+                    if (listener != null) listener.onReopenClick(item);
                 });
             }
         }

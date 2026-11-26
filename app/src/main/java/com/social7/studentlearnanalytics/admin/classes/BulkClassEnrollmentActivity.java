@@ -36,6 +36,7 @@ import com.social7.studentlearnanalytics.R;
 import com.social7.studentlearnanalytics.network.ApiClient;
 import com.social7.studentlearnanalytics.network.ApiService;
 import com.social7.studentlearnanalytics.utils.UiUtils;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -67,6 +68,8 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
     private String selectedClassName = "";
     private String selectedClassCode = "";
     private String selectedClassAcademicYear = "";
+    private Integer selectedClassYearLevel = null;
+    private String selectedClassYearLabel = "";
     private String selectedClassStatus = "";
 
     private int currentPage = 1;
@@ -92,6 +95,9 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
                             selectedClassName = UiUtils.optString(obj, "name", "");
                             selectedClassCode = UiUtils.optString(obj, "code", "");
                             selectedClassAcademicYear = UiUtils.optString(obj, "academic_year", "");
+                            selectedClassYearLevel = YearLevelHelper.parse(UiUtils.optString(obj, "year_level", ""));
+                            selectedClassYearLabel = selectedClassYearLevel != null
+                                    ? YearLevelHelper.toFullLabel(this, selectedClassYearLevel) : "";
                             selectedClassStatus = UiUtils.optString(obj, "status", "active");
                             String dept = UiUtils.optString(obj, "department_name", "");
                             int count = UiUtils.optInt(obj, "students_count", 0);
@@ -100,6 +106,7 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
                             tvSelectedClassMeta.setVisibility(View.VISIBLE);
                             tvSelectedClassMeta.setText(
                                     (dept.isEmpty() ? "" : dept + " • ")
+                                            + (selectedClassYearLabel.isEmpty() ? "" : selectedClassYearLabel + " • ")
                                             + (selectedClassAcademicYear.isEmpty() ? "" : selectedClassAcademicYear + " • ")
                                             + count + " enrolled"
                             );
@@ -144,6 +151,9 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!com.social7.studentlearnanalytics.utils.RoleGuard.checkAccess(this, "Admin")) {
+            return;
+        }
         setContentView(R.layout.activity_bulk_class_enrollment);
         bindViews();
         updateCounter();
@@ -265,7 +275,8 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
                                 row.fullName = UiUtils.optString(o, "full_name", "");
                                 row.departmentName = UiUtils.optString(o, "department_name", "");
                                 row.programName = UiUtils.optString(o, "program_name", "");
-                                row.yearLevel = UiUtils.optInt(o, "year_level", 0);
+                                Integer parsedYl = YearLevelHelper.parse(UiUtils.optString(o, "year_level", ""));
+                                row.yearLevel = parsedYl != null ? parsedYl : 0;
                                 row.currentClassCode = UiUtils.optString(o, "current_class_code", "");
                                 row.alreadyEnrolled = o.has("already_enrolled_in_selected")
                                         && !o.get("already_enrolled_in_selected").isJsonNull()
@@ -329,21 +340,32 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
 
         StringBuilder preview = new StringBuilder();
         preview.append("Class: ").append(selectedClassName).append(" (").append(selectedClassCode).append(")\n");
+        if (!selectedClassYearLabel.isEmpty()) {
+            preview.append(getString(R.string.student_year_level)).append(": ").append(selectedClassYearLabel).append("\n");
+        }
         if (!selectedClassAcademicYear.isEmpty()) {
             preview.append("Academic Year: ").append(selectedClassAcademicYear).append("\n");
         }
         preview.append("Students Selected: ").append(selectedStudentIds.size()).append("\n\n");
 
+        int mismatchCount = 0;
         int shown = 0;
         for (StudentRow r : studentRows) {
             if (selectedStudentIds.contains(r.id)) {
-                preview.append("• ").append(r.studentCode).append(" — ").append(r.fullName).append("\n");
-                shown++;
-                if (shown >= 10 && selectedStudentIds.size() > 10) {
-                    preview.append("... and ").append(selectedStudentIds.size() - shown).append(" more\n");
-                    break;
+                boolean mismatch = selectedClassYearLevel != null && r.yearLevel > 0 && !selectedClassYearLevel.equals(r.yearLevel);
+                if (mismatch) mismatchCount++;
+                String ylBadge = r.yearLevel > 0 ? (" [" + YearLevelHelper.toBadgeText(this, r.yearLevel) + "]") : "";
+                if (shown < 10) {
+                    preview.append("• ").append(r.studentCode).append(" — ").append(r.fullName).append(ylBadge).append("\n");
+                    shown++;
                 }
             }
+        }
+        if (selectedStudentIds.size() > 10) {
+            preview.append("... and ").append(selectedStudentIds.size() - 10).append(" more\n");
+        }
+        if (mismatchCount > 0) {
+            preview.append("\n⚠ ").append(getString(R.string.year_level_mismatch_warning)).append(" (").append(mismatchCount).append(")\n");
         }
 
         new MaterialAlertDialogBuilder(this)
@@ -532,10 +554,15 @@ public class BulkClassEnrollmentActivity extends AppCompatActivity {
 
             holder.tvName.setText(row.fullName);
             holder.tvId.setText(row.studentCode);
+            String ylLabel = row.yearLevel > 0 ? YearLevelHelper.toFullLabel(BulkClassEnrollmentActivity.this, row.yearLevel) : "";
+            boolean isCrossYear = selectedClassYearLevel != null && row.yearLevel > 0 && !selectedClassYearLevel.equals(row.yearLevel);
+            if (isCrossYear && !ylLabel.isEmpty()) {
+                ylLabel = ylLabel + " (" + getString(R.string.cross_year_level) + ")";
+            }
             holder.tvMeta.setText(
                     (row.departmentName.isEmpty() ? "" : row.departmentName + " • ")
                             + (row.programName.isEmpty() ? "" : row.programName + " • ")
-                            + (row.yearLevel > 0 ? "Year " + row.yearLevel : "")
+                            + ylLabel
                             + (row.currentClassCode.isEmpty() ? "" : " • Current: " + row.currentClassCode)
             );
 

@@ -97,7 +97,7 @@ public class AddTeacherActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        String[] departments = {"Select department", "Computer Science", "Information Technology", "Software Engineering", "Business Administration", "Data Science"};
+        String[] departments = {"Select faculty", "Computer Science", "Information Technology", "Software Engineering", "Business Administration", "Data Science"};
         String[] positions = {"Select position", "Lecturer", "Assistant Lecturer", "Senior Lecturer", "Associate Professor", "Professor"};
         String[] workTypes = {"Select work type", "Full-time", "Part-time"};
 

@@ -3,6 +3,7 @@ package com.social7.studentlearnanalytics.localization;
 import android.content.Context;
 
 import com.social7.studentlearnanalytics.R;
+import com.social7.studentlearnanalytics.utils.YearLevelHelper;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -187,6 +188,12 @@ public final class ApiLabelLocalizer {
             return context.getString(R.string.system_administrator);
         }
         return raw;
+    }
+
+    public static String localizeYearLevel(Context context, Object raw) {
+        if (raw == null) return "";
+        String formatted = YearLevelHelper.toFullLabel(context, raw);
+        return YearLevelHelper.isValid(raw) ? formatted : String.valueOf(raw);
     }
 
     public static String getTimeGreeting(Context context) {

@@ -110,7 +110,13 @@ public class TeacherHeaderHelper {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        int count = response.body().get("data").getAsJsonObject().get("unread_count").getAsInt();
+                        JsonObject body = response.body();
+                        int count = 0;
+                        if (body.has("data") && body.get("data").isJsonObject() && body.getAsJsonObject("data").has("unread_count")) {
+                            count = body.getAsJsonObject("data").get("unread_count").getAsInt();
+                        } else if (body.has("unread_count") && !body.get("unread_count").isJsonNull()) {
+                            count = body.get("unread_count").getAsInt();
+                        }
                         if (count > 0) {
                             tvBadge.setText(String.valueOf(count));
                             tvBadge.setVisibility(View.VISIBLE);
